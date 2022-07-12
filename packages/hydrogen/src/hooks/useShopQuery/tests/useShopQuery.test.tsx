@@ -1,8 +1,8 @@
-import React, {Suspense} from 'react';
+import {Suspense} from 'react';
 import {useShopQuery} from '../hooks.js';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 import {ServerRequestProvider} from '../../../foundation/ServerRequestProvider/index.js';
-import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server.jsx';
+import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server.js';
 import {setCache} from '../../../foundation/runtime.js';
 import {InMemoryCache} from '../../../framework/cache/in-memory.js';
 

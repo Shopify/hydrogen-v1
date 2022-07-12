@@ -1,6 +1,5 @@
-import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {ExternalVideo} from '../ExternalVideo.jsx';
+import {ExternalVideo} from '../ExternalVideo.js';
 import {getExternalVideoData} from '../../../utilities/tests/media.js';
 
 describe('<ExternalVideo />', () => {

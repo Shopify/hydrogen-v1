@@ -1,6 +1,7 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
+import * as React from 'react';
 import {mount} from '@shopify/react-testing';
-import {Analytics} from '../Analytics.client.jsx';
+import {Analytics} from '../Analytics.client.js';
 import {ClientAnalytics} from '../ClientAnalytics.js';
 
 export function SomeClientComponent({

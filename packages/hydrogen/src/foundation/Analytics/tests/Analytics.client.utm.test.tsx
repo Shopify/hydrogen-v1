@@ -1,14 +1,13 @@
-import React from 'react';
 import {
   mountComponent,
   SomeClientComponent,
-} from './analytics-client-test-utils.client.jsx';
+} from './analytics-client-test-utils.client.js';
 import {ClientAnalytics} from '../ClientAnalytics.js';
 
 // This test is in its own file is due to the fact that I cannot set
 // window.location more than once
 describe('Analytics.client utm', () => {
-  it('should process utm search parameters', async (done) => {
+  it('should process utm search parameters', async () => {
     global.window = Object.create(window);
     Object.defineProperty(window, 'location', {
       value: {
@@ -39,7 +38,6 @@ describe('Analytics.client utm', () => {
                 term: '678',
               },
             });
-            done();
           }}
         />
       </>

@@ -1,11 +1,10 @@
-import React from 'react';
-import {Metafield} from '../Metafield.client.jsx';
+import {Metafield} from '../Metafield.client.js';
 import {getRawMetafield} from '../../../utilities/tests/metafields.js';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 import {Image} from '../../Image/index.js';
 import {getMediaImage} from '../../../utilities/tests/media.js';
 import type {Rating} from '../../../types.js';
-import {Link} from '../../Link/Link.client.jsx';
+import {Link} from '../../Link/Link.client.js';
 import {Page, Product, ProductVariant} from '../../../storefront-api-types.js';
 
 describe('<Metafield />', () => {

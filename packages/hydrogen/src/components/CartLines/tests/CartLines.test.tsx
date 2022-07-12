@@ -1,5 +1,4 @@
-import React from 'react';
-import {CartLines} from '../CartLines.client.jsx';
+import {CartLines} from '../CartLines.client.js';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
 import {CartLineProductTitle} from '../../CartLineProductTitle/index.js';
 import {CART} from '../../CartProvider/tests/fixtures.js';

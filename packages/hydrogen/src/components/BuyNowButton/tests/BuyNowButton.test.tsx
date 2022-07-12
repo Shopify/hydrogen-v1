@@ -1,4 +1,4 @@
-import React from 'react';
+import {createRef} from 'react';
 
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 import {BaseButton} from '../../BaseButton/index.js';
@@ -7,7 +7,7 @@ const mockCreateInstantCheckout = jest.fn();
 const mockUseInstantCheckout = jest.fn();
 const mockUseCartFetch = jest.fn();
 
-import {BuyNowButton} from '../BuyNowButton.client.jsx';
+import {BuyNowButton} from '../BuyNowButton.client.js';
 
 jest.mock('../../CartProvider/index.js', () => ({
   ...(jest.requireActual('../../CartProvider/index.js') as {}),
@@ -157,7 +157,7 @@ describe('BuyNowButton', () => {
     });
 
     it('passes the buttonRef', () => {
-      const mockRef = React.createRef<HTMLButtonElement>();
+      const mockRef = createRef<HTMLButtonElement>();
 
       const component = mountWithProviders(
         <BuyNowButton variantId="1" buttonRef={mockRef}>

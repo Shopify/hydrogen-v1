@@ -1,4 +1,4 @@
-import {createMountableHook} from '../../../utilities/tests/createMountableHook.jsx';
+import {createMountableHook} from '../../../utilities/tests/createMountableHook.js';
 import {CurrencyCode} from '../../../storefront-api-types.js';
 import {useMoney} from '../hooks.js';
 

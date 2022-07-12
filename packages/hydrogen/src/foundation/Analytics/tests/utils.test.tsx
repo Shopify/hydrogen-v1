@@ -1,4 +1,4 @@
-import {getNamedspacedEventname} from '../utils.jsx';
+import {getNamedspacedEventname} from '../utils.js';
 
 describe('Analytics - utils', () => {
   it('should return not namespaced event name when it is part of reserve name list', () => {

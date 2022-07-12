@@ -1,18 +1,18 @@
-import React from 'react';
+import {type Dispatch, type SetStateAction} from 'react';
 import {createMount} from '@shopify/react-testing';
 import {BrowserHistory} from 'history';
 import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../../foundation/constants.js';
 
 import {ShopifyConfig} from '../../types.js';
-import {ShopifyProvider} from '../../foundation/ShopifyProvider/ShopifyProvider.server.jsx';
-import {BrowserRouter} from '../../foundation/Router/BrowserRouter.client.jsx';
+import {ShopifyProvider} from '../../foundation/ShopifyProvider/ShopifyProvider.server.js';
+import {BrowserRouter} from '../../foundation/Router/BrowserRouter.client.js';
 import {
   LocationServerProps,
   ServerProps,
   ServerPropsProvider,
-} from '../../foundation/ServerPropsProvider/ServerPropsProvider.jsx';
+} from '../../foundation/ServerPropsProvider/ServerPropsProvider.js';
 
-type SetServerProps = React.Dispatch<React.SetStateAction<ServerProps>>;
+type SetServerProps = Dispatch<SetStateAction<ServerProps>>;
 export interface ShopifyProviderOptions {
   shopifyConfig?: Partial<ShopifyConfig>;
   setServerProps?: SetServerProps;

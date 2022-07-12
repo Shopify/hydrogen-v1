@@ -7,10 +7,7 @@ import {
   CacheNone,
 } from '../../Cache/strategies/index.js';
 import {shouldPreloadQuery} from '../../useQuery/hooks.js';
-import {
-  PreloadQueryEntry,
-  HydrogenRequest,
-} from '../HydrogenRequest.server.jsx';
+import {PreloadQueryEntry, HydrogenRequest} from '../HydrogenRequest.server.js';
 
 describe('HydrogenRequest', () => {
   it('converts node request to Fetch API request', () => {

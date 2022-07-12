@@ -1,9 +1,8 @@
-import React from 'react';
 import {mount} from '@shopify/react-testing';
 import {CartLineProvider} from '../../CartLineProvider/index.js';
-import {CartLineQuantity} from '../CartLineQuantity.client.jsx';
+import {CartLineQuantity} from '../CartLineQuantity.client.js';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
-import {Link} from '../../Link/Link.client.jsx';
+import {Link} from '../../Link/Link.client.js';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 
 describe('<CartLineQuantity />', () => {

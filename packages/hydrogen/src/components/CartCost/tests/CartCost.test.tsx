@@ -1,7 +1,6 @@
-import React from 'react';
 import {CartProvider} from '../../CartProvider/index.js';
 import {CART_WITH_LINES} from '../../CartProvider/tests/fixtures.js';
-import {CartCost} from '../CartCost.client.jsx';
+import {CartCost} from '../CartCost.client.js';
 import {Money} from '../../Money/index.js';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 

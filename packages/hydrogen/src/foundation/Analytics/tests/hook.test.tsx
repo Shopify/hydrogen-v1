@@ -1,8 +1,8 @@
-import React, {Suspense} from 'react';
-import {HydrogenRequest} from '../../HydrogenRequest/HydrogenRequest.server.jsx';
+import {Suspense} from 'react';
+import {HydrogenRequest} from '../../HydrogenRequest/HydrogenRequest.server.js';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 import {ServerRequestProvider} from '../../ServerRequestProvider/index.js';
-import {useServerAnalytics} from '../hook.jsx';
+import {useServerAnalytics} from '../hook.js';
 
 function mountComponent(analyticsData?: any) {
   function Component() {

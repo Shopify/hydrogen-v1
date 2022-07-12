@@ -1,8 +1,7 @@
-import React from 'react';
 import {
   mountComponent,
   SomeClientComponent,
-} from './analytics-client-test-utils.client.jsx';
+} from './analytics-client-test-utils.client.js';
 import {ClientAnalytics} from '../ClientAnalytics.js';
 
 describe('Analytics.client', () => {
@@ -20,7 +19,7 @@ describe('Analytics.client', () => {
     );
   });
 
-  it('should receive page-view event on mount', async (done) => {
+  it('should receive page-view event on mount', async () => {
     const analyticsData = {
       test: '123',
     };
@@ -33,14 +32,13 @@ describe('Analytics.client', () => {
           reset={true}
           callback={(payload: any) => {
             expect(payload).toEqual(analyticsData);
-            done();
           }}
         />
       </>
     );
   });
 
-  it('should receive page-view and viewed-product event on mount', async (done) => {
+  it('should receive page-view and viewed-product event on mount', async () => {
     const analyticsData = {
       publishEventsOnNavigate: [ClientAnalytics.eventNames.VIEWED_PRODUCT],
       test: '123',
@@ -50,7 +48,7 @@ describe('Analytics.client', () => {
     const allDone = () => {
       doneCount++;
       if (doneCount === 2) {
-        done();
+        return Promise.resolve();
       }
     };
 

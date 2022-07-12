@@ -1,9 +1,8 @@
-import React from 'react';
 import {getRawMetafield} from '../../../../../utilities/tests/metafields.js';
 import {mount} from '@shopify/react-testing';
-import {StarRating, Star} from '../StarRating.jsx';
+import {StarRating, Star} from '../StarRating.js';
 import {Rating} from '../../../../../types.js';
-import {Link} from '../../../../Link/Link.client.jsx';
+import {Link} from '../../../../Link/Link.client.js';
 import {mountWithProviders} from '../../../../../utilities/tests/shopifyMount.js';
 
 describe('<StarRating />', () => {

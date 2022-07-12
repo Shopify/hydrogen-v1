@@ -1,9 +1,9 @@
-import React, {Suspense} from 'react';
-import {HydrogenRequest} from '../../HydrogenRequest/HydrogenRequest.server.jsx';
+import {Suspense, type ReactNode} from 'react';
+import {HydrogenRequest} from '../../HydrogenRequest/HydrogenRequest.server.js';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 import {ServerRequestProvider} from '../../ServerRequestProvider/index.js';
-import {Analytics} from '../Analytics.server.jsx';
-import {useServerAnalytics} from '../hook.jsx';
+import {Analytics} from '../Analytics.server.js';
+import {useServerAnalytics} from '../hook.js';
 
 function SomeServerComponent({analyticsData}: {analyticsData: any}) {
   useServerAnalytics(analyticsData);
@@ -44,7 +44,7 @@ function SomeApiDelayServerComponent({
   return <div>Api delay - {delay}</div>;
 }
 
-function mountComponent(request: HydrogenRequest, children: React.ReactChild) {
+function mountComponent(request: HydrogenRequest, children: ReactNode) {
   return mountWithProviders(
     <ServerRequestProvider request={request}>
       <Suspense fallback={null}>

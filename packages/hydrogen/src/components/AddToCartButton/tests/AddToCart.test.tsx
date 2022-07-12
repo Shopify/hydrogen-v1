@@ -1,10 +1,10 @@
-import React from 'react';
-import {CartProvider} from '../../CartProvider/index.jsx';
+import {createRef} from 'react';
+import {CartProvider} from '../../CartProvider/index.js';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 import {mountWithCartProvider} from '../../CartProvider/tests/utilities.js';
 
 import {ProductOptionsProvider} from '../../ProductOptionsProvider/index.js';
-import {AddToCartButton} from '../AddToCartButton.client.jsx';
+import {AddToCartButton} from '../AddToCartButton.client.js';
 import {getProduct, getVariant} from '../../../utilities/tests/product.js';
 import {BaseButton} from '../../BaseButton/index.js';
 
@@ -233,7 +233,7 @@ describe('AddToCartButton', () => {
 
     it('passes the buttonRef', () => {
       const product = getProduct();
-      const mockRef = React.createRef<HTMLButtonElement>();
+      const mockRef = createRef<HTMLButtonElement>();
 
       const component = mountWithProviders(
         <CartProvider>

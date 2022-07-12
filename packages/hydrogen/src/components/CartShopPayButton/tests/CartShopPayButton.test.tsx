@@ -1,5 +1,4 @@
-import React from 'react';
-import {CartShopPayButton} from '../CartShopPayButton.client.jsx';
+import {CartShopPayButton} from '../CartShopPayButton.client.js';
 import {CartProvider} from '../../CartProvider/index.js';
 import {CART_WITH_LINES} from '../../CartProvider/tests/fixtures.js';
 import {ShopPayButton} from '../../ShopPayButton/index.js';

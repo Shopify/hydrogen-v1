@@ -1,11 +1,11 @@
 import {ImportGlobEagerOutput} from '../../../types.js';
-import {createPageRoutes} from '../../FileRoutes/FileRoutes.server.jsx';
+import {createPageRoutes} from '../../FileRoutes/FileRoutes.server.js';
 
 const STUB_MODULE = {default: {}, api: null};
 
 it('converts normal pages to routes', () => {
   const pages: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '*', './routes');
@@ -21,8 +21,8 @@ it('converts normal pages to routes', () => {
 
 it('handles index pages', () => {
   const pages: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '*', './routes');
@@ -43,12 +43,12 @@ it('handles index pages', () => {
 
 it('handles nested index pages', () => {
   const pages: ImportGlobEagerOutput = {
-    './routes/products/index.server.jsx': STUB_MODULE,
-    './routes/products/[handle].server.jsx': STUB_MODULE,
-    './routes/blogs/index.server.jsx': STUB_MODULE,
-    './routes/products/snowboards/fastones/index.server.jsx': STUB_MODULE,
-    './routes/articles/index.server.jsx': STUB_MODULE,
-    './routes/articles/[...handle].server.jsx': STUB_MODULE,
+    './routes/products/index.server.js': STUB_MODULE,
+    './routes/products/[handle].server.js': STUB_MODULE,
+    './routes/blogs/index.server.js': STUB_MODULE,
+    './routes/products/snowboards/fastones/index.server.js': STUB_MODULE,
+    './routes/articles/index.server.js': STUB_MODULE,
+    './routes/articles/[...handle].server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '*', './routes');
@@ -89,9 +89,9 @@ it('handles nested index pages', () => {
 
 it('handles dynamic paths', () => {
   const pages: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
-    './routes/products/[handle].server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
+    './routes/products/[handle].server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '*', './routes');
@@ -116,9 +116,9 @@ it('handles dynamic paths', () => {
 
 it('handles catch all routes', () => {
   const pages: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
-    './routes/products/[...handle].server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
+    './routes/products/[...handle].server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '*', './routes');
@@ -143,11 +143,11 @@ it('handles catch all routes', () => {
 
 it('handles nested dynamic paths', () => {
   const pages: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
-    './routes/products/[handle].server.jsx': STUB_MODULE,
-    './routes/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
-    './routes/blogs/[handle]/[...articleHandle].server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
+    './routes/products/[handle].server.js': STUB_MODULE,
+    './routes/blogs/[handle]/[articleHandle].server.js': STUB_MODULE,
+    './routes/blogs/[handle]/[...articleHandle].server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '*', './routes');
@@ -183,12 +183,12 @@ it('handles nested dynamic paths', () => {
 
 it('prioritizes overrides next to dynamic paths', () => {
   const pages: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
-    './routes/products/[handle].server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
+    './routes/products/[handle].server.js': STUB_MODULE,
     // Alphabetically, `hoodie` will likely come after `[handle]`
-    './routes/products/hoodie.server.jsx': STUB_MODULE,
-    './routes/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
+    './routes/products/hoodie.server.js': STUB_MODULE,
+    './routes/blogs/[handle]/[articleHandle].server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '*', './routes');
@@ -226,7 +226,7 @@ it('prioritizes overrides next to dynamic paths', () => {
 it('handles typescript paths', () => {
   const pages: ImportGlobEagerOutput = {
     './routes/contact.server.tsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '*', './routes');
@@ -247,8 +247,8 @@ it('handles typescript paths', () => {
 
 it('lowercases routes', () => {
   const pages: ImportGlobEagerOutput = {
-    './routes/Contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
+    './routes/Contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '*', './routes');
@@ -269,8 +269,8 @@ it('lowercases routes', () => {
 
 it('factors in the top-level path prefix', () => {
   const pages: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '/foo/*', './routes');
@@ -291,8 +291,8 @@ it('factors in the top-level path prefix', () => {
 
 it('uses a custom file directory path', () => {
   const pages: ImportGlobEagerOutput = {
-    './custom/contact.server.jsx': STUB_MODULE,
-    './custom/index.server.jsx': STUB_MODULE,
+    './custom/contact.server.js': STUB_MODULE,
+    './custom/index.server.js': STUB_MODULE,
   };
 
   const routes = createPageRoutes(pages, '*', './custom');

@@ -6,7 +6,7 @@ const STUB_MODULE = {default: null, api: {}};
 
 it('converts API functions to routes', () => {
   const files: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
   };
 
   const routes = getApiRoutes({files, dirPrefix: './routes'});
@@ -23,9 +23,9 @@ it('converts API functions to routes', () => {
 
 it('handles index API routes', () => {
   const files: ImportGlobEagerOutput = {
-    './routes/index.server.jsx': STUB_MODULE,
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/api/index.server.jsx': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/api/index.server.js': STUB_MODULE,
   };
 
   const routes = getApiRoutes({files, dirPrefix: './routes'});
@@ -54,12 +54,12 @@ it('handles index API routes', () => {
 
 it('handles nested index API routes', () => {
   const files: ImportGlobEagerOutput = {
-    './routes/products/index.server.jsx': STUB_MODULE,
-    './routes/products/[handle].server.jsx': STUB_MODULE,
-    './routes/blogs/index.server.jsx': STUB_MODULE,
-    './routes/products/snowboards/fastones/index.server.jsx': STUB_MODULE,
-    './routes/articles/index.server.jsx': STUB_MODULE,
-    './routes/articles/[...handle].server.jsx': STUB_MODULE,
+    './routes/products/index.server.js': STUB_MODULE,
+    './routes/products/[handle].server.js': STUB_MODULE,
+    './routes/blogs/index.server.js': STUB_MODULE,
+    './routes/products/snowboards/fastones/index.server.js': STUB_MODULE,
+    './routes/articles/index.server.js': STUB_MODULE,
+    './routes/articles/[...handle].server.js': STUB_MODULE,
   };
 
   const routes = getApiRoutes({files, dirPrefix: './routes'});
@@ -106,9 +106,9 @@ it('handles nested index API routes', () => {
 
 it('handles dynamic paths', () => {
   const files: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
-    './routes/products/[handle].server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
+    './routes/products/[handle].server.js': STUB_MODULE,
   };
 
   const routes = getApiRoutes({files, dirPrefix: './routes'});
@@ -136,9 +136,9 @@ it('handles dynamic paths', () => {
 
 it('handles catch all routes', () => {
   const files: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
-    './routes/products/[...handle].server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
+    './routes/products/[...handle].server.js': STUB_MODULE,
   };
 
   const routes = getApiRoutes({files, dirPrefix: './routes'});
@@ -166,11 +166,11 @@ it('handles catch all routes', () => {
 
 it('handles nested dynamic paths', () => {
   const files: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
-    './routes/products/[handle].server.jsx': STUB_MODULE,
-    './routes/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
-    './routes/blogs/[handle]/[...articleHandle].server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
+    './routes/products/[handle].server.js': STUB_MODULE,
+    './routes/blogs/[handle]/[articleHandle].server.js': STUB_MODULE,
+    './routes/blogs/[handle]/[...articleHandle].server.js': STUB_MODULE,
   };
 
   const routes = getApiRoutes({files, dirPrefix: './routes'});
@@ -211,12 +211,12 @@ it('handles nested dynamic paths', () => {
 
 it('prioritizes overrides next to dynamic paths', () => {
   const files: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
-    './routes/products/[handle].server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
+    './routes/products/[handle].server.js': STUB_MODULE,
     // Alphabetically, `hoodie` will likely come after `[handle]`
-    './routes/products/hoodie.server.jsx': STUB_MODULE,
-    './routes/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
+    './routes/products/hoodie.server.js': STUB_MODULE,
+    './routes/blogs/[handle]/[articleHandle].server.js': STUB_MODULE,
   };
 
   const routes = getApiRoutes({files, dirPrefix: './routes'});
@@ -259,7 +259,7 @@ it('prioritizes overrides next to dynamic paths', () => {
 it('handles typescript paths', () => {
   const files: ImportGlobEagerOutput = {
     './routes/contact.server.tsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
   };
 
   const routes = getApiRoutes({files, dirPrefix: './routes'});
@@ -282,8 +282,8 @@ it('handles typescript paths', () => {
 
 it('lowercases routes', () => {
   const files: ImportGlobEagerOutput = {
-    './routes/Contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
+    './routes/Contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
   };
 
   const routes = getApiRoutes({files, dirPrefix: './routes'});
@@ -306,8 +306,8 @@ it('lowercases routes', () => {
 
 it('factors in the top-level path prefix', () => {
   const files: ImportGlobEagerOutput = {
-    './routes/contact.server.jsx': STUB_MODULE,
-    './routes/index.server.jsx': STUB_MODULE,
+    './routes/contact.server.js': STUB_MODULE,
+    './routes/index.server.js': STUB_MODULE,
   };
 
   const routes = getApiRoutes({

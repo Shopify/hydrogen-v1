@@ -1,6 +1,5 @@
-import React from 'react';
 import {CartLineProvider} from '../../CartLineProvider/index.js';
-import {CartLinePrice} from '../CartLinePrice.client.jsx';
+import {CartLinePrice} from '../CartLinePrice.client.js';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
 import {Money} from '../../Money/index.js';
 import {CurrencyCode} from '../../../storefront-api-types.js';

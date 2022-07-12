@@ -1,12 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 
 import {mount} from '@shopify/react-testing';
 
-import {ProductSeo} from '../ProductSeo.client.jsx';
-import {TitleSeo} from '../TitleSeo.client.jsx';
-import {DescriptionSeo} from '../DescriptionSeo.client.jsx';
-import {TwitterSeo} from '../TwitterSeo.client.jsx';
-import {ImageSeo} from '../ImageSeo.client.jsx';
+import {ProductSeo} from '../ProductSeo.client.js';
+import {TitleSeo} from '../TitleSeo.client.js';
+import {DescriptionSeo} from '../DescriptionSeo.client.js';
+import {TwitterSeo} from '../TwitterSeo.client.js';
+import {ImageSeo} from '../ImageSeo.client.js';
 import {CurrencyCode} from '../../../storefront-api-types.js';
 
 jest.mock('../../../foundation/Head/Head.client', () => ({

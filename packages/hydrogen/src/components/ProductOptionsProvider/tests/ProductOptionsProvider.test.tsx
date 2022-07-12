@@ -1,5 +1,4 @@
-import React from 'react';
-import {ProductOptionsProvider} from '../ProductOptionsProvider.client.jsx';
+import {ProductOptionsProvider} from '../ProductOptionsProvider.client.js';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 import {getProduct} from '../../../utilities/tests/product.js';
 import {useProductOptions} from '../../../hooks/useProductOptions/index.js';

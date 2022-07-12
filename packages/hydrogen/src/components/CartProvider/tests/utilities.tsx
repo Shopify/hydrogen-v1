@@ -1,6 +1,5 @@
-import React from 'react';
 import {createMount} from '@shopify/react-testing';
-import {CartContext} from '../context.jsx';
+import {CartContext} from '../context.js';
 import {CartWithActions, Cart} from '../types.js';
 import {CART_ACTIONS} from './fixtures.js';
 

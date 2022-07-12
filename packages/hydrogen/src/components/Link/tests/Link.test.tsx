@@ -1,8 +1,7 @@
 import {createBrowserHistory} from 'history';
 import {nextTick} from 'process';
-import React from 'react';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
-import {Link} from '../Link.client.jsx';
+import {Link} from '../Link.client.js';
 
 describe('<Link />', () => {
   it('renders an anchor tag', () => {

@@ -1,13 +1,12 @@
-import React from 'react';
 import {mount} from '@shopify/react-testing';
 
 import {flattenConnection} from '../../../utilities/index.js';
-import {CartContext} from '../context.jsx';
+import {CartContext} from '../context.js';
 import {CART_WITH_LINES} from './fixtures.js';
 import type {CartInput, CartLineInput} from '../../../storefront-api-types.js';
 import {CountryCode} from '../../../storefront-api-types.js';
 
-import {CartProvider} from '../CartProvider.client.jsx';
+import {CartProvider} from '../CartProvider.client.js';
 
 const fetchCartMock = jest.fn(() => ({data: {}}));
 
