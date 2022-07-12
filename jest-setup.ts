@@ -2,6 +2,10 @@
 import '@shopify/react-testing';
 import '@shopify/react-testing/matchers';
 import './scripts/polyfillWebRuntime';
+// eslint-disable-next-line node/no-extraneous-import
+import * as React from 'react';
+
+globalThis.React = React;
 
 // TODO remove all these mocks when @shopify/react-testing supports React 18 experimental
 

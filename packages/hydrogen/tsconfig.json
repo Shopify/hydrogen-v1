@@ -1,5 +1,5 @@
 {
-  "exclude": ["**/__tests__", "**/tests", "**/*.example.*"],
+  "exclude": ["**/__tests__", "**/tests", "**/*.example.*", "dist/**"],
   "compilerOptions": {
     "declaration": true,
     "jsx": "react-jsx",
@@ -12,6 +12,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,
-    "preserveWatchOutput": true
+    "preserveWatchOutput": true,
+    "allowJs": true
   }
 }

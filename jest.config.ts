@@ -1,8 +1,10 @@
-// eslint-disable-next-line node/no-extraneous-import
-import type {Config} from '@jest/types';
+import type {InitialOptionsTsJest} from 'ts-jest';
 
-const config: Config.InitialOptions = {
+const config: InitialOptionsTsJest = {
   preset: 'ts-jest',
+  transform: {
+    '\\.[jt]sx?$': 'ts-jest',
+  },
   testMatch: [
     '**/*.(spec|test).[jt]s?(x)',
     '!**/*/dist/**/*',
@@ -22,6 +24,7 @@ const config: Config.InitialOptions = {
     __HYDROGEN_TEST__: true,
     'ts-jest': {
       tsconfig: './packages/hydrogen/tsconfig.json',
+      // useESM: true,
     },
   },
   collectCoverageFrom: [
@@ -33,6 +36,12 @@ const config: Config.InitialOptions = {
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['html-spa', 'text-summary'],
+  extensionsToTreatAsEsm: ['.ts'],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  testEnvironment: 'jsdom',
+  transformIgnorePatterns: ['node_modules/(?!(kolorist))'],
 };
 
 export default config;
