@@ -1,8 +1,8 @@
 import React, {ReactNode, Ref} from 'react';
 import {useCallback} from 'react';
 
-export interface BaseButtonProps {
-  as?: any;
+export interface CustomBaseButtonProps<AsType> {
+  as?: AsType;
   /** Any ReactNode elements. */
   children: ReactNode;
   /** Click event handler. Default behaviour triggers unless prevented */
@@ -19,14 +19,25 @@ export interface BaseButtonProps {
   disabled?: boolean;
 }
 
-export const BaseButton = <AsType extends React.ElementType = 'button'>({
-  as,
-  onClick,
-  defaultOnClick,
-  children,
-  buttonRef,
-  ...passthroughProps
-}: BaseButtonProps) => {
+export type BaseButtonProps<AsType extends React.ElementType> =
+  CustomBaseButtonProps<AsType> &
+    Omit<
+      React.ComponentPropsWithoutRef<AsType>,
+      keyof CustomBaseButtonProps<AsType>
+    >;
+
+export function BaseButton<AsType extends React.ElementType = 'button'>(
+  props: BaseButtonProps<AsType>
+) {
+  const {
+    as,
+    onClick,
+    defaultOnClick,
+    children,
+    buttonRef,
+    ...passthroughProps
+  } = props;
+
   const handleOnClick = useCallback(
     (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (onClick) {
@@ -46,13 +57,9 @@ export const BaseButton = <AsType extends React.ElementType = 'button'>({
 
   const Component = as || 'button';
 
-  return React.createElement(
-    Component,
-    {
-      ref: buttonRef,
-      onClick: handleOnClick,
-      ...passthroughProps,
-    },
-    children
+  return (
+    <Component ref={buttonRef} onClick={handleOnClick} {...passthroughProps}>
+      {children}
+    </Component>
   );
-};
+}

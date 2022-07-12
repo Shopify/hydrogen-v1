@@ -24,14 +24,15 @@ type AddToCartButtonProps<AsType extends React.ElementType> =
     Omit<
       React.ComponentPropsWithoutRef<AsType>,
       keyof CustomAddToCartButtonProps<AsType>
-    >;
+    > &
+    Omit<BaseButtonProps<AsType>, keyof CustomAddToCartButtonProps<AsType>>;
 
 /**
  * The `AddToCartButton` component renders a button that adds an item to the cart when pressed.
  * It must be a descendent of the `CartProvider` component.
  */
 export function AddToCartButton<AsType extends React.ElementType = 'button'>(
-  props: AddToCartButtonProps<AsType> & BaseButtonProps
+  props: AddToCartButtonProps<AsType>
 ) {
   const [addingItem, setAddingItem] = useState<boolean>(false);
   const {
@@ -41,7 +42,6 @@ export function AddToCartButton<AsType extends React.ElementType = 'button'>(
     onClick,
     children,
     accessibleAddingToCartLabel,
-    as,
     ...passthroughProps
   } = props;
   const {status, linesAdd} = useCart();
@@ -73,8 +73,7 @@ export function AddToCartButton<AsType extends React.ElementType = 'button'>(
 
   return (
     <>
-      <BaseButton<AsType>
-        as={as}
+      <BaseButton
         disabled={disabled}
         onClick={onClick}
         defaultOnClick={handleAddItem}

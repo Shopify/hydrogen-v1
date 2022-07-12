@@ -25,7 +25,7 @@ type BuyNowButtonProps<AsType extends React.ElementType> =
 
 /** The `BuyNowButton` component renders a button that adds an item to the cart and redirects the customer to checkout. */
 export function BuyNowButton<AsType extends React.ElementType = 'button'>(
-  props: BuyNowButtonProps<AsType> & BaseButtonProps
+  props: BuyNowButtonProps<AsType> & BaseButtonProps<AsType>
 ) {
   const {createInstantCheckout, checkoutUrl} = useInstantCheckout();
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,7 +36,6 @@ export function BuyNowButton<AsType extends React.ElementType = 'button'>(
     onClick,
     attributes,
     children,
-    as,
     ...passthroughProps
   } = props;
 
@@ -61,7 +60,6 @@ export function BuyNowButton<AsType extends React.ElementType = 'button'>(
 
   return (
     <BaseButton
-      as={as}
       {...passthroughProps}
       disabled={loading ?? passthroughProps.disabled}
       onClick={onClick}

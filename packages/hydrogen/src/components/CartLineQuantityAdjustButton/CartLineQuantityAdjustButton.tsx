@@ -24,7 +24,7 @@ type CartLineQuantityAdjustButtonProps<AsType extends React.ElementType> =
  */
 export function CartLineQuantityAdjustButton<
   AsType extends React.ElementType = 'button'
->(props: CartLineQuantityAdjustButtonProps<AsType> & BaseButtonProps) {
+>(props: CartLineQuantityAdjustButtonProps<AsType> & BaseButtonProps<AsType>) {
   const {status, linesRemove, linesUpdate} = useCart();
   const cartLine = useCartLine();
   const {children, adjust, onClick, ...passthroughProps} = props;
