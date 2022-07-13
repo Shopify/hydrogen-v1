@@ -1,8 +1,9 @@
 import React from 'react';
+import {Locale} from '../../ShopifyProvider/types';
 import {Table} from './Table';
 
 interface Props {
-  locale: string;
+  locale: Locale;
   storeDomain: string;
   storefrontApiVersion: string;
 }

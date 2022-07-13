@@ -1,6 +1,7 @@
 import React from 'react';
 import {DevTools as DevToolsClient} from './DevTools.client';
 import {useServerRequest} from '../ServerRequestProvider';
+import {getLocale} from '../../utilities/locale';
 
 export function DevTools() {
   const serverRequest = useServerRequest();
@@ -12,7 +13,10 @@ export function DevTools() {
     storefrontApiVersion,
   } = shopifyConfig || {};
   const settings = {
-    locale: `${languageCode}-${countryCode}`,
+    locale:
+      languageCode && countryCode
+        ? getLocale(languageCode, countryCode)
+        : `${languageCode}-${countryCode}`,
     storeDomain,
     storefrontApiVersion,
   };
