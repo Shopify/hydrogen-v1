@@ -7,12 +7,6 @@ An example demonstrating a .server driven basic Cart logic.
 - Add `cartId` and `cartCount` to the session as cookies so they can be used during .server
 - Uses form actions for all interactions with the API. e.g — AddToCart, remove..
 
-# .env
-
-Please add these two your .env
-SHOPIFY_STORE_DOMAIN=...
-SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN=...
-
 # Hydrogen
 
 Hydrogen is a React framework and SDK that you can use to build fast and dynamic Shopify custom storefronts.
