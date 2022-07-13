@@ -1,6 +1,6 @@
 {
   "name": "hello-cart-session",
-  "description": "An example using JavaScript in Hydrogen",
+  "description": "A hydrogen example demonstrating a .server-driven basic Cart workflow.",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
@@ -10,12 +10,12 @@
     "preview": "shopify hydrogen preview"
   },
   "devDependencies": {
-    "@shopify/cli": "3.0.27",
-    "@shopify/cli-hydrogen": "3.0.27",
+    "@shopify/cli": "latest",
+    "@shopify/cli-hydrogen": "latest",
     "vite": "^2.9.0"
   },
   "dependencies": {
-    "@shopify/hydrogen": "^1.0.2",
+    "@shopify/hydrogen": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
