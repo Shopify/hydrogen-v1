@@ -119,15 +119,15 @@ export default async function testCases({
     ).toMatchInlineSnapshot(`"props: {\\"hello\\":\\"world\\"}"`);
 
     // // Navigate events should clear the server props
-    page.on('request', (request) => {
-      try {
-        expect(request.url()).toContain(
-          '__rsc?state=%7B%22pathname%22%3A%22%2Ftest-server-props%22%2C%22search%22%3A%22%3Frefresh%22%7D'
-        );
-      } catch (e) {
-        fail(e);
-      }
-    });
+    // page.on('request', (request) => {
+    //   try {
+    //     expect(request.url()).toContain(
+    //       '__rsc?state=%7B%22pathname%22%3A%22%2Ftest-server-props%22%2C%22search%22%3A%22%3Frefresh%22%7D'
+    //     );
+    //   } catch (e) {
+    //     fail(e);
+    //   }
+    // });
     await Promise.all([page.click('#navigate'), page.waitForNavigation()]);
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
       `"props: {}"`
