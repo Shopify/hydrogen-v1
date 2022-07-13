@@ -82,7 +82,7 @@ export const renderHydrogen = (App: any) => {
 
     const {default: hydrogenRoutes} = await import(
       // @ts-expect-error
-      'virtual__hydrogen-routes.server.jsx'
+      'virtual__hydrogen-routes.server.js'
     );
 
     const hydrogenConfig: ResolvedHydrogenConfig = {
