@@ -1,11 +1,16 @@
 # RSC/SSR Hydrogen Cart with session
 
-An example demonstrating a .server driven basic Cart logic.
+A hydrogen example demonstrating a 💯 `.server-driven` basic Cart workflow.
 
-- Provides a set of cart utilities and cart client
-- Provides a `/api/cart/[action]` to handle POST requests from the different `get`, `create`, `add` and `remove` form actions
-- Add `cartId` and `cartCount` to the session as cookies so they can be used during .server
+- Provides a set of `cart` utilities (`getCart`, `createCart`...) as well as a GraphQL cart client
+- Provides a `/api/cart/[action]` that handle POST requests from the different `get`, `create`, `add` and `remove` form actions.
+- Persists `cartId` and `cartCount` to the session (cookie), so they can be used used during the `.server` lifecycle
 - Uses form actions for all interactions with the API. e.g — AddToCart, remove..
+- Provides `suspendedFn` a utility to enable `<Suspend />` friendly async API calls from `.server` components
+
+### Additional context
+
+[Oxygen Demo](https://hello-server-cart-596cadc157f9402f1570.o2.myshopify.dev/)
 
 # Hydrogen
 
