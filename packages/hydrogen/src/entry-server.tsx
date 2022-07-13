@@ -850,13 +850,13 @@ async function cacheResponse(
   const cache = getCache();
 
   /**
-   * Only cache on cachable responses where response
+   * Only full page cache on cachable responses where response
    *
    * - have content to cache
    * - have status 200
    * - does not have no-store on cache-control header
    * - does not have set-cookie header
-   * - is not a POST request
+   * - is a GET request
    * - does not have a session or does not have an active customer access token
    */
   if (
@@ -865,7 +865,7 @@ async function cacheResponse(
     response.status === 200 &&
     response.cache().mode !== NO_STORE &&
     !response.headers.has('Set-Cookie') &&
-    !/post/i.test(request.method) &&
+    /get/i.test(request.method) &&
     !sessionHasCustomerAccessToken(request)
   ) {
     if (revalidate) {
