@@ -66,10 +66,10 @@ export function AddToCartButton<AsType extends React.ElementType = 'button'>(
   return (
     <>
       <BaseButton
+        {...passthroughProps}
         disabled={disabled}
         onClick={onClick}
         defaultOnClick={handleAddItem}
-        {...passthroughProps}
       >
         {children}
       </BaseButton>
