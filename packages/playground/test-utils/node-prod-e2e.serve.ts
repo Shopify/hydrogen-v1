@@ -20,8 +20,8 @@ export async function serve(root: string, isProd: boolean) {
         resolve({
           // for test teardown
           async close() {
-            await new Promise((resolve) => {
-              server.close(resolve);
+            await new Promise((resolve2) => {
+              server.close(resolve2);
             });
           },
         });
