@@ -2,13 +2,9 @@
   "name": "hydrogen-monorepo",
   "private": true,
   "packageManager": "yarn@1.22.17",
-  "workspaces": [
-    "templates/*",
-    "packages/*",
-    "packages/playground/*"
-  ],
+  "workspaces": ["templates/*", "packages/*", "packages/playground/*"],
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "scripts": {
     "dev": "yarn turbo run dev --parallel --filter=@shopify/hydrogen-ui --filter=@shopify/hydrogen",
@@ -74,19 +70,10 @@
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
-      "prettier --write"
-    ],
-    "*.{ts,tsx}": [
-      "eslint",
-      "prettier --parser=typescript --write"
-    ],
-    "*.html": [
-      "prettier --write"
-    ],
-    "*.md": [
-      "prettier --write"
-    ]
+    "*.{js,jsx}": ["prettier --write"],
+    "*.{ts,tsx}": ["eslint", "prettier --parser=typescript --write"],
+    "*.html": ["prettier --write"],
+    "*.md": ["prettier --write"]
   },
   "resolutions": {
     "unified": "9.2.2"
