@@ -24,7 +24,6 @@ const config: InitialOptionsTsJest = {
     __HYDROGEN_TEST__: true,
     'ts-jest': {
       tsconfig: './packages/hydrogen/tsconfig.json',
-      // useESM: true,
     },
   },
   collectCoverageFrom: [

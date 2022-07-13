@@ -1,4 +1,10 @@
-import {createContext, useContext} from 'react';
+import {
+  createContext,
+  useContext,
+  // @ts-expect-error
+  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
+  type ReactNode,
+} from 'react';
 import {getTime} from '../../utilities/timing.js';
 import {hashKey} from '../../utilities/hash.js';
 import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server.js';
@@ -17,14 +23,13 @@ requestCacheRSC.key = Symbol.for('HYDROGEN_REQUEST');
 
 type ServerRequestProviderProps = {
   request: HydrogenRequest;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 function getInternalReactDispatcher() {
   return (
-    // @ts-ignore
-    React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
-      .ReactCurrentDispatcher.current || {}
+    __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher
+      .current || {}
   );
 }
 

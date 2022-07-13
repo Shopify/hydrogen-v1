@@ -1,8 +1,10 @@
-// eslint-disable-next-line node/no-extraneous-import
-import type {Config} from '@jest/types';
+import type {InitialOptionsTsJest} from 'ts-jest';
 
-const config: Config.InitialOptions = {
+const config: InitialOptionsTsJest = {
   preset: 'ts-jest',
+  transform: {
+    '\\.[jt]sx?$': 'ts-jest',
+  },
   testMatch: ['**/playground/**/*.(spec|test).[jt]s?(x)'],
   testTimeout: process.env.CI ? 30000 : 10000,
   watchPathIgnorePatterns: ['<rootDir>/temp'],
@@ -15,6 +17,7 @@ const config: Config.InitialOptions = {
       tsconfig: './packages/playground/tsconfig.json',
     },
   },
+  transformIgnorePatterns: ['node_modules/(?!(kolorist|uuid))'],
 };
 
 export default config;
