@@ -119,16 +119,19 @@ export default async function testCases({
     ).toMatchInlineSnapshot(`"props: {\\"hello\\":\\"world\\"}"`);
 
     // // Navigate events should clear the server props
-    // console.log('1');
-    // await waitForNetworkUrl(
-    //   page,
-    //   '__rsc?state=%7B%22pathname%22%3A%22%2Ftest-server-props%22%2C%22search%22%3A%22%3Frefresh%22%7D'
-    // );
-    // await Promise.all([page.click('#navigate'), page.waitForNavigation()]);
-    // await page.waitForSelector('#server-props');
-    // expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
-    //   `"props: {}"`
-    // );
+    page.on('request', (request) => {
+      try {
+        expect(request.url()).toContain(
+          '__rsc?state=%7B%22pathname%22%3A%22%2Ftest-server-props%22%2C%22search%22%3A%22%3Frefresh%22%7D'
+        );
+      } catch (e) {
+        fail(e);
+      }
+    });
+    await Promise.all([page.click('#navigate'), page.waitForNavigation()]);
+    expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
+      `"props: {}"`
+    );
   });
 
   it('streams the SSR response and includes RSC payload', async () => {
@@ -712,22 +715,6 @@ export default async function testCases({
       expect(request.url()).toEqual(SHOPIFY_PERFORMANCE_ENDPOINT);
       expect(performanceEvent.page_load_type).toEqual('sub');
       expect(performanceEvent.url).toEqual(getServerUrl() + analyticSubPage);
-    });
-  });
-}
-
-function waitForNetworkUrl(page, url) {
-  return new Promise<void>((resolve, reject) => {
-    console.log('2');
-    page.on('request', (request) => {
-      console.log('3');
-      try {
-        expect(request.url()).toContain(url);
-        console.log('4');
-        resolve();
-      } catch (e) {
-        reject(e);
-      }
     });
   });
 }
