@@ -139,7 +139,7 @@ describe('<Link />', () => {
 
     setTimeout(() => {
       try {
-        expect(setServerProps.mock.calls[0][0]()).toStrictEqual({
+        expect(setServerProps.mock.calls[0][0]).toStrictEqual({
           pathname: '/products/hydrogen',
           search: '',
         });
