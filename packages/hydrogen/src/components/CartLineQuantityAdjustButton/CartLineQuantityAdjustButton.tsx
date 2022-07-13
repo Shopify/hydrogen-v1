@@ -4,6 +4,7 @@ import {useCartLine} from '../CartLineProvider';
 import {BaseButton, BaseButtonProps} from '../BaseButton';
 
 interface CartLineQuantityAdjustButtonProps<AsType extends React.ElementType> {
+  /** Provide a React element or component to render as the underlying button. Note: for accessibility compliance, almost always you should use a `button` element, or a component that renders an underlying button. */
   as?: AsType;
   /** The adjustment for a cart line's quantity. Valid values: `increase` (default), `decrease`, or `remove`. */
   adjust?: 'increase' | 'decrease' | 'remove';

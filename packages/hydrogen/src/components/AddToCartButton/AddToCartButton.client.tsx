@@ -4,8 +4,8 @@ import {useProductOptions} from '../../hooks/useProductOptions';
 import {BaseButton, BaseButtonProps} from '../BaseButton';
 
 interface AddToCartButtonProps<AsType extends React.ElementType> {
+  /** Provide a React element or component to render as the underlying button. Note: for accessibility compliance, almost always you should use a `button` element, or a component that renders an underlying button. */
   as?: AsType;
-
   /** An array of cart line attributes that belong to the item being added to the cart. */
   attributes?: {
     key: string;

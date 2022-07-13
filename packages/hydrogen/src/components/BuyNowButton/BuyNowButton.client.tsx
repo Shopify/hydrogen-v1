@@ -3,8 +3,8 @@ import {useInstantCheckout} from '../CartProvider';
 import {BaseButton, BaseButtonProps} from '../BaseButton';
 
 interface BuyNowButtonProps<AsType extends React.ElementType> {
+  /** Provide a React element or component to render as the underlying button. Note: for accessibility compliance, almost always you should use a `button` element, or a component that renders an underlying button. */
   as?: AsType;
-
   /** The item quantity. Defaults to 1. */
   quantity?: number;
   /** The ID of the variant. */
