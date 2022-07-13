@@ -77,9 +77,10 @@ export function useShopQuery<T>({
   let text: string;
   let data: any;
   let useQueryError: any;
+  let response: ReturnType<typeof fetchSync> | null = null;
 
   try {
-    const response = fetchSync(url, {
+    response = fetchSync(url, {
       ...requestInit,
       cache,
       preload,
@@ -127,12 +128,19 @@ export function useShopQuery<T>({
    */
   if (data?.errors) {
     const errors = Array.isArray(data.errors) ? data.errors : [data.errors];
-
+    const requestId = response?.headers?.get('x-request-id') ?? '';
     for (const error of errors) {
       if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {
-        throw new Error(`Storefront API GraphQL Error: ${error.message}`);
+        throw new Error(
+          `Storefront API GraphQL Error: ${error.message}.\nRequest id: ${requestId}`
+        );
       } else {
-        log.error('Storefront API GraphQL Error', error);
+        log.error(
+          'Storefront API GraphQL Error',
+          error,
+          'Storefront API GraphQL request id',
+          requestId
+        );
       }
     }
     log.error(`Storefront API GraphQL error count: ${errors.length}`);
