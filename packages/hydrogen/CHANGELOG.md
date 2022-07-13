@@ -1,5 +1,63 @@
 # Changelog
 
+## 1.1.0
+
+### Minor Changes
+
+- Replace graphiql with graphql/graphql-playground in local development at '/graphql` route. ([#1710](https://github.com/Shopify/hydrogen/pull/1710)) by [@cartogram](https://github.com/cartogram)
+
+* Expose utilities for integrating Hydrogen with 3rd party platforms in `@shopify/hydrogen/platforms`. These utilities can resolve the project build path automatically and also find the client build assets. ([#1772](https://github.com/Shopify/hydrogen/pull/1772)) by [@frandiox](https://github.com/frandiox)
+
+  ```js
+  import {
+    handleRequest, // Instead of './src/App.server'
+    indexTemplate, // Instead of './dist/client/index.html?raw'
+    isAsset, // Access a list of files in './dist/client/**/*'
+  } from '@shopify/hydrogen/platforms';
+
+  // Platform entry handler
+  export default function(request) {
+    if (isAsset(new URL(request.url).pathname)) {
+      return platformAssetHandler(request);
+    }
+
+    return handleRequest(request, {indexTemplate});
+  }
+  ```
+
+  Note that user apps don't need to be changed.
+
+### Patch Changes
+
+- Fix server props to properly reset on page navigation. Fixes https://github.com/Shopify/hydrogen/issues/1817 ([#1830](https://github.com/Shopify/hydrogen/pull/1830)) by [@blittle](https://github.com/blittle)
+
+* Serve assets in `public` directory from the same origin when deploying to Oxygen. ([#1815](https://github.com/Shopify/hydrogen/pull/1815)) by [@frandiox](https://github.com/frandiox)
+
+  Normally, public assets are served from a CDN domain that is different from the storefront URL. This creates issues in some situations where the assets need to be served from the same origin, such as when using service workers in PWA or tools like Partytown. This change adds a proxy so that the browser can download assets from the same origin.
+
+  Note that, for performance reasons, it is still recommended placing assets in `/src/assets` instead of `/public` whenever possible.
+
+- The payload returned by `fetchSync` was supposed to mimic `react-fetch` but it wrongly moved the Response data to a sub-property `response`. This has been fixed to have the Response at the top level. Also, cached responses are now correctly serialized and retrieved to avoid issues on cache hit. ([#1760](https://github.com/Shopify/hydrogen/pull/1760)) by [@frandiox](https://github.com/frandiox)
+
+  ```diff
+  const response = fetchSync('...');
+  -response.response.headers.get('...');
+  +response.headers.get('...');
+  const jsonData = response.json();
+  ```
+
+  Note that the sub-property `response` is still available but marked as deprecated.
+
+* Improve error messaging when there is an error in the Storefront API's GraphQL response. ([#1837](https://github.com/Shopify/hydrogen/pull/1837)) by [@frehner](https://github.com/frehner)
+
+- `null` shopId fix on the `PerformanceMetrics` component ([#1722](https://github.com/Shopify/hydrogen/pull/1722)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+* Make sure full page caching only caches on GET request ([#1839](https://github.com/Shopify/hydrogen/pull/1839)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+- Fix server props when using non UTF-8 characters in URL. ([#1780](https://github.com/Shopify/hydrogen/pull/1780)) by [@frandiox](https://github.com/frandiox)
+
+* Fix HMR in client components. It should now update only the modified client component in the browser instead of refreshing the entire page. ([#1818](https://github.com/Shopify/hydrogen/pull/1818)) by [@frandiox](https://github.com/frandiox)
+
 ## 1.0.2
 
 ### Patch Changes
