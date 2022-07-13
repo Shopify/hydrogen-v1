@@ -130,12 +130,12 @@ export function useShopQuery<T>({
 
     for (const error of errors) {
       if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {
-        throw new Error(error.message);
+        throw new Error(`Storefront API GraphQL Error: ${error.message}`);
       } else {
-        log.error('GraphQL Error', error);
+        log.error('Storefront API GraphQL Error', error);
       }
     }
-    log.error(`GraphQL errors: ${errors.length}`);
+    log.error(`Storefront API GraphQL error count: ${errors.length}`);
   }
 
   if (
