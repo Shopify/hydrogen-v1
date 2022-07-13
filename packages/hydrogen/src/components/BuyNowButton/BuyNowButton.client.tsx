@@ -60,8 +60,8 @@ export function BuyNowButton<AsType extends React.ElementType = 'button'>(
 
   return (
     <BaseButton
-      {...passthroughProps}
       disabled={loading ?? passthroughProps.disabled}
+      {...passthroughProps}
       onClick={onClick}
       defaultOnClick={handleBuyNow}
     >
