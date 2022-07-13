@@ -102,7 +102,6 @@ export function ProductForm() {
       }
       <div className="grid items-stretch gap-4">
         <AddToCartButton
-          as="button"
           variantId={selectedVariant?.id}
           quantity={1}
           accessibleAddingToCartLabel="Adding item to your cart"

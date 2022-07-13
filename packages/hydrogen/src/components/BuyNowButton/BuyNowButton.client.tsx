@@ -2,7 +2,7 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {useInstantCheckout} from '../CartProvider';
 import {BaseButton, BaseButtonProps} from '../BaseButton';
 
-interface CustomBuyNowButtonProps<AsType extends React.ElementType> {
+interface BuyNowButtonProps<AsType extends React.ElementType> {
   as?: AsType;
 
   /** The item quantity. Defaults to 1. */
@@ -15,13 +15,6 @@ interface CustomBuyNowButtonProps<AsType extends React.ElementType> {
     value: string;
   }[];
 }
-
-type BuyNowButtonProps<AsType extends React.ElementType> =
-  CustomBuyNowButtonProps<AsType> &
-    Omit<
-      React.ComponentPropsWithoutRef<AsType>,
-      keyof CustomBuyNowButtonProps<AsType>
-    >;
 
 /** The `BuyNowButton` component renders a button that adds an item to the cart and redirects the customer to checkout. */
 export function BuyNowButton<AsType extends React.ElementType = 'button'>(

@@ -3,20 +3,11 @@ import {useCart} from '../CartProvider';
 import {useCartLine} from '../CartLineProvider';
 import {BaseButton, BaseButtonProps} from '../BaseButton';
 
-interface CustomCartLineQuantityAdjustButtonProps<
-  AsType extends React.ElementType
-> {
+interface CartLineQuantityAdjustButtonProps<AsType extends React.ElementType> {
   as?: AsType;
   /** The adjustment for a cart line's quantity. Valid values: `increase` (default), `decrease`, or `remove`. */
   adjust?: 'increase' | 'decrease' | 'remove';
 }
-
-type CartLineQuantityAdjustButtonProps<AsType extends React.ElementType> =
-  CustomCartLineQuantityAdjustButtonProps<AsType> &
-    Omit<
-      React.ComponentPropsWithoutRef<AsType>,
-      keyof CustomCartLineQuantityAdjustButtonProps<AsType>
-    >;
 
 /**
  * The `CartLineQuantityAdjustButton` component renders a button that adjusts the cart line's quantity when pressed.
