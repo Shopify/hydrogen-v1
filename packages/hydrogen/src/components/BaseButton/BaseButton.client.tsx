@@ -10,7 +10,7 @@ export interface CustomBaseButtonProps<AsType> {
   onClick?: (
     event?: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void | boolean;
-  /** A default onClick behaviour */
+  /** A default onClick behavior */
   defaultOnClick?: (
     event?: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void | boolean;
