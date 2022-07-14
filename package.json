@@ -2,7 +2,11 @@
   "name": "hydrogen-monorepo",
   "private": true,
   "packageManager": "yarn@1.22.17",
-  "workspaces": ["templates/*", "packages/*", "packages/playground/*"],
+  "workspaces": [
+    "templates/*",
+    "packages/*",
+    "packages/playground/*"
+  ],
   "engines": {
     "node": ">=18"
   },
@@ -70,10 +74,19 @@
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx}": ["prettier --write"],
-    "*.{ts,tsx}": ["eslint", "prettier --parser=typescript --write"],
-    "*.html": ["prettier --write"],
-    "*.md": ["prettier --write"]
+    "*.{js,jsx}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "eslint",
+      "prettier --parser=typescript --write"
+    ],
+    "*.html": [
+      "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write"
+    ]
   },
   "resolutions": {
     "unified": "9.2.2"
