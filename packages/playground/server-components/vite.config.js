@@ -1,7 +1,5 @@
 const hydrogen = require('@shopify/hydrogen/plugin.cjs');
 const path = require('path');
-// const vp = require('@vanilla-extract/vite-plugin');
-// const vp = require('./vanilla-extract-plugin');
 
 /**
  * @type {import('vite').UserConfig}
