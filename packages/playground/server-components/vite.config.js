@@ -1,5 +1,7 @@
 const hydrogen = require('@shopify/hydrogen/plugin.cjs');
 const path = require('path');
+// const vp = require('@vanilla-extract/vite-plugin');
+// const vp = require('./vanilla-extract-plugin');
 
 /**
  * @type {import('vite').UserConfig}
@@ -7,7 +9,7 @@ const path = require('path');
 module.exports = {
   plugins: [
     // devCache is used in /request-sync test
-    hydrogen({devCache: true}),
+    hydrogen({devCache: true, experimental: {css: 'global'}}),
   ],
   resolve: {
     alias: [
