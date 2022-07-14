@@ -277,8 +277,8 @@ export default async function testCases({
     );
 
     // Style tag is present in DOM
-    expect(await page.textContent('style')).toEqual(
-      `.${className} {\n  color: red;\n}\n`
+    expect(await page.textContent('style')).toMatch(
+      new RegExp(`\\.${className}\\s*{\\s*color: red;\\s*}`, 'm')
     );
   });
 
