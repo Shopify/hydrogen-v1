@@ -9,6 +9,12 @@ export default function cssRsc() {
   return {
     name: 'hydrogen:css-rsc',
     enforce: 'pre',
+    buildStart() {
+      if (config?.build?.ssr) process.env.RSC_BUILD = 'true';
+    },
+    buildEnd() {
+      if (config?.build?.ssr) delete process.env.RSC_BUILD;
+    },
     config(config) {
       // Disable CSS code split during client build to avoid
       // preloading styles (which are already inlined in index.html).
