@@ -265,23 +265,6 @@ export default async function testCases({
     expect(await page.$$('[data-test=alias]')).toHaveLength(3);
   });
 
-  it('adds style tags for CSS modules', async () => {
-    await page.goto(getServerUrl() + '/css-modules');
-    expect(await page.textContent('h1')).toContain('CSS Modules');
-
-    // Same class for the same style
-    const className = await page.getAttribute('[data-test=server]', 'class');
-    expect(className).toMatch(/^_red_/);
-    expect(await page.getAttribute('[data-test=client]', 'class')).toEqual(
-      className
-    );
-
-    // Style tag is present in DOM
-    expect(await page.textContent('style')).toMatch(
-      new RegExp(`\\.${className}\\s*{\\s*color: red;\\s*}`, 'm')
-    );
-  });
-
   it('supports React.useId()', async () => {
     const response = await page.goto(getServerUrl() + '/useid');
 
@@ -313,6 +296,39 @@ export default async function testCases({
     // This requires `devCache: true` in `vite.config.js`.
     await page.reload();
     await test();
+  });
+
+  describe('CSS', () => {
+    it('adds style tags for pure CSS', async () => {
+      await page.goto(getServerUrl() + '/css-pure');
+      expect(await page.textContent('h1')).toContain('CSS Pure');
+
+      // Same class for the same style
+      const className = await page.getAttribute('[data-test=server]', 'class');
+      expect(className).toEqual('green');
+
+      // Style tag is present in DOM
+      const styles = await page.locator('style').allTextContents();
+      expect(styles.join('\n')).toMatch(/\.green\s*{\s*color: green;\s*/m);
+    });
+
+    it('adds style tags for CSS modules', async () => {
+      await page.goto(getServerUrl() + '/css-modules');
+      expect(await page.textContent('h1')).toContain('CSS Modules');
+
+      // Same class for the same style
+      const className = await page.getAttribute('[data-test=server]', 'class');
+      expect(className).toMatch(/^_red_/);
+      expect(await page.getAttribute('[data-test=client]', 'class')).toEqual(
+        className
+      );
+
+      // Style tag is present in DOM
+      const styles = await page.locator('style').allTextContents();
+      expect(styles.join('\n')).toMatch(
+        new RegExp(`\\.${className}\\s*{\\s*color: red;\\s*}`, 'm')
+      );
+    });
   });
 
   describe('HMR', () => {

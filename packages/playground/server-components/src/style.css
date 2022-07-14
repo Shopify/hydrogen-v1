@@ -1,0 +1,5 @@
+.green {
+  color: green;
+  /* Test for escaping quotes: */
+  quotes: "'" "'";
+}

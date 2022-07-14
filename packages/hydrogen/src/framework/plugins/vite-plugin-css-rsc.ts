@@ -71,9 +71,10 @@ export default function cssRsc() {
         outputChunk.code = outputChunk.code.replace(
           INJECT_STYLES_COMMENT,
           css
-            ? `<style>${css
+            ? `<style>${css // TODO: minify here?
                 .replace(/\s+/gm, ' ')
                 .replace(/'/g, "\\'")
+                .replace(/"/g, '\\"')
                 .trim()}</style>`
             : ''
         );
