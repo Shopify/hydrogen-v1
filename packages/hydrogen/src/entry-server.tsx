@@ -56,7 +56,6 @@ import {
 } from './foundation/Cache/cache';
 import {CacheShort, NO_STORE} from './foundation/Cache/strategies';
 import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes';
-import {getOxygenVariable} from './utilities/storefrontApi';
 
 declare global {
   // This is provided by a Vite plugin
@@ -81,18 +80,6 @@ export const renderHydrogen = (App: any) => {
       // eslint-disable-next-line node/no-missing-import
       'virtual__hydrogen.config.ts'
     );
-
-    // override with Oxygen's env variable if available
-    const oxygenStorefrontToken = getOxygenVariable(
-      'SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN'
-    );
-    if (oxygenStorefrontToken) {
-      inlineHydrogenConfig.shopify.storefrontToken = oxygenStorefrontToken;
-    }
-    const oxygenStorefrontDomain = getOxygenVariable('SHOPIFY_STORE_DOMAIN');
-    if (oxygenStorefrontDomain) {
-      inlineHydrogenConfig.shopify.storeDomain = oxygenStorefrontDomain;
-    }
 
     const {default: hydrogenRoutes} = await import(
       // @ts-ignore
