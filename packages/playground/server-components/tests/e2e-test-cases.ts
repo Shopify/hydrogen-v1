@@ -309,7 +309,7 @@ export default async function testCases({
 
       // Style tag is present in DOM
       const styles = await page.locator('style').allTextContents();
-      expect(styles.join('\n')).toMatch(/\.green\s*{\s*color: green;\s*/m);
+      expect(styles.join('\n')).toMatch(/\.green\s*{\s*color:\s*green;?\s*/m);
     });
 
     it('adds style tags for CSS modules', async () => {
@@ -326,7 +326,7 @@ export default async function testCases({
       // Style tag is present in DOM
       const styles = await page.locator('style').allTextContents();
       expect(styles.join('\n')).toMatch(
-        new RegExp(`\\.${className}\\s*{\\s*color: red;\\s*}`, 'm')
+        new RegExp(`\\.${className}\\s*{\\s*color:\\s*red;?\\s*}`, 'm')
       );
     });
   });
