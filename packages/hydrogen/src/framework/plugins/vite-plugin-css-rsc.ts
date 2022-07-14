@@ -1,5 +1,5 @@
 import MagicString from 'magic-string';
-import type {HtmlTagDescriptor, Plugin, ResolvedConfig} from 'vite';
+import {normalizePath, HtmlTagDescriptor, Plugin, ResolvedConfig} from 'vite';
 
 const INJECT_STYLES_COMMENT = '<!--__INJECT_STYLES__-->';
 
@@ -41,11 +41,12 @@ export default function cssRsc() {
         const tags = [] as HtmlTagDescriptor[];
 
         for (const [key, value] of server.moduleGraph.idToModuleMap.entries()) {
-          if (key.split('/').pop()!.includes('.css')) {
+          if (normalizePath(key).split('/').pop()!.includes('.css')) {
+            const filepath = normalizePath(value.file!);
             tags.push(
               value.type === 'css'
-                ? {tag: 'link', attrs: {rel: 'stylesheet', href: value.file!}}
-                : {tag: 'script', attrs: {type: 'module', src: value.file!}}
+                ? {tag: 'link', attrs: {rel: 'stylesheet', href: filepath}}
+                : {tag: 'script', attrs: {type: 'module', src: filepath}}
             );
           }
         }
