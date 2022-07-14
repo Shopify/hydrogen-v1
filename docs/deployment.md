@@ -20,7 +20,7 @@ To learn how to deploy your Hydrogen storefront to Netlify, refer to the [Hydrog
 
 ## Deploy to Vercel
 
-To learn how to deploy your Hydrogen storefront to Vercel, refer to the [Vercel Hydrogen template](https://vercel.com/new/clone?s=https%3A%2F%2Fgithub.com%2Fvercel%2Fvercel%2Ftree%2Fmain%2Fexamples%2Fhydrogen&template=hydrogen) documentation.
+To learn how to deploy your Hydrogen storefront to Vercel Edge Functions, refer to the [Vercel Hydrogen template](https://vercel.com/new/clone?s=https%3A%2F%2Fgithub.com%2Fvercel%2Fvercel%2Ftree%2Fmain%2Fexamples%2Fhydrogen&template=hydrogen) documentation.
 
 ## Deploy to Node.js
 
