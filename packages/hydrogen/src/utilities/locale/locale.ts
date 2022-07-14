@@ -1,4 +1,4 @@
-import {CountryCode, LanguageCode} from '../storefront-api-types';
+import {CountryCode, LanguageCode} from '../../storefront-api-types';
 
 /**
  * Calculates locale based on provided language and countryCode
@@ -6,9 +6,13 @@ import {CountryCode, LanguageCode} from '../storefront-api-types';
  * 2. Else merge language and countryCode
  */
 export function getLocale(
-  language: `${LanguageCode}`,
-  countryCode: `${CountryCode}`
+  language?: `${LanguageCode}`,
+  countryCode?: `${CountryCode}`
 ) {
+  if (!language || !countryCode) {
+    return '';
+  }
+
   if (isLanguageExtended(language)) {
     return hyphenateLanguage(language);
   }
@@ -21,5 +25,5 @@ function hyphenateLanguage(str: `${LanguageCode}`) {
 
 function isLanguageExtended(str?: `${LanguageCode}`) {
   if (!str) return false;
-  return /-|_/.test(str);
+  return str.includes('_') || str.includes('-');
 }

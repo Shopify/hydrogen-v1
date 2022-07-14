@@ -48,7 +48,7 @@ This hook returns an object with the following properties:
 | ---------- | ---------------------------------------------------------------------------------------- |
 | `country`  | An object with the country's `isoCode`.                                       |
 | `language` | An object with the language's `isoCode`.                                                 |
-| `locale`   | The locale string based on `country` and `language`. See [how we determine locale](#calculating-the-locale-for-i18n).  |
+| `locale`   | The locale string based on `country` and `language`. See [how we determine locale](#determine-the-locale-for-i18n).  |
 
 ## Determine the locale for i18n
 

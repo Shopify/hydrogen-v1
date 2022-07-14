@@ -13,10 +13,7 @@ export function DevTools() {
     storefrontApiVersion,
   } = shopifyConfig || {};
   const settings = {
-    locale:
-      languageCode && countryCode
-        ? getLocale(languageCode, countryCode)
-        : `${languageCode}-${countryCode}`,
+    locale: getLocale(languageCode, countryCode),
     storeDomain,
     storefrontApiVersion,
   };
