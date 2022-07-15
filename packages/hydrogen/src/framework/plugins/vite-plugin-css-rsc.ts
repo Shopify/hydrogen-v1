@@ -23,8 +23,8 @@ export default function cssRsc() {
     configResolved(_config) {
       config = _config;
     },
-    transform(code, id) {
-      if (id.includes('index.html?raw')) {
+    transform(code, id, options) {
+      if (options?.ssr && id.includes('index.html?raw')) {
         // Mark the client build index.html to inject styles later
         const s = new MagicString(code);
         s.replace('</head>', INJECT_STYLES_COMMENT + '</head>');
@@ -40,14 +40,39 @@ export default function cssRsc() {
       if (server) {
         const tags = [] as HtmlTagDescriptor[];
 
+        const foundCssFiles = new Set<string>();
+        const {browserHash = ''} =
+          (server as any)._optimizedDeps?.metadata || {};
+
         for (const [key, value] of server.moduleGraph.idToModuleMap.entries()) {
           if (normalizePath(key).split('/').pop()!.includes('.css')) {
-            const filepath = normalizePath(value.file!);
-            tags.push(
-              value.type === 'css'
-                ? {tag: 'link', attrs: {rel: 'stylesheet', href: filepath}}
-                : {tag: 'script', attrs: {type: 'module', src: filepath}}
-            );
+            let {url, file, lastHMRTimestamp} = value;
+
+            if (!foundCssFiles.has(file!)) {
+              foundCssFiles.add(file!);
+
+              // Vite is adding hash and timestamp to the CSS files downloaded
+              // from client components. Adding the same query string params
+              // here prevents this file from being downloaded twice.
+              if (lastHMRTimestamp) {
+                const timestampQuery = `?t=${lastHMRTimestamp}`;
+                // The timestamp needs to be the first query string param.
+                url = url.includes('?')
+                  ? url.replace('?', timestampQuery + '&')
+                  : url + timestampQuery;
+              }
+
+              if (browserHash && !url.includes('v=')) {
+                // Append the hash at the end.
+                url += (url.includes('?') ? '&' : '?') + `v=${browserHash}`;
+              }
+
+              tags.push(
+                value.type === 'css'
+                  ? {tag: 'link', attrs: {rel: 'stylesheet', href: url}}
+                  : {tag: 'script', attrs: {type: 'module', src: url}}
+              );
+            }
           }
         }
 
