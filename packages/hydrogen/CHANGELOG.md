@@ -2,6 +2,13 @@
 
 ## 1.1.0
 
+### Migration for Stores based on the "Demo Store" template
+
+If your Store is based on the "Demo Store" tempate, and you are using the `test:ci` NPM script, then you need to replace the contents of your `/tests/utils.js` or `/tests/utils.ts` file with the following:
+
+- For Typescript projects, replace `/tests/utils.ts` with the content found [here](https://github.com/Shopify/hydrogen/blob/e2a14cb3eb0f8f171603c597dfe572df4d11cc7a/templates/demo-store/tests/utils.ts)
+- For Javascript projects, replace `/tests/utils.js` with the content found [here](https://gist.github.com/frehner/2b2ba6639d5cc13c39f5eeea707413c4)
+
 ### Minor Changes
 
 - Replace graphiql with graphql/graphql-playground in local development at '/graphql` route. ([#1710](https://github.com/Shopify/hydrogen/pull/1710)) by [@cartogram](https://github.com/cartogram)
