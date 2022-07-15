@@ -36,6 +36,7 @@ export function Form({
 
       // @ts-expect-error
       // It is valid to pass a FormData instance to a URLSearchParams constructor
+      // @todo - support multipart forms
       const formBody = new URLSearchParams(formData);
 
       startTransition(() => {
@@ -45,7 +46,7 @@ export function Form({
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
             'Hydrogen-Client': 'Form-Action',
           },
-          body: formBody,
+          body: formBody.toString(),
         }).then((fetchResponse) => {
           const rscPathname = fetchResponse.headers.get(
             'Hydrogen-RSC-Pathname'

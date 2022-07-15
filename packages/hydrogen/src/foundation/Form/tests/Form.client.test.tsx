@@ -55,6 +55,7 @@ describe('<Form>', () => {
 
     const event = {
       preventDefault: jest.fn(),
+      target: component.find('form')?.domNode,
     };
 
     component.find('form')?.trigger('onSubmit', event);

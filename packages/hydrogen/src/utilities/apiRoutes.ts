@@ -263,20 +263,23 @@ export async function renderApiRoute(
     );
   }
 
-  if (response instanceof ApiRouteRscRequest) {
+  if (response instanceof Request) {
     const url = new URL(request.url);
+    const newUrl = new URL(response.url, url);
 
     if (request.headers.get('Hydrogen-Client') === 'Form-Action') {
-      return new Request(response.getRscUrl(url), {
+      response.headers.set(
+        'Hydrogen-RSC-Pathname',
+        newUrl.pathname + newUrl.search
+      );
+      return new Request(getRscUrl(url, newUrl), {
         headers: response.headers,
       });
     } else {
       // This request was made by a native form presumably because the client components had yet to hydrate,
       // redirect instead of just rendering the response this will prevent odd refresh / back behavior.
       // The redirect response also should *never* be cached.
-      //
-      // @todo No server props (state) will follow this redirect. Maybe we could find a way to make that happen?
-      response.headers.set('Location', response.getRedirectHeader(url));
+      response.headers.set('Location', newUrl.href);
       response.headers.set('Cache-Control', 'no-store');
 
       return new Response(null, {
@@ -289,46 +292,14 @@ export async function renderApiRoute(
   return response;
 }
 
-export class ApiRouteRscRequest extends Request {
-  #pathname?: string;
-  #state?: Record<string, any> = {};
-
-  constructor(pathname?: string, state: Record<string, any> = {}) {
-    super('http://localhost');
-    this.#pathname = pathname;
-    this.#state = state;
-
-    if (pathname) {
-      this.headers.set('Hydrogen-RSC-Pathname', pathname);
-    }
-  }
-
-  getRscUrl(currentUrl: URL) {
-    const rscUrl = new URL(RSC_PATHNAME, currentUrl);
-    const searchParams = new URLSearchParams({
-      state: JSON.stringify({
-        pathname: this.#pathname ?? currentUrl.pathname,
-        search: '',
-        ...this.#state,
-      }),
-    });
-    rscUrl.search = searchParams.toString();
-    return rscUrl.toString();
-  }
-
-  getRedirectHeader(currentUrl: URL) {
-    return this.#pathname
-      ? currentUrl.origin + this.#pathname
-      : currentUrl.href;
-  }
-}
-
-export function renderRscFromApiRoute(
-  options: {
-    url?: string;
-    props: Record<string, any>;
-  } = {props: {}}
-) {
-  const {url, props = {}} = options;
-  return new ApiRouteRscRequest(url, props);
+function getRscUrl(currentUrl: URL, newUrl: URL) {
+  const rscUrl = new URL(RSC_PATHNAME, currentUrl);
+  const searchParams = new URLSearchParams({
+    state: JSON.stringify({
+      pathname: newUrl.pathname,
+      search: newUrl.search,
+    }),
+  });
+  rscUrl.search = searchParams.toString();
+  return rscUrl.toString();
 }

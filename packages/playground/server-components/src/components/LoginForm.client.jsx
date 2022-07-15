@@ -2,6 +2,7 @@ import {Form} from '@shopify/hydrogen';
 import {useCallback} from 'react';
 import {useState} from 'react';
 
+export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const INVALID_USER = 'INVALID_USER';
 export const INVALID_USERNAME = 'INVALID_USERNAME';
 export const INVALID_PASSWORD = 'INVALID_PASSWORD';

@@ -1,6 +1,7 @@
-import {Form, renderRsc, useSession} from '@shopify/hydrogen';
+import {Form, useSession, useUrl} from '@shopify/hydrogen';
 import {
   LoginForm,
+  LOGIN_ERROR,
   INVALID_USER,
   INVALID_USERNAME,
   INVALID_PASSWORD,
@@ -14,8 +15,10 @@ const users = [
   },
 ];
 
-export default function FormServer({error}) {
+export default function Account() {
   const {user} = useSession();
+  const url = useUrl();
+  const loginError = url.searchParams.get(LOGIN_ERROR);
 
   if (user)
     return (
@@ -34,7 +37,7 @@ export default function FormServer({error}) {
       </div>
     );
 
-  return <LoginForm error={error} />;
+  return <LoginForm error={loginError} />;
 }
 
 export async function api(request, {session}) {
@@ -43,24 +46,28 @@ export async function api(request, {session}) {
 
   if (action === 'logout') {
     await session.destroy();
-    return renderRsc({url: '/'});
+    return new Request('/');
   }
 
   const username = data.get('username');
   const password = data.get('password');
 
-  if (!username) return renderRsc({props: {error: INVALID_USERNAME}});
-  if (!password) return renderRsc({props: {error: INVALID_PASSWORD}});
+  if (!username) {
+    return new Request(`/account?${LOGIN_ERROR}=${INVALID_USERNAME}`);
+  }
+  if (!password) {
+    return new Request(`/account?${LOGIN_ERROR}=${INVALID_PASSWORD}`);
+  }
 
   const user = users.find(
     (user) => username === user.username && user.password === password
   );
 
   if (!user) {
-    return renderRsc({props: {error: INVALID_USER}});
+    return new Request(`/account?${LOGIN_ERROR}=${INVALID_USER}`);
   }
 
   await session.set('user', user.username);
 
-  return renderRsc();
+  return new Request('/account');
 }
