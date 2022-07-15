@@ -19,7 +19,7 @@ SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN=
 
 - `/components/GTM.server` — to initialize the `dataLayer` and load the `https://www.googletagmanager.com/gtm.js` script via partytown
 - `/route/reverse-proxy` — an api that helps us bypass CORS issues when loading 3rd-party libraries via partytown Web Workers.
-- `/components/PageViewEvent` — a client component demonstrating how to fire `page_view` and `container initialized` gtm triggers.
+- `/components/PageViewEvent` — a client component demonstrating how to trigger `page_view` and `container initialized` gtm events.
 - `App.jsx` — includes the `<Partytown />` instance and `enablePartytownAtomic` a helper function to enable partytown in atomic mode
 - `yarn partytown` — a script to copy partytown worker scripts to `/public/~partytown`. (To be run after a `@builder.io/partytown` update)
 
