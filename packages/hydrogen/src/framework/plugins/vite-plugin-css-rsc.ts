@@ -45,10 +45,16 @@ export default function cssRsc() {
           (server as any)._optimizedDeps?.metadata || {};
 
         for (const [key, value] of server.moduleGraph.idToModuleMap.entries()) {
+          // TODO stylus scss less
           if (normalizePath(key).split('/').pop()!.includes('.css')) {
-            let {url, file, lastHMRTimestamp} = value;
+            let {url, file, lastHMRTimestamp, importers} = value;
 
-            if (!foundCssFiles.has(file!)) {
+            if (
+              !foundCssFiles.has(file!) &&
+              !Array.from(importers).some((importer) =>
+                foundCssFiles.has(importer.file!)
+              )
+            ) {
               foundCssFiles.add(file!);
 
               // Vite is adding hash and timestamp to the CSS files downloaded
