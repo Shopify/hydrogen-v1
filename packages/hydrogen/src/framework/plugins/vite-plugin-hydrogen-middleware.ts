@@ -8,7 +8,7 @@ import {InMemoryCache} from '../cache/in-memory.js';
 import {VIRTUAL_PROXY_HYDROGEN_CONFIG_ID} from './vite-plugin-hydrogen-virtual-files.js';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
-  process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server.js';
+  process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   return {

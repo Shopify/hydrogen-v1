@@ -5,7 +5,7 @@ import type {HydrogenVitePluginOptions} from '../types.js';
 import {viteception} from '../viteception.js';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
-  process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server.js';
+  process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
 // The character ":" breaks Vite with Node >= 16.15. Use "_" instead
 const VIRTUAL_PREFIX = 'virtual__';
