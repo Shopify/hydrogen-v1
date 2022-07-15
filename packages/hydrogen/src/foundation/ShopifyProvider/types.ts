@@ -9,6 +9,9 @@ export interface ShopifyContextValue
   storefrontId: string | null;
 }
 
+// TODO: improve types with intrinsic string manipulation
+export type Locale = string;
+
 export interface LocalizationContextValue {
   country: {
     isoCode: `${CountryCode}`;
@@ -16,7 +19,7 @@ export interface LocalizationContextValue {
   language: {
     isoCode: `${LanguageCode}`;
   };
-  locale: `${LanguageCode}-${CountryCode}`;
+  locale: Locale;
 }
 
 export type ShopifyProviderProps = {

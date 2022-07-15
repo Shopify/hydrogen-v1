@@ -9,6 +9,7 @@ import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 import {getOxygenVariable} from '../../utilities/storefrontApi';
 import {SHOPIFY_STOREFRONT_ID_VARIABLE} from '../../constants';
+import {getLocale} from '../../utilities/locale';
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
   const countryCode = shopifyConfig.defaultCountryCode ?? DEFAULT_COUNTRY;
@@ -128,7 +129,7 @@ export function getLocalizationContextValue(
       language: {
         isoCode: runtimeLanguageCode,
       },
-      locale: `${runtimeLanguageCode}-${runtimeCountryCode}`,
+      locale: getLocale(runtimeLanguageCode, runtimeCountryCode),
     };
   }, [defaultLanguageCode, defaultCountryCode, countryCode, languageCode]);
 }
