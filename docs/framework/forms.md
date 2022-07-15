@@ -117,7 +117,7 @@ export default function Login() {
 
 {% endcodeblock %}
 
-When the page initially loads, there is no search parameter. If the login mutation fails, the server components re-render with the `error` serach parameter, and this shows a message to the user. The downside to this approach is the error state is within the URL, which means the error message will remain if the page is refreshed. This will no longer be a problem with flashed session data.
+When the page initially loads, there is no search parameter. If the login mutation fails, the server components re-render with the `error` serach parameter, and this shows a message to the user. The downside to this approach is the error state is within the URL, which means the error message will stay if the page is refreshed. This will no longer be a problem with flashed session data.
 
 ## Client validation and feedback
 
