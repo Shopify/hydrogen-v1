@@ -1,1 +1,1 @@
-export {ClientAnalytics} from './ClientAnalytics';
+export {ClientAnalytics} from './ClientAnalytics.js';

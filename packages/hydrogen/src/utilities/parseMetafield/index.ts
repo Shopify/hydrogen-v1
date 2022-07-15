@@ -1,1 +1,1 @@
-export {parseMetafield, parseMetafieldValue} from './parseMetafield';
+export {parseMetafield, parseMetafieldValue} from './parseMetafield.js';

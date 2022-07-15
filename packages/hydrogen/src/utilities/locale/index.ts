@@ -1,1 +1,1 @@
-export {getLocale} from './locale';
+export {getLocale} from './locale.js';
