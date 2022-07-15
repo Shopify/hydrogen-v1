@@ -35,7 +35,7 @@ export function collectQueryTimings(
 
   if (hashedKey !== 'hydrogen-shopify-config') {
     request.ctx.queryTimings.push({
-      name: findQueryName(hashKey(queryKey)),
+      name: findQueryName(hashedKey),
       timingType,
       timestamp: getTime(),
       duration,
