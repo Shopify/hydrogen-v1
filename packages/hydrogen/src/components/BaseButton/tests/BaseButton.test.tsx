@@ -1,6 +1,6 @@
 import React from 'react';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {BaseButton} from '../BaseButton.client';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {BaseButton} from '../BaseButton.client.js';
 
 describe('BaseButton', () => {
   afterEach(() => {

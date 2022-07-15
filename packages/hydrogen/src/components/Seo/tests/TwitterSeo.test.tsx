@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {TwitterSeo} from '../TwitterSeo.client';
+import {TwitterSeo} from '../TwitterSeo.client.js';
 
 jest.mock('../../../foundation/Head/Head.client', () => ({
   Head({children}: {children: React.ReactNode}) {

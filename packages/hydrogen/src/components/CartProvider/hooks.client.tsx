@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import {useShop} from '../../foundation';
-import {flattenConnection} from '../../utilities';
-import {CartInput} from '../../storefront-api-types';
-import {CartCreate, defaultCartFragment} from './cart-queries';
+import {useShop} from '../../foundation/index.js';
+import {flattenConnection} from '../../utilities/index.js';
+import {CartInput} from '../../storefront-api-types.js';
+import {CartCreate, defaultCartFragment} from './cart-queries.js';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
-} from './graphql/CartCreateMutation';
-import {Cart} from './types';
+} from './graphql/CartCreateMutation.js';
+import {Cart} from './types.js';
 import {
   SHOPIFY_STOREFRONT_ID_HEADER,
   STOREFRONT_API_PUBLIC_TOKEN_HEADER,
@@ -15,7 +15,7 @@ import {
   SHOPIFY_STOREFRONT_S_HEADER,
   SHOPIFY_Y,
   SHOPIFY_S,
-} from '../../constants';
+} from '../../constants.js';
 import {parse} from 'worktop/cookie';
 
 export function useCartFetch() {

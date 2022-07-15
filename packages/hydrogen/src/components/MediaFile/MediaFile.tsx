@@ -1,15 +1,15 @@
 import React from 'react';
-import {Image, type ShopifyImageProps} from '../Image';
-import {Video} from '../Video';
-import {ExternalVideo} from '../ExternalVideo';
-import {ModelViewer} from '../ModelViewer';
+import {Image, type ShopifyImageProps} from '../Image/index.js';
+import {Video} from '../Video/index.js';
+import {ExternalVideo} from '../ExternalVideo/index.js';
+import {ModelViewer} from '../ModelViewer/index.js';
 import type {
   MediaEdge as MediaEdgeType,
   MediaImage as MediaImageType,
   ExternalVideo as ExternalVideoType,
   Model3d as Model3dType,
   Video as VideoType,
-} from '../../storefront-api-types';
+} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 export interface MediaFileProps {

@@ -1,4 +1,4 @@
-import {LIB_VERSION} from '../version';
+import {LIB_VERSION} from '../version.js';
 
 const defaultHeaders = {
   'content-type': 'application/json',

@@ -3,6 +3,6 @@ export {
   ServerPropsContext,
   type ServerProps,
   type ServerPropsContextValue,
-} from './ServerPropsProvider';
-export {useShop} from './useShop';
-export {useUrl} from './useUrl';
+} from './ServerPropsProvider/index.js';
+export {useShop} from './useShop/index.js';
+export {useUrl} from './useUrl/index.js';

@@ -1,5 +1,5 @@
-import {ResolvedHydrogenConfig} from '../../../types';
-import {ServerAnalyticsRoute} from '../ServerAnalyticsRoute';
+import {ResolvedHydrogenConfig} from '../../../types.js';
+import {ServerAnalyticsRoute} from '../ServerAnalyticsRoute.js';
 
 const createRequest = () => {
   return new Request('__event', {

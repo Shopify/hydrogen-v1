@@ -1,7 +1,7 @@
 import React from 'react';
-import {DevTools as DevToolsClient} from './DevTools.client';
-import {useServerRequest} from '../ServerRequestProvider';
-import {getLocale} from '../../utilities/locale';
+import {DevTools as DevToolsClient} from './DevTools.client.js';
+import {useServerRequest} from '../ServerRequestProvider/index.js';
+import {getLocale} from '../../utilities/locale/index.js';
 
 export function DevTools() {
   const serverRequest = useServerRequest();

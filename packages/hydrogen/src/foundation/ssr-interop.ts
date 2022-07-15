@@ -6,8 +6,8 @@
  */
 
 import {useContext, Context} from 'react';
-import type {HydrogenRequest} from './HydrogenRequest/HydrogenRequest.server';
-//@SSR import {useServerRequest} from './ServerRequestProvider';
+import type {HydrogenRequest} from './HydrogenRequest/HydrogenRequest.server.js';
+//@SSR import {useServerRequest} from './ServerRequestProvider/index.js';
 
 // This is replaced by Vite to import.meta.env.SSR
 export const META_ENV_SSR = false;
@@ -30,7 +30,7 @@ const reactContextType = Symbol.for('react.context');
  * The returned type depends on what the server getter returns.
  * @example
  * ```js
- * import {MyClientContext} from './my-client-react-context-provider';
+ * import {MyClientContext} from './my-client-react-context-provider.js';
  * useEnvContext(req => req.ctx.myServerContext, MyClientContext)
  * ```
  */

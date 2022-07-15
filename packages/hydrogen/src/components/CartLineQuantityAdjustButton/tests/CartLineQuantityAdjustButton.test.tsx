@@ -1,12 +1,12 @@
 import React from 'react';
-import {CartLineProvider} from '../../CartLineProvider';
-import {CartLineQuantity} from '../../CartLineQuantity';
-import {CartLineQuantityAdjustButton} from '../CartLineQuantityAdjustButton';
-import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
-import {useCart} from '../../CartProvider';
-import {CART_WITH_LINES_FLATTENED} from '../../CartProvider/tests/fixtures';
-import {mountWithCartProvider} from '../../CartProvider/tests/utilities';
-import {BaseButton} from '../../BaseButton';
+import {CartLineProvider} from '../../CartLineProvider/index.js';
+import {CartLineQuantity} from '../../CartLineQuantity.js';
+import {CartLineQuantityAdjustButton} from '../CartLineQuantityAdjustButton.js';
+import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
+import {useCart} from '../../CartProvider/index.js';
+import {CART_WITH_LINES_FLATTENED} from '../../CartProvider/tests/fixtures.js';
+import {mountWithCartProvider} from '../../CartProvider/tests/utilities/index.js';
+import {BaseButton} from '../../BaseButton/index.js';
 
 describe('CartLineQuantityAdjustButton', () => {
   it('increases quantity', () => {

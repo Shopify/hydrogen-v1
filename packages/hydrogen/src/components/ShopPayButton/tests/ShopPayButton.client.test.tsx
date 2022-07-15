@@ -1,11 +1,11 @@
 import React from 'react';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 import {
   ShopPayButton,
   getIdFromGid,
   DoublePropsErrorMessage,
   MissingPropsErrorMessage,
-} from '../ShopPayButton.client';
+} from '../ShopPayButton.client.js';
 
 jest.mock('../../../hooks/useLoadScript/useLoadScript.client', () => {
   return {

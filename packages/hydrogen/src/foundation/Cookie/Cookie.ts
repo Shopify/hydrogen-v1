@@ -1,6 +1,6 @@
 import {parse, stringify as stringifyCookie} from 'worktop/cookie';
-import {log} from '../../utilities/log';
-import {parseJSON} from '../../utilities/parse';
+import {log} from '../../utilities/log/index.js';
+import {parseJSON} from '../../utilities/parse.js';
 
 export type CookieOptions = {
   /** Whether to secure the cookie so that [client-side JavaScript can't read the cookie](https://owasp.org/www-community/HttpOnly).

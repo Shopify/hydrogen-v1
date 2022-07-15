@@ -1,12 +1,12 @@
 import React from 'react';
-import {CartProvider} from '../../CartProvider';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {mountWithCartProvider} from '../../CartProvider/tests/utilities';
+import {CartProvider} from '../../CartProvider/index.js';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {mountWithCartProvider} from '../../CartProvider/tests/utilities/index.js';
 
-import {ProductOptionsProvider} from '../../ProductOptionsProvider';
-import {AddToCartButton} from '../AddToCartButton.client';
-import {getProduct, getVariant} from '../../../utilities/tests/product';
-import {BaseButton} from '../../BaseButton';
+import {ProductOptionsProvider} from '../../ProductOptionsProvider/index.js';
+import {AddToCartButton} from '../AddToCartButton.client.js';
+import {getProduct, getVariant} from '../../../utilities/tests/product.js';
+import {BaseButton} from '../../BaseButton/index.js';
 
 describe('AddToCartButton', () => {
   beforeEach(() => {

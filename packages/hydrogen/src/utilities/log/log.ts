@@ -1,7 +1,7 @@
-import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server';
+import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.js';
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
-import {getTime} from '../timing';
-import {parseUrl} from './utils';
+import {getTime} from '../timing.js';
+import {parseUrl} from './utils.js';
 
 /** The `log` utility is a function that's used for logging debugging, warning, and error information about the application.
  * Use this utility by importing `log` from `@shopify/hydrogen`, or by using a `log` prop passed to each page

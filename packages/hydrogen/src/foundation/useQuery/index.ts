@@ -1,1 +1,1 @@
-export {useQuery} from './hooks';
+export {useQuery, type HydrogenUseQueryOptions} from './hooks.js';

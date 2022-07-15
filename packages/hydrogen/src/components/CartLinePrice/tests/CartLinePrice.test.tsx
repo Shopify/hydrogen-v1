@@ -1,10 +1,10 @@
 import React from 'react';
-import {CartLineProvider} from '../../CartLineProvider';
-import {CartLinePrice} from '../CartLinePrice.client';
-import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
-import {Money} from '../../Money';
-import {CurrencyCode} from '../../../storefront-api-types';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {CartLineProvider} from '../../CartLineProvider/index.js';
+import {CartLinePrice} from '../CartLinePrice.client.js';
+import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
+import {Money} from '../../Money/index.js';
+import {CurrencyCode} from '../../../storefront-api-types.js';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 
 describe('<CartLinePrice />', () => {
   it('renders <Money /> with the regular price by default', () => {

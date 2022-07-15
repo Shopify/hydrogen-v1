@@ -1,4 +1,4 @@
-import type {GraphQLConnection} from '../../types';
+import type {GraphQLConnection} from '../../types.js';
 import type {PartialDeep} from 'type-fest';
 
 /**

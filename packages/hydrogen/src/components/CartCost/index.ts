@@ -1,1 +1,1 @@
-export {CartCost} from './CartCost.client';
+export {CartCost} from './CartCost.client.js';

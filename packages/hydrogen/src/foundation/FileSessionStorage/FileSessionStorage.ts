@@ -1,11 +1,11 @@
-import type {SessionStorageAdapter} from '../session/session';
-import {Cookie} from '../Cookie/Cookie';
+import type {SessionStorageAdapter} from '../session/session.js';
+import {Cookie} from '../Cookie/Cookie.js';
 import {v4 as uid} from 'uuid';
 import path from 'path';
 import {promises as fsp} from 'fs';
-import type {CookieOptions} from '../Cookie/Cookie';
-import {Logger} from '../../utilities/log';
-import {parseJSON} from '../../utilities/parse';
+import type {CookieOptions} from '../Cookie/Cookie.js';
+import {Logger} from '../../utilities/log/index.js';
+import {parseJSON} from '../../utilities/parse.js';
 
 async function wait() {
   return new Promise((resolve) => setTimeout(resolve));

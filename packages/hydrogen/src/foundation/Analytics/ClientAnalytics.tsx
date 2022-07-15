@@ -1,8 +1,8 @@
-import {getNamedspacedEventname, mergeDeep} from './utils';
-import type {Subscriber, Subscribers, SubscriberFunction} from './types';
-import {eventNames} from './const';
-import {EVENT_PATHNAME} from '../../constants';
-import {META_ENV_SSR} from '../ssr-interop';
+import {getNamedspacedEventname, mergeDeep} from './utils.js';
+import type {Subscriber, Subscribers, SubscriberFunction} from './types.js';
+import {eventNames} from './const.js';
+import {EVENT_PATHNAME} from '../../constants.js';
+import {META_ENV_SSR} from '../ssr-interop.js';
 
 type EventGuard = Record<string, NodeJS.Timeout>;
 

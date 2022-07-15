@@ -1,6 +1,6 @@
-import {type HydrogenUseQueryOptions, useQuery} from '../../useQuery/hooks';
-import {useUrl} from '../../useUrl';
-import {ResponseSync} from '../ResponseSync';
+import {type HydrogenUseQueryOptions, useQuery} from '../../useQuery/index.js';
+import {useUrl} from '../../useUrl/index.js';
+import {ResponseSync} from '../ResponseSync.js';
 
 /**
  * The `fetchSync` hook makes API requests and is the recommended way to make simple fetch calls on the server and the client.

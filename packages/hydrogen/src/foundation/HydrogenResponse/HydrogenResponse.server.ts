@@ -1,6 +1,9 @@
-import {CacheShort, generateCacheControlHeader} from '../Cache/strategies';
-import type {CachingStrategy} from '../../types';
-import Redirect from '../Redirect/Redirect.client';
+import {
+  CacheShort,
+  generateCacheControlHeader,
+} from '../Cache/strategies/index.js';
+import type {CachingStrategy} from '../../types.js';
+import Redirect from '../Redirect/Redirect.client.js';
 import React from 'react';
 
 export class HydrogenResponse extends Response {

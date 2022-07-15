@@ -1,7 +1,11 @@
-import '../utilities/web-api-polyfill';
+import '../utilities/web-api-polyfill.js';
 import path from 'path';
-import {handleRequest, indexTemplate, relativeClientBuildPath} from './virtual';
-import {hydrogenMiddleware} from '../framework/middleware';
+import {
+  handleRequest,
+  indexTemplate,
+  relativeClientBuildPath,
+} from './virtual.js';
+import {hydrogenMiddleware} from '../framework/middleware.js';
 
 // @ts-ignore
 import serveStatic from 'serve-static';
@@ -9,7 +13,7 @@ import serveStatic from 'serve-static';
 import compression from 'compression';
 import bodyParser from 'body-parser';
 import connect, {NextHandleFunction} from 'connect';
-import {InMemoryCache} from '../framework/cache/in-memory';
+import {InMemoryCache} from '../framework/cache/in-memory.js';
 
 type CreateServerOptions = {
   cache?: Cache;

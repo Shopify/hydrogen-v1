@@ -1,6 +1,6 @@
 import React from 'react';
-import {useCart} from '../CartProvider';
-import {Money} from '../Money';
+import {useCart} from '../CartProvider/index.js';
+import {Money} from '../Money/index.js';
 
 export interface CartCostProps {
   /** A string type that defines the type of cost needed. Valid values: `total`, `subtotal`, `tax`, or `duty`. */

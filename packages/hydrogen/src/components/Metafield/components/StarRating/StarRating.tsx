@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {Rating} from '../../../../types';
+import {Rating} from '../../../../types.js';
 
 export const STAR_EMPTY = '☆';
 export const STAR_FILLED = '★';

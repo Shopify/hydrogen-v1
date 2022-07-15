@@ -1,5 +1,5 @@
-import {ShopifyContext} from '../ShopifyProvider';
-import {useEnvContext} from '../ssr-interop';
+import {ShopifyContext} from '../ShopifyProvider/index.js';
+import {useEnvContext} from '../ssr-interop.js';
 
 /**
  * The `useShop` hook provides access to values within

@@ -1,10 +1,10 @@
 import React from 'react';
-import {CartLines} from '../CartLines.client';
-import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
-import {CartLineProductTitle} from '../../CartLineProductTitle';
-import {CART} from '../../CartProvider/tests/fixtures';
-import {CartProvider} from '../../CartProvider';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {CartLines} from '../CartLines.client.js';
+import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
+import {CartLineProductTitle} from '../../CartLineProductTitle.js';
+import {CART} from '../../CartProvider/tests/fixtures.js';
+import {CartProvider} from '../../CartProvider/index.js';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 
 describe('CartLines', () => {
   const fetch = global.fetch;

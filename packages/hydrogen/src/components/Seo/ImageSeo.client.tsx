@@ -1,6 +1,6 @@
 import React from 'react';
-import {Head} from '../../foundation/Head';
-import type {Image} from '../../storefront-api-types';
+import {Head} from '../../foundation/Head/index.js';
+import type {Image} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 export function ImageSeo({url, width, height, altText}: PartialDeep<Image>) {

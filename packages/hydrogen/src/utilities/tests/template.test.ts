@@ -1,4 +1,4 @@
-import {stripScriptsFromTemplate} from '../template';
+import {stripScriptsFromTemplate} from '../template.js';
 
 describe('getScriptsFromTemplate', () => {
   it('identifies scripts and modules in a template', () => {

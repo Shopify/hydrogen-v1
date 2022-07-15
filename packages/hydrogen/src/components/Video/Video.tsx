@@ -1,6 +1,6 @@
 import React, {type HTMLAttributes} from 'react';
-import {shopifyImageLoader} from '../../utilities';
-import type {Video as VideoType} from '../../storefront-api-types';
+import {shopifyImageLoader} from '../../utilities/index.js';
+import type {Video as VideoType} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 interface VideoProps {

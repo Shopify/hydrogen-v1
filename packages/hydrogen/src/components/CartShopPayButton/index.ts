@@ -1,1 +1,1 @@
-export {CartShopPayButton} from './CartShopPayButton.client';
+export {CartShopPayButton} from './CartShopPayButton.client.js';

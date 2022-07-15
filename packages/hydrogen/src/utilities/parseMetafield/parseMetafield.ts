@@ -1,7 +1,7 @@
-import type {Metafield} from '../../storefront-api-types';
-import type {ParsedMetafield} from '../../types';
+import type {Metafield} from '../../storefront-api-types.js';
+import type {ParsedMetafield} from '../../types.js';
 import type {PartialDeep} from 'type-fest';
-import {parseJSON} from '../parse';
+import {parseJSON} from '../parse.js';
 
 /**
  * The `parseMetafield` utility transforms a [Metafield](https://shopify.dev/api/storefront/reference/common-objects/Metafield)

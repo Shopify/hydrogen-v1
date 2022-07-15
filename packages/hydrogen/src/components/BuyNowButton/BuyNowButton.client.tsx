@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {useInstantCheckout} from '../CartProvider';
-import {BaseButton, BaseButtonProps} from '../BaseButton';
+import {useInstantCheckout} from '../CartProvider/index.js';
+import {BaseButton, BaseButtonProps} from '../BaseButton/index.js';
 
 interface BuyNowButtonProps {
   /** The item quantity. Defaults to 1. */

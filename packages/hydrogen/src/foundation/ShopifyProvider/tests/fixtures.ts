@@ -1,4 +1,4 @@
-import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../../constants';
+import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../../constants.js';
 
 export const SHOPIFY_CONFIG = {
   defaultCountryCode: DEFAULT_COUNTRY,
