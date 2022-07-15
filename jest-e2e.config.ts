@@ -15,6 +15,10 @@ const config: Config.InitialOptions = {
       tsconfig: './packages/playground/tsconfig.json',
     },
   },
+  moduleNameMapper: {
+    // captures the module name with '.js', and removes the '.js' part so that the module resolver can find the '.ts' file
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
 };
 
 export default config;
