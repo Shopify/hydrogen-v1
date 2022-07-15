@@ -1,1 +1,1 @@
-export {useCart} from './useCart/index.js';
+export {useCart} from './useCart.js';

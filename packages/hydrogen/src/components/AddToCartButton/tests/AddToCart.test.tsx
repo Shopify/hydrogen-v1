@@ -1,7 +1,7 @@
 import React from 'react';
 import {CartProvider} from '../../CartProvider/index.js';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
-import {mountWithCartProvider} from '../../CartProvider/tests/utilities/index.js';
+import {mountWithCartProvider} from '../../CartProvider/tests/utilities.js';
 
 import {ProductOptionsProvider} from '../../ProductOptionsProvider/index.js';
 import {AddToCartButton} from '../AddToCartButton.client.js';

@@ -33,6 +33,10 @@ const config: Config.InitialOptions = {
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['html-spa', 'text-summary'],
+  moduleNameMapper: {
+    // captures
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
 };
 
 export default config;

@@ -1,1 +1,1 @@
-export {useUrl} from './useUrl/index.js';
+export {useUrl} from './useUrl.js';

@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
 
-import {useUrl} from '../useUrl/index.js';
+import {useUrl} from '../index.js';
 
 jest.mock('../../ssr-interop', () => ({
   META_ENV_SSR: false,
