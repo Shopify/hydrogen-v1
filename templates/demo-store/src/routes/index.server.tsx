@@ -7,11 +7,12 @@ import {
   useServerAnalytics,
   useLocalization,
   useShopQuery,
+  RSCSubRoute,
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
-import {FeaturedCollections, Hero} from '~/components';
+import {FeaturedCollections, Hero, TestRSCSubRoute} from '~/components';
 import {Layout, ProductSwimlane} from '~/components/index.server';
 import {
   CollectionConnection,
@@ -27,6 +28,7 @@ export default function Homepage() {
 
   return (
     <Layout>
+      {/* <RSCSubRoute state={{}} path="test" page={<TestRSCSubRoute />} /> */}
       <Suspense>
         <SeoForHomepage />
       </Suspense>
