@@ -56,7 +56,7 @@ We use the assigned `language` and `countryCode` in the `ShopifyProvider` to det
 
 If the `language` doesn't contain language tag extensions, then we try to merge `language` and `countryCode`. For example, if `language` is `EN` (English) and `countryCode` is `US` (United States), then `locale` is `EN-US`.
 
-Alternatively if the `language` contains a language tag extension we use it directly as `locale`. For example, given
+Alternatively if the `language` contains a language tag extension, then we use it directly as `locale`. For example, if
 `language` is `PT_BR` (Brazilian Portuguese) and `countryCode` is `US` (United States), the resulting `locale` is `PT_BR`
 ## Related components
 
