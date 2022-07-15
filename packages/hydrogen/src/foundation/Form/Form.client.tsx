@@ -8,7 +8,7 @@ interface FormProps {
   method?: string;
   children?: Array<React.ReactNode>;
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
-  enctype?: string;
+  encType?: string;
   noValidate?: boolean;
 }
 
@@ -17,13 +17,14 @@ export function Form({
   method,
   children,
   onSubmit,
-  enctype = 'application/x-www-form-urlencoded',
+  encType = 'application/x-www-form-urlencoded',
   noValidate,
   ...props
 }: FormProps) {
   const {setRscResponseFromApiRoute} = useInternalServerProps();
   const [_, startTransition] = (React as any).useTransition();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const submit = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
@@ -47,20 +48,31 @@ export function Form({
             'Hydrogen-Client': 'Form-Action',
           },
           body: formBody.toString(),
-        }).then((fetchResponse) => {
-          const rscPathname = fetchResponse.headers.get(
-            'Hydrogen-RSC-Pathname'
-          );
-          if (rscPathname !== window.location.pathname) {
-            window.history.pushState(null, '', rscPathname);
-          }
-          const rscResponse = createFromFetch(Promise.resolve(fetchResponse));
-          setRscResponseFromApiRoute({
-            url: method + action,
-            response: rscResponse,
+        })
+          .then((fetchResponse) => {
+            const rscPathname = fetchResponse.headers.get(
+              'Hydrogen-RSC-Pathname'
+            );
+
+            if (!rscPathname)
+              throw new Error(
+                `The <Form> component action must point to an API Route that responds with a new Request()\nRead more at https://shopify.dev/custom-storefronts/hydrogen/framework/forms`
+              );
+
+            if (rscPathname !== window.location.pathname) {
+              window.history.pushState(null, '', rscPathname);
+            }
+            const rscResponse = createFromFetch(Promise.resolve(fetchResponse));
+            setRscResponseFromApiRoute({
+              url: method + action,
+              response: rscResponse,
+            });
+            setLoading(false);
+          })
+          .catch((error) => {
+            setError(error);
+            setLoading(false);
           });
-          setLoading(false);
-        });
       });
     },
     [onSubmit, startTransition, action, method, setRscResponseFromApiRoute]
@@ -71,11 +83,11 @@ export function Form({
       action={action}
       method={method}
       onSubmit={submit}
-      encType={enctype}
+      encType="application/x-www-form-urlencoded"
       noValidate={noValidate}
       {...props}
     >
-      {children instanceof Function ? children(loading) : children}
+      {children instanceof Function ? children({loading, error}) : children}
     </form>
   );
 }

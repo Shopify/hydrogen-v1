@@ -4,63 +4,57 @@ title: Form
 description: The Form provides a declarative way to perform mutations: creating, updating, and deleting data
 ---
 
-Within a Hydrogen App, [Server components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc#fetching-data-on-the-server) are used to fetch data and [API Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#api-routes) to mutate data. The `<Form>` component provides a declarative way to send data to API Routes, and re-render server components.
-
-In order to understand how the `<Form>` component works, let's review how basic HTML forms work:
-
-```html
-<form action="/login" method="post">
-  <label> Username <input type="text" name="username" /> </label>
-  <label> Password <input type="password" name="password" /> </label>
-  <button type="submit">Submit</button>
-</form>
-```
-
-The above example has no JavaScript running. When the submit button is pressed, the browser sends a `POST` request to `/login` with each form field encoded. The browser also does a full page refresh displaying the response from the server. Again, this all happens without JavaScript. JavaScript becomes useful for a few reasons:
-
-1. Improve performance by preventing the whole page from reloading
-2. Improve the user experience with client-side validation and feedback
-
-Hydrogen provides the `<Form>` component that mimicks the functionality of a native `<form>` element, while providing an enhanced user experience with client-side JavaScript.
+Within a Hydrogen App, [Server components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc#fetching-data-on-the-server) are used to fetch data and [API Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#api-routes) to mutate data. The `<Form>` component provides a declarative way to send data to API Routes, and re-render server components. The `<Form>` component that mimicks the functionality of a native `<form>` element, while providing an enhanced user experience with client-side JavaScript.
 
 ## Example code
 
-We can rewrite the above code by simply swapping out the native `<form>` element with a `<Form>` component imported from Hydrogen:
+{% codeblock file, filename: 'LoginForm.client.jsx' %}
 
 ```tsx
 import {Form} from '@shopify/hydrogen';
 
 export default function Login() {
+  const url = useUrl();
   return (
     <Form action="/login" method="post">
-      <label>
-        Username <input type="text" name="username" />
-      </label>
-      <label>
-        Password <input type="password" name="password" />
-      </label>
-      <button type="submit">Submit</button>
+      {({loading}) => (
+        <>
+          <label>
+            Username <input type="text" name="username" />
+          </label>
+          <label>
+            Password <input type="password" name="password" />
+          </label>
+          {url.searchParams.get('error') ? (
+            <h2 className="text-red-700">Invalid username or password</h2>
+          ) : null}
+          <button type="submit" disabled={loading}>
+            Submit
+          </button>
+        </>
+      )}
     </Form>
   );
 }
-
-export async function api(request, {session}) {
-  const data = await request.formData();
-  const username = data.get('username');
-  const password = data.get('password');
-
-  const userId = await getUser(username, password);
-
-  if (!userId) {
-    return new Request('/login?error');
-  }
-
-  await session.set('userId', userId);
-
-  return new Request('/account');
-}
 ```
 
-Simple login form
+{% endcodeblock %}
 
-An action with hidden fields
+## Props
+
+The `<Form>` component shares the same props that are available to the [native `<form>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form) with the following additions:
+
+| Name      | Type                                                                   | Description                                                                                                                                                                                                                                                            |
+| --------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| action    | <code>string</code>                                                    | The path to the API Route that the form will submit to. The API Route _must_ respond with a `new Request()`. .                                                                                                                                                         |
+| encType?  | <code>string</code>                                                    | The MIME type of the form submission. `multipart/form-data` is _NOT_ yet supported.                                                                                                                                                                                    |
+| onSubmit? | <code>Function</code>                                                  | Use this callback to intercept the submission event. The form will not submit if `event.preventDefault()` is called                                                                                                                                                    |
+| children? | <code>ReactNode</code> or <code>({loading, error}) => ReactNode</code> | Either pass any ReactNode, or a function that returns a ReactNode. That function will receive a loading and error parameter. Loading will be `true` while the form is being submitted. The error will be populated if there is an error communicating with the server. |
+
+## Component type
+
+The `Form` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+
+## Related framework topics
+
+- [Forms and API Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
