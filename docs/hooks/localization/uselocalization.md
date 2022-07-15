@@ -52,7 +52,7 @@ This hook returns an object with the following properties:
 
 ## Determine the locale for i18n
 
-We use both the assigned `language` and `countryCode` in the `ShopifyProvider` to determine the `locale`.
+We use the assigned `language` and `countryCode` in the `ShopifyProvider` to determine the `locale`.
 
 If the `language` does not contain language tag extensions, then we try to merge `language` and `countryCode`. For example, given `language` is `EN` (english) and `countryCode` is `US` (United States), the resulting `locale` is `EN-US`.
 
