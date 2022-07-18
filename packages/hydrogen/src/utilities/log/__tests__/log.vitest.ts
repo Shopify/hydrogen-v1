@@ -1,4 +1,5 @@
 import {vi, type Mocked} from 'vitest';
+import {stripColors} from 'kolorist';
 import {
   log,
   setLogger,
@@ -36,7 +37,7 @@ describe('log', () => {
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(log.options()).toEqual({});
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual({});
-    expect(mockedLogger.debug.mock.calls[0][1]).toEqual('test');
+    expect(stripColors(mockedLogger.debug.mock.calls[0][1])).toEqual('test');
   });
 
   it('should return the mockLogger2 instance when setLogger is called', () => {
@@ -102,7 +103,9 @@ describe('log', () => {
     logServerResponse('str', request, 500);
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
       '"GET streaming SSR     500 1100.00 ms http://localhost:3000/"'
     );
   });
@@ -116,7 +119,9 @@ describe('log', () => {
     logServerResponse('str', request, 200);
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
       '"GET streaming SSR     200 1100.00 ms http://localhost:3000/"'
     );
   });
@@ -130,7 +135,9 @@ describe('log', () => {
     logServerResponse('str', request, 301);
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
       '"GET streaming SSR     301 1100.00 ms http://localhost:3000/"'
     );
   });
@@ -144,7 +151,9 @@ describe('log', () => {
     logServerResponse('str', request, 404);
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
       '"GET streaming SSR     404 1100.00 ms http://localhost:3000/"'
     );
   });

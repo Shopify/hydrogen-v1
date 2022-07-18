@@ -1,4 +1,5 @@
 import {vi, type Mocked} from 'vitest';
+import {stripColors} from 'kolorist';
 import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
 import {Logger, setLogger} from '../log';
 import {collectQueryTimings, logQueryTimings} from '../log-query-timeline';
@@ -46,7 +47,8 @@ describe('cache header log', () => {
     logQueryTimings('ssr', request);
 
     expect(mockedLogger.debug).toHaveBeenCalled();
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(`
+    expect(stripColors(mockedLogger.debug.mock.calls[0][1]))
+      .toMatchInlineSnapshot(`
       "┌── Query timings for http://localhost:3000/
       │ -200.00ms  Requested  test1
       │ -200.00ms  Resolved   test1 (Took 100.00ms)
@@ -76,7 +78,8 @@ describe('cache header log', () => {
     logQueryTimings('ssr', request);
 
     expect(mockedLogger.debug).toHaveBeenCalled();
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(`
+    expect(stripColors(mockedLogger.debug.mock.calls[0][1]))
+      .toMatchInlineSnapshot(`
       "┌── Query timings for http://localhost:3000/
       │ -200.00ms  Requested  test1
       │ -200.00ms  Resolved   test1 (Took 100.00ms)
@@ -106,7 +109,8 @@ describe('cache header log', () => {
     logQueryTimings('ssr', request);
 
     expect(mockedLogger.debug).toHaveBeenCalled();
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(`
+    expect(stripColors(mockedLogger.debug.mock.calls[0][1]))
+      .toMatchInlineSnapshot(`
       "┌── Query timings for http://localhost:3000/
       │ -200.00ms  Requested  test1
       │ -200.00ms  Resolved   test1 (Took 100.00ms)
@@ -132,7 +136,8 @@ describe('cache header log', () => {
     logQueryTimings('ssr', request);
 
     expect(mockedLogger.debug).toHaveBeenCalled();
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(`
+    expect(stripColors(mockedLogger.debug.mock.calls[0][1]))
+      .toMatchInlineSnapshot(`
       "┌── Query timings for http://localhost:3000/
       │ -200.00ms  Requested  test1
       │ -200.00ms  Resolved   test1 (Took 100.00ms)

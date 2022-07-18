@@ -1,4 +1,5 @@
 import {vi, type Mocked} from 'vitest';
+import {stripColors} from 'kolorist';
 import {Logger, setLogger} from '../log';
 import {logCacheApiStatus} from '../log-cache-api-status';
 
@@ -30,8 +31,8 @@ describe('cache header log', () => {
 
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual({});
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
-      '"[Cache] HIT      query shopInfo"'
-    );
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot('"[Cache] HIT      query shopInfo"');
   });
 });

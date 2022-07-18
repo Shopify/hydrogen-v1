@@ -1,4 +1,5 @@
 import {vi, type Mocked} from 'vitest';
+import {stripColors} from 'kolorist';
 import {Logger, setLogger} from '../log';
 import {logCacheControlHeaders} from '../log-cache-header';
 import {collectQueryCacheControlHeaders} from '../log-cache-header';
@@ -44,13 +45,17 @@ describe('cache header log', () => {
 
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
       '"┌── Cache control header for http://localhost:3000/"'
     );
-    expect(mockedLogger.debug.mock.calls[1][1]).toMatchInlineSnapshot(
-      '"│ public, max-age=1, stale-while-revalidate=9"'
-    );
-    expect(mockedLogger.debug.mock.calls[2][1]).toMatchInlineSnapshot('"└──"');
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[1][1])
+    ).toMatchInlineSnapshot('"│ public, max-age=1, stale-while-revalidate=9"');
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[2][1])
+    ).toMatchInlineSnapshot('"└──"');
   });
 
   it('should log cache control header for sub request', () => {
@@ -68,13 +73,17 @@ describe('cache header log', () => {
 
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
       '"┌── Cache control header for {\\"pathname\\":\\"/\\",\\"search\\":\\"\\"}"'
     );
-    expect(mockedLogger.debug.mock.calls[1][1]).toMatchInlineSnapshot(
-      '"│ public, max-age=1, stale-while-revalidate=9"'
-    );
-    expect(mockedLogger.debug.mock.calls[2][1]).toMatchInlineSnapshot('"└──"');
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[1][1])
+    ).toMatchInlineSnapshot('"│ public, max-age=1, stale-while-revalidate=9"');
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[2][1])
+    ).toMatchInlineSnapshot('"└──"');
   });
 
   it('should log cache control header for main request and sub query request', () => {
@@ -97,17 +106,25 @@ describe('cache header log', () => {
 
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
       '"┌── Cache control header for http://localhost:3000/"'
     );
-    expect(mockedLogger.debug.mock.calls[1][1]).toMatchInlineSnapshot(
-      '"│ public, max-age=1, stale-while-revalidate=9"'
-    );
-    expect(mockedLogger.debug.mock.calls[2][1]).toMatchInlineSnapshot('"│"');
-    expect(mockedLogger.debug.mock.calls[3][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[1][1])
+    ).toMatchInlineSnapshot('"│ public, max-age=1, stale-while-revalidate=9"');
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[2][1])
+    ).toMatchInlineSnapshot('"│"');
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[3][1])
+    ).toMatchInlineSnapshot(
       '"│ query test1 public, max-age=1, stale-while-revalidate=9"'
     );
-    expect(mockedLogger.debug.mock.calls[4][1]).toMatchInlineSnapshot('"└──"');
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[4][1])
+    ).toMatchInlineSnapshot('"└──"');
   });
 
   it('should log cache control header for main request and several sub query requests', () => {
@@ -140,22 +157,34 @@ describe('cache header log', () => {
 
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockedLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
       '"┌── Cache control header for http://localhost:3000/"'
     );
-    expect(mockedLogger.debug.mock.calls[1][1]).toMatchInlineSnapshot(
-      '"│ public, max-age=1, stale-while-revalidate=9"'
-    );
-    expect(mockedLogger.debug.mock.calls[2][1]).toMatchInlineSnapshot('"│"');
-    expect(mockedLogger.debug.mock.calls[3][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[1][1])
+    ).toMatchInlineSnapshot('"│ public, max-age=1, stale-while-revalidate=9"');
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[2][1])
+    ).toMatchInlineSnapshot('"│"');
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[3][1])
+    ).toMatchInlineSnapshot(
       '"│ query test1     public, max-age=1, stale-while-revalidate=9"'
     );
-    expect(mockedLogger.debug.mock.calls[4][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[4][1])
+    ).toMatchInlineSnapshot(
       '"│ query testing2  public, max-age=2, stale-while-revalidate=10"'
     );
-    expect(mockedLogger.debug.mock.calls[5][1]).toMatchInlineSnapshot(
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[5][1])
+    ).toMatchInlineSnapshot(
       '"│ query testable3 public, max-age=3, stale-while-revalidate=11"'
     );
-    expect(mockedLogger.debug.mock.calls[6][1]).toMatchInlineSnapshot('"└──"');
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[6][1])
+    ).toMatchInlineSnapshot('"└──"');
   });
 });
