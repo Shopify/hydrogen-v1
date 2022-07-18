@@ -1,9 +1,16 @@
-import {CacheLong, gql, useShopQuery} from '@shopify/hydrogen';
+import {
+  CacheLong,
+  gql,
+  useShopQuery,
+  type HydrogenRouteProps,
+} from '@shopify/hydrogen';
 
 /**
  * A server component that fetches a `shop.name` and sets default values and templates for every page on a website
  */
-export default function TestRSCSubRoute() {
+export default function TestRSCSubRoute({response}: HydrogenRouteProps) {
+  response.cache(CacheLong());
+
   console.log('TestRSCSubRoute');
   const {
     data: {
@@ -16,7 +23,7 @@ export default function TestRSCSubRoute() {
   });
 
   return (
-    <p>
+    <p className="bg-contrast">
       {name}: {description}
     </p>
   );

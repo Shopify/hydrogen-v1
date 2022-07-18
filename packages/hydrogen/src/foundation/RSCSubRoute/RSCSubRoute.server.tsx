@@ -21,7 +21,9 @@ export function RSCSubRoute({
   const {serverProps} = request.ctx.router;
 
   return (
-    <Suspense fallback={cloneElement(page, serverProps)}>
+    <Suspense
+      fallback={request.isRscRequest() ? null : cloneElement(page, serverProps)}
+    >
       <RSCSubRouteClient
         state={{
           ...state,

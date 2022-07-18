@@ -1,4 +1,4 @@
-import React, {Suspense, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ErrorBoundary} from 'react-error-boundary';
 import {
   createFromFetch,
@@ -21,10 +21,8 @@ export function RSCSubRouteClient({state}: {state: any}) {
         return null;
       }}
     >
-      <Suspense fallback={null}>
-        {/* @ts-ignore */}
-        {response && response.readRoot()}
-      </Suspense>
+      {/* @ts-ignore */}
+      {response && response.readRoot()}
     </ErrorBoundary>
   );
 }
