@@ -12,12 +12,13 @@ import {
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
-import {FeaturedCollections, Hero, TestRSCSubRoute} from '~/components';
+import {FeaturedCollections, Hero} from '~/components';
 import {Layout, ProductSwimlane} from '~/components/index.server';
 import {
   CollectionConnection,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
+import TestRSCSubRoute from './component/TestRSCSubRoute.server';
 
 export default function Homepage() {
   useServerAnalytics({
@@ -28,7 +29,11 @@ export default function Homepage() {
 
   return (
     <Layout>
-      {/* <RSCSubRoute state={{}} path="test" page={<TestRSCSubRoute />} /> */}
+      <RSCSubRoute
+        state={{}}
+        path="component/TestRSCSubRoute"
+        page={<TestRSCSubRoute />}
+      />
       <Suspense>
         <SeoForHomepage />
       </Suspense>
