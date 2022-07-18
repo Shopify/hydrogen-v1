@@ -9,6 +9,7 @@ import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';
 import {META_ENV_SSR} from '../../foundation/ssr-interop';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi';
 import {parseJSON} from '../../utilities/parse';
+import {findQueryName} from '../../utilities/log/utils';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -92,7 +93,13 @@ export function useShopQuery<T>({
     try {
       data = response.json();
     } catch (error: any) {
-      useQueryError = new Error('Unable to parse response:\n' + text);
+      useQueryError = new Error(
+        `Unable to parse ${findQueryName(
+          query
+        )} response (x-request-id: ${response.headers.get(
+          'x-request-id'
+        )}):\n${text}`
+      );
     }
   } catch (error: any) {
     // Pass-through thrown promise for Suspense functionality

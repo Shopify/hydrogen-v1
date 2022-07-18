@@ -27,7 +27,7 @@ export default function Homepage() {
 
   return (
     <Layout>
-      <Suspense>
+      <Suspense fallback="">
         <SeoForHomepage />
       </Suspense>
       <Suspense>
@@ -86,7 +86,7 @@ function HomepageContent() {
 function SeoForHomepage() {
   const {
     data: {
-      shop: {title, description},
+      shop: {name: title, description},
     },
   } = useShopQuery({
     query: HOMEPAGE_SEO_QUERY,
@@ -168,9 +168,9 @@ const HOMEPAGE_CONTENT_QUERY = gql`
 `;
 
 const HOMEPAGE_SEO_QUERY = gql`
-  query homeShopInfo {
+  query shopInfo {
     shop {
-      title: name
+      name
       description
     }
   }
