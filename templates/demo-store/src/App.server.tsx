@@ -16,14 +16,21 @@ import {HeaderFallback} from '~/components';
 import type {CountryCode} from '@shopify/hydrogen/storefront-api-types';
 import {DefaultSeo, NotFound} from '~/components/index.server';
 
-function App({request}: HydrogenRouteProps) {
+function App({request, subRoute}: HydrogenRouteProps) {
   const pathname = new URL(request.normalizedUrl).pathname;
   const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
   const countryCode = localeMatch ? (localeMatch[1] as CountryCode) : undefined;
 
   const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
 
-  return (
+  return subRoute ? (
+    <ShopifyProvider countryCode={countryCode}>
+      <Router>
+        <FileRoutes basePath={countryCode ? `/${countryCode}/` : undefined} />
+        <Route path="*" page={<NotFound />} />
+      </Router>
+    </ShopifyProvider>
+  ) : (
     <Suspense fallback={<HeaderFallback isHome={isHome} />}>
       <ShopifyProvider countryCode={countryCode}>
         <CartProvider countryCode={countryCode}>

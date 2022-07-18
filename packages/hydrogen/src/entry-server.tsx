@@ -647,7 +647,11 @@ function runRSC({App, state, log, request, response}: RunRscParams) {
   request.ctx.router.serverProps = serverProps;
   preloadRequestCacheData(request);
 
-  const AppRSC = (
+  const AppRSC = state?.subRoute ? (
+    <ServerRequestProvider request={request}>
+      <App {...serverProps} />
+    </ServerRequestProvider>
+  ) : (
     <ServerRequestProvider request={request}>
       <App {...serverProps} />
       <Suspense fallback={null}>

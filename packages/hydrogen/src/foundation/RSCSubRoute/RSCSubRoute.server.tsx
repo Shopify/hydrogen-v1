@@ -28,6 +28,7 @@ export function RSCSubRoute({
         state={{
           ...state,
           pathname: `/${path}`,
+          subRoute: true,
         }}
       />
     </Suspense>
