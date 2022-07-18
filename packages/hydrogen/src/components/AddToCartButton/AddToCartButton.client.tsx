@@ -15,6 +15,8 @@ interface AddToCartButtonProps {
   quantity?: number;
   /** The text that is announced by the screen reader when the item is being added to the cart. Used for accessibility purposes only and not displayed on the page. */
   accessibleAddingToCartLabel?: string;
+  /** The selling plan ID of the subscription variant */
+  sellingPlanId?: string;
 }
 
 /**
@@ -29,6 +31,7 @@ export function AddToCartButton<AsType extends React.ElementType = 'button'>(
     variantId: explicitVariantId,
     quantity = 1,
     attributes,
+    sellingPlanId,
     onClick,
     children,
     accessibleAddingToCartLabel,
@@ -57,9 +60,10 @@ export function AddToCartButton<AsType extends React.ElementType = 'button'>(
         quantity,
         merchandiseId: variantId,
         attributes,
+        sellingPlanId,
       },
     ]);
-  }, [linesAdd, quantity, variantId, attributes]);
+  }, [linesAdd, quantity, variantId, attributes, sellingPlanId]);
 
   return (
     <>
