@@ -1,18 +1,24 @@
+import path from 'path';
 import MagicString from 'magic-string';
 import {normalizePath, HtmlTagDescriptor, Plugin, ResolvedConfig} from 'vite';
 
+const VITE_CSS_CHUNK_NAME = 'style.css';
 const INJECT_STYLES_COMMENT = '<!--__INJECT_STYLES__-->';
+
+// Keep this in the outer scope to share it
+// across client <> server builds.
+let clientBuildPath: string;
 
 export default function cssRsc() {
   let config: ResolvedConfig;
 
   return {
     name: 'hydrogen:css-rsc',
-    enforce: 'pre',
-    config(config) {
-      // Disable CSS code split during client build to avoid
-      // preloading styles (which are already inlined in index.html).
-      return {build: {cssCodeSplit: !!config.build?.ssr}};
+    enforce: 'post',
+    config() {
+      // Disable CSS code split to avoid preloading styles
+      // which are already included in index.html
+      return {build: {cssCodeSplit: false}};
     },
     configResolved(_config) {
       config = _config;
@@ -85,36 +91,79 @@ export default function cssRsc() {
       }
     },
     generateBundle(options, bundle, isWrite) {
-      // Inline collected styles during build
+      type OutputChunk = Extract<typeof bundle[0], {type: 'chunk'}>;
+      type OutputAsset = Extract<typeof bundle[0], {type: 'asset'}>;
+
       if (config.build?.ssr) {
-        const outputChunk = Object.values(bundle).find((file) => {
-          return file.type === 'chunk' && file.isEntry;
-        }) as Extract<typeof bundle[0], {type: 'chunk'}>;
+        // -- Server build
 
-        // Find all the CSS files imported by the output chunk
-        let css = '';
-        const importedCss = Array.from(
-          (outputChunk as any).viteMetadata?.importedCss || []
-        ) as string[];
-
-        for (const cssKey of importedCss) {
-          const asset = bundle[cssKey];
-          if (asset && asset.type === 'asset') {
-            css += asset.source + ' ';
-          }
+        if (!clientBuildPath) {
+          // Default value
+          clientBuildPath = normalizePath(
+            path.resolve(config.root, config.build.outDir, '..', 'client')
+          );
         }
 
-        // Inline styles in the bundled index.html template
+        const relativeClientPath = normalizePath(
+          path.relative(
+            normalizePath(path.resolve(config.root, config.build.outDir)),
+            clientBuildPath
+          )
+        );
+
+        let cssAssetFileName = '';
+        const cssAsset = Object.values(bundle).find(
+          (file) => file.type === 'asset' && file.name === VITE_CSS_CHUNK_NAME
+        ) as OutputAsset | undefined;
+        const outputChunk = Object.values(bundle).find(
+          (file) => file.type === 'chunk' && file.isEntry
+        ) as OutputChunk;
+
+        if (cssAsset) {
+          cssAssetFileName = cssAsset.fileName;
+          // Move CSS file to client build assets
+          cssAsset.fileName = normalizePath(
+            path.join(relativeClientPath, cssAsset.fileName)
+          );
+        }
+
+        // Add a reference to the CSS file in indexTemplate
         outputChunk.code = outputChunk.code.replace(
           INJECT_STYLES_COMMENT,
-          css
-            ? `<style>${css
-                .replace(/\s+/gm, ' ')
-                .replace(/'/g, "\\'")
-                .replace(/"/g, '\\"')
-                .trim()}</style>`
-            : ''
+          cssAssetFileName &&
+            `<link rel="stylesheet" href="${
+              (process.env.HYDROGEN_ASSET_BASE_URL || '/') + cssAssetFileName
+            }">`
         );
+      } else {
+        // -- Client build
+
+        // Save outDir from client build in the outer scope in order
+        // to read it during the server build. The CLI runs Vite in
+        // the same process so the scope is shared across builds.
+        clientBuildPath = normalizePath(
+          path.resolve(config.root, config.build.outDir)
+        );
+
+        const indexHtml = bundle['index.html'] as OutputAsset;
+        const cssAsset = Object.values(bundle).find(
+          (file) => file.type === 'asset' && file.name === VITE_CSS_CHUNK_NAME
+        ) as OutputAsset | undefined;
+
+        if (cssAsset) {
+          // The client build CSS is incomplete because it only includes
+          // CSS imported in client components (server components are not
+          // discovered in this build). Remove it from this build and
+          // let it be added by the server build after this.
+          delete bundle[cssAsset.fileName];
+          indexHtml.source = (indexHtml.source as string).replace(
+            new RegExp(
+              `\\s*<link[^<>]+${cssAsset.fileName.replace('.', '\\.')}.*?>`,
+              ''
+            ),
+            ''
+          );
+        }
       }
     },
   } as Plugin;
