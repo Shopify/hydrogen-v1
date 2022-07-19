@@ -167,8 +167,8 @@ function Content({
   const response = useServerResponse(serverProps, rscResponseFromApiRoute);
 
   useEffect(() => {
-    // If server props ever change, we want to make sure to use a fresh
-    // _rsc request, and ignore any response from API routes.
+    // If server props ever change, then use a fresh
+    // _rsc request and ignore any response from API routes.
     setRscResponseFromApiRoute(null);
   }, [serverProps]);
 

@@ -163,7 +163,7 @@ export default function LoginForm() {
 
 {% endcodeblock %}
 
-Because the `<Form>` is now within a client component, `children` can be a render prop, which allows us to give feedback while the form is submitting:
+Because the `Form` is now within a client component, `children` can be a render prop. This enables you to give users feedback while the form is submitting.
 
 {% codeblock file, filename: 'LoginForm.client.jsx' %}
 
@@ -199,7 +199,9 @@ export default function Login() {
 
 ## Hidden fields
 
-The `<Form>` component can be used for any mutation, not just ones with a text field. For example, maybe when a customer adds an item to a cart, or when they log out:
+You can use the `Form` component for any mutation that doesn't include a text field. 
+
+For example, the following uses a `Form` component for adding items an item to a cart:
 
 {% codeblock file, filename: 'Product.server.jsx' %}
 
@@ -220,8 +222,8 @@ export default function Product({product}) {
 
 {% endcodeblock %}
 
-The hidden input field for the `productId` will be sent to the server when the add to cart button is pressed. The API route at `/addToCart` can contain all the logic to add the product to the cart, then re-render the page. The advantage here is the button will be actionable before the page has fully loaded and JavaScript hydrated.
+The hidden input field for the `productId` is sent to the server when the **Add to cart** button is clicked. The API route at `/addToCart` can contain all the logic to add the product to the cart and re-render the page. The button is actionable before the page fully loads and the JavaScript is hydrated.
 
 ## Next steps
 
-Read the full API reference for the [`<Form>` component](https://shopify.dev/api/hydrogen/components/framework/form)
+Read the full API reference for the [`<Form>` component](https://shopify.dev/api/hydrogen/components/framework/form).
