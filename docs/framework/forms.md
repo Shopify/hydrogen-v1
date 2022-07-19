@@ -1,14 +1,14 @@
 ---
 gid: 9120943b-01c9-4da3-a201-5a54cab6ca2a
 title: Forms
-description: Declarative mutations with `<Form>` and API Routes
+description: Declarative mutations with `Form` and API Routes
 ---
 
 Within a Hydrogen App, [Server components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc#fetching-data-on-the-server) are used to fetch data and [API Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#api-routes) to mutate data. The `Form` component provides a declarative way to send data to API Routes, and re-render server components.
 
 ## HTML `<form>`
 
-In order to understand how the `<Form>` component works, let's review how basic HTML forms work:
+The `Form` builds upon native `<form>` elements:
 
 {% codeblock file, filename: 'index.html' %}
 
@@ -22,18 +22,18 @@ In order to understand how the `<Form>` component works, let's review how basic 
 
 {% endcodeblock %}
 
-This example HTML doesn't run any JavaScript. When **Submit** is clicked,  the browser sends a `POST` request to `/login` with each form field encoded. The browser also reloads the entire page to display the server's response. Read more about [native HTML forms](https://developer.mozilla.org/en-US/docs/Learn/Forms).
+This example HTML doesn't run any JavaScript. When **Submit** is clicked, the browser sends a `POST` request to `/login` with each form field encoded. The browser also reloads the entire page to display the server's response. Read more about [native HTML forms](https://developer.mozilla.org/en-US/docs/Learn/Forms).
 
-## Hydrogen `<Form>`
+## Hydrogen `Form`
 
 Native HTML forms work without JavaScript. However, Javascript can provide the following improvements:
 
 - **Performance**: JavaScript prevents the entire page from reloading to display responses from the server.
-2. UX: JavaScript provides client-side validation and feedback {indicate benefit here?}
+- **UX**: JavaScript provides client-side validation and feedback. Client-side validation is quicker than making a round trip to the server, and feedback helps the user know when the form is in the process of submitting.
 
-Hydrogen's `<Form>` component mimics the functionality of a native `<form>` element, while providing an enhanced user experience with client-side JavaScript. 
+Hydrogen's `Form` component mimics the functionality of a native `<form>` element, while providing an enhanced user experience with client-side JavaScript.
 
-The following example rewrites the [example form element](#html-form) by substituting the native HTML with a `<Form>` component that's imported from Hydrogen:
+The following example rewrites the [example form element](#html-form) by substituting the native HTML with a `Form` component that's imported from Hydrogen:
 
 {% codeblock file, filename: 'login.server.jsx' %}
 
@@ -57,7 +57,7 @@ export default function Login() {
 
 {% endcodeblock %}
 
-## `<Form>` requires an API route
+## `Form` requires an API route
 
 The `action` attribute must point to an API route. The following is an example implementation:
 
@@ -89,7 +89,7 @@ export async function api(request, {session}) {
 
 {% endcodeblock %}
 
-Read data in the API route from the `<Form>` by using the [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) API. The API Route must respond with a `new Request()`. This renders the server components for the given page. You can re-render the current page, or render an entirely different page in the app.
+Read data in the API route from the `Form` by using the [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) API. The API Route must respond with a `new Request()`. This renders the server components for the given page. You can re-render the current page, or render an entirely different page in the app.
 
 In the previous example, when the user is not found, the current page is re-rendered with a search parameter. The following code updates the server component to render the login error:
 
@@ -125,7 +125,7 @@ The downside to this approach is that the error state is within the URL, which m
 
 ## Client validation and feedback
 
-The examples provided so far have been entirely in server components. However, the best user experience has client-side validation and gives user feedback while the form is submitting. This requires a client component. 
+The examples provided so far have been entirely in server components. However, the best user experience has client-side validation and gives user feedback while the form is submitting. This requires a client component.
 
 The following example moves `Form` into a client component:
 
@@ -203,7 +203,7 @@ export default function Login() {
 
 ## Hidden fields
 
-You can use the `Form` component for any mutation that doesn't include a text field. 
+You can use the `Form` component for any mutation that doesn't include a text field.
 
 For example, the following uses a `Form` component for adding items an item to a cart:
 
@@ -230,4 +230,4 @@ The hidden input field for the `productId` is sent to the server when the **Add 
 
 ## Next steps
 
-Read the full API reference for the [`<Form>` component](https://shopify.dev/api/hydrogen/components/framework/form).
+Read the full API reference for the [`Form` component](https://shopify.dev/api/hydrogen/components/framework/form).

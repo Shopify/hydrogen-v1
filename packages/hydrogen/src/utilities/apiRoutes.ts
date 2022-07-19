@@ -277,8 +277,8 @@ export async function renderApiRoute(
       });
     } else {
       // This request was made by a native form presumably because the client components had yet to hydrate,
-      // redirect instead of just rendering the response this will prevent odd refresh / back behavior.
-      // The redirect response also should *never* be cached.
+      // Because of this, we need to redirect instead of just rendering the response.
+      // Doing so prevents odd refresh / back behavior. The redirect response also should *never* be cached.
       response.headers.set('Location', newUrl.href);
       response.headers.set('Cache-Control', 'no-store');
 
