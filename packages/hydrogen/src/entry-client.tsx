@@ -209,7 +209,10 @@ function CustomError({
     <ErrorBoundary
       FallbackComponent={({error: errorRenderingCustomPage}) => {
         if (import.meta.env.DEV) {
-          console.error('Error rendering custom error page: \n' + error);
+          console.error(
+            'Error rendering custom error page. Check `src/Error.client.jsx` \n' +
+              errorRenderingCustomPage
+          );
         }
         return <DefaultError error={error} />;
       }}
