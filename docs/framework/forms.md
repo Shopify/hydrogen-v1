@@ -4,7 +4,7 @@ title: Forms
 description: Declarative mutations with `<Form>` and API Routes
 ---
 
-Within a Hydrogen App, [Server components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc#fetching-data-on-the-server) are used to fetch data and [API Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#api-routes) to mutate data. The `<Form>` component provides a declarative way to send data to API Routes, and re-render server components.
+Within a Hydrogen App, [Server components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc#fetching-data-on-the-server) are used to fetch data and [API Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#api-routes) to mutate data. The `Form` component provides a declarative way to send data to API Routes, and re-render server components.
 
 ## HTML Forms
 
