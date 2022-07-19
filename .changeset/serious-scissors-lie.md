@@ -8,7 +8,7 @@ Until now, we had experimental support for CSS Modules with some minor restricti
 
 - Only server components that were the default export had access to the CSS Module automatically (i.e. it required extra work for named exports).
 - CSS Module was duplicated when used in multiple components.
-- RSC responses had all the CSS inlined, making them much bigger.
+- RSC responses had all the CSS inlined, making them much larger.
 
 The new CSS approach adds full support for CSS Modules without the previous restrictions and drawbacks.
 
