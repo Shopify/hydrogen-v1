@@ -542,7 +542,7 @@ export default async function testCases({
 
     it('responds with RSC', async () => {
       const response = await page.request.post(getServerUrl() + '/account', {
-        data: `username=alincoln%40shopify.com&password=somepass`,
+        data: `username=alincoln%40example.com&password=somepass`,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
           'Hydrogen-Client': 'Form-Action',
@@ -552,7 +552,7 @@ export default async function testCases({
 
       expect(response.status()).toBe(200);
       expect(text.split('\n')[0]).toBe('S1:"react.suspense"');
-      expect(text).toContain('["Welcome ","alincoln@shopify.com","!"]');
+      expect(text).toContain('["Welcome ","alincoln@example.com","!"]');
     });
 
     it('responds with RSC pathname header', async () => {
@@ -573,7 +573,7 @@ export default async function testCases({
 
     it('responds with html content when submitted by a form', async () => {
       const response = await page.request.post(getServerUrl() + '/account', {
-        data: `username=alincoln%40shopify.com&password=somepass`,
+        data: `username=alincoln%40example.com&password=somepass`,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
         },
@@ -582,7 +582,7 @@ export default async function testCases({
       const text = await response.text();
 
       expect(text).toContain('<!DOCTYPE html>');
-      expect(text).toContain('alincoln@shopify.com');
+      expect(text).toContain('alincoln@example.com');
     });
   });
 

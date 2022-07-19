@@ -4,6 +4,13 @@ title: Form
 description: The Form provides a declarative way to perform mutations for creating, updating, and deleting data
 ---
 
+<aside class="note beta">
+<h4>Experimental feature</h4>
+
+<p>Hydrogen Form is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
+
+</aside>
+
 Within a Hydrogen app, [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc#fetching-data-on-the-server) are used to fetch data and [API routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#api-routes) are used to mutate data. The `Form` component provides a declarative way to send data to API routes and re-render server components. The `Form` component mimics the functionality of a native `<form>` element, but it provides an enhanced user experience with client-side JavaScript.
 
 ## Example code
@@ -11,7 +18,7 @@ Within a Hydrogen app, [React Server Components](https://shopify.dev/custom-stor
 {% codeblock file, filename: 'LoginForm.client.jsx' %}
 
 ```tsx
-import {Form} from '@shopify/hydrogen';
+import {Form} from '@shopify/hydrogen/experimental';
 
 export default function Login() {
   const url = useUrl();

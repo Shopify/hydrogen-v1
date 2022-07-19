@@ -56,7 +56,7 @@ export function Form({
 
             if (!rscPathname)
               throw new Error(
-                `The component's `action` attribute must point to an API route that responds with a new Request()\nRead more at https://shopify.dev/custom-storefronts/hydrogen/framework/forms`
+                `The component's \`action\` attribute must point to an API route that responds with a new Request()\nRead more at https://shopify.dev/custom-storefronts/hydrogen/framework/forms`
               );
 
             if (rscPathname !== window.location.pathname) {

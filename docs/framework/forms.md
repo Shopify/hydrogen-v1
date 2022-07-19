@@ -4,6 +4,13 @@ title: Forms
 description: Declarative mutations with `Form` and API Routes
 ---
 
+<aside class="note beta">
+<h4>Experimental feature</h4>
+
+<p>Hydrogen Form is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
+
+</aside>
+
 Within a Hydrogen App, [Server components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc#fetching-data-on-the-server) are used to fetch data and [API Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#api-routes) to mutate data. The `Form` component provides a declarative way to send data to API Routes, and re-render server components.
 
 ## HTML `<form>`
@@ -38,7 +45,7 @@ The following example rewrites the [example form element](#html-form) by substit
 {% codeblock file, filename: 'login.server.jsx' %}
 
 ```tsx
-import {Form} from '@shopify/hydrogen';
+import {Form} from '@shopify/hydrogen/experimental';
 
 export default function Login() {
   return (
@@ -96,7 +103,7 @@ In the previous example, when the user is not found, the current page is re-rend
 {% codeblock file, filename: 'login.server.jsx' %}
 
 ```tsx
-import {Form} from '@shopify/hydrogen';
+import {Form} from '@shopify/hydrogen/experimental';
 
 export default function Login() {
   const url = useUrl();
@@ -144,7 +151,7 @@ export default function Login() {
 {% codeblock file, filename: 'LoginForm.client.jsx' %}
 
 ```tsx
-import {Form} from '@shopify/hydrogen';
+import {Form} from '@shopify/hydrogen/experimental';
 
 export default function LoginForm() {
   const url = useUrl();
@@ -172,7 +179,7 @@ Because the `Form` is now within a client component, `children` can be a render 
 {% codeblock file, filename: 'LoginForm.client.jsx' %}
 
 ```tsx
-import {Form} from '@shopify/hydrogen';
+import {Form} from '@shopify/hydrogen/experimental';
 
 export default function Login() {
   const url = useUrl();
@@ -210,7 +217,7 @@ For example, the following uses a `Form` component for adding items an item to a
 {% codeblock file, filename: 'Product.server.jsx' %}
 
 ```tsx
-import {Form} from '@shopify/hydrogen';
+import {Form} from '@shopify/hydrogen/experimental';
 
 export default function Product({product}) {
   return (

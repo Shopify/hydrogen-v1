@@ -1,4 +1,4 @@
-import {Form} from '@shopify/hydrogen';
+import {Form} from '@shopify/hydrogen/experimental';
 import {useCallback} from 'react';
 import {useState} from 'react';
 
