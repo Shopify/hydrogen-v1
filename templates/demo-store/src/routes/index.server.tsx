@@ -86,7 +86,7 @@ function HomepageContent() {
 function SeoForHomepage() {
   const {
     data: {
-      shop: {title, description},
+      shop: {name, description},
     },
   } = useShopQuery({
     query: HOMEPAGE_SEO_QUERY,
@@ -98,7 +98,7 @@ function SeoForHomepage() {
     <Seo
       type="homepage"
       data={{
-        title,
+        title: name,
         description,
         titleTemplate: '%s · Powered by Hydrogen',
       }}
@@ -168,9 +168,9 @@ const HOMEPAGE_CONTENT_QUERY = gql`
 `;
 
 const HOMEPAGE_SEO_QUERY = gql`
-  query homeShopInfo {
+  query shopInfo {
     shop {
-      title: name
+      name
       description
     }
   }
