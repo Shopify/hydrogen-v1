@@ -127,13 +127,14 @@ export default function cssRsc() {
           );
         }
 
+        let assetPrefix = process.env.HYDROGEN_ASSET_BASE_URL || '/';
+        if (!assetPrefix.endsWith('/')) assetPrefix += '/';
+
         // Add a reference to the CSS file in indexTemplate
         outputChunk.code = outputChunk.code.replace(
           INJECT_STYLES_COMMENT,
           cssAssetFileName &&
-            `<link rel="stylesheet" href="${
-              (process.env.HYDROGEN_ASSET_BASE_URL || '/') + cssAssetFileName
-            }">`
+            `<link rel="stylesheet" href="${assetPrefix + cssAssetFileName}">`
         );
       } else {
         // -- Client build
