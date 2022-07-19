@@ -10,7 +10,7 @@ import {
 const users = [
   {
     name: 'Abraham Lincoln',
-    username: 'alincoln@shopify.com',
+    username: 'alincoln@example.com',
     password: 'somepass',
   },
 ];

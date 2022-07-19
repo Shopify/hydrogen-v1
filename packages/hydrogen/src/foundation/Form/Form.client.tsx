@@ -36,7 +36,7 @@ export function Form({
       const formData = new FormData(e.target as HTMLFormElement);
 
       // @ts-expect-error
-      // It is valid to pass a FormData instance to a URLSearchParams constructor
+      // It's valid to pass a FormData instance to a URLSearchParams constructor
       // @todo - support multipart forms
       const formBody = new URLSearchParams(formData);
 
@@ -56,7 +56,7 @@ export function Form({
 
             if (!rscPathname)
               throw new Error(
-                `The <Form> component action must point to an API Route that responds with a new Request()\nRead more at https://shopify.dev/custom-storefronts/hydrogen/framework/forms`
+                `The component's `action` attribute must point to an API route that responds with a new Request()\nRead more at https://shopify.dev/custom-storefronts/hydrogen/framework/forms`
               );
 
             if (rscPathname !== window.location.pathname) {
