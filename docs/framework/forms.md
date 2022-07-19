@@ -26,12 +26,14 @@ This example HTML doesn't run any JavaScript. When **Submit** is clicked,  the b
 
 ## Hydrogen `<Form>`
 
-Native HTML forms work without JavaScript. JavaScript becomes useful in forms for a few reasons:
+Native HTML forms work without JavaScript. However, Javascript can provide the following improvements:
 
-1. Improve performance by preventing the whole page from reloading
-2. Improve the user experience with client-side validation and feedback
+- **Performance**: JavaScript prevents the entire page from reloading to display responses from the server.
+2. UX: JavaScript provides client-side validation and feedback {indicate benefit here?}
 
-Hydrogen provides the `<Form>` component that mimicks the functionality of a native `<form>` element, while providing an enhanced user experience with client-side JavaScript. We can rewrite the above code by simply swapping out the native `<form>` element with a `<Form>` component imported from Hydrogen:
+Hydrogen's `<Form>` component mimics the functionality of a native `<form>` element, while providing an enhanced user experience with client-side JavaScript. 
+
+The following example rewrites the [example form element](#html-form) by substituting the native HTML with a `<Form>` component that's imported from Hydrogen:
 
 {% codeblock file, filename: 'login.server.jsx' %}
 
@@ -55,9 +57,9 @@ export default function Login() {
 
 {% endcodeblock %}
 
-## `<Form>` requires an API Route
+## `<Form>` requires an API route
 
-In order to properly use the `<Form>` component, the `action` attribute must point to an API route. An example implementation might look like:
+The `action` attribute must point to an API route. The following is an example implementation:
 
 {% codeblock file, filename: 'login.server.jsx' %}
 
@@ -89,7 +91,7 @@ export async function api(request, {session}) {
 
 Read data in the API route from the `<Form>` by using the [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) API. The API Route must respond with a `new Request()`. This renders the server components for the given page. You can re-render the current page, or render an entirely different page in the app.
 
-In the above example, when the user is not found, we re-render the current page with a search parameter. Let's update the server component to render the login error:
+In the previous example, when the user is not found, the current page is re-rendered with a search parameter. The following code updates the server component to render the login error:
 
 {% codeblock file, filename: 'login.server.jsx' %}
 
