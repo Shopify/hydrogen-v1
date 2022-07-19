@@ -298,7 +298,25 @@ export default async function testCases({
     await test();
   });
 
-  describe('CSS', () => {
+  describe.only('CSS', () => {
+    const extractCssFromDOM = async () => {
+      if (isBuild) {
+        // Downloaded using a link tag
+        const linkTags = await page
+          .locator('link[rel=stylesheet]')
+          .elementHandles();
+
+        expect(linkTags).toHaveLength(1); // Styles are not duplicated
+
+        const href = await linkTags[0].getAttribute('href');
+
+        return await (await fetch(getServerUrl() + href)).text();
+      } else {
+        // Inlined in DOM using JS for HMR
+        return (await page.locator('style').allTextContents()).join('\n');
+      }
+    };
+
     it('adds style tags for pure CSS', async () => {
       await page.goto(getServerUrl() + '/css-pure');
       expect(await page.textContent('h1')).toContain('CSS Pure');
@@ -307,9 +325,10 @@ export default async function testCases({
       const className = await page.getAttribute('[data-test=server]', 'class');
       expect(className).toEqual('green');
 
-      // Style tag is present in DOM
-      const styles = await page.locator('style').allTextContents();
-      expect(styles.join('\n')).toMatch(/\.green\s*{\s*color:\s*green;?\s*/m);
+      // Style is present in DOM
+      expect(await extractCssFromDOM()).toMatch(
+        /\.green\s*{\s*color:\s*green;?\s*/m
+      );
     });
 
     it('adds style tags for CSS modules', async () => {
@@ -323,9 +342,8 @@ export default async function testCases({
         className
       );
 
-      // Style tag is present in DOM
-      const styles = await page.locator('style').allTextContents();
-      expect(styles.join('\n')).toMatch(
+      // Style is present in DOM
+      expect(await extractCssFromDOM()).toMatch(
         new RegExp(`\\.${className}\\s*{\\s*color:\\s*red;?\\s*}`, 'm')
       );
     });
