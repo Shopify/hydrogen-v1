@@ -1,4 +1,4 @@
-import {Suspense} from 'react';
+import {Suspense, type ElementType} from 'react';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {
   FileRoutes,
@@ -25,10 +25,7 @@ function App({request, subRoute}: HydrogenRouteProps) {
 
   return subRoute ? (
     <ShopifyProvider countryCode={countryCode}>
-      <Router>
-        <FileRoutes basePath={countryCode ? `/${countryCode}/` : undefined} />
-        <Route path="*" page={<NotFound />} />
-      </Router>
+      <FileRoutes basePath={countryCode ? `/${countryCode}/` : undefined} />
     </ShopifyProvider>
   ) : (
     <Suspense fallback={<HeaderFallback isHome={isHome} />}>
