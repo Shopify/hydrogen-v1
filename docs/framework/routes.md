@@ -423,20 +423,42 @@ export default function MyPage(props: HydrogenRouteProps) {
   //
 }
 
-export const api: HydrogenApiRoute = async(request, options) => {
+export const api: HydrogenApiRoute = async (request, options) => {
   //
-}
+};
 
 // Alternate version of `api`:
-export async function api(request: HydrogenRequest, options: HydrogenApiRouteOptions) {
-
-}
+export async function api(
+  request: HydrogenRequest,
+  options: HydrogenApiRouteOptions
+) {}
 ```
 
 {% endcodeblock %}
 
 > Tip:
 > The Hello World template is available in [TypeScript](https://shopify.dev/custom-storefronts/hydrogen/templates#hello-world-template). You can also refer to the [example implementation of TypeScript](https://github.com/Shopify/hydrogen/tree/main/examples/typescript) in GitHub.
+
+## Custom 500 Error Pages
+
+If an unexpected error occurs while rendering a route, Hydrogen will respond with a 500 HTTP error and render a default error page. You can customize that page by adding a `Error.client.jsx` component within your `src` directory:
+
+{% codeblock file, filename: '[handle].server.jsx' %}
+
+```tsx
+export default function Error({error}) {
+  return (
+    <div>
+      <h1>An unknown error occured!</h1>
+      <h2>{error.message}</h2>
+      <h3>{error.stack}</h3>
+    </div>
+  );
+}
+```
+
+{% endcodeblock %}
+
 ## Related components and hooks
 
 - [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)

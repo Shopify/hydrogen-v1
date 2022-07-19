@@ -5,6 +5,7 @@ import React, {
   Fragment,
   type ElementType,
   useEffect,
+  ComponentType,
 } from 'react';
 import {hydrateRoot} from 'react-dom/client';
 import type {ClientConfig, ClientHandler} from './types';
@@ -23,6 +24,8 @@ import {ClientAnalytics} from './foundation/Analytics/';
 let rscReader: ReadableStream | null;
 
 const cache = new Map();
+
+const ErrorModules = import.meta.glob('/src/Error.client.{jsx,tsx}');
 
 // Hydrate an SSR response from <meta> tags placed in the DOM.
 const flightChunks: string[] = [];
@@ -135,7 +138,18 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     root,
     <RootComponent>
       <ServerRequestProviderMock />
-      <ErrorBoundary FallbackComponent={Error}>
+      <ErrorBoundary
+        FallbackComponent={
+          Object.keys(ErrorModules).length
+            ? ({error}) => (
+                <CustomError
+                  error={error}
+                  errorPage={ErrorModules[Object.keys(ErrorModules)[0]] as any}
+                />
+              )
+            : DefaultError
+        }
+      >
         <Suspense fallback={null}>
           <Content clientWrapper={ClientWrapper} />
         </Suspense>
@@ -183,19 +197,31 @@ function Content({
   );
 }
 
-function Error({error}: {error: Error}) {
-  if (import.meta.env.DEV) {
-    return (
-      <div style={{padding: '1em'}}>
-        <h1 style={{fontSize: '2em', marginBottom: '1em', fontWeight: 'bold'}}>
-          Error
-        </h1>
+function CustomError({
+  error,
+  errorPage,
+}: {
+  error: Error;
+  errorPage: () => Promise<{default: ComponentType<any>}>;
+}) {
+  const Error = React.lazy(errorPage);
+  return (
+    <ErrorBoundary
+      FallbackComponent={({error: errorRenderingCustomPage}) => {
+        if (import.meta.env.DEV) {
+          console.error('Error rendering custom error page: \n' + error);
+        }
+        return <DefaultError error={error} />;
+      }}
+    >
+      <Suspense fallback={null}>
+        <Error error={error} />
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
 
-        <pre style={{whiteSpace: 'pre-wrap'}}>{error.stack}</pre>
-      </div>
-    );
-  }
-
+function DefaultError({error}: {error: Error}) {
   return (
     <div
       style={{
