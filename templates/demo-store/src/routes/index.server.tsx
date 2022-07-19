@@ -108,8 +108,8 @@ function SeoForHomepage() {
 
 /**
  * The homepage content query includes a request for custom metafields inside the alias
- * `heroBanners`. The template will load placeholder content if these metafields don't
- * exist. Define these 5 custom metafields on your Shopify store to override placeholders:
+ * `heroBanners`. The template loads placeholder content if these metafields don't
+ * exist. Define the following five custom metafields on your Shopify store to override placeholders:
  * - hero.title             Single line text
  * - hero.byline            Single line text
  * - hero.cta               Single line text
