@@ -119,11 +119,15 @@ export default function Login() {
 
 {% endcodeblock %}
 
-When the page initially loads, there is no search parameter. If the login mutation fails, the server components re-render with the `error` serach parameter, and this shows a message to the user. The downside to this approach is the error state is within the URL, which means the error message will stay if the page is refreshed. This will no longer be a problem with flashed session data.
+The page initially loads without a search parameter. If the login mutation fails, then the server components re-render with the `error` search parameter and display a message to the user.
+
+The downside to this approach is that the error state is within the URL, which means the error message persists if the page is refreshed. This won't be a problem with flashed session data.
 
 ## Client validation and feedback
 
-So far, all of the examples have been completely in server components. While this is awesome, the best user experience has client-side validation and feedback to the user while the form is submitting. This requires a client component. Let's move the `<Form>` into a client component:
+The examples provided so far have been entirely in server components. However, the best user experience has client-side validation and gives user feedback while the form is submitting. This requires a client component. 
+
+The following example moves `Form` into a client component:
 
 {% codeblock file, filename: 'login.server.jsx' %}
 
