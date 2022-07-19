@@ -21,7 +21,9 @@ interface AddToCartButtonProps {
  * The `AddToCartButton` component renders a button that adds an item to the cart when pressed.
  * It must be a descendent of the `CartProvider` component.
  */
-export function AddToCartButton(props: AddToCartButtonProps & BaseButtonProps) {
+export function AddToCartButton<AsType extends React.ElementType = 'button'>(
+  props: AddToCartButtonProps & BaseButtonProps<AsType>
+) {
   const [addingItem, setAddingItem] = useState<boolean>(false);
   const {
     variantId: explicitVariantId,

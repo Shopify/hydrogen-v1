@@ -113,19 +113,26 @@ export default async function testCases({
     );
 
     await page.click('#update-server-props');
-    await page.waitForSelector('#server-props-with-data', {timeout: 35000});
 
     expect(
       await page.textContent('#server-props-with-data')
     ).toMatchInlineSnapshot(`"props: {\\"hello\\":\\"world\\"}"`);
 
-    // Navigate events should clear the server props
+    // // Navigate events should clear the server props
+    page.on('request', (request) => {
+      try {
+        expect(request.url()).toContain(
+          '__rsc?state=%7B%22pathname%22%3A%22%2Ftest-server-props%22%2C%22search%22%3A%22%3Frefresh%22%7D'
+        );
+      } catch (e) {
+        fail(e);
+      }
+    });
     await Promise.all([page.click('#navigate'), page.waitForNavigation()]);
-    await page.waitForSelector('#server-props', {timeout: 35000});
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
       `"props: {}"`
     );
-  }, 35000);
+  });
 
   it('streams the SSR response and includes RSC payload', async () => {
     const response = await fetch(getServerUrl() + '/stream');
