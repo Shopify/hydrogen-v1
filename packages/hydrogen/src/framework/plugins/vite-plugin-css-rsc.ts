@@ -45,8 +45,13 @@ export default function cssRsc() {
           (server as any)._optimizedDeps?.metadata || {};
 
         for (const [key, value] of server.moduleGraph.idToModuleMap.entries()) {
-          // TODO stylus scss less
-          if (normalizePath(key).split('/').pop()!.includes('.css')) {
+          if (
+            // Note: Some CSS-in-JS libs use `.css.js`
+            // extension and we should match it here:
+            /\.(css|sass|scss|stylus|less)(\.|\?|$)/.test(
+              normalizePath(key).split('/').pop()!
+            )
+          ) {
             let {url, file, lastHMRTimestamp, importers} = value;
 
             if (
