@@ -114,7 +114,7 @@ function SeoForHomepage() {
  * - hero.byline            Single line text
  * - hero.cta               Single line text
  * - hero.spread            File
- * - hero.spread_secondary  File
+ * - hero.spread_seconary   File
  *
  * @see https://help.shopify.com/manual/metafields/metafield-definitions/creating-custom-metafield-definitions
  * @see https://github.com/Shopify/hydrogen/discussions/1790
