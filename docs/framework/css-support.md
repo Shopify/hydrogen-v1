@@ -8,7 +8,7 @@ Hydrogen's [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen
 
 ## How it works
 
-You can build with Tailwind's library or use other methods of styling like vanilla CSS files or a third-party CSS-in-JS framework like [CSS Modules](#css-modules). Hydrogen is powered by Vite, which natively supports several different [methods of CSS injection](https://vitejs.dev/guide/features.html#css).
+You can build with Tailwind's library or use other methods of styling like vanilla CSS or [CSS Modules](#css-modules). All the CSS imported in the app will be extracted at build time as a single asset.
 
 > Note:
 > Make sure to import your stylesheets from a `*.client.jsx` component, or directly from `index.html`.
@@ -118,18 +118,65 @@ If you want to use a font that's not included in Shopify's font library, then yo
 
 3. Import your `.css` file into `index.html` or any desired client component.
 
-## CSS Modules
+## Using CSS
 
-Hydrogen includes a [Vite plugin](https://vitejs.dev/guide/features.html#css-modules) that collects styles for each CSS Module in your components. CSS Modules can be imported in both client and server components.
+<aside class="note beta">
+<h4>Experimental feature</h4>
 
-{% codeblock file, filename: 'src/components/Hello.client.jsx' %}
+<p>Importing CSS in React Server Components is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
+
+</aside>
+
+Hydrogen collects styles for each CSS file imported in your components, both in client and server components.
+There are two modes for CSS support that can be modified by passing `experimental.css` option to the Hydrogen plugin in `vite.config.js`:
+
+{% codeblock file, filename: 'vite.config.js' %}
+
+```
+export default defineConfig({
+  plugins: [hydrogen({experimental: {css: 'global'}})]
+})
+```
+
+{% endcodeblock %}
+
+- `'modules-only'` mode: enables limited support for CSS Modules only. This is the current default mode.
+- `'global'` mode: enables full support for both vanilla CSS and CSS Modules. It also enables a way to integrate with tools that provide CSS-in-JS at build time. This is the recommended mode.
+
+Note that CSS code split for different routes is not supported at the moment.
+
+### Vanilla (pure) CSS and extensions
+
+Vanilla CSS and language extensions such as [Sass](https://sass-lang.com/), [Less](https://lesscss.org/) or [Stylus](https://stylus-lang.com/) are supported under the `experimental.css: 'global'` feature.
+
+Once enabled, you can simply import your stylesheets directly in your server components:
+
+
+{% codeblock file, filename: 'App.server.jsx' %}
+
+```jsx
+import './my-style.css';
+import './another-style.sass';
+
+function App() {
+  return <div>...</div>
+}
+```
+
+{% endcodeblock %}
+
+### CSS Modules
+
+Hydrogen collects styles for each CSS Module in your components. CSS Modules can be imported in both client and server components.
+
+{% codeblock file, filename: 'src/components/Hello.server.jsx' %}
 
 ```js
-import styles from './styles.module.css';
+import {red} from './styles.module.css';
 
 export default function MyComponent() {
   return (
-    <div className={styles.wrapper}>
+    <div className={red}>
       <p>Hello</p>
     </div>
   );
@@ -138,26 +185,13 @@ export default function MyComponent() {
 
 {% endcodeblock %}
 
-The CSS Module is inlined in a `<style>` tag before your component. Currently, this tag is only added automatically for the default export in the file. If you want to render the styles in other named exports, then you must do it manually by rendering `<styles.StyleTag />`:
+When the CSS mode is `'modules-only'`, your styles will be inlined in a `<style>` tag before your component. This tag is only added automatically for the default export in the file. Consider using `'global'` CSS mode to support named exports and reduce code duplication.
 
-{% codeblock file, filename: 'src/components/Hello.client.jsx' %}
+### CSS-in-JS libraries
 
-```jsx
-import styles from './styles.module.css';
+CSS-in-JS libraries that emit `.css` files at **build time** can be supported by Hydrogen via third-party Vite plugins. Please, reach out to the library maintainers to ask for React Server Components support and feel free to tag the Hydrogen team.
 
-export default MyComponent() {...}
-
-export function MyNamedComponent() {
-  return (
-    <div className={styles.wrapper}>
-      <styles.StyleTag />
-      <p>Hello</p>
-    </div>
-  );
-}
-```
-
-{% endcodeblock %}
+On the other hand, CSS-in-JS libraries that collect styles at **runtime** are not supported at the moment due to limitations when integrating these libraries with React Server Components.
 
 ## Next steps
 
