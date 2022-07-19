@@ -305,7 +305,7 @@ export default async function testCases({
     await test();
   });
 
-  describe.only('CSS', () => {
+  describe('CSS', () => {
     const extractCssFromDOM = async () => {
       if (isBuild) {
         // Downloaded using a link tag
