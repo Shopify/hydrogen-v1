@@ -26,6 +26,7 @@ export {
   CartProvider,
   useCart,
   useInstantCheckout,
+  CartProviderV2,
 } from './CartProvider/index.js';
 export type {
   State,
