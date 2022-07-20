@@ -38,7 +38,6 @@ export default function Homepage() {
 }
 
 function HomepageContent() {
-  itBroke();
   const {
     language: {isoCode: languageCode},
     country: {isoCode: countryCode},
