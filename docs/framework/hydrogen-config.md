@@ -29,9 +29,9 @@ export default defineConfig({
     storefrontToken: '{storefront_api_access_token}',
     /* The Storefront API version that your app uses */
     storefrontApiVersion: '2022-07',
-    /* A path to a custom page to render when the server encounters an unhandled exception */
-    serverErrorPage: '/src/Error.jsx',
   },
+  /* A path to a custom page to render when the server encounters an unhandled exception */
+  serverErrorPage: '/src/Error.jsx',
 });
 ```
 
