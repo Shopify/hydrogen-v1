@@ -20,12 +20,13 @@ import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import type {DevServerMessage} from './utilities/devtools';
 import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
 import {ClientAnalytics} from './foundation/Analytics/';
+// @ts-expect-error
+// eslint-disable-next-line node/no-missing-import
+import ErrorModules from 'virtual__error.jsx';
 
 let rscReader: ReadableStream | null;
 
 const cache = new Map();
-
-const ErrorModules = import.meta.glob('/src/Error.client.{jsx,tsx}');
 
 // Hydrate an SSR response from <meta> tags placed in the DOM.
 const flightChunks: string[] = [];
@@ -210,8 +211,7 @@ function CustomError({
       FallbackComponent={({error: errorRenderingCustomPage}) => {
         if (import.meta.env.DEV) {
           console.error(
-            'Error rendering custom error page. Check `src/Error.client.jsx` \n' +
-              errorRenderingCustomPage
+            'Error rendering custom error page:\n' + errorRenderingCustomPage
           );
         }
         return <DefaultError error={error} />;
