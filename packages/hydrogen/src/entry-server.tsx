@@ -436,7 +436,9 @@ async function runSSR({
     const prepareForStreaming = () => {
       Object.assign(responseOptions, getResponseOptions(response, didError()));
 
-      if (responseOptions.status === 200) {
+      if (responseOptions.status >= 400) {
+        responseOptions.headers.set('cache-control', 'no-store');
+      } else {
         /**
          * TODO: This assumes `response.cache()` has been called _before_ any
          * queries which might be caught behind Suspense. Clarify this or add
@@ -450,8 +452,6 @@ async function runSSR({
           'cache-control',
           response.cacheControlHeader
         );
-      } else {
-        responseOptions.headers.set('cache-control', 'no-store');
       }
 
       if (isRedirect(responseOptions)) {
@@ -747,7 +747,9 @@ function writeHeadToNodeResponse(
     error
   );
 
-  if (status === 200) {
+  if (status >= 400) {
+    nodeResponse.setHeader('cache-control', 'no-store');
+  } else {
     /**
      * TODO: Also add `Vary` headers for `accept-language` and any other keys
      * we want to shard our full-page cache for all Hydrogen storefronts.
@@ -756,8 +758,6 @@ function writeHeadToNodeResponse(
       'cache-control',
       componentResponse.cacheControlHeader
     );
-  } else {
-    nodeResponse.setHeader('cache-control', 'no-store');
   }
 
   nodeResponse.statusCode = status;
