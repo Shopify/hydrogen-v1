@@ -17,7 +17,7 @@ export default function cssRsc() {
     enforce: 'post',
     config() {
       // Disable CSS code split to avoid preloading styles
-      // which are already included in index.html
+      // that are already included in index.html
       return {build: {cssCodeSplit: false}};
     },
     configResolved(_config) {
@@ -46,7 +46,7 @@ export default function cssRsc() {
 
         for (const [key, value] of server.moduleGraph.idToModuleMap.entries()) {
           if (
-            // Note: Some CSS-in-JS libs use `.css.js`
+            // Note: Some CSS-in-JS libraries use `.css.js`
             // extension and we should match it here:
             /\.(css|sass|scss|stylus|less)(\.|\?|$)/.test(
               normalizePath(key).split('/').pop()!
@@ -74,7 +74,7 @@ export default function cssRsc() {
               }
 
               if (browserHash && !url.includes('v=')) {
-                // Append the hash at the end.
+                // Append the hash at the end
                 url += (url.includes('?') ? '&' : '?') + `v=${browserHash}`;
               }
 
@@ -121,7 +121,7 @@ export default function cssRsc() {
 
         if (cssAsset) {
           cssAssetFileName = cssAsset.fileName;
-          // Move CSS file to client build assets
+          // Move the CSS file to the client build assets
           cssAsset.fileName = normalizePath(
             path.join(relativeClientPath, cssAsset.fileName)
           );
@@ -139,7 +139,7 @@ export default function cssRsc() {
       } else {
         // -- Client build
 
-        // Save outDir from client build in the outer scope in order
+        // Save outDir from client build in the outer scope
         // to read it during the server build. The CLI runs Vite in
         // the same process so the scope is shared across builds.
         clientBuildPath = normalizePath(

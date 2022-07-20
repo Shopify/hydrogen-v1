@@ -127,8 +127,8 @@ If you want to use a font that's not included in Shopify's font library, then yo
 
 </aside>
 
-Hydrogen collects styles for each CSS file imported in your components, both in client and server components.
-There are two modes for CSS support that can be modified by passing `experimental.css` option to the Hydrogen plugin in `vite.config.js`:
+Hydrogen collects styles for each CSS file imported in your client and server components.
+You can modify the following modes for CSS support by passing `experimental.css` option to the Hydrogen plugin in `vite.config.js`:
 
 {% codeblock file, filename: 'vite.config.js' %}
 
@@ -140,16 +140,17 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-- `'modules-only'` mode: enables limited support for CSS Modules only. This is the current default mode.
-- `'global'` mode: enables full support for both vanilla CSS and CSS Modules. It also enables a way to integrate with tools that provide CSS-in-JS at build time. This is the recommended mode.
+- **`modules-only`**: Enables limited support for CSS Modules only. This is the current default mode.
+- **`global`**: Enables full support for vanilla CSS and CSS Modules. `global` also enables a way to integrate with tools that provide CSS-in-JS at build time. This is the recommended mode.
 
-Note that CSS code split for different routes is not supported at the moment.
+> Note:
+> CSS code split for different routes is not currently supported.
 
 ### Vanilla (pure) CSS and extensions
 
-Vanilla CSS and language extensions such as [Sass](https://sass-lang.com/), [Less](https://lesscss.org/) or [Stylus](https://stylus-lang.com/) are supported under the `experimental.css: 'global'` feature.
+Vanilla CSS and language extensions such as [Sass](https://sass-lang.com/), [Less](https://lesscss.org/), and [Stylus](https://stylus-lang.com/) are supported under the `experimental.css: 'global'` feature.
 
-Once enabled, you can simply import your stylesheets directly in your server components:
+Once enabled, you can import your stylesheets directly in your server components:
 
 
 {% codeblock file, filename: 'App.server.jsx' %}
@@ -185,13 +186,13 @@ export default function MyComponent() {
 
 {% endcodeblock %}
 
-When the CSS mode is `'modules-only'`, your styles will be inlined in a `<style>` tag before your component. This tag is only added automatically for the default export in the file. Consider using `'global'` CSS mode to support named exports and reduce code duplication.
+When the CSS mode is `modules-only`, styles are inlined in a `<style>` tag before your component. This tag is only added automatically for the default export in the file. Consider using the `global` CSS mode to support named exports and reduce code duplication.
 
 ### CSS-in-JS libraries
 
-CSS-in-JS libraries that emit `.css` files at **build time** can be supported by Hydrogen via third-party Vite plugins. Please, reach out to the library maintainers to ask for React Server Components support and feel free to tag the Hydrogen team.
+Hydrogen supports CSS-in-JS libraries that emit `.css` files at build time via third-party Vite plugins. Please, reach out to the library maintainers to ask for React Server Components support and feel free to tag the Hydrogen team.
 
-On the other hand, CSS-in-JS libraries that collect styles at **runtime** are not supported at the moment due to limitations when integrating these libraries with React Server Components.
+However, CSS-in-JS libraries that collect styles at runtime aren't currently supported due to limitation integrating these libraries with React Server Components.
 
 ## Next steps
 

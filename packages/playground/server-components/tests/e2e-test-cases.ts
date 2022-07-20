@@ -313,13 +313,13 @@ export default async function testCases({
           .locator('link[rel=stylesheet]')
           .elementHandles();
 
-        expect(linkTags).toHaveLength(1); // Styles are not duplicated
+        expect(linkTags).toHaveLength(1); // Styles aren't duplicated
 
         const href = await linkTags[0].getAttribute('href');
 
         return await (await fetch(getServerUrl() + href)).text();
       } else {
-        // Inlined in DOM using JS for HMR
+        // Inlined in the DOM using JS for HMR
         return (await page.locator('style').allTextContents()).join('\n');
       }
     };
