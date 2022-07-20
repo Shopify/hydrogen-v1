@@ -436,16 +436,23 @@ async function runSSR({
     const prepareForStreaming = () => {
       Object.assign(responseOptions, getResponseOptions(response, didError()));
 
-      /**
-       * TODO: This assumes `response.cache()` has been called _before_ any
-       * queries which might be caught behind Suspense. Clarify this or add
-       * additional checks downstream?
-       */
-      /**
-       * TODO: Also add `Vary` headers for `accept-language` and any other keys
-       * we want to shard our full-page cache for all Hydrogen storefronts.
-       */
-      responseOptions.headers.set('cache-control', response.cacheControlHeader);
+      if (responseOptions.status === 200) {
+        /**
+         * TODO: This assumes `response.cache()` has been called _before_ any
+         * queries which might be caught behind Suspense. Clarify this or add
+         * additional checks downstream?
+         */
+        /**
+         * TODO: Also add `Vary` headers for `accept-language` and any other keys
+         * we want to shard our full-page cache for all Hydrogen storefronts.
+         */
+        responseOptions.headers.set(
+          'cache-control',
+          response.cacheControlHeader
+        );
+      } else {
+        responseOptions.headers.set('cache-control', 'no-store');
+      }
 
       if (isRedirect(responseOptions)) {
         return false;
@@ -511,6 +518,7 @@ async function runSSR({
         setTimeout(() => {
           writable.close();
           postRequestTasks('str', responseOptions.status, request, response);
+          response.status = responseOptions.status;
           cacheResponse(response, request, savedChunks, revalidate);
         }, 0);
       });
@@ -533,6 +541,7 @@ async function runSSR({
     const savedChunks = tagOnWrite(nodeResponse);
 
     nodeResponse.on('finish', () => {
+      response.status = nodeResponse.statusCode;
       cacheResponse(response, request, savedChunks, revalidate);
     });
 
@@ -733,16 +742,23 @@ function writeHeadToNodeResponse(
   if (nodeResponse.headersSent) return;
   log.trace('writeHeadToNodeResponse');
 
-  /**
-   * TODO: Also add `Vary` headers for `accept-language` and any other keys
-   * we want to shard our full-page cache for all Hydrogen storefronts.
-   */
-  nodeResponse.setHeader('cache-control', componentResponse.cacheControlHeader);
-
   const {headers, status, statusText} = getResponseOptions(
     componentResponse,
     error
   );
+
+  if (status === 200) {
+    /**
+     * TODO: Also add `Vary` headers for `accept-language` and any other keys
+     * we want to shard our full-page cache for all Hydrogen storefronts.
+     */
+    nodeResponse.setHeader(
+      'cache-control',
+      componentResponse.cacheControlHeader
+    );
+  } else {
+    nodeResponse.setHeader('cache-control', 'no-store');
+  }
 
   nodeResponse.statusCode = status;
 
