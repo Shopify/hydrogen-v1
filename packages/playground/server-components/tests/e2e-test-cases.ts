@@ -272,23 +272,6 @@ export default async function testCases({
     expect(await page.$$('[data-test=alias]')).toHaveLength(3);
   });
 
-  it('adds style tags for CSS modules', async () => {
-    await page.goto(getServerUrl() + '/css-modules');
-    expect(await page.textContent('h1')).toContain('CSS Modules');
-
-    // Same class for the same style
-    const className = await page.getAttribute('[data-test=server]', 'class');
-    expect(className).toMatch(/^_red_/);
-    expect(await page.getAttribute('[data-test=client]', 'class')).toEqual(
-      className
-    );
-
-    // Style tag is present in DOM
-    expect(await page.textContent('style')).toEqual(
-      `.${className} {\n  color: red;\n}\n`
-    );
-  });
-
   it('supports React.useId()', async () => {
     const response = await page.goto(getServerUrl() + '/useid');
 
@@ -320,6 +303,57 @@ export default async function testCases({
     // This requires `devCache: true` in `vite.config.js`.
     await page.reload();
     await test();
+  });
+
+  describe('CSS', () => {
+    const extractCssFromDOM = async () => {
+      if (isBuild) {
+        // Downloaded using a link tag
+        const linkTags = await page
+          .locator('link[rel=stylesheet]')
+          .elementHandles();
+
+        expect(linkTags).toHaveLength(1); // Styles aren't duplicated
+
+        const href = await linkTags[0].getAttribute('href');
+
+        return await (await fetch(getServerUrl() + href)).text();
+      } else {
+        // Inlined in the DOM using JS for HMR
+        return (await page.locator('style').allTextContents()).join('\n');
+      }
+    };
+
+    it('adds style tags for pure CSS', async () => {
+      await page.goto(getServerUrl() + '/css-pure');
+      expect(await page.textContent('h1')).toContain('CSS Pure');
+
+      // Same class for the same style
+      const className = await page.getAttribute('[data-test=server]', 'class');
+      expect(className).toEqual('green');
+
+      // Style is present in DOM
+      expect(await extractCssFromDOM()).toMatch(
+        /\.green\s*{\s*color:\s*green;?\s*/m
+      );
+    });
+
+    it('adds style tags for CSS modules', async () => {
+      await page.goto(getServerUrl() + '/css-modules');
+      expect(await page.textContent('h1')).toContain('CSS Modules');
+
+      // Same class for the same style
+      const className = await page.getAttribute('[data-test=server]', 'class');
+      expect(className).toMatch(/^_red_/);
+      expect(await page.getAttribute('[data-test=client]', 'class')).toEqual(
+        className
+      );
+
+      // Style is present in DOM
+      expect(await extractCssFromDOM()).toMatch(
+        new RegExp(`\\.${className}\\s*{\\s*color:\\s*red;?\\s*}`, 'm')
+      );
+    });
   });
 
   describe('HMR', () => {
