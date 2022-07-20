@@ -8,12 +8,13 @@ import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import type {HydrogenRequest} from '../foundation/HydrogenRequest/HydrogenRequest.server';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
-import {
-  emptySessionImplementation,
+import type {
   SessionApi,
   SessionStorageAdapter,
-} from '../foundation/session/session';
+} from '../foundation/session/session-types';
+import {emptySessionImplementation} from '../foundation/session/session';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks';
+import {RSC_PATHNAME} from '../constants';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
@@ -202,7 +203,7 @@ export async function renderApiRoute(
     suppressLog?: boolean;
   }
 ): Promise<Response | Request> {
-  let response;
+  let response: any;
   const log = getLoggerWithContext(request);
   let cookieToSet = '';
 
@@ -249,7 +250,9 @@ export async function renderApiRoute(
     }
   } catch (e) {
     log.error(e);
-    response = new Response('Error processing: ' + request.url, {status: 500});
+    response = new Response('Error processing: ' + request.url, {
+      status: 500,
+    });
   }
 
   if (!suppressLog) {
@@ -260,5 +263,43 @@ export async function renderApiRoute(
     );
   }
 
+  if (response instanceof Request) {
+    const url = new URL(request.url);
+    const newUrl = new URL(response.url, url);
+
+    if (request.headers.get('Hydrogen-Client') === 'Form-Action') {
+      response.headers.set(
+        'Hydrogen-RSC-Pathname',
+        newUrl.pathname + newUrl.search
+      );
+      return new Request(getRscUrl(url, newUrl), {
+        headers: response.headers,
+      });
+    } else {
+      // This request was made by a native form presumably because the client components had yet to hydrate,
+      // Because of this, we need to redirect instead of just rendering the response.
+      // Doing so prevents odd refresh / back behavior. The redirect response also should *never* be cached.
+      response.headers.set('Location', newUrl.href);
+      response.headers.set('Cache-Control', 'no-store');
+
+      return new Response(null, {
+        status: 303,
+        headers: response.headers,
+      });
+    }
+  }
+
   return response;
+}
+
+function getRscUrl(currentUrl: URL, newUrl: URL) {
+  const rscUrl = new URL(RSC_PATHNAME, currentUrl);
+  const searchParams = new URLSearchParams({
+    state: JSON.stringify({
+      pathname: newUrl.pathname,
+      search: newUrl.search,
+    }),
+  });
+  rscUrl.search = searchParams.toString();
+  return rscUrl.toString();
 }

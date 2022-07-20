@@ -14,7 +14,7 @@ import type {
 import {hashKey} from '../../utilities/hash';
 import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants';
-import {SessionSyncApi} from '../session/session';
+import type {SessionSyncApi} from '../session/session-types';
 import {parseJSON} from '../../utilities/parse';
 
 export type PreloadQueryEntry = {

@@ -1,4 +1,4 @@
-import type {SessionStorageAdapter} from '../session/session';
+import type {SessionStorageAdapter} from '../session/session-types';
 import {Cookie} from '../Cookie/Cookie';
 import type {CookieOptions} from '../Cookie/Cookie';
 
@@ -29,6 +29,7 @@ export const CookieSessionStorage = function (
       },
       async destroy(request: Request) {
         // @todo - set expires for Date in past
+        parsed = true;
         return cookie.destroy();
       },
     };

@@ -41,6 +41,7 @@ export const mountWithProviders = createMount<
     <ServerPropsProvider
       setServerPropsForRsc={setServerProps}
       initialServerProps={serverProps}
+      setRscResponseFromApiRoute={() => {}}
     >
       <ShopifyProvider
         shopifyConfig={shopifyConfig}

@@ -4,6 +4,7 @@ import React, {
   StrictMode,
   Fragment,
   type ElementType,
+  useEffect,
 } from 'react';
 import {hydrateRoot} from 'react-dom/client';
 import type {ClientConfig, ClientHandler} from './types';
@@ -145,6 +146,11 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 
 export default renderHydrogen;
 
+interface APIRouteRscResponse {
+  url: string;
+  response: any;
+}
+
 function Content({
   clientWrapper: ClientWrapper = ({children}: {children: JSX.Element}) =>
     children,
@@ -155,12 +161,22 @@ function Content({
     pathname: window.location.pathname,
     search: window.location.search,
   });
-  const response = useServerResponse(serverProps);
+  const [rscResponseFromApiRoute, setRscResponseFromApiRoute] =
+    useState<APIRouteRscResponse | null>(null);
+
+  const response = useServerResponse(serverProps, rscResponseFromApiRoute);
+
+  useEffect(() => {
+    // If server props ever change, then use a fresh
+    // _rsc request and ignore any response from API routes.
+    setRscResponseFromApiRoute(null);
+  }, [serverProps]);
 
   return (
     <ServerPropsProvider
       initialServerProps={serverProps}
       setServerPropsForRsc={setServerProps}
+      setRscResponseFromApiRoute={setRscResponseFromApiRoute}
     >
       <ClientWrapper>{response.readRoot()}</ClientWrapper>
     </ServerPropsProvider>
@@ -205,8 +221,17 @@ function Error({error}: {error: Error}) {
   );
 }
 
-function useServerResponse(state: any) {
+function useServerResponse(
+  state: any,
+  apiRouteRscResponse: APIRouteRscResponse | null
+) {
   const key = JSON.stringify(state);
+
+  if (apiRouteRscResponse) {
+    cache.clear();
+    cache.set(apiRouteRscResponse.url, apiRouteRscResponse.response);
+    return apiRouteRscResponse.response;
+  }
 
   let response = cache.get(key);
   if (response) {

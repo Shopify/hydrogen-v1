@@ -35,7 +35,7 @@ export default async function (request, options) {
             es: {'/es/products': '/es/productos'},
             en: {'/en/productos': '/en/products'},
           }),
-        20
+        5
       )
     );
   }
