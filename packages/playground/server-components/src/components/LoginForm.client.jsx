@@ -50,7 +50,7 @@ export function LoginForm({error}) {
         }
       }}
     >
-      {(loading) => (
+      {({loading}) => (
         <>
           <input type="hidden" name="action" value="login" />
           <div>
