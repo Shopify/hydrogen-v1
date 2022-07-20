@@ -1,15 +1,21 @@
-import {useLocalization, useShopQuery, CacheLong, gql} from '@shopify/hydrogen';
+import {
+  useLocalization,
+  useShopQuery,
+  CacheLong,
+  gql,
+  type HydrogenRouteProps,
+} from '@shopify/hydrogen';
 import type {Menu, Shop} from '@shopify/hydrogen/storefront-api-types';
 
 import {Header} from '~/components';
 import {parseMenu} from '~/lib/utils';
 
 const HEADER_MENU_HANDLE = 'main-menu';
-const FOOTER_MENU_HANDLE = 'footer';
-
 const SHOP_NAME_FALLBACK = 'Hydrogen';
 
-export default function HeaderMenu() {
+export default function HeaderMenu({response}: HydrogenRouteProps) {
+  response.cache(CacheLong());
+
   const {shopName, headerMenu} = useLayoutQuery();
   return <Header title={shopName} menu={headerMenu} />;
 }
@@ -22,13 +28,11 @@ function useLayoutQuery() {
   const {data} = useShopQuery<{
     shop: Shop;
     headerMenu: Menu;
-    footerMenu: Menu;
   }>({
     query: SHOP_QUERY,
     variables: {
       language: languageCode,
       headerMenuHandle: HEADER_MENU_HANDLE,
-      footerMenuHandle: FOOTER_MENU_HANDLE,
     },
     cache: CacheLong(),
     preload: '*',
@@ -50,11 +54,7 @@ function useLayoutQuery() {
     ? parseMenu(data.headerMenu, customPrefixes)
     : undefined;
 
-  const footerMenu = data?.footerMenu
-    ? parseMenu(data.footerMenu, customPrefixes)
-    : undefined;
-
-  return {footerMenu, headerMenu, shopName};
+  return {headerMenu, shopName};
 }
 
 const SHOP_QUERY = gql`
@@ -66,24 +66,12 @@ const SHOP_QUERY = gql`
     type
     url
   }
-  query layoutMenus(
-    $language: LanguageCode
-    $headerMenuHandle: String!
-    $footerMenuHandle: String!
-  ) @inContext(language: $language) {
+  query layoutHeaderMenus($language: LanguageCode, $headerMenuHandle: String!)
+  @inContext(language: $language) {
     shop {
       name
     }
     headerMenu: menu(handle: $headerMenuHandle) {
-      id
-      items {
-        ...MenuItem
-        items {
-          ...MenuItem
-        }
-      }
-    }
-    footerMenu: menu(handle: $footerMenuHandle) {
       id
       items {
         ...MenuItem

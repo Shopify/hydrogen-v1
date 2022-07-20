@@ -1,7 +1,7 @@
 import {RSCSubRoute} from '@shopify/hydrogen';
 
-import HeaderMenu from '../../routes/component/HeaderMenu.server';
-import FooterMenu from '../../routes/component/FooterMenu.server';
+import HeaderMenu from '../../routes/sub-routes/HeaderMenu.server';
+import FooterMenu from '../../routes/sub-routes/FooterMenu.server';
 
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
@@ -18,7 +18,7 @@ export function Layout({children}: {children: React.ReactNode}) {
 
         <RSCSubRoute
           state={{}}
-          path="component/HeaderMenu"
+          path="sub-routes/HeaderMenu"
           page={<HeaderMenu />}
         />
 
@@ -28,7 +28,7 @@ export function Layout({children}: {children: React.ReactNode}) {
       </div>
       <RSCSubRoute
         state={{}}
-        path="component/FooterMenu"
+        path="sub-routes/FooterMenu"
         page={<FooterMenu />}
       />
     </>

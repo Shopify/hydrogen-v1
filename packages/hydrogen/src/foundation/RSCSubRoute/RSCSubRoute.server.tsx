@@ -1,4 +1,4 @@
-import React, {cloneElement, ReactElement, Suspense} from 'react';
+import React, {cloneElement, ReactElement} from 'react';
 // import {ErrorBoundary} from 'react-error-boundary';
 import {useServerRequest} from '../ServerRequestProvider';
 import {RSCSubRouteClient} from './RSCSubRoute.client';
@@ -16,21 +16,26 @@ export function RSCSubRoute({
   state,
   path,
   page,
-}: RSCSubRouteProps): ReactElement | null {
+}: RSCSubRouteProps): ReactElement {
   const request = useServerRequest();
   const {serverProps} = request.ctx.router;
+  const isRSC = request.isRscRequest();
+  const clientState = {
+    ...state,
+    pathname: `/${path}`,
+    subRoute: true,
+  };
 
-  return (
-    <Suspense
-      fallback={request.isRscRequest() ? null : cloneElement(page, serverProps)}
-    >
-      <RSCSubRouteClient
-        state={{
-          ...state,
-          pathname: `/${path}`,
-          subRoute: true,
-        }}
-      />
-    </Suspense>
+  return isRSC ? (
+    <RSCSubRouteClient state={clientState} isRSC={isRSC} />
+  ) : (
+    <RSCSubRouteClient state={clientState} isRSC={isRSC}>
+      {cloneElement(page, serverProps)}
+    </RSCSubRouteClient>
   );
 }
+
+// try
+// 1. Render SSR
+// 2. Client-side set children as init state, and bound app state
+// 3. RSC takes over in useEffect (app wide rsc state)

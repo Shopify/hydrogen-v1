@@ -18,7 +18,7 @@ import {
   CollectionConnection,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
-import TestRSCSubRoute from './component/TestRSCSubRoute.server';
+import TestRSCSubRoute from './sub-routes/TestRSCSubRoute.server';
 
 export default function Homepage() {
   useServerAnalytics({
@@ -31,7 +31,7 @@ export default function Homepage() {
     <Layout>
       <RSCSubRoute
         state={{}}
-        path="component/TestRSCSubRoute"
+        path="sub-routes/TestRSCSubRoute"
         page={<TestRSCSubRoute />}
       />
       <Suspense>

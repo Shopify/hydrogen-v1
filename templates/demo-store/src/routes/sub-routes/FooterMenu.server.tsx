@@ -1,15 +1,20 @@
-import {useLocalization, useShopQuery, CacheLong, gql} from '@shopify/hydrogen';
+import {
+  useLocalization,
+  useShopQuery,
+  CacheLong,
+  gql,
+  type HydrogenRouteProps,
+} from '@shopify/hydrogen';
 import type {Menu, Shop} from '@shopify/hydrogen/storefront-api-types';
 
 import {Footer} from '~/components/index.server';
 import {parseMenu} from '~/lib/utils';
 
-const HEADER_MENU_HANDLE = 'main-menu';
 const FOOTER_MENU_HANDLE = 'footer';
 
-const SHOP_NAME_FALLBACK = 'Hydrogen';
+export default function FooterMenu({response}: HydrogenRouteProps) {
+  response.cache(CacheLong());
 
-export default function FooterMenu() {
   const {footerMenu} = useLayoutQuery();
   return <Footer menu={footerMenu} />;
 }
@@ -20,21 +25,16 @@ function useLayoutQuery() {
   } = useLocalization();
 
   const {data} = useShopQuery<{
-    shop: Shop;
-    headerMenu: Menu;
     footerMenu: Menu;
   }>({
     query: SHOP_QUERY,
     variables: {
       language: languageCode,
-      headerMenuHandle: HEADER_MENU_HANDLE,
       footerMenuHandle: FOOTER_MENU_HANDLE,
     },
     cache: CacheLong(),
     preload: '*',
   });
-
-  const shopName = data ? data.shop.name : SHOP_NAME_FALLBACK;
 
   /*
     Modify specific links/routes (optional)
@@ -46,15 +46,11 @@ function useLayoutQuery() {
   */
   const customPrefixes = {BLOG: '', CATALOG: 'products'};
 
-  const headerMenu = data?.headerMenu
-    ? parseMenu(data.headerMenu, customPrefixes)
-    : undefined;
-
   const footerMenu = data?.footerMenu
     ? parseMenu(data.footerMenu, customPrefixes)
     : undefined;
 
-  return {footerMenu, headerMenu, shopName};
+  return {footerMenu};
 }
 
 const SHOP_QUERY = gql`
@@ -66,23 +62,8 @@ const SHOP_QUERY = gql`
     type
     url
   }
-  query layoutMenus(
-    $language: LanguageCode
-    $headerMenuHandle: String!
-    $footerMenuHandle: String!
-  ) @inContext(language: $language) {
-    shop {
-      name
-    }
-    headerMenu: menu(handle: $headerMenuHandle) {
-      id
-      items {
-        ...MenuItem
-        items {
-          ...MenuItem
-        }
-      }
-    }
+  query layoutFooterMenus($language: LanguageCode, $footerMenuHandle: String!)
+  @inContext(language: $language) {
     footerMenu: menu(handle: $footerMenuHandle) {
       id
       items {

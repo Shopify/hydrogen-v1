@@ -1,4 +1,4 @@
-import {Suspense, type ElementType} from 'react';
+import {Suspense} from 'react';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {
   FileRoutes,
