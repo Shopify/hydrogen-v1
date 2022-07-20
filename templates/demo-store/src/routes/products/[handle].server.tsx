@@ -12,12 +12,14 @@ export default function Product() {
           <Link
             className="bg-primary rounded text-contrast py-2 px-4 focus:shadow-outline block w-full"
             to="products/snowboard"
+            prefetch={false}
           >
             Product A - Snowboard
           </Link>
           <Link
             className="bg-primary rounded text-contrast py-2 px-4 focus:shadow-outline block w-full"
             to="products/the-full-stack"
+            prefetch={false}
           >
             Product B - The Full Stack
           </Link>

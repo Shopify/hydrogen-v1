@@ -8,6 +8,7 @@ import {
   useServerAnalytics,
   useShopQuery,
   type HydrogenRouteProps,
+  RSCSubRoute,
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
@@ -21,6 +22,7 @@ import {
   Section,
   Text,
 } from '~/components';
+import ProductRecommendationRoute from '../sub-routes/ProductRecommendationRoute.server';
 
 export default function ProductDetailRoute({handle}: HydrogenRouteProps) {
   const {
@@ -56,9 +58,7 @@ export default function ProductDetailRoute({handle}: HydrogenRouteProps) {
 
   return (
     <>
-      <Suspense>
-        <Seo type="product" data={product} />
-      </Suspense>
+      <Seo type="product" data={product} />
       <ProductOptionsProvider data={product}>
         <Section padding="x" className="px-0">
           <div className="grid items-start md:gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
@@ -103,9 +103,11 @@ export default function ProductDetailRoute({handle}: HydrogenRouteProps) {
             </div>
           </div>
         </Section>
-        <Suspense>
-          <ProductSwimlane title="Related Products" data={id} />
-        </Suspense>
+        <RSCSubRoute
+          state={{id}}
+          path="sub-routes/ProductRecommendationRoute"
+          page={<ProductRecommendationRoute id={id} />}
+        />
       </ProductOptionsProvider>
     </>
   );
