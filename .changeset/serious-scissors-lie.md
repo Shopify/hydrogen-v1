@@ -1,8 +1,8 @@
 ---
-'@shopify/hydrogen': patch
+'@shopify/hydrogen': minor
 ---
 
-Added a new experimental CSS approach to support importing styles directly in React Server Component. This feature must be enabled manually.
+Added a new experimental CSS approach to support importing styles directly in React Server Components. This feature must be enabled manually.
 
 Until now, we had experimental support for CSS Modules with some minor restrictions and drawbacks:
 
