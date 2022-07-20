@@ -8,7 +8,7 @@ Hydrogen's [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen
 
 ## How it works
 
-You can build with Tailwind's library or use other methods of styling like vanilla CSS or [CSS Modules](#css-modules). All the CSS imported in the app will be extracted at build time as a single asset.
+You can build with Tailwind's library or use other methods of styling like vanilla CSS or [CSS Modules](#css-modules). All CSS that's imported in the app is extracted as a single asset at build time.
 
 > Note:
 > Make sure to import your stylesheets from a `*.client.jsx` component, or directly from `index.html`.
