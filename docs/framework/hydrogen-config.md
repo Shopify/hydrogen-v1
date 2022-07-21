@@ -260,7 +260,9 @@ export default defineConfig({
 
 ### `serverErrorPage`
 
-If an unexpected error occurs while rendering a route, Hydrogen will respond with a 500 HTTP error and render a default error page. Define a custom error page with the `serverErrorPage` configuration property. It defaults to `/src/Error.{jsx,tsx}`. The custom error page is passed an `Error` property:
+If an unexpected error occurs while rendering a route, then Hydrogen responds with a 500 HTTP error and renders a default error page at `/src/Error.{jsx,tsx}`.
+
+You can define a custom error page with the `serverErrorPage` configuration property. The custom error page is passed an `Error` property. The following is an example:
 
 {% codeblock file, filename: '/src/Error.jsx' %}
 
@@ -278,7 +280,8 @@ export default function Error({error}) {
 
 {% endcodeblock %}
 
-Note: If Hydrogen fails to render the custom error page, it will fallback to the default built-in Error page.
+> Note:
+> If Hydrogen fails to render the custom error page, then it falls back to the default built-in Error page.
 
 ## Changing the configuration file location
 
