@@ -9,6 +9,7 @@ import {
   useShopQuery,
   type HydrogenRouteProps,
   RSCSubRoute,
+  Link,
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
@@ -75,6 +76,24 @@ export default function ProductDetailRoute({handle}: HydrogenRouteProps) {
                   {vendor && (
                     <Text className={'opacity-50 font-medium'}>{vendor}</Text>
                   )}
+                </div>
+                <div className="">
+                  <div className="flex gap-4">
+                    <Link
+                      className="bg-primary rounded text-contrast py-2 px-4 focus:shadow-outline block w-full"
+                      to="products/snowboard"
+                      prefetch={false}
+                    >
+                      Product A - Snowboard
+                    </Link>
+                    <Link
+                      className="bg-primary rounded text-contrast py-2 px-4 focus:shadow-outline block w-full"
+                      to="products/the-full-stack"
+                      prefetch={false}
+                    >
+                      Product B - The Full Stack
+                    </Link>
+                  </div>
                 </div>
                 <ProductForm />
                 <div className="grid gap-4 py-4">

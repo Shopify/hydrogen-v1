@@ -1,4 +1,10 @@
-import React, {useEffect, useState, ReactElement, useTransition} from 'react';
+import React, {
+  useEffect,
+  useState,
+  ReactElement,
+  useTransition,
+  Suspense,
+} from 'react';
 import {ErrorBoundary} from 'react-error-boundary';
 import {
   createFromFetch,
@@ -21,8 +27,8 @@ export function RSCSubRouteClient({
   isRSC,
   children,
 }: RSCSubRouteClientProps) {
-  const [_, startTransition] = useTransition();
-  const [response, setResponse] = useState(children);
+  const [isPending, startTransition] = useTransition();
+  const [response, setResponse] = useState(<Suspense>{children}</Suspense>);
 
   useEffect(() => {
     if (isRSC) {
@@ -38,10 +44,10 @@ export function RSCSubRouteClient({
         return null;
       }}
     >
-      <>
+      <div className={isPending ? 'opacity-50' : ''}>
         {/* @ts-ignore */}
         {response && response.readRoot ? response.readRoot() : response}
-      </>
+      </div>
     </ErrorBoundary>
   );
 }
@@ -50,11 +56,7 @@ function getSubServerResponse(state: any) {
   const key = JSON.stringify(state);
 
   const cacheEntry = cache.get(key);
-  if (cacheEntry) {
-    if (Date.now() > cacheEntry.expiry) {
-      cache.delete(key);
-    }
-
+  if (cacheEntry && Date.now() < cacheEntry.expiry) {
     return cacheEntry.response;
   }
 
