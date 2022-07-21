@@ -1,6 +1,5 @@
 /**
- * Export all client components from here to ensure they're available in both import
- * paths. This is because we transform `@shopify/hydrogen` to `@shopify/hydrogen/client`
+ * Export all client components from here to ensure they're available in both import * paths. This is because we transform `@shopify/hydrogen` to `@shopify/hydrogen/client`
  * inside client components during the client build only, but when the same components
  * run during SSR, they reference this path.
  */
@@ -44,7 +43,10 @@ export {useRequestContext} from './foundation/useRequestContext/index.js';
 export {useServerAnalytics} from './foundation/Analytics/hook.js';
 export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server.js';
 export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const.js';
-export {useSession} from './foundation/useSession/useSession.js';
+export {
+  useSession,
+  useFlashSession,
+} from './foundation/useSession/useSession.js';
 export {Cookie} from './foundation/Cookie/Cookie.js';
 
 /**
