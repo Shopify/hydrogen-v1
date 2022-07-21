@@ -39,8 +39,6 @@ export function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
     closeDrawer: closeMenu,
   } = useDrawer();
 
-  console.log('Render header');
-
   return (
     <>
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />

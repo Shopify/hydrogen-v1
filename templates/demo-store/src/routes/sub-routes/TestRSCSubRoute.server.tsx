@@ -11,7 +11,6 @@ import {
 export default function TestRSCSubRoute({response}: HydrogenRouteProps) {
   response.cache(CacheLong());
 
-  console.log('TestRSCSubRoute');
   const {
     data: {
       shop: {name, description},
