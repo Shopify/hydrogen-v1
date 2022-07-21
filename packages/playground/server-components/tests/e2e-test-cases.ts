@@ -883,7 +883,7 @@ export default async function testCases({
     });
 
     it('responds with a 500 and no cache headers for bots', async () => {
-      const response = await fetch(getServerUrl() + '/async-error?_bot');
+      const response = await fetch(getServerUrl() + '/error-async?_bot');
       expect(response.status).toBe(500);
       expect(response.headers.get('cache-control')).toBe('no-store');
     });
