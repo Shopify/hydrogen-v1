@@ -108,7 +108,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       if (id === '\0' + VIRTUAL_ERROR_FILE) {
         return importHydrogenConfig().then((hc) => {
           const errorPath = hc.serverErrorPage ?? '/src/Error.{jsx,tsx}';
-          const code = `const errorPage = import.meta.glob("${errorPath}");\n export default errorPage;`;
+          const code = `const errorPage = import.meta.glob("${errorPath}");\n export default Object.values(errorPage)[0];`;
           return {code};
         });
       }

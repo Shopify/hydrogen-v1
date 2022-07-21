@@ -22,7 +22,7 @@ import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerP
 import {ClientAnalytics} from './foundation/Analytics/';
 // @ts-expect-error
 // eslint-disable-next-line node/no-missing-import
-import ErrorModules from 'virtual__error.jsx';
+import CustomErrorPage from 'virtual__error.jsx';
 
 let rscReader: ReadableStream | null;
 
@@ -141,12 +141,9 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
       <ServerRequestProviderMock />
       <ErrorBoundary
         FallbackComponent={
-          Object.keys(ErrorModules).length
+          CustomErrorPage
             ? ({error}) => (
-                <CustomError
-                  error={error}
-                  errorPage={ErrorModules[Object.keys(ErrorModules)[0]] as any}
-                />
+                <CustomErrorWrapper error={error} errorPage={CustomErrorPage} />
               )
             : DefaultError
         }
@@ -198,7 +195,7 @@ function Content({
   );
 }
 
-function CustomError({
+function CustomErrorWrapper({
   error,
   errorPage,
 }: {
