@@ -1,4 +1,4 @@
-import React, {cloneElement, ReactElement, Suspense} from 'react';
+import React, {cloneElement, ReactElement} from 'react';
 // import {ErrorBoundary} from 'react-error-boundary';
 import {useServerRequest} from '../ServerRequestProvider';
 import {RSCSubRouteClient} from './RSCSubRoute.client';
