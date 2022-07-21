@@ -39,13 +39,17 @@ export function collectQueryTimings(
   duration?: number,
   info?: string | undefined
 ) {
-  request.ctx.queryTimings.push({
-    name: findQueryName(hashKey(queryKey)),
-    timingType,
-    timestamp: getTime(),
-    duration,
-    info,
-  });
+  const hashedKey = hashKey(queryKey);
+
+  if (hashedKey !== 'hydrogen-shopify-config') {
+    request.ctx.queryTimings.push({
+      name: findQueryName(hashedKey),
+      timingType,
+      timestamp: getTime(),
+      duration,
+      info,
+    });
+  }
 }
 
 export function logQueryTimings(type: RenderType, request: HydrogenRequest) {

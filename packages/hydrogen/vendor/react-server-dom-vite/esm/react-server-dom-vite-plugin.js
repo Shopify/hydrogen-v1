@@ -122,6 +122,13 @@ function ReactFlightVitePlugin() {
   return {
     name: 'vite-plugin-react-server-components',
     enforce: 'pre',
+    buildStart: function () {
+      // Let other plugins differentiate between pure SSR and RSC builds
+      if (config?.build?.ssr) process.env.RSC_BUILD = 'true';
+    },
+    buildEnd: function () {
+      if (config?.build?.ssr) delete process.env.RSC_BUILD;
+    },
     configureServer: function (_server) {
       server = _server;
       var seenModules = {};

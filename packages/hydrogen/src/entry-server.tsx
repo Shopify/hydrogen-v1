@@ -70,10 +70,12 @@ const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
 export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
-    const {cache, context, buyerIpHeader} = options;
+    const {cache, context, buyerIpHeader, headers} = options;
 
     const request = new HydrogenRequest(rawRequest);
     const url = new URL(request.url);
+
+    let sessionApi = options.sessionApi;
 
     const {default: inlineHydrogenConfig} = await import(
       // @ts-ignore
@@ -98,16 +100,16 @@ export const renderHydrogen = (App: any) => {
     setLogger(hydrogenConfig.logger);
     const log = getLoggerWithContext(request);
 
-    const response = new HydrogenResponse();
+    const response = new HydrogenResponse(null, {
+      headers: headers || {},
+    });
 
     if (hydrogenConfig.poweredByHeader ?? true) {
-      // If not defined in the config, always show the header
+      // If undefined in the config, then always show the header
       response.headers.set('powered-by', 'Shopify-Hydrogen');
     }
 
-    const sessionApi = hydrogenConfig.session
-      ? hydrogenConfig.session(log)
-      : undefined;
+    sessionApi ??= hydrogenConfig.session?.(log);
 
     request.ctx.session = getSyncSessionApi(request, response, log, sessionApi);
 
@@ -136,7 +138,11 @@ export const renderHydrogen = (App: any) => {
       );
 
       return apiResponse instanceof Request
-        ? handleRequest(apiResponse, options)
+        ? handleRequest(apiResponse, {
+            ...options,
+            sessionApi,
+            headers: apiResponse.headers,
+          })
         : apiResponse;
     }
 
@@ -237,7 +243,11 @@ async function processRequest(
     );
 
     return apiResponse instanceof Request
-      ? handleRequest(apiResponse, options)
+      ? handleRequest(apiResponse, {
+          ...options,
+          sessionApi,
+          headers: apiResponse.headers,
+        })
       : apiResponse;
   }
 
@@ -256,7 +266,7 @@ async function processRequest(
     cacheResponse(response, request, [buffered], revalidate);
 
     return new Response(buffered, {
-      headers: {'cache-control': response.cacheControlHeader},
+      headers: response.headers,
     });
   }
 
@@ -356,6 +366,7 @@ async function runSSR({
         <ServerPropsProvider
           initialServerProps={state as any}
           setServerPropsForRsc={() => {}}
+          setRscResponseFromApiRoute={() => {}}
         >
           <Suspense fallback={null}>
             <RscConsumer />

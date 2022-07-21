@@ -93,7 +93,7 @@ function HomepageContent() {
 function SeoForHomepage() {
   const {
     data: {
-      shop: {title, description},
+      shop: {name, description},
     },
   } = useShopQuery({
     query: HOMEPAGE_SEO_QUERY,
@@ -105,13 +105,27 @@ function SeoForHomepage() {
     <Seo
       type="homepage"
       data={{
-        title,
+        title: name,
         description,
         titleTemplate: '%s · Powered by Hydrogen',
       }}
     />
   );
 }
+
+/**
+ * The homepage content query includes a request for custom metafields inside the alias
+ * `heroBanners`. The template loads placeholder content if these metafields don't
+ * exist. Define the following five custom metafields on your Shopify store to override placeholders:
+ * - hero.title             Single line text
+ * - hero.byline            Single line text
+ * - hero.cta               Single line text
+ * - hero.spread            File
+ * - hero.spread_seconary   File
+ *
+ * @see https://help.shopify.com/manual/metafields/metafield-definitions/creating-custom-metafield-definitions
+ * @see https://github.com/Shopify/hydrogen/discussions/1790
+ */
 
 const HOMEPAGE_CONTENT_QUERY = gql`
   ${MEDIA_FRAGMENT}
@@ -175,9 +189,9 @@ const HOMEPAGE_CONTENT_QUERY = gql`
 `;
 
 const HOMEPAGE_SEO_QUERY = gql`
-  query homeShopInfo {
+  query shopInfo {
     shop {
-      title: name
+      name
       description
     }
   }

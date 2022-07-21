@@ -11,6 +11,7 @@ import purgeQueryCache from './plugins/vite-plugin-purge-query-cache';
 import hydrationAutoImport from './plugins/vite-plugin-hydration-auto-import';
 import inspect from 'vite-plugin-inspect';
 import react from '@vitejs/plugin-react';
+import cssRsc from './plugins/vite-plugin-css-rsc';
 import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc';
 import clientImports from './plugins/vite-plugin-client-imports';
 import suppressWarnings from './plugins/vite-plugin-hydrogen-suppress-warnings';
@@ -26,7 +27,7 @@ const hydrogenPlugin = (pluginOptions: HydrogenVitePluginOptions = {}) => {
     react(),
     hydrationAutoImport(),
     ssrInterop(),
-    cssModulesRsc(),
+    pluginOptions.experimental?.css === 'global' ? cssRsc() : cssModulesRsc(),
     rsc(pluginOptions),
     platformEntry(),
     suppressWarnings(),
