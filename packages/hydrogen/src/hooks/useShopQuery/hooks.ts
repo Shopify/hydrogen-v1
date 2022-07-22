@@ -1,5 +1,5 @@
 import {useShop} from '../../foundation/useShop';
-import {getLoggerWithContext} from '../../utilities/log';
+import {collectQueryTimings, getLoggerWithContext} from '../../utilities/log';
 import type {CachingStrategy, PreloadOptions} from '../../types';
 import {graphqlRequestBody} from '../../utilities';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
@@ -72,7 +72,7 @@ export function useShopQuery<T>({
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {url, requestInit} = useCreateShopRequest(body); // eslint-disable-line react-hooks/rules-of-hooks
+  const {url, requestInit, key} = useCreateShopRequest(body); // eslint-disable-line react-hooks/rules-of-hooks
 
   let text: string;
   let data: any;
@@ -90,6 +90,13 @@ export function useShopQuery<T>({
     text = response.text();
 
     try {
+      collectQueryTimings(
+        serverRequest,
+        key,
+        'info',
+        undefined,
+        response?.headers?.get('x-request-id') || undefined
+      );
       data = response.json();
     } catch (error: any) {
       if (response.headers.get('content-length')) {

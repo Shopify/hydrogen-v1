@@ -154,21 +154,26 @@ export class HydrogenRequest extends Request {
   }
 
   public getPreloadQueries(): PreloadQueriesByURL | undefined {
-    if (preloadCache.has(this.normalizedUrl)) {
+    const url = new URL(this.url);
+    const state: any = JSON.parse(url.searchParams.get('state') || '{}');
+
+    if (preloadCache.has(this.url)) {
       const combinedPreloadQueries: PreloadQueriesByURL = new Map();
-      const urlPreloadCache = preloadCache.get(this.normalizedUrl);
+      const urlPreloadCache = preloadCache.get(this.url);
 
       mergeMapEntries(combinedPreloadQueries, urlPreloadCache);
-      mergeMapEntries(combinedPreloadQueries, preloadCache.get(PRELOAD_ALL));
+      if (!state.subRoute) {
+        mergeMapEntries(combinedPreloadQueries, preloadCache.get(PRELOAD_ALL));
+      }
 
       return combinedPreloadQueries;
-    } else if (preloadCache.has(PRELOAD_ALL)) {
+    } else if (!state.subRoute && preloadCache.has(PRELOAD_ALL)) {
       return preloadCache.get(PRELOAD_ALL);
     }
   }
 
   public savePreloadQueries() {
-    preloadCache.set(this.normalizedUrl, this.ctx.preloadQueries);
+    preloadCache.set(this.url, this.ctx.preloadQueries);
   }
 
   /**

@@ -7,6 +7,7 @@ import {
   useServerAnalytics,
   useLocalization,
   useShopQuery,
+  RSCSubRoute,
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
@@ -17,6 +18,7 @@ import {
   CollectionConnection,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
+import TestRSCSubRoute from './sub-routes/TestRSCSubRoute.server';
 
 export default function Homepage() {
   useServerAnalytics({
@@ -27,6 +29,11 @@ export default function Homepage() {
 
   return (
     <Layout>
+      <RSCSubRoute
+        state={{}}
+        path="sub-routes/TestRSCSubRoute"
+        page={<TestRSCSubRoute />}
+      />
       <Suspense>
         <SeoForHomepage />
       </Suspense>

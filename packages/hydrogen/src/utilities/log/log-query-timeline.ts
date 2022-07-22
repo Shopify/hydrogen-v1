@@ -8,13 +8,19 @@ import {getTime} from '../timing';
 
 import type {RenderType} from './log';
 
-export type TimingType = 'requested' | 'resolved' | 'rendered' | 'preload';
+export type TimingType =
+  | 'requested'
+  | 'resolved'
+  | 'rendered'
+  | 'preload'
+  | 'info';
 
 export type QueryTiming = {
   name: string;
   timingType: TimingType;
   timestamp: number;
   duration?: number;
+  info?: string;
 };
 
 const color = gray;
@@ -23,13 +29,15 @@ const TIMING_MAPPING = {
   rendered: 'Rendered',
   resolved: 'Resolved',
   preload: 'Preload',
+  info: 'Info',
 };
 
 export function collectQueryTimings(
   request: HydrogenRequest,
   queryKey: QueryKey,
   timingType: TimingType,
-  duration?: number
+  duration?: number,
+  info?: string | undefined
 ) {
   const hashedKey = hashKey(queryKey);
 
@@ -39,6 +47,7 @@ export function collectQueryTimings(
       timingType,
       timestamp: getTime(),
       duration,
+      info,
     });
   }
 }
@@ -91,7 +100,7 @@ export function logQueryTimings(type: RenderType, request: HydrogenRequest) {
           query.timingType === 'resolved'
             ? ` (Took ${duration?.toFixed(2)}ms)`
             : ''
-        }`
+        }${query.timingType === 'info' ? ` ${query.info}` : ''}`
       );
 
       // SSR + RSC render path generates 2 `load` and `render` for each query
