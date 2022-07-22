@@ -1,6 +1,5 @@
 import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import {htmlEncode} from '../../../hydrogen/src/utilities';
-import {loadScript} from '../../../hydrogen/src/utilities/load_script';
 import fetch from 'node-fetch';
 import {resolve} from 'path';
 import type {Browser, Page} from 'playwright';
