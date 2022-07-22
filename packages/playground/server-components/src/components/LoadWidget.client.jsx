@@ -1,24 +1,7 @@
 import {useLoadScript} from '@shopify/hydrogen';
 
-export function LoadWidgets() {
-  useLoadScript('https://www.googletagmanager.com/gtag/js?id=UA-IN-BODY');
-  useLoadScript('https://www.googletagmanager.com/gtag/js?id=UA-IN-HEAD', {
-    in: 'head',
-  });
-  useLoadScript(
-    'https://www.googletagmanager.com/gtag/js?id=UA-IN-HEAD-MODULE',
-    {
-      module: true,
-      in: 'head',
-    }
-  );
-  useLoadScript(
-    'https://www.googletagmanager.com/gtag/js?id=UA-IN-BODY-MODULE',
-    {
-      module: true,
-      in: 'body',
-    }
-  );
+export function LoadWidget({url, options}) {
+  useLoadScript(url, options);
 
   return (
     <div

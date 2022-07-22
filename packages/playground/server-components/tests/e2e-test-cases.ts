@@ -1,5 +1,6 @@
 import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import {htmlEncode} from '../../../hydrogen/src/utilities';
+import {loadScript} from '../../../hydrogen/src/utilities/load_script';
 import fetch from 'node-fetch';
 import {resolve} from 'path';
 import type {Browser, Page} from 'playwright';
@@ -729,6 +730,56 @@ export default async function testCases({
       expect(request.url()).toEqual(SHOPIFY_PERFORMANCE_ENDPOINT);
       expect(performanceEvent.page_load_type).toEqual('sub');
       expect(performanceEvent.url).toEqual(getServerUrl() + analyticSubPage);
+    });
+  });
+
+  describe('Load 3rd-party scripts', () => {
+    it('should load script in the body', async () => {
+      await page.goto(getServerUrl() + '/loadscript/body', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'body > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-BODY"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script as module in the body', async () => {
+      await page.goto(getServerUrl() + '/loadscript/body-module', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'body > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-BODY-MODULE"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script in the head', async () => {
+      await page.goto(getServerUrl() + '/loadscript/head', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'head > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-HEAD"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script as a module in the head', async () => {
+      await page.goto(getServerUrl() + '/loadscript/head-module', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'head > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-HEAD-MODULE"]'
+        )
+      ).toBeTruthy();
     });
   });
 }
