@@ -810,4 +810,54 @@ export default async function testCases({
       expect(performanceEvent.url).toEqual(getServerUrl() + analyticSubPage);
     });
   });
+
+  describe('Load 3rd-party scripts', () => {
+    it('should load script in the body', async () => {
+      await page.goto(getServerUrl() + '/loadscript/body', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'body > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-BODY"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script as module in the body', async () => {
+      await page.goto(getServerUrl() + '/loadscript/body-module', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'body > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-BODY-MODULE"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script in the head', async () => {
+      await page.goto(getServerUrl() + '/loadscript/head', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'head > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-HEAD"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script as a module in the head', async () => {
+      await page.goto(getServerUrl() + '/loadscript/head-module', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'head > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-HEAD-MODULE"]'
+        )
+      ).toBeTruthy();
+    });
+  });
 }

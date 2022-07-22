@@ -1,6 +1,9 @@
 const SCRIPTS_LOADED: Record<string, Promise<boolean>> = {};
 
-export function loadScript(src: string, options?: {module?: boolean}) {
+export function loadScript(
+  src: string,
+  options?: {module?: boolean; in?: 'head' | 'body'}
+): Promise<boolean> {
   const isScriptLoaded: Promise<boolean> = SCRIPTS_LOADED[src];
 
   if (isScriptLoaded) {
@@ -19,7 +22,11 @@ export function loadScript(src: string, options?: {module?: boolean}) {
     script.onerror = () => {
       reject(false);
     };
-    document.body.appendChild(script);
+    if (options?.in === 'head') {
+      document.head.appendChild(script);
+    } else {
+      document.body.appendChild(script);
+    }
   });
 
   SCRIPTS_LOADED[src] = promise;
