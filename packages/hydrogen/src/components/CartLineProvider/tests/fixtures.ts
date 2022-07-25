@@ -1,4 +1,4 @@
-import {CurrencyCode} from '../../../storefront-api-types';
+import {CurrencyCode} from '../../../storefront-api-types.js';
 
 export const CART_LINE = {
   attributes: [{key: 'color', value: 'red'}],

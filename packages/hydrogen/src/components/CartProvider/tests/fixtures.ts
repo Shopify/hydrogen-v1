@@ -1,8 +1,8 @@
-import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
-import {getPrice} from '../../../utilities/tests/price';
-import {flattenConnection} from '../../../utilities';
-import type {CartWithActions} from '../types';
-import {defaultCartFragment} from '../cart-queries';
+import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
+import {getPrice} from '../../../utilities/tests/price.js';
+import {flattenConnection} from '../../../utilities/index.js';
+import type {CartWithActions} from '../types.js';
+import {defaultCartFragment} from '../cart-queries.js';
 
 export const CART = {
   id: 'abc',

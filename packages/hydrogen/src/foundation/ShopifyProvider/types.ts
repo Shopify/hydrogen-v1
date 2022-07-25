@@ -1,6 +1,6 @@
-import type {CountryCode, LanguageCode} from '../../storefront-api-types';
+import type {CountryCode, LanguageCode} from '../../storefront-api-types.js';
 import type {ReactNode} from 'react';
-import type {ShopifyConfigFetcher, ShopifyConfig} from '../../types';
+import type {ShopifyConfigFetcher, ShopifyConfig} from '../../types.js';
 
 export interface ShopifyContextValue
   extends Omit<ShopifyConfig, 'defaultLanguageCode' | 'defaultCountryCode'> {

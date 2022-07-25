@@ -1,7 +1,7 @@
 import React from 'react';
-import {CartProvider} from '../../CartProvider';
-import {CartCheckoutButton} from '../CartCheckoutButton.client';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {CartProvider} from '../../CartProvider/index.js';
+import {CartCheckoutButton} from '../CartCheckoutButton.client.js';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 
 jest.mock('../../CartProvider', () => ({
   ...(jest.requireActual('../../CartProvider') as {}),

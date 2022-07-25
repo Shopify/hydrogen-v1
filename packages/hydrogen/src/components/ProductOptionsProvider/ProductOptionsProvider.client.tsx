@@ -1,21 +1,21 @@
 import React, {useMemo, useState, useEffect, useCallback} from 'react';
-import {ProductOptionsContext} from './context';
+import {ProductOptionsContext} from './context.js';
 import type {
   SellingPlan,
   SellingPlanAllocation,
   Product,
   ProductVariant as ProductVariantType,
-} from '../../storefront-api-types';
+} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 import {
   getSelectedVariant,
   getOptions,
-} from '../../hooks/useProductOptions/helpers';
+} from '../../hooks/useProductOptions/helpers.js';
 import type {
   SelectedOptions,
   ProductOptionsHookValue,
-} from '../../hooks/useProductOptions/types';
-import {flattenConnection} from '../../utilities/flattenConnection';
+} from '../../hooks/useProductOptions/types.js';
+import {flattenConnection} from '../../utilities/flattenConnection/index.js';
 
 type InitialVariantId = ProductVariantType['id'] | null;
 

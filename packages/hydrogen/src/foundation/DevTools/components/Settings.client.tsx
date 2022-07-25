@@ -1,6 +1,6 @@
 import React from 'react';
-import {Locale} from '../../ShopifyProvider/types';
-import {Table} from './Table';
+import {Locale} from '../../ShopifyProvider/types.js';
+import {Table} from './Table.js';
 
 interface Props {
   locale: Locale;

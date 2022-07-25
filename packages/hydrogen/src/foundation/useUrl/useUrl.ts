@@ -1,8 +1,8 @@
 import {useContext, useMemo} from 'react';
-import {RSC_PATHNAME} from '../../constants';
-import {parseJSON} from '../../utilities/parse';
-import {RouterContext} from '../Router/BrowserRouter.client';
-import {useEnvContext, META_ENV_SSR} from '../ssr-interop';
+import {RSC_PATHNAME} from '../../constants.js';
+import {parseJSON} from '../../utilities/parse.js';
+import {RouterContext} from '../Router/BrowserRouter.client.js';
+import {useEnvContext, META_ENV_SSR} from '../ssr-interop.js';
 
 /**
  * The `useUrl` hook retrieves the current URL in a server or client component.

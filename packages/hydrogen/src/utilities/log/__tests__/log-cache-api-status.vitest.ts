@@ -1,7 +1,7 @@
 import {vi, type Mocked} from 'vitest';
 import {stripColors} from 'kolorist';
-import {Logger, setLogger} from '../log';
-import {logCacheApiStatus} from '../log-cache-api-status';
+import {Logger, setLogger} from '../index.js';
+import {logCacheApiStatus} from '../log-cache-api-status.js';
 
 let mockedLogger: Mocked<Logger>;
 

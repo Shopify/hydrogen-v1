@@ -1,7 +1,7 @@
 import React, {ReactNode, ElementType, Fragment} from 'react';
-import {useCart} from '../CartProvider';
-import {CartLineProvider} from '../CartLineProvider';
-import {Props} from '../types';
+import {useCart} from '../CartProvider/index.js';
+import {CartLineProvider} from '../CartLineProvider/index.js';
+import {Props} from '../types.js';
 
 export interface CartLinesProps {
   /** A `ReactNode` element. Valid values: `ul` or `undefined`. If `ul`, then each child will

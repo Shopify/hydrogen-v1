@@ -1,5 +1,5 @@
 import React from 'react';
-import {CloseIcon, HydrogenIcon} from './icons';
+import {CloseIcon, HydrogenIcon} from './icons.js';
 
 interface Props {
   open?: boolean;

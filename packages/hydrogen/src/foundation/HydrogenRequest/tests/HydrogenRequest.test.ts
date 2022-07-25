@@ -1,9 +1,13 @@
 import {IncomingMessage} from 'http';
-import {RSC_PATHNAME} from '../../../constants';
-import {PreloadOptions} from '../../../types';
-import {CacheLong, CacheShort, CacheNone} from '../../Cache/strategies';
-import {shouldPreloadQuery} from '../../useQuery/hooks';
-import {PreloadQueryEntry, HydrogenRequest} from '../HydrogenRequest.server';
+import {RSC_PATHNAME} from '../../../constants.js';
+import {PreloadOptions} from '../../../types.js';
+import {
+  CacheLong,
+  CacheShort,
+  CacheNone,
+} from '../../Cache/strategies/index.js';
+import {shouldPreloadQuery} from '../../useQuery/index.js';
+import {PreloadQueryEntry, HydrogenRequest} from '../HydrogenRequest.server.js';
 
 describe('HydrogenRequest', () => {
   it('converts node request to Fetch API request', () => {

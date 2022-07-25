@@ -1,4 +1,4 @@
-import {getLocale} from '../locale';
+import {getLocale} from '../index.js';
 
 describe('locale', () => {
   describe('getLocale', () => {

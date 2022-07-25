@@ -1,5 +1,5 @@
-import type {ResolvedHydrogenConfig} from '../../types';
-import {log} from '../../utilities/log';
+import type {ResolvedHydrogenConfig} from '../../types.js';
+import {log} from '../../utilities/log/index.js';
 
 const analyticsDefaultResponse = new Response(null, {
   status: 200,

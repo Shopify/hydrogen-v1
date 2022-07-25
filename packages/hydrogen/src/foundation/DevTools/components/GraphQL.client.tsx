@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import type {DevServerMessage} from '../../../utilities/devtools';
+import type {DevServerMessage} from '../../../utilities/devtools.js';
 
 export function GraphQL() {
   const [warnings, setWarnings] = useState<string[] | null>(null);

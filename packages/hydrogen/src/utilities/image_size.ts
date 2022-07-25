@@ -1,4 +1,4 @@
-import type {Image as ImageType} from '../storefront-api-types';
+import type {Image as ImageType} from '../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 import type {
   ShopifyLoaderOptions,

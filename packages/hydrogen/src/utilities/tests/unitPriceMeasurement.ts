@@ -4,7 +4,7 @@ import {
   UnitPriceMeasurementMeasuredUnit,
   UnitPriceMeasurementMeasuredType,
   UnitPriceMeasurement,
-} from '../../storefront-api-types';
+} from '../../storefront-api-types.js';
 
 export function getUnitPriceMeasurement(
   unitPriceMeasurement: Partial<UnitPriceMeasurement> = {}

@@ -5,9 +5,9 @@ import React, {
   ElementType,
   useCallback,
 } from 'react';
-import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript.client';
-import {Props} from '../types';
-import type {Model3d} from '../../storefront-api-types';
+import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript.client.js';
+import {Props} from '../types.js';
+import type {Model3d} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 interface ModelViewerProps {

@@ -2,8 +2,8 @@ import React from 'react';
 import {
   mountComponent,
   SomeClientComponent,
-} from './analytics-client-test-utils.client';
-import {ClientAnalytics} from '../ClientAnalytics';
+} from './analytics-client-test-utils.client.js';
+import {ClientAnalytics} from '../ClientAnalytics.js';
 
 // This test is in its own file is due to the fact that I cannot set
 // window.location more than once

@@ -2,13 +2,11 @@
 // with user project information and re-exports it.
 
 // @ts-ignore
-// eslint-disable-next-line node/no-missing-import
 import appEntry from '__HYDROGEN_ENTRY__';
-import type {RequestHandler} from '../shared-types';
+import type {RequestHandler} from '../shared-types.js';
 
 export const handleRequest = appEntry as RequestHandler;
 
-// eslint-disable-next-line node/no-missing-import
 export {default as indexTemplate} from '__HYDROGEN_HTML_TEMPLATE__?raw';
 
 export const assets = new Set(['__HYDROGEN_ASSETS__']) as Set<string>;

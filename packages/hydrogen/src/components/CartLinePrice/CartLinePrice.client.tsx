@@ -1,6 +1,6 @@
 import React from 'react';
-import {useCartLine} from '../CartLineProvider';
-import {Money} from '../Money';
+import {useCartLine} from '../CartLineProvider/index.js';
+import {Money} from '../Money/index.js';
 
 interface CartLinePriceProps {
   /** The type of price. Valid values:`regular` (default) or `compareAt`. */

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {Interface, Panels} from './components';
+import {Interface, Panels} from './components/index.js';
 
 export function DevTools({dataFromServer}: {dataFromServer: any}) {
   const [open, setOpen] = useState(false);

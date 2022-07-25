@@ -2,10 +2,10 @@ import {Plugin, loadEnv, ResolvedConfig} from 'vite';
 import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
-import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
-import type {HydrogenVitePluginOptions} from '../types';
-import {InMemoryCache} from '../cache/in-memory';
-import {VIRTUAL_PROXY_HYDROGEN_CONFIG_ID} from './vite-plugin-hydrogen-virtual-files';
+import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware.js';
+import type {HydrogenVitePluginOptions} from '../types.js';
+import {InMemoryCache} from '../cache/in-memory.js';
+import {VIRTUAL_PROXY_HYDROGEN_CONFIG_ID} from './vite-plugin-hydrogen-virtual-files.js';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';

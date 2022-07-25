@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
-import {useCart} from '../CartProvider';
-import {useCartLine} from '../CartLineProvider';
-import {BaseButton, BaseButtonProps} from '../BaseButton';
+import {useCart} from '../CartProvider/index.js';
+import {useCartLine} from '../CartLineProvider/index.js';
+import {BaseButton, BaseButtonProps} from '../BaseButton/index.js';
 
 interface CartLineQuantityAdjustButtonProps {
   /** The adjustment for a cart line's quantity. Valid values: `increase` (default), `decrease`, or `remove`. */

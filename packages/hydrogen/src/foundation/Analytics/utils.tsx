@@ -1,4 +1,4 @@
-import {eventNames} from './const';
+import {eventNames} from './const.js';
 const RESERVED_EVENT_NAMES = Object.values(eventNames);
 
 export function getNamedspacedEventname(eventname: string): string {

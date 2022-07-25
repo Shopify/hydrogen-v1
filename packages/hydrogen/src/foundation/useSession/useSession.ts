@@ -1,4 +1,4 @@
-import {useServerRequest} from '../ServerRequestProvider';
+import {useServerRequest} from '../ServerRequestProvider/index.js';
 
 /** The `useSession` hook reads session data in server components. */
 export const useSession = function () {

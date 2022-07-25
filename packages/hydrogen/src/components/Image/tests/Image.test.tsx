@@ -1,8 +1,8 @@
 import React from 'react';
-import {Image} from '../Image';
+import {Image} from '../index.js';
 import {mount} from '@shopify/react-testing';
-import {getPreviewImage} from '../../../utilities/tests/media';
-import * as utilities from '../../../utilities';
+import {getPreviewImage} from '../../../utilities/tests/media.js';
+import * as utilities from '../../../utilities/index.js';
 
 describe('<Image />', () => {
   let consoleWarnSpy: jest.SpyInstance;

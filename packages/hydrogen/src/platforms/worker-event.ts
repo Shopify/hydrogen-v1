@@ -1,4 +1,4 @@
-import moduleEntry from './worker';
+import moduleEntry from './worker.js';
 
 interface FetchEvent extends Event {
   readonly request: Request;

@@ -1,5 +1,5 @@
 import {useContext} from 'react';
-import {CartLineContext} from '../../components/CartLineProvider/context';
+import {CartLineContext} from '../../components/CartLineProvider/context.js';
 
 /**
  * The `useCartLine` hook provides access to the cart line object. It must be a descendent of a `CartProvider` component.

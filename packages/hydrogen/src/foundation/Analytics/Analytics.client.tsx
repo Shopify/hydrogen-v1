@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {ClientAnalytics} from './ClientAnalytics';
+import {ClientAnalytics} from './ClientAnalytics.js';
 
 export function Analytics({
   analyticsDataFromServer,

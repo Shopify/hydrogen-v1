@@ -1,1 +1,1 @@
-export {Form} from './foundation/Form/Form.client';
+export {Form} from './foundation/Form/Form.client.js';

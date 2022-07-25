@@ -1,9 +1,9 @@
-import {LocalizationContext} from '../../foundation/ShopifyProvider/ShopifyProvider.client';
+import {LocalizationContext} from '../../foundation/ShopifyProvider/ShopifyProvider.client.js';
 import type {
   Locale,
   LocalizationContextValue,
-} from '../../foundation/ShopifyProvider/types';
-import {useEnvContext} from '../../foundation/ssr-interop';
+} from '../../foundation/ShopifyProvider/types.js';
+import {useEnvContext} from '../../foundation/ssr-interop.js';
 
 export function useLocalization(): LocalizationContextValue & {
   locale: Locale;

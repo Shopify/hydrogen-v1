@@ -1,6 +1,6 @@
 import React from 'react';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {Form} from '../Form.client';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {Form} from '../Form.client.js';
 
 // @ts-ignore
 import {createFromFetch} from '@shopify/hydrogen/vendor/react-server-dom-vite';

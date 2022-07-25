@@ -3,10 +3,10 @@ import type {
   MoneyV2,
   UnitPriceMeasurement,
   Product,
-} from '../../storefront-api-types';
-import {Money} from '../Money';
+} from '../../storefront-api-types.js';
+import {Money} from '../Money/index.js';
 import type {PartialDeep} from 'type-fest';
-import {flattenConnection} from '../../utilities/flattenConnection';
+import {flattenConnection} from '../../utilities/flattenConnection/index.js';
 
 export interface ProductPriceProps {
   data: PartialDeep<Product>;

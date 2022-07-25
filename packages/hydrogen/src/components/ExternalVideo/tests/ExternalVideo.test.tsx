@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {ExternalVideo} from '../ExternalVideo';
-import {getExternalVideoData} from '../../../utilities/tests/media';
+import {ExternalVideo} from '../index.js';
+import {getExternalVideoData} from '../../../utilities/tests/media.js';
 
 describe('<ExternalVideo />', () => {
   it('renders an iframe element with sensible defaults', () => {

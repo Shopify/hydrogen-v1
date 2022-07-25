@@ -1,8 +1,8 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {CartLineProvider} from '../CartLineProvider.client';
-import {CART_LINE} from './fixtures';
-import {useCartLine} from '../../../hooks/useCartLine';
+import {CartLineProvider} from '../CartLineProvider.client.js';
+import {CART_LINE} from './fixtures.js';
+import {useCartLine} from '../../../hooks/useCartLine/index.js';
 
 it('provides a hook to access cart line data', () => {
   function Data() {
