@@ -1,3 +1,4 @@
+import {vi, type Mock} from 'vitest';
 import {wrapPromise} from '../suspense.js';
 
 function promiseSuccess(expectedReturn: string) {
@@ -13,9 +14,9 @@ function promiseFail(errMessage: string) {
 }
 
 async function suspenseLikeBehaviour(
-  errorBoundary: jest.Mock,
-  suspenseBoundary: jest.Mock,
-  wrongErrorBoundary: jest.Mock,
+  errorBoundary: Mock,
+  suspenseBoundary: Mock,
+  wrongErrorBoundary: Mock,
   promiseOrWrappedPromise: Promise<string> | ReturnType<typeof wrapPromise>
 ): Promise<string> {
   try {
@@ -56,24 +57,16 @@ async function suspenseLikeBehaviour(
   }
 }
 
-let errorBoundary: jest.Mock,
-  suspenseBoundary: jest.Mock,
-  wrongErrorBoundary: jest.Mock;
+let errorBoundary: Mock, suspenseBoundary: Mock, wrongErrorBoundary: Mock;
 
 describe('Suspense', () => {
   beforeEach(() => {
-    errorBoundary = jest.fn();
-    suspenseBoundary = jest.fn();
-    wrongErrorBoundary = jest.fn();
+    errorBoundary = vi.fn();
+    suspenseBoundary = vi.fn();
+    wrongErrorBoundary = vi.fn();
   });
 
-  afterEach(() => {
-    errorBoundary.mockClear();
-    suspenseBoundary.mockClear();
-    wrongErrorBoundary.mockClear();
-  });
-
-  it('Resolves to the expected value on a successful promise resolve', async () => {
+  it('resolves to the expected value on a successful promise resolve', async () => {
     const expected = 'succeeded';
     const res = await suspenseLikeBehaviour(
       errorBoundary,
@@ -87,7 +80,7 @@ describe('Suspense', () => {
     expect(res).toBe(expected);
   });
 
-  it('Hits the correct error boundary on a thrown error', async () => {
+  it('hits the correct error boundary on a thrown error', async () => {
     const expected = 'Error';
     const res = await suspenseLikeBehaviour(
       errorBoundary,

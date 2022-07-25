@@ -1,3 +1,4 @@
+import {vi} from 'vitest';
 import {gql} from '../graphql-tag.js';
 import {injectGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker.js';
 
@@ -79,7 +80,7 @@ const getData = () => ({
 });
 
 describe('GraphQL Tracker', () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 
   it('warns about unused properties', () => {
     let unusedData = {
@@ -97,7 +98,7 @@ describe('GraphQL Tracker', () => {
     // Read stuff via direct access or destructuring
     dataMock.data.shop.id + dataMock.data.shop.title;
 
-    jest.advanceTimersByTime(TIMEOUT_MS / 2);
+    vi.advanceTimersByTime(TIMEOUT_MS / 2);
 
     const {
       data: {
@@ -118,11 +119,11 @@ describe('GraphQL Tracker', () => {
       },
     } = dataMock;
 
-    jest.advanceTimersByTime(TIMEOUT_MS / 2 + 100);
+    vi.advanceTimersByTime(TIMEOUT_MS / 2 + 100);
     // Not enough time since last read
     expect(unusedData.properties.length).toEqual(0);
 
-    jest.advanceTimersByTime(TIMEOUT_MS / 2);
+    vi.advanceTimersByTime(TIMEOUT_MS / 2);
     // Enough time since last read
     expect(unusedData.properties.length).toBeGreaterThan(0);
 
@@ -158,7 +159,7 @@ describe('GraphQL Tracker', () => {
 
     // Reading properties after the timeout is finished won't trigger a refresh
     firstProductEdge.node.variants.edges[0].node.title;
-    jest.advanceTimersByTime(TIMEOUT_MS + 100);
+    vi.advanceTimersByTime(TIMEOUT_MS + 100);
     expect(unusedData.properties).toContain('products.variants.title');
 
     manualCheck();
