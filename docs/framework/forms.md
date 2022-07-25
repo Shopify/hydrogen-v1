@@ -1,7 +1,7 @@
 ---
 gid: 9120943b-01c9-4da3-a201-5a54cab6ca2a
 title: Forms
-description: Learn how to run declarative mutations with the `Form` component and API routes
+description: Learn how to run declarative mutations with the Form component and API routes.
 ---
 
 <aside class="note beta">
