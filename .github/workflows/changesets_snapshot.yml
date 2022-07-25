@@ -32,7 +32,9 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          version: yarn run version
+          version:
+            yarn run version --snapshot ${{ github.ref_name }}
+            yarn run get:version
           publish: yarn changeset publish --no-git-tag --tag ${{ github.ref_name }}
           commit: '[ci] release ${{ github.ref_name }}'
           createGithubReleases: false
