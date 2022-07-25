@@ -1,6 +1,6 @@
 import {vi} from 'vitest';
-import {gql} from '../graphql-tag';
-import {injectGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker';
+import {gql} from '../graphql-tag.js';
+import {injectGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker.js';
 
 const query = gql`
   query shopName {

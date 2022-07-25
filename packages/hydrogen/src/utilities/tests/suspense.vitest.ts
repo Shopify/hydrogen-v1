@@ -1,5 +1,5 @@
 import {vi, type Mock} from 'vitest';
-import {wrapPromise} from '../suspense';
+import {wrapPromise} from '../suspense.js';
 
 function promiseSuccess(expectedReturn: string) {
   return new Promise<string>((resolve) => {
