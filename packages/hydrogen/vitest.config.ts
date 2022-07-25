@@ -9,5 +9,10 @@ export default defineConfig({
     environment: 'happy-dom',
     globals: true,
     setupFiles: './vitest.setup.ts',
+    restoreMocks: true,
+  },
+  define: {
+    __HYDROGEN_DEV__: true,
+    __HYDROGEN_TEST__: true,
   },
 });
