@@ -1,7 +1,7 @@
 ---
 gid: 9120943b-00c9-4da3-a201-5a54cab6ca2a
 title: Form
-description: The Form provides a declarative way to perform mutations for creating, updating, and deleting data
+description: The Form provides a declarative way to perform mutations for creating, updating, and deleting data.
 ---
 
 <aside class="note beta">
