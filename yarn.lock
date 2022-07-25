@@ -2488,6 +2488,11 @@
     "@testing-library/dom" "^8.5.0"
     "@types/react-dom" "^18.0.0"
 
+"@testing-library/user-event@^14.3.0":
+  version "14.3.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-14.3.0.tgz#0a6750b94b40e4739706d41e8efc2ccf64d2aad9"
+  integrity sha512-P02xtBBa8yMaLhK8CzJCIns8rqwnF6FxhR9zs810flHOBXUYCFjLd8Io1rQrAkQRWEmW2PGdZIEdMxf/KLsqFA==
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
@@ -6954,10 +6959,10 @@ happy-dom@^5.3.4:
     whatwg-encoding "^2.0.0"
     whatwg-mimetype "^3.0.0"
 
-happy-dom@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/happy-dom/-/happy-dom-6.0.3.tgz#ba1b35ae5466d4ac70bbfc3d9179ac4fbaa71ea4"
-  integrity sha512-1P1l2ynhs9lkO2M8X+fJzMbGUBzKZX8CSqjYrMw5LInqwdURvwj1veYD+br13jtNCwbjzZrYNuQXjj1vqENK4w==
+happy-dom@^6.0.4:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/happy-dom/-/happy-dom-6.0.4.tgz#553c1a8ba842455beb975c579d769914808c7404"
+  integrity sha512-b+ID23Ms0BY08UNLymsOMG7EI2jSlwEt4cbJs938GZfeNAg+fqgkSO3TokQMgSOFoHznpjWmpVjBUL5boJ9PWw==
   dependencies:
     css.escape "^1.5.1"
     he "^1.2.0"
