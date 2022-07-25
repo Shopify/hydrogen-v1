@@ -26,8 +26,8 @@
     "test:vite-ci": "cross-env FORCE_COLOR=true jest && jest --config jest-e2e.config.ts",
     "test:hydrogen:vite": "yarn workspace @shopify/hydrogen test:vitest:ci",
     "test:hydrogen-ui": "yarn workspace @shopify/hydrogen-ui test:ci",
-    "version": "changeset version --snapshot $REF_NAME && yarn get:version",
-    "get:version": "node -p \"'export const LIB_VERSION = \\'' + require('./packages/hydrogen/package.json').version + '\\';'\" > packages/hydrogen/src/version.ts",
+    "version:snapshot": "changeset version",
+    "version": "changeset version && node -p \"'export const LIB_VERSION = \\'' + require('./packages/hydrogen/package.json').version + '\\';'\" > packages/hydrogen/src/version.ts",
     "generate-docs": "node ./scripts/generate-docs.mjs",
     "graphql-types": "run-s graphql-types:hydrogen lint:schema",
     "graphql-types:hydrogen": "yarn workspace @shopify/hydrogen graphql-types"
