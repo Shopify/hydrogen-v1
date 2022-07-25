@@ -1,3 +1,5 @@
+import {vi, type Mocked} from 'vitest';
+import {stripColors} from 'kolorist';
 import {
   log,
   setLogger,
@@ -7,23 +9,23 @@ import {
 } from '../index.js';
 import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server.js';
 
-let mockLogger: jest.Mocked<Logger>;
+let mockedLogger: Mocked<Logger>;
 
 describe('log', () => {
   beforeEach(() => {
-    mockLogger = {
-      trace: jest.fn(),
-      debug: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-      fatal: jest.fn(),
-      options: jest.fn(() => ({})),
+    mockedLogger = {
+      trace: vi.fn(),
+      debug: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      fatal: vi.fn(),
+      options: vi.fn(() => ({})),
     };
 
-    global.Date.now = () => 2100;
-    global.performance.now = () => 2100;
+    vi.spyOn(Date, 'now').mockImplementation(() => 2100);
+    vi.spyOn(performance, 'now').mockImplementation(() => 2100);
 
-    setLogger(mockLogger);
+    setLogger(mockedLogger);
   });
 
   afterEach(() => {
@@ -32,20 +34,20 @@ describe('log', () => {
 
   it('should return the wrapped mockLogger instance when log is called', () => {
     log.debug('test');
-    expect(mockLogger.debug).toHaveBeenCalled();
+    expect(mockedLogger.debug).toHaveBeenCalled();
     expect(log.options()).toEqual({});
-    expect(mockLogger.debug.mock.calls[0][0]).toEqual({});
-    expect(mockLogger.debug.mock.calls[0][1]).toEqual('test');
+    expect(mockedLogger.debug.mock.calls[0][0]).toEqual({});
+    expect(stripColors(mockedLogger.debug.mock.calls[0][1])).toEqual('test');
   });
 
   it('should return the mockLogger2 instance when setLogger is called', () => {
-    const mockLogger2: jest.Mocked<Logger> = {
-      trace: jest.fn(),
-      debug: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-      fatal: jest.fn(),
-      options: jest.fn(() => ({})),
+    const mockLogger2: Mocked<Logger> = {
+      trace: vi.fn(),
+      debug: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      fatal: vi.fn(),
+      options: vi.fn(() => ({})),
     };
 
     setLogger({...mockLogger2, showCacheControlHeader: true});
@@ -99,10 +101,12 @@ describe('log', () => {
       time: 1000,
     } as HydrogenRequest;
     logServerResponse('str', request, 500);
-    expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
-      `"GET [3mstreaming SSR    [23m [31m500[39m 1100.00 ms http://localhost:3000/"`
+    expect(mockedLogger.debug).toHaveBeenCalled();
+    expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
+      '"GET streaming SSR     500 1100.00 ms http://localhost:3000/"'
     );
   });
 
@@ -113,10 +117,12 @@ describe('log', () => {
       time: 1000,
     } as HydrogenRequest;
     logServerResponse('str', request, 200);
-    expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
-      `"GET [3mstreaming SSR    [23m [32m200[39m 1100.00 ms http://localhost:3000/"`
+    expect(mockedLogger.debug).toHaveBeenCalled();
+    expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
+      '"GET streaming SSR     200 1100.00 ms http://localhost:3000/"'
     );
   });
 
@@ -127,10 +133,12 @@ describe('log', () => {
       time: 1000,
     } as HydrogenRequest;
     logServerResponse('str', request, 301);
-    expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
-      `"GET [3mstreaming SSR    [23m [94m301[39m 1100.00 ms http://localhost:3000/"`
+    expect(mockedLogger.debug).toHaveBeenCalled();
+    expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
+      '"GET streaming SSR     301 1100.00 ms http://localhost:3000/"'
     );
   });
 
@@ -141,19 +149,23 @@ describe('log', () => {
       time: 1000,
     } as HydrogenRequest;
     logServerResponse('str', request, 404);
-    expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
-    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
-      `"GET [3mstreaming SSR    [23m [33m404[39m 1100.00 ms http://localhost:3000/"`
+    expect(mockedLogger.debug).toHaveBeenCalled();
+    expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
+      '"GET streaming SSR     404 1100.00 ms http://localhost:3000/"'
     );
   });
 
   ['trace', 'debug', 'warn', 'error', 'fatal'].forEach((method) => {
     it(`logs ${method}`, () => {
       (log as any)[method](`hydrogen: ${method}`);
-      expect((mockLogger as any)[method]).toHaveBeenCalled();
-      expect(((mockLogger as any)[method] as any).mock.calls[0][0]).toEqual({});
-      expect(((mockLogger as any)[method] as any).mock.calls[0][1]).toBe(
+      expect((mockedLogger as any)[method]).toHaveBeenCalled();
+      expect(((mockedLogger as any)[method] as any).mock.calls[0][0]).toEqual(
+        {}
+      );
+      expect(((mockedLogger as any)[method] as any).mock.calls[0][1]).toBe(
         `hydrogen: ${method}`
       );
     });
@@ -162,11 +174,11 @@ describe('log', () => {
       const clog = getLoggerWithContext({url: 'example.com'});
 
       (clog as any)[method](`hydrogen: ${method}`);
-      expect((mockLogger as any)[method]).toHaveBeenCalled();
-      expect(((mockLogger as any)[method] as any).mock.calls[0][0]).toEqual({
+      expect((mockedLogger as any)[method]).toHaveBeenCalled();
+      expect(((mockedLogger as any)[method] as any).mock.calls[0][0]).toEqual({
         url: 'example.com',
       });
-      expect(((mockLogger as any)[method] as any).mock.calls[0][1]).toBe(
+      expect(((mockedLogger as any)[method] as any).mock.calls[0][1]).toBe(
         `hydrogen: ${method}`
       );
     });

@@ -423,20 +423,22 @@ export default function MyPage(props: HydrogenRouteProps) {
   //
 }
 
-export const api: HydrogenApiRoute = async(request, options) => {
+export const api: HydrogenApiRoute = async (request, options) => {
   //
-}
+};
 
 // Alternate version of `api`:
-export async function api(request: HydrogenRequest, options: HydrogenApiRouteOptions) {
-
-}
+export async function api(
+  request: HydrogenRequest,
+  options: HydrogenApiRouteOptions
+) {}
 ```
 
 {% endcodeblock %}
 
 > Tip:
 > The Hello World template is available in [TypeScript](https://shopify.dev/custom-storefronts/hydrogen/templates#hello-world-template). You can also refer to the [example implementation of TypeScript](https://github.com/Shopify/hydrogen/tree/main/examples/typescript) in GitHub.
+
 ## Related components and hooks
 
 - [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)

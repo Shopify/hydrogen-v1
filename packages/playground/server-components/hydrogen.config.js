@@ -15,4 +15,5 @@ export default defineConfig({
     trace() {},
     debug() {},
   },
+  serverErrorPage: '/src/500Error.tsx',
 });

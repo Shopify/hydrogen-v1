@@ -887,5 +887,11 @@ export default async function testCases({
       expect(response.status).toBe(500);
       expect(response.headers.get('cache-control')).toBe('no-store');
     });
+
+    it('loads a custom error page', async () => {
+      await page.goto(getServerUrl() + '/error');
+      expect(await page.textContent('h1')).toContain('Custom Error Page');
+      expect(await page.textContent('h2')).toContain('itBroke is not defined');
+    });
   });
 }
