@@ -11,7 +11,7 @@ description: Learn how to run declarative mutations with the Form component and 
 
 </aside>
 
-Within a Hydrogen app, [server components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc#fetching-data-on-the-server) fetch data and [API routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#api-routes) mutate data. The `Form` component provides a declarative way to send data to API routes and re-render server components. Hydrogen's `Form` component mimics the functionality of a native `<form>` element, while providing an enhanced experience with client-side JavaScript.
+Within a Hydrogen app, [server components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc#fetching-data-on-the-server) fetch data and [API routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#api-routes) mutate data. The `Form` component provides a declarative way to send data to API routes and re-render server components.
 
 ## HTML `form` element
 
@@ -235,6 +235,10 @@ export default function Product({product}) {
 
 The hidden input field for the `productId` is sent to the server when the **Add to cart** button is clicked. The API route at `/addToCart` can contain all the logic to add the product to the cart and re-render the page. The button is actionable before the page fully loads and the JavaScript is hydrated.
 
+## Related components
+
+- [`Form`](https://shopify.dev/api/hydrogen/components/framework/form).
+
 ## Next steps
 
-- Read the full API reference for the [`Form` component](https://shopify.dev/api/hydrogen/components/framework/form).
+- Learn more about [forms and API routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#concatenating-requests).
