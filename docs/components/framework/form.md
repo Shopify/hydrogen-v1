@@ -64,4 +64,4 @@ The `Form` component is a client component, so it renders on the client. For mor
 
 ## Related framework topics
 
-- [Forms and API Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#concatenating-requests)
+- [Forms and API routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#concatenating-requests)

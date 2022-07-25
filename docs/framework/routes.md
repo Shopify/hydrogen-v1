@@ -450,6 +450,7 @@ export async function api(
 - [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
 - [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
 - [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
+- [`Form`](https://shopify.dev/api/hydrogen/components/framework/form)
 
 ## Next steps
 

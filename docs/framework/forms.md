@@ -237,7 +237,11 @@ The hidden input field for the `productId` is sent to the server when the **Add 
 
 ## Related components
 
-- [`Form`](https://shopify.dev/api/hydrogen/components/framework/form).
+- [Form](https://shopify.dev/api/hydrogen/components/framework/form)
+
+## Related framework topics
+
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
 
 ## Next steps
 
