@@ -41,6 +41,6 @@ describe('Hash key for subrequests', () => {
         NaN,
         ['subarray'],
       ])
-    ).toEqual('hello() => \'world\'11Infinity{}NaN["subarray"]');
+    ).toEqual('hello() => "world"11Infinity{}NaN["subarray"]');
   });
 });
