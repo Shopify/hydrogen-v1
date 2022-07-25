@@ -8,20 +8,19 @@ import React, {
   ComponentType,
 } from 'react';
 import {hydrateRoot} from 'react-dom/client';
-import type {ClientConfig, ClientHandler} from './types';
+import type {ClientConfig, ClientHandler} from './types.js';
 import {ErrorBoundary} from 'react-error-boundary';
 import {
   createFromFetch,
   createFromReadableStream,
   // @ts-ignore
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
-import {RSC_PATHNAME} from './constants';
-import {ServerPropsProvider} from './foundation/ServerPropsProvider';
-import type {DevServerMessage} from './utilities/devtools';
-import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
-import {ClientAnalytics} from './foundation/Analytics/';
+import {RSC_PATHNAME} from './constants.js';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider/index.js';
+import type {DevServerMessage} from './utilities/devtools.js';
+import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider.js';
+import {ClientAnalytics} from './foundation/Analytics/index.js';
 // @ts-expect-error
-// eslint-disable-next-line node/no-missing-import
 import CustomErrorPage from 'virtual__error.jsx';
 
 let rscReader: ReadableStream | null;

@@ -1,1 +1,1 @@
-export {useMoney} from './hooks';
+export {useMoney} from './hooks.js';

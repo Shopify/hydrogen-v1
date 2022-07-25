@@ -1,1 +1,1 @@
-export {useShopQuery} from './hooks';
+export {useShopQuery, type UseShopQueryResponse} from './hooks.js';

@@ -1,6 +1,9 @@
 import React, {type ReactNode} from 'react';
-import {useMoney} from '../../hooks';
-import type {MoneyV2, UnitPriceMeasurement} from '../../storefront-api-types';
+import {useMoney} from '../../hooks/index.js';
+import type {
+  MoneyV2,
+  UnitPriceMeasurement,
+} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 interface CustomProps<ComponentGeneric extends React.ElementType> {

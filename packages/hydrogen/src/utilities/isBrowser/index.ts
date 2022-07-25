@@ -1,1 +1,1 @@
-export {isBrowser} from './isBrowser';
+export {isBrowser} from './isBrowser.js';

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {render, screen} from '@testing-library/react';
-import {ExternalVideo} from '../index';
+import {ExternalVideo} from '../index.js';
 import {vi} from 'vitest';
-import {getExternalVideoData} from '../../../utilities/tests/media';
+import {getExternalVideoData} from '../../../utilities/tests/media.js';
 
 const testId = 'video-iframe';
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {render, screen} from '@testing-library/react';
-import {Video} from '../index';
+import {Video} from '../index.js';
 
 const VIDEO_PROPS = {
   id: 'video',

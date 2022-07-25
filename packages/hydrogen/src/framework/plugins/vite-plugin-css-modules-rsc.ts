@@ -1,5 +1,5 @@
 import type {Plugin, ResolvedConfig} from 'vite';
-import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
+import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware.js';
 import MagicString from 'magic-string';
 import path from 'path';
 

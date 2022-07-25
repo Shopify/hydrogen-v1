@@ -1,1 +1,1 @@
-export {StarRating} from './StarRating';
+export {StarRating} from './StarRating.js';

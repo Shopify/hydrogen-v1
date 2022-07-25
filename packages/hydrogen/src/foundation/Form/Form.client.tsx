@@ -1,7 +1,7 @@
 import React, {FormEvent, useCallback, useState} from 'react';
 // @ts-ignore
 import {createFromFetch} from '@shopify/hydrogen/vendor/react-server-dom-vite';
-import {useInternalServerProps} from '../useServerProps/use-server-props';
+import {useInternalServerProps} from '../useServerProps/use-server-props.js';
 
 interface FormProps {
   action: string;

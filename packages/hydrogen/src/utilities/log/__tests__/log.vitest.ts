@@ -6,8 +6,8 @@ import {
   Logger,
   logServerResponse,
   getLoggerWithContext,
-} from '../log';
-import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
+} from '../index.js';
+import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server.js';
 
 let mockedLogger: Mocked<Logger>;
 

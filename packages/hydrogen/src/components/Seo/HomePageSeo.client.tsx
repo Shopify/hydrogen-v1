@@ -1,8 +1,8 @@
 import React from 'react';
-import {Head} from '../../foundation/Head';
-import {TitleSeo} from './TitleSeo.client';
-import {DescriptionSeo} from './DescriptionSeo.client';
-import type {HomePage} from './seo-types';
+import {Head} from '../../foundation/Head/index.js';
+import {TitleSeo} from './TitleSeo.client.js';
+import {DescriptionSeo} from './DescriptionSeo.client.js';
+import type {HomePage} from './seo-types.js';
 
 export function HomePageSeo({
   title,

@@ -2,7 +2,7 @@ import {
   getShopifyImageDimensions,
   type GetShopifyImageDimensionsProps,
   addImageSizeParametersToUrl,
-} from '../image_size';
+} from '../image_size.js';
 
 describe(`getShopifyImageDimensions`, () => {
   it(`gives 'loaderOptions' priority`, () => {

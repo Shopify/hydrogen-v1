@@ -1,9 +1,9 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {CartLineProvider} from '../../CartLineProvider';
-import {CartLineImage} from '../CartLineImage.client';
-import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
-import {Image} from '../../Image';
+import {CartLineProvider} from '../../CartLineProvider/index.js';
+import {CartLineImage} from '../CartLineImage.client.js';
+import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
+import {Image} from '../../Image/index.js';
 
 const cartMerchandiseImage = {
   url: 'https://cdn.shopify.com/someimage.jpg',

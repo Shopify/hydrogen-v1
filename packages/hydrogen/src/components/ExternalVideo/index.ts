@@ -1,1 +1,1 @@
-export {ExternalVideo} from './ExternalVideo';
+export {ExternalVideo} from './ExternalVideo.js';

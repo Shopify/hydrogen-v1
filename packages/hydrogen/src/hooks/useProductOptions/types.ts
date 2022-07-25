@@ -6,7 +6,7 @@ import type {
   SellingPlanAllocation as SellingPlanAllocationType,
   SellingPlanGroup as SellingPlanGroupType,
   SellingPlanGroupConnection,
-} from '../../storefront-api-types';
+} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 export type SelectedOptions = {

@@ -1,21 +1,21 @@
 import type {
   ShopifyContextValue,
   LocalizationContextValue,
-} from '../ShopifyProvider/types';
-import {getTime} from '../../utilities/timing';
-import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
-import type {QueryTiming} from '../../utilities/log/log-query-timeline';
+} from '../ShopifyProvider/types.js';
+import {getTime} from '../../utilities/timing.js';
+import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header.js';
+import type {QueryTiming} from '../../utilities/log/log-query-timeline.js';
 import type {
   ResolvedHydrogenConfig,
   PreloadOptions,
   QueryKey,
   RuntimeContext,
-} from '../../types';
-import {hashKey} from '../../utilities/hash';
+} from '../../types.js';
+import {hashKey} from '../../utilities/hash.js';
 import {HelmetData as HeadData} from 'react-helmet-async';
-import {RSC_PATHNAME} from '../../constants';
-import type {SessionSyncApi} from '../session/session-types';
-import {parseJSON} from '../../utilities/parse';
+import {RSC_PATHNAME} from '../../constants.js';
+import type {SessionSyncApi} from '../session/session-types.js';
+import {parseJSON} from '../../utilities/parse.js';
 
 export type PreloadQueryEntry = {
   key: QueryKey;

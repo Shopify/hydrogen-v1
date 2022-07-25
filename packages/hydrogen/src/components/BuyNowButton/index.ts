@@ -1,1 +1,1 @@
-export {BuyNowButton} from './BuyNowButton.client';
+export {BuyNowButton} from './BuyNowButton.client.js';

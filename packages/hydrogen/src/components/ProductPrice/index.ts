@@ -1,1 +1,1 @@
-export {ProductPrice} from './ProductPrice.client';
+export {ProductPrice} from './ProductPrice.client.js';

@@ -1,4 +1,4 @@
-import {CountryCode, LanguageCode} from '../../storefront-api-types';
+import {CountryCode, LanguageCode} from '../../storefront-api-types.js';
 
 /**
  * Calculates locale based on provided language and countryCode

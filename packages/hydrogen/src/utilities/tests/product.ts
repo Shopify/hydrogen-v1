@@ -1,13 +1,13 @@
 // eslint-disable-next-line node/no-extraneous-import
 import faker from 'faker';
-import {getPrice} from './price';
-import {getUnitPriceMeasurement} from './unitPriceMeasurement';
-import {getAnyMedia, getPreviewImage} from './media';
+import {getPrice} from './price.js';
+import {getUnitPriceMeasurement} from './unitPriceMeasurement.js';
+import {getAnyMedia, getPreviewImage} from './media.js';
 import {
   ProductVariant,
   Product as ProductType,
-} from '../../storefront-api-types';
-import {getRawMetafield} from './metafields';
+} from '../../storefront-api-types.js';
+import {getRawMetafield} from './metafields.js';
 import type {PartialDeep} from 'type-fest';
 
 export function getProduct(

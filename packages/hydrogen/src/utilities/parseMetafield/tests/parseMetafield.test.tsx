@@ -1,5 +1,5 @@
-import {parseMetafieldValue} from '../parseMetafield';
-import {getRawMetafield} from '../../tests/metafields';
+import {parseMetafieldValue} from '../parseMetafield.js';
+import {getRawMetafield} from '../../tests/metafields.js';
 
 describe(`parseMetafieldValue()`, () => {
   describe(`handles the different types`, () => {

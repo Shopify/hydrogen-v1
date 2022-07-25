@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
-import {loadScript} from '../../../../utilities/load_script';
-import {ClientAnalytics} from '../../ClientAnalytics';
-import {useShop} from '../../../useShop';
+import {loadScript} from '../../../../utilities/load_script.js';
+import {ClientAnalytics} from '../../ClientAnalytics.js';
+import {useShop} from '../../../useShop/index.js';
 
 declare global {
   interface Window {

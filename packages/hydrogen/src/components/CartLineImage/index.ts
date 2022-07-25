@@ -1,1 +1,1 @@
-export {CartLineImage} from './CartLineImage.client';
+export {CartLineImage} from './CartLineImage.client.js';

@@ -1,2 +1,2 @@
-export {Interface} from './Interface.client';
-export {Panels} from './Panels';
+export {Interface} from './Interface.client.js';
+export {Panels} from './Panels.js';

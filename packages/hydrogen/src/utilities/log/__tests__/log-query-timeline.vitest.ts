@@ -1,8 +1,8 @@
 import {vi, type Mocked} from 'vitest';
 import {stripColors} from 'kolorist';
-import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
-import {Logger, setLogger} from '../log';
-import {collectQueryTimings, logQueryTimings} from '../log-query-timeline';
+import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server.js';
+import {Logger, setLogger} from '../index.js';
+import {collectQueryTimings, logQueryTimings} from '../log-query-timeline.js';
 
 let mockedLogger: Mocked<Logger>;
 

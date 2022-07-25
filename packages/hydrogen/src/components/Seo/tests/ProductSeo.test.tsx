@@ -2,12 +2,12 @@ import React from 'react';
 
 import {mount} from '@shopify/react-testing';
 
-import {ProductSeo} from '../ProductSeo.client';
-import {TitleSeo} from '../TitleSeo.client';
-import {DescriptionSeo} from '../DescriptionSeo.client';
-import {TwitterSeo} from '../TwitterSeo.client';
-import {ImageSeo} from '../ImageSeo.client';
-import {CurrencyCode} from '../../../storefront-api-types';
+import {ProductSeo} from '../ProductSeo.client.js';
+import {TitleSeo} from '../TitleSeo.client.js';
+import {DescriptionSeo} from '../DescriptionSeo.client.js';
+import {TwitterSeo} from '../TwitterSeo.client.js';
+import {ImageSeo} from '../ImageSeo.client.js';
+import {CurrencyCode} from '../../../storefront-api-types.js';
 
 jest.mock('../../../foundation/Head/Head.client', () => ({
   Head({children}: {children: React.ReactNode}) {

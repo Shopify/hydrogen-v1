@@ -1,1 +1,1 @@
-export {isServer} from './isServer';
+export {isServer} from './isServer.js';

@@ -1,1 +1,1 @@
-export {flattenConnection} from './flattenConnection';
+export {flattenConnection} from './flattenConnection.js';
