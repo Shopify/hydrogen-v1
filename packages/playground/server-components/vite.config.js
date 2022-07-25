@@ -7,7 +7,7 @@ const path = require('path');
 module.exports = {
   plugins: [
     // devCache is used in /request-sync test
-    hydrogen({devCache: true}),
+    hydrogen({devCache: true, experimental: {css: 'global'}}),
   ],
   resolve: {
     alias: [

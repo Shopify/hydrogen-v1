@@ -272,23 +272,6 @@ export default async function testCases({
     expect(await page.$$('[data-test=alias]')).toHaveLength(3);
   });
 
-  it('adds style tags for CSS modules', async () => {
-    await page.goto(getServerUrl() + '/css-modules');
-    expect(await page.textContent('h1')).toContain('CSS Modules');
-
-    // Same class for the same style
-    const className = await page.getAttribute('[data-test=server]', 'class');
-    expect(className).toMatch(/^_red_/);
-    expect(await page.getAttribute('[data-test=client]', 'class')).toEqual(
-      className
-    );
-
-    // Style tag is present in DOM
-    expect(await page.textContent('style')).toEqual(
-      `.${className} {\n  color: red;\n}\n`
-    );
-  });
-
   it('supports React.useId()', async () => {
     const response = await page.goto(getServerUrl() + '/useid');
 
@@ -320,6 +303,57 @@ export default async function testCases({
     // This requires `devCache: true` in `vite.config.js`.
     await page.reload();
     await test();
+  });
+
+  describe('CSS', () => {
+    const extractCssFromDOM = async () => {
+      if (isBuild) {
+        // Downloaded using a link tag
+        const linkTags = await page
+          .locator('link[rel=stylesheet]')
+          .elementHandles();
+
+        expect(linkTags).toHaveLength(1); // Styles aren't duplicated
+
+        const href = await linkTags[0].getAttribute('href');
+
+        return await (await fetch(getServerUrl() + href)).text();
+      } else {
+        // Inlined in the DOM using JS for HMR
+        return (await page.locator('style').allTextContents()).join('\n');
+      }
+    };
+
+    it('adds style tags for pure CSS', async () => {
+      await page.goto(getServerUrl() + '/css-pure');
+      expect(await page.textContent('h1')).toContain('CSS Pure');
+
+      // Same class for the same style
+      const className = await page.getAttribute('[data-test=server]', 'class');
+      expect(className).toEqual('green');
+
+      // Style is present in DOM
+      expect(await extractCssFromDOM()).toMatch(
+        /\.green\s*{\s*color:\s*green;?\s*/m
+      );
+    });
+
+    it('adds style tags for CSS modules', async () => {
+      await page.goto(getServerUrl() + '/css-modules');
+      expect(await page.textContent('h1')).toContain('CSS Modules');
+
+      // Same class for the same style
+      const className = await page.getAttribute('[data-test=server]', 'class');
+      expect(className).toMatch(/^_red_/);
+      expect(await page.getAttribute('[data-test=client]', 'class')).toEqual(
+        className
+      );
+
+      // Style is present in DOM
+      expect(await extractCssFromDOM()).toMatch(
+        new RegExp(`\\.${className}\\s*{\\s*color:\\s*red;?\\s*}`, 'm')
+      );
+    });
   });
 
   describe('HMR', () => {
@@ -539,6 +573,51 @@ export default async function testCases({
       await page.click('#increase');
       expect(await page.textContent('#counter')).toEqual('2');
     });
+
+    it('responds with RSC', async () => {
+      const response = await page.request.post(getServerUrl() + '/account', {
+        data: `username=alincoln%40example.com&password=somepass`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Hydrogen-Client': 'Form-Action',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(text.split('\n')[0]).toBe('S1:"react.suspense"');
+      expect(text).toContain('["Welcome ","alincoln@example.com","!"]');
+    });
+
+    it('responds with RSC pathname header', async () => {
+      const response = await page.request.post(getServerUrl() + '/account', {
+        data: `action=logout`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Hydrogen-Client': 'Form-Action',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(response.headers()['hydrogen-rsc-pathname']).toBe('/');
+      expect(text.split('\n')[0]).toBe('S1:"react.suspense"');
+      expect(text).toContain('Home');
+    });
+
+    it('responds with html content when submitted by a form', async () => {
+      const response = await page.request.post(getServerUrl() + '/account', {
+        data: `username=alincoln%40example.com&password=somepass`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
+      });
+      expect(response.status()).toBe(200);
+      const text = await response.text();
+
+      expect(text).toContain('<!DOCTYPE html>');
+      expect(text).toContain('alincoln@example.com');
+    });
   });
 
   describe('Custom Routing', () => {
@@ -729,6 +808,84 @@ export default async function testCases({
       expect(request.url()).toEqual(SHOPIFY_PERFORMANCE_ENDPOINT);
       expect(performanceEvent.page_load_type).toEqual('sub');
       expect(performanceEvent.url).toEqual(getServerUrl() + analyticSubPage);
+    });
+  });
+
+  describe('Load 3rd-party scripts', () => {
+    it('should load script in the body', async () => {
+      await page.goto(getServerUrl() + '/loadscript/body', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'body > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-BODY"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script as module in the body', async () => {
+      await page.goto(getServerUrl() + '/loadscript/body-module', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'body > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-BODY-MODULE"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script in the head', async () => {
+      await page.goto(getServerUrl() + '/loadscript/head', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'head > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-HEAD"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script as a module in the head', async () => {
+      await page.goto(getServerUrl() + '/loadscript/head-module', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'head > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-HEAD-MODULE"]'
+        )
+      ).toBeTruthy();
+    });
+  });
+
+  describe('Custom error apge', () => {
+    beforeEach(() => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('responds with a 500 and no cache headers', async () => {
+      const response = await fetch(getServerUrl() + '/error');
+      expect(response.status).toBe(500);
+      expect(response.headers.get('cache-control')).toBe('no-store');
+    });
+
+    it('responds with a 500 and no cache headers for bots', async () => {
+      const response = await fetch(getServerUrl() + '/error?_bot');
+      expect(response.status).toBe(500);
+      expect(response.headers.get('cache-control')).toBe('no-store');
+    });
+
+    it('responds with a 500 and no cache headers for bots on async pages', async () => {
+      const response = await fetch(getServerUrl() + '/error-async?_bot');
+      expect(response.status).toBe(500);
+      expect(response.headers.get('cache-control')).toBe('no-store');
     });
   });
 }

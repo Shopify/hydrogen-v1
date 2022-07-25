@@ -56,6 +56,7 @@ export interface InternalServerPropsContextValue
   serverProps: ServerProps;
   locationServerProps: LocationServerProps;
   getProposedLocationServerProps: ProposedServerPropsSetter;
+  setRscResponseFromApiRoute: (response: any) => void;
 }
 
 export interface ServerPropsContextValue extends BaseServerPropsContextValue {
@@ -71,12 +72,14 @@ interface ServerPropsProviderProps {
   setServerPropsForRsc: React.Dispatch<
     React.SetStateAction<LocationServerProps>
   >;
+  setRscResponseFromApiRoute: (response: any) => void;
   children: ReactNode;
 }
 
 export function ServerPropsProvider({
   initialServerProps,
   setServerPropsForRsc,
+  setRscResponseFromApiRoute,
   children,
 }: ServerPropsProviderProps) {
   const [locationServerProps, setLocationServerProps] =
@@ -153,6 +156,7 @@ export function ServerPropsProvider({
       setServerProps: setServerPropsCallback,
       setLocationServerProps: setLocationServerPropsCallback,
       getProposedLocationServerProps: getProposedLocationServerPropsCallback,
+      setRscResponseFromApiRoute,
     }),
     [
       pending,
@@ -161,6 +165,7 @@ export function ServerPropsProvider({
       setServerPropsCallback,
       setLocationServerPropsCallback,
       getProposedLocationServerPropsCallback,
+      setRscResponseFromApiRoute,
     ]
   );
 

@@ -6,7 +6,7 @@ import type {Logger, LoggerConfig} from './utilities/log/index.js';
 import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.js';
 import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.js';
 import type {Metafield} from './storefront-api-types.js';
-import type {SessionStorageAdapter} from './foundation/session/session.js';
+import type {SessionStorageAdapter} from './foundation/session/session-types.js';
 import type {PartialDeep, JsonValue} from 'type-fest';
 
 export type AssembleHtmlParams = {

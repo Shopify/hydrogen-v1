@@ -1,4 +1,4 @@
-import type {SessionStorageAdapter} from '../session/session.js';
+import type {SessionStorageAdapter} from '../session/session-types.js';
 import {Cookie} from '../Cookie/Cookie.js';
 import {v4 as uid} from 'uuid';
 import path from 'path';
