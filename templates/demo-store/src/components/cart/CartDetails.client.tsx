@@ -1,7 +1,6 @@
 import {useRef} from 'react';
 import {useScroll} from 'react-use';
 import {
-  Link,
   useCart,
   CartLineProvider,
   CartShopPayButton,
@@ -70,15 +69,63 @@ export function CartDetails({
 
 function CartCheckoutActions() {
   const {checkoutUrl} = useCart();
+
+  async function checkoutHandler() {
+    try {
+      // const response = await fetch(`/multipass-checkout`, {
+      const response = await fetch(`/multipass-checkout-node`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({checkoutUrl}),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `${response.status} /multipass response not ok. ${response.statusText}`,
+        );
+      }
+
+      const {data, error} = await response.json();
+
+      if (error) {
+        throw new Error(error);
+      }
+
+      // multipass url
+      const {url} = data;
+
+      if (!url) {
+        throw new Error('Missing multipass url');
+      }
+
+      // go to the checkout already logged in
+      window.location.href = url;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.warn(
+          'Checkout via multipass not available due to ',
+          error.message,
+          'Checking out as guest.',
+        );
+      }
+
+      // fallback — go to the checkout as guest
+      // window.location.href = checkoutUrl;
+    }
+  }
+
   return (
     <>
       <div className="grid gap-4">
         {checkoutUrl ? (
-          <Link to={checkoutUrl} prefetch={false} target="_self">
-            <Button as="span" width="full">
-              Continue to Checkout
-            </Button>
-          </Link>
+          <Button
+            as="span"
+            width="full"
+            onClick={checkoutHandler}
+            target="_self"
+          >
+            Continue to Checkout
+          </Button>
         ) : null}
         <CartShopPayButton />
       </div>
