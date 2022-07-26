@@ -200,7 +200,7 @@ describe('AddToCartButton', () => {
           }
         );
 
-        expect(screen.getByRole('button')).toHaveAttribute('disabled', '');
+        expect(screen.getByRole('button')).toBeDisabled();
       });
     });
 
@@ -220,7 +220,7 @@ describe('AddToCartButton', () => {
 
         await user.click(screen.getByRole('button'));
 
-        expect(screen.getByRole('button')).toHaveAttribute('disabled', '');
+        expect(screen.getByRole('button')).toBeDisabled();
       });
 
       it('renders a message for screen readers when an accessible label is provided', async () => {
