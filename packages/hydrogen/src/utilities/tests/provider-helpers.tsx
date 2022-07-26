@@ -43,14 +43,14 @@ export function ShopifyTestProviders({
 
 export function CartTestProviders({
   children,
-  cartConfig,
+  cartProviderValues,
 }: {
   children: React.ReactNode;
-  cartConfig?: Parameters<typeof getCartConfig>[0];
+  cartProviderValues?: Parameters<typeof getCartProviderValues>[0];
 }) {
-  const finalConfig = getCartConfig(cartConfig);
+  const finalValue = getCartProviderValues(cartProviderValues);
   return (
-    <CartContext.Provider value={finalConfig}>{children}</CartContext.Provider>
+    <CartContext.Provider value={finalValue}>{children}</CartContext.Provider>
   );
 }
 
@@ -68,7 +68,7 @@ export function getShopifyConfig(config: Partial<ShopifyConfig> = {}) {
   };
 }
 
-function getCartConfig({
+function getCartProviderValues({
   cart = {},
   ...config
 }: CartProviderOptions = {}): CartWithActions {

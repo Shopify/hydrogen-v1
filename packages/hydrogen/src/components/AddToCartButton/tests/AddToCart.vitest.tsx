@@ -79,19 +79,16 @@ describe('AddToCartButton', () => {
 
       const user = userEvent.setup();
       render(
-        <ProductOptionsProvider data={product}>
-          <AddToCartButton variantId={id}>Add to cart</AddToCartButton>
-        </ProductOptionsProvider>,
-        {
-          wrapper: ({children}) => (
-            <CartTestProviders
-              cartConfig={{linesAdd: mockLinesAdd, cart: {id: '456'}}}
-            >
-              {children}
-            </CartTestProviders>
-          ),
-        }
+        <CartTestProviders
+          cartProviderValues={{linesAdd: mockLinesAdd, cart: {id: '456'}}}
+        >
+          <ProductOptionsProvider data={product}>
+            <AddToCartButton variantId={id}>Add to cart</AddToCartButton>
+          </ProductOptionsProvider>
+          ,
+        </CartTestProviders>
       );
+
       await user.click(screen.getByRole('button'));
 
       expect(mockLinesAdd).toHaveBeenCalledTimes(1);
@@ -112,21 +109,16 @@ describe('AddToCartButton', () => {
 
         const user = userEvent.setup();
         render(
-          <ProductOptionsProvider
-            data={product}
-            initialVariantId={selectedVariant?.id}
+          <CartTestProviders
+            cartProviderValues={{linesAdd: mockLinesAdd, cart: {id: '456'}}}
           >
-            <AddToCartButton>Add to cart</AddToCartButton>
-          </ProductOptionsProvider>,
-          {
-            wrapper: ({children}) => (
-              <CartTestProviders
-                cartConfig={{linesAdd: mockLinesAdd, cart: {id: '456'}}}
-              >
-                {children}
-              </CartTestProviders>
-            ),
-          }
+            <ProductOptionsProvider
+              data={product}
+              initialVariantId={selectedVariant?.id}
+            >
+              <AddToCartButton>Add to cart</AddToCartButton>
+            </ProductOptionsProvider>
+          </CartTestProviders>
         );
 
         await user.click(screen.getByRole('button'));
@@ -157,18 +149,13 @@ describe('AddToCartButton', () => {
         const user = userEvent.setup();
 
         render(
-          <ProductOptionsProvider data={product}>
-            <AddToCartButton>Add to cart</AddToCartButton>
-          </ProductOptionsProvider>,
-          {
-            wrapper: ({children}) => (
-              <CartTestProviders
-                cartConfig={{linesAdd: mockLinesAdd, cart: {id: '456'}}}
-              >
-                {children}
-              </CartTestProviders>
-            ),
-          }
+          <CartTestProviders
+            cartProviderValues={{linesAdd: mockLinesAdd, cart: {id: '456'}}}
+          >
+            <ProductOptionsProvider data={product}>
+              <AddToCartButton>Add to cart</AddToCartButton>
+            </ProductOptionsProvider>
+          </CartTestProviders>
         );
 
         await user.click(screen.getByRole('button'));
@@ -188,16 +175,12 @@ describe('AddToCartButton', () => {
         const product = getProduct();
 
         render(
-          <ProductOptionsProvider data={product} initialVariantId={null}>
-            <AddToCartButton>Add to cart</AddToCartButton>
-          </ProductOptionsProvider>,
-          {
-            wrapper: ({children}) => (
-              <CartTestProviders cartConfig={{linesAdd: mockLinesAdd}}>
-                {children}
-              </CartTestProviders>
-            ),
-          }
+          <CartTestProviders cartProviderValues={{linesAdd: mockLinesAdd}}>
+            <ProductOptionsProvider data={product} initialVariantId={null}>
+              <AddToCartButton>Add to cart</AddToCartButton>
+            </ProductOptionsProvider>
+            ,
+          </CartTestProviders>
         );
 
         expect(screen.getByRole('button')).toBeDisabled();
