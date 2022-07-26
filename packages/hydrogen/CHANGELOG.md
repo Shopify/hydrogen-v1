@@ -94,8 +94,8 @@
 
 ### Special Thanks
 
-- Thanks to @mrkldshv for help in migrating tests from Jest to Vitest.
-- Thanks to @davidhousedev for constant feedback and discussions.
+- Thanks to [@mrkldshv](https://github.com/mrkldshv) for help in migrating tests from Jest to Vitest.
+- Thanks to [@davidhousedev](https://github.com/davidhousedev) for constant feedback and discussions.
 
 ## 1.1.0
 
