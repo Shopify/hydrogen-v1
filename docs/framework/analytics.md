@@ -453,7 +453,7 @@ export function GoogleAnalytics() {
 {% endcodeblock %}
 
 > Note:
-> The code calls `loadScript` instead of [`useLoadScript`](https://shopify.dev/api/hydrogen/hooks/primitive/useloadscript). `useLoadScript` is a hook and can't be called from regular JavaScript functions.
+> The code calls `loadScript` instead of [`useLoadScript`](https://shopify.dev/api/hydrogen/hooks/primitive/useloadscript). `useLoadScript` is a hook and can't be called inside `useEffect`.
 
 The following example shows an implementation of a client analytics connector using the [getanalytics.io Google Tag Manager package](https://getanalytics.io/plugins/google-tag-manager/):
 

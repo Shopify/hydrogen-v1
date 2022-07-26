@@ -7,7 +7,7 @@ description: The useLoadScript hook loads an external script tag on the client-s
 The `useLoadScript` hook loads an external script tag on the client-side.
 
 > Note:
-> Call `loadScript` from regular JavaScript functions and React hooks instead of calling `useLoadScript`.
+> A non-hook version, `loadScript`, is also available if you need to execute inside vanilla JavaScript functions such as `onClick` handlers.
 
 ## Example code
 
