@@ -92,6 +92,11 @@
 
 - Allow `sourceProps` to be passed to `<Video/>`'s underlying `<source>` elements. ([#1847](https://github.com/Shopify/hydrogen/pull/1847)) by [@frehner](https://github.com/frehner)
 
+### Special Thanks
+
+- Thanks to [@mrkldshv](https://github.com/mrkldshv) for help in migrating tests from Jest to Vitest.
+- Thanks to [@davidhousedev](https://github.com/davidhousedev) for constant feedback and discussions.
+
 ## 1.1.0
 
 ### Migration for Stores based on the "Demo Store" template
