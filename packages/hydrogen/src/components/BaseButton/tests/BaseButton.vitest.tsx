@@ -11,7 +11,7 @@ describe('BaseButton', () => {
       wrapper: ShopifyTestProviders,
     });
 
-    expect(screen.getByRole('button').textContent).toBe('Base Button');
+    expect(screen.getByRole('button')).toHaveTextContent('Base Button');
   });
 
   it('allows passthrough props', () => {
@@ -19,7 +19,7 @@ describe('BaseButton', () => {
       wrapper: ShopifyTestProviders,
     });
 
-    expect(screen.getByRole('button')).toHaveAttribute('class', 'bg-blue-600');
+    expect(screen.getByRole('button')).toHaveClass('bg-blue-600');
   });
 
   describe('given an on click event handler', () => {
