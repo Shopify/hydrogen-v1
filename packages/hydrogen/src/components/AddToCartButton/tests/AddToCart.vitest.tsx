@@ -55,7 +55,7 @@ describe('AddToCartButton', () => {
       }
     );
 
-    expect(screen.getByRole('button')).toHaveAttribute('class', 'bg-blue-600');
+    expect(screen.getByRole('button')).toHaveClass('bg-blue-600');
   });
 
   describe('when variantId is set explicity', () => {
@@ -69,7 +69,7 @@ describe('AddToCartButton', () => {
         {wrapper: CartTestProviders}
       );
 
-      expect(screen.getByRole('button')).toHaveAttribute('disabled', '');
+      expect(screen.getByRole('button')).toBeDisabled();
     });
 
     it('calls linesAdd with the variantId', async () => {
@@ -226,7 +226,7 @@ describe('AddToCartButton', () => {
 
         await user.click(screen.getByRole('button'));
 
-        expect(screen.getByRole('alert').textContent).toBe(
+        expect(screen.getByRole('alert')).toHaveTextContent(
           'Adding product to your cart'
         );
       });
