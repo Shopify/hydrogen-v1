@@ -1,8 +1,9 @@
+import {vi} from 'vitest';
 import {InMemoryCache} from '../in-memory.js';
 
 describe('In-Memory Cache', () => {
   const clock = {timestamp: 0};
-  Date.now = jest.fn(() => clock.timestamp);
+  Date.now = vi.fn(() => clock.timestamp);
 
   const advanceTimeBy = (ms: number) => {
     clock.timestamp += ms;
