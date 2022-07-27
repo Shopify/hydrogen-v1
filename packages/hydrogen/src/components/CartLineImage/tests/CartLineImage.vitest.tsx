@@ -11,7 +11,7 @@ const cartMerchandiseImage = {
   height: 300,
 };
 
-describe('CartLineImage', () => {
+describe('<CartLineImage/>', () => {
   it('displays the image', () => {
     const line = {
       ...CART_LINE,

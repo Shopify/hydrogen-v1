@@ -5,7 +5,7 @@ import {BaseButton} from '../BaseButton.client.js';
 import {vi} from 'vitest';
 import userEvent from '@testing-library/user-event';
 
-describe('BaseButton', () => {
+describe('<BaseButton/>', () => {
   it('renders a button', () => {
     render(<BaseButton>Base Button</BaseButton>, {
       wrapper: ShopifyTestProviders,

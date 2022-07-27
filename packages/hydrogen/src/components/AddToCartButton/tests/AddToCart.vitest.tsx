@@ -11,7 +11,7 @@ import {
 } from '../../../utilities/tests/provider-helpers.js';
 import userEvent from '@testing-library/user-event';
 
-describe('AddToCartButton', () => {
+describe('<AddToCartButton/>', () => {
   beforeEach(() => {
     // @ts-expect-error Custom fetch for testing
     global.fetch = vi.fn(async (_url, _init) => {
