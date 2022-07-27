@@ -3,4 +3,5 @@ export type {
   ShopifyLoaderParams,
   ShopifyLoaderOptions,
   ShopifyImageProps,
+  ExternalImageProps,
 } from './Image.js';
