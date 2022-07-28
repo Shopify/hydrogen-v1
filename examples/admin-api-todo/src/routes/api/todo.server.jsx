@@ -130,7 +130,7 @@ async function createMetafieldDefinition(nextKey) {
   Update a metafield/todo based on a metafield.key
 */
 async function updateTo({key, value, origin}) {
-  // update metafield
+  // Update metafield
   const body = {
     metafield: {
       namespace: 'hydrogen',
