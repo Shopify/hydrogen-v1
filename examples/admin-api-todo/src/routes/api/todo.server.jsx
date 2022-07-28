@@ -51,7 +51,7 @@ export async function api(req) {
       case 'deleteTodo':
         return await deleteTodo({...body, origin});
 
-      // uses REST Admin API for illustration purposes
+      // Uses the REST Admin API for illustration purposes
       case 'updateTodo':
         return await updateTo({...body, origin});
 
