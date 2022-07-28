@@ -1,0 +1,56 @@
+
+//In API Cart (Server)
+// 3 shoes
+// 1 shirt
+{shoe: 3, shirt: 1}
+
+// Start new tab
+
+Add 1 shoe -> Local Cart 1 Shoe
+Add 1 shirt -> Local Cart {shoe: 1, shirt: 1}
+
+Scenario 1: Happy path
+API Cart Server returns before any local Actions
+API machine sends state to local machine
+
+localMachine: {shoe: 3, shirt: 1}
+
+If user does any action
+addShoe() -> shows in UI localMachine {shoe: 4, shirt: 1}
+    send event to API machine - addCartLine({shoe: 1})
+
+updateShirt(4) ->  shows in UI localMachine {shoe: 4, shirt: 4}
+    send event to API machine - updateCartLine({shirt: 4})
+
+API machine sends request to Storfront API
+addCartLine({shoe: 1}) -> Server: {shoe: 4, shirt: 1}. We won't send the Cart to localMachine because we still have one action in the queue. 
+updateCartLine({shirt: 4}) -> Server: {shoe: 4, shirt: 4}. Send this to localMachine
+
+Scenario 2: User does action before the cart fetch finishes
+API Cart Server starts fetch
+-> User before Cart Server returns does actions:
+
+localMachine is empty: {}
+
+addShoe() -> shows in UI localMachine {shoe: 1}
+    send event to API machine - addCartLine({shoe: 1})
+
+updateShirt(4) ->  shows in UI localMachine {shoe: 1, shirt: 4 }
+    send event to API machine - updateCartLine({shirt: 4})
+
+POINT: Never send to server until the last item in the queue finishes fetching
+Response finishes
+
+/////
+
+With reconciliation
+
+Scenario 1. Easy path
+localCart: {} serverCart: {shoes: 3, shirt: 1}
+
+1. Fetch completes. localCart and serverCart synced
+2. localCart and serverCart: {shoes: 3, shirt: 1}
+3. Two action shappen:
+    a. addShoe() -> localCart: {shoes: 4, shirt: 1}
+    b. updateShirt(4) -> localCart: {shoes: 4, shirt: 4}
+4. 
