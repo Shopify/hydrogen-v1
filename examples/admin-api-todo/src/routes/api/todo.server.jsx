@@ -28,7 +28,7 @@ export async function api(req) {
       return redirectToOrigin({origin});
     }
 
-    // capture the form data
+    // Capture the form data
     const formData = await req.formData();
     for (const entry of formData.entries()) {
       body[entry[0]] = entry[1];
