@@ -8,7 +8,7 @@ export function TodoCreate() {
     >
       <p style={{marginRight: '1rem'}}>+&nbsp;</p>
 
-      {/* hidden fields passing required data to the api/shop */}
+      {/* Hidden fields that pass required data to the API/shop */}
       <input hidden type="text" name="action" defaultValue="createTodo"></input>
 
       <label htmlFor="create-todo">New todo item input</label>
