@@ -19,7 +19,7 @@ export async function api(req) {
     let body = {};
 
     if (req.method !== 'POST') {
-      // redirect back to the origin
+      // Redirect back to the origin
       return redirectToOrigin({origin});
     }
 
