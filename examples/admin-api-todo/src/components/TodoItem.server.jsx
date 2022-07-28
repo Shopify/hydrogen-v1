@@ -11,7 +11,7 @@ export function TodoItem({metafield, index}) {
       >
         <p style={{marginRight: '1rem'}}>{index}.</p>
 
-        {/* hidden fields passing required data to the api/shop */}
+        {/* Hidden fields that pass required data to the API/shop */}
         <input type="text" hidden name="action" defaultValue="updateTodo" />
         <input type="text" hidden name="key" defaultValue={metafield.key} />
 
