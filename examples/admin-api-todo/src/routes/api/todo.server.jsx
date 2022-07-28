@@ -23,7 +23,7 @@ export async function api(req) {
       return redirectToOrigin({origin});
     }
 
-    // we only allow form-encoded POST requests
+    // We only allow form-encoded POST requests
     if (!contentType.includes('form')) {
       return redirectToOrigin({origin});
     }
