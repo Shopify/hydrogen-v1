@@ -3,7 +3,6 @@ import React, {
   ReactNode,
   useMemo,
   useCallback,
-  // @ts-ignore
   useTransition,
   useState,
 } from 'react';

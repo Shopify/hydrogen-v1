@@ -190,7 +190,7 @@ When the CSS mode is `modules-only`, styles are inlined in a `<style>` tag befor
 
 ### CSS-in-JS libraries
 
-Hydrogen supports CSS-in-JS libraries that emit `.css` files at build time via third-party Vite plugins. Please, reach out to the library maintainers to ask for React Server Components support and feel free to tag the Hydrogen team.
+Hydrogen supports CSS-in-JS libraries that emit `.css` files at build time via third-party Vite plugins. Please reach out to the library maintainers to ask for React Server Components support, and feel free to tag the Hydrogen team (`@shopify/hydrogen`).
 
 However, CSS-in-JS libraries that collect styles at runtime aren't currently supported due to limitation integrating these libraries with React Server Components.
 

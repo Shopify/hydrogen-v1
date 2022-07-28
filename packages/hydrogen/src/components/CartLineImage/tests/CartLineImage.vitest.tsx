@@ -1,9 +1,8 @@
 import React from 'react';
-import {mount} from '@shopify/react-testing';
 import {CartLineProvider} from '../../CartLineProvider/index.js';
 import {CartLineImage} from '../CartLineImage.client.js';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
-import {Image} from '../../Image/index.js';
+import {render, screen} from '@testing-library/react';
 
 const cartMerchandiseImage = {
   url: 'https://cdn.shopify.com/someimage.jpg',
@@ -12,7 +11,7 @@ const cartMerchandiseImage = {
   height: 300,
 };
 
-describe(`<CartLineImage />`, () => {
+describe('<CartLineImage/>', () => {
   it('displays the image', () => {
     const line = {
       ...CART_LINE,
@@ -22,15 +21,18 @@ describe(`<CartLineImage />`, () => {
       },
     };
 
-    const wrapper = mount(
+    render(
       <CartLineProvider line={line}>
         <CartLineImage />
       </CartLineProvider>
     );
 
-    expect(wrapper).toContainReactComponent(Image, {
-      data: line.merchandise.image,
-    });
+    const image = screen.getByRole('img');
+
+    expect(image.getAttribute('src')).toContain(line.merchandise.image.url);
+    expect(image).toHaveAttribute('height', `${line.merchandise.image.height}`);
+    expect(image).toHaveAttribute('width', `${line.merchandise.image.width}`);
+    expect(image).toHaveAccessibleName(line.merchandise.image.altText);
   });
 
   it('allows passthrough props', () => {
@@ -44,29 +46,31 @@ describe(`<CartLineImage />`, () => {
       },
     };
 
-    const wrapper = mount(
+    render(
       <CartLineProvider line={line}>
         <CartLineImage className="w-full" />
       </CartLineProvider>
     );
 
-    expect(wrapper).toContainReactComponent(Image, {
-      data: line.merchandise.image,
-      className: 'w-full',
-    });
+    const image = screen.getByRole('img');
+
+    expect(image.getAttribute('src')).toContain(line.merchandise.image.url);
+    expect(image).toHaveAttribute('height', `${line.merchandise.image.height}`);
+    expect(image).toHaveAttribute('width', `${line.merchandise.image.width}`);
+    expect(image).toHaveAccessibleName(line.merchandise.image.altText);
+    expect(image).toHaveClass('w-full');
   });
 
   it('displays nothing if there is no image', () => {
-    const wrapper = mount(
+    render(
       <CartLineProvider line={CART_LINE}>
         <CartLineImage />
       </CartLineProvider>
     );
 
-    expect(wrapper).not.toContainReactComponent(Image);
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
   });
 
-  // eslint-disable-next-line jest/expect-expect
   it.skip(`typescript types`, () => {
     // this test is actually just using //@ts-expect-error as the assertion, and don't need to execute in order to have TS validation on them
     // I don't love this idea, but at the moment I also don't have other great ideas for how to easily test our component TS types

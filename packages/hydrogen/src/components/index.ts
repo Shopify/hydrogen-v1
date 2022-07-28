@@ -1,7 +1,11 @@
 export {Link} from './Link/index.js';
 export {MediaFile} from './MediaFile/index.js';
 export {Video} from './Video/index.js';
-export {Image} from './Image/index.js';
+export {
+  Image,
+  type ExternalImageProps,
+  type ShopifyImageProps,
+} from './Image/index.js';
 export {ExternalVideo} from './ExternalVideo/index.js';
 export {AddToCartButton} from './AddToCartButton/index.js';
 export {ModelViewer} from './ModelViewer/index.js';

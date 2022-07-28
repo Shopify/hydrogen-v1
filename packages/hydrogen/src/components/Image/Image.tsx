@@ -201,7 +201,7 @@ type LoaderProps<GenericLoaderOpts> = {
    */
   loaderOptions?: GenericLoaderOpts;
 };
-type ExternalImageProps<GenericLoaderOpts> = SetRequired<
+export type ExternalImageProps<GenericLoaderOpts> = SetRequired<
   HtmlImageProps,
   'src' | 'width' | 'height' | 'alt'
 > & {
