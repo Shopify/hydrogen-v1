@@ -90,8 +90,5 @@
       "prettier --write"
     ]
   },
-  "resolutions": {
-    "unified": "9.2.2"
-  },
   "version": "0.0.0"
 }
