@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSession} from '../useSession/useSession.js';
 import {DevTools as DevToolsClient} from './DevTools.client.js';
 import {useServerRequest} from '../ServerRequestProvider/index.js';
 import {getLocale} from '../../utilities/locale/index.js';
@@ -17,6 +18,13 @@ export function DevTools() {
     storeDomain,
     storefrontApiVersion,
   };
+  const session = useSession();
 
-  return <DevToolsClient dataFromServer={{settings}} />;
+  const data = {
+    settings,
+    storage: {
+      session,
+    },
+  };
+  return <DevToolsClient dataFromServer={data} />;
 }
