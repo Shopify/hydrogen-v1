@@ -10,7 +10,7 @@ Hydrogen is a React framework and SDK that you can use to build fast and dynamic
 
 ```
 SHOPIFY_ADMIN_API_PRIVATE_TOKEN=shpat_....
-SHOPIFY_ADMIN_API_VERSION=2022-04
+SHOPIFY_ADMIN_API_VERSION={api_version}
 SHOPIFY_ADMIN_API_DOMAIN=yourstore.myshopify.com
 ```
 
