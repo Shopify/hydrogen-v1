@@ -72,7 +72,7 @@ export async function api(req) {
 
 /*
   Creates a new metafield to store the todo value.
-  If no metafield definition exists, create one and then add the metafield.
+  If no metafield definition exists, then create one and add the metafield.
   If a metafield definition exists we just add the metafield to it
 */
 async function createTodo({value, origin}) {
