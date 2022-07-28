@@ -36,7 +36,7 @@ export function TodoItem({metafield, index}) {
 
       {/* delete todo */}
       <form id="delete-todo" action="/api/todo" method="post">
-        {/* hidden fields passing required data to the api/shop */}
+        {/* Hidden fields that pass required data to the API/shop */}
         <input type="text" hidden name="action" defaultValue="deleteTodo" />
         <input type="text" hidden name="id" defaultValue={metafield.id} />
 
