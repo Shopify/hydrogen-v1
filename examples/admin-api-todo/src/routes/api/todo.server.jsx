@@ -34,7 +34,7 @@ export async function api(req) {
       body[entry[0]] = entry[1];
     }
 
-    // capture the target action from the form input[name=action]
+    // Capture the target action from the form input[name=action]
     const action = body.action;
 
     if (!action) {
