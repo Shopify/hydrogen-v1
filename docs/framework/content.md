@@ -109,7 +109,7 @@ const QUERY = gql`
   ) {
     product: product(handle: $handle) {
       product_features: metafield(
-        namespace: "my_fields"
+        namespace: "custom"
         key: "product_feature"
       ) {
         references(first: 5) {
