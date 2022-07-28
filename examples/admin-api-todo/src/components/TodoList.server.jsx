@@ -22,7 +22,7 @@ export function TodoList() {
     ? flattenConnection(data.shop.metafields)
     : [];
 
-  // empty list of todos
+  // Empty list of todos
   if (!metafields?.length) {
     return (
       <div>
