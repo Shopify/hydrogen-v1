@@ -6,7 +6,7 @@ import {SHOP_METAFIELDS_QUERY} from '../graphql/queries';
 export function TodoList() {
   /*
     Fetch todos/metafields synchronously from the Admin API
-    just for demonstration purposes - (Should be fetched via storefront API)
+    For demonstration purposes only. Should be fetched via the Storefront API)
   */
   const {data, error = null} = fetchTodosSync();
 
