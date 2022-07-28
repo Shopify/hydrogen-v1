@@ -24,10 +24,6 @@ describe('<BuyNowButton/>', () => {
     });
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('renders a button', () => {
     render(<BuyNowButton variantId="1">Buy now</BuyNowButton>, {
       wrapper: ShopifyTestProviders,
