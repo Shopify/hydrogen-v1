@@ -6,7 +6,7 @@ import {
   STOREFRONT_API_BUYER_IP_HEADER,
   SHOPIFY_STOREFRONT_ID_VARIABLE,
   SHOPIFY_STOREFRONT_ID_HEADER,
-} from '../constants';
+} from '../constants.js';
 
 export function getStorefrontApiRequestHeaders({
   buyerIp,

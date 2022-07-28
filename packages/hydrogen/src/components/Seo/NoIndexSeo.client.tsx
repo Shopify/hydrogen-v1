@@ -1,7 +1,7 @@
 import React from 'react';
-import {useLocalization} from '../../hooks/useLocalization/useLocalization';
-import {Head} from '../../foundation/Head/Head.client';
-import type {DefaultPage} from './seo-types';
+import {useLocalization} from '../../hooks/useLocalization/useLocalization.js';
+import {Head} from '../../foundation/Head/Head.client.js';
+import type {DefaultPage} from './seo-types.js';
 import type {PartialDeep} from 'type-fest';
 
 export function NoIndexPageSeo({

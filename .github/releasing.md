@@ -21,6 +21,8 @@ To release an unstable version:
 1. Merge your changes into the `unstable` branch.
 1. Visit the [Changesets Snapshot](https://github.com/Shopify/hydrogen/actions/workflows/changesets_snapshot.yml) GitHub Action workflow.
 1. Click "Run Workflow." Be sure to select `unstable` as the branch name.
+1. A new branch and pull request into the `unstable` branch will be created. If that unstable release branch looks good, merge it.
+1. Manually release the unstable version on NPM by repeating steps 2 and 3.
 
 A new snapshot release will be created with your changes and tagged on NPM with `unstable`. You can install the unstable version of Hydrogen using this tag:
 

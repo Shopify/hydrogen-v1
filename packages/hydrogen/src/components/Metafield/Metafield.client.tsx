@@ -1,9 +1,9 @@
 import React, {type ElementType, useMemo} from 'react';
-import type {Props} from '../types';
-import {useLocalization} from '../../hooks/useLocalization/useLocalization';
-import {getMeasurementAsString} from '../../utilities/measurement';
-import type {Measurement, Rating} from '../../types';
-import {Image} from '../Image';
+import type {Props} from '../types.js';
+import {useLocalization} from '../../hooks/useLocalization/useLocalization.js';
+import {getMeasurementAsString} from '../../utilities/measurement.js';
+import type {Measurement, Rating} from '../../types.js';
+import {Image} from '../Image/index.js';
 import type {
   MediaImage,
   Page,
@@ -12,11 +12,11 @@ import type {
   GenericFile,
   Video as VideoType,
   Metafield,
-} from '../../storefront-api-types';
-import {Video} from '../Video';
-import {flattenConnection} from '../../utilities/flattenConnection/index';
+} from '../../storefront-api-types.js';
+import {Video} from '../Video/index.js';
+import {flattenConnection} from '../../utilities/flattenConnection/index.js';
 import type {PartialDeep} from 'type-fest';
-import {parseMetafield} from '../../utilities/parseMetafield/index';
+import {parseMetafield} from '../../utilities/parseMetafield/index.js';
 
 export interface MetafieldProps<TTag> {
   /** An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). */

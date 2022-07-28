@@ -14,7 +14,7 @@ const config: Config.InitialOptions = {
     '<rootDir>/templates/*',
     '<rootDir>/packages/hydrogen-ui/*',
   ],
-  testTimeout: process.env.CI ? 30000 : 10000,
+  testTimeout: process.env.CI ? 45000 : 10000,
   watchPathIgnorePatterns: ['<rootDir>/temp', 'fixtures'],
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
   globals: {
@@ -33,6 +33,10 @@ const config: Config.InitialOptions = {
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['html-spa', 'text-summary'],
+  moduleNameMapper: {
+    // captures the module name with '.js', and removes the '.js' part so that the module resolver can find the '.ts' file
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
 };
 
 export default config;

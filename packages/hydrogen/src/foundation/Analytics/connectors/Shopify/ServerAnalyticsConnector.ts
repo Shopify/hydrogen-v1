@@ -1,4 +1,4 @@
-import {log} from '../../../../utilities/log';
+import {log} from '../../../../utilities/log/index.js';
 
 export const ShopifyServerAnalyticsConnector = {
   request(): Promise<any> {

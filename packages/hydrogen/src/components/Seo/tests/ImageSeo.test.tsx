@@ -1,8 +1,8 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {Head} from '../../../foundation/Head';
+import {Head} from '../../../foundation/Head/index.js';
 
-import {ImageSeo} from '../ImageSeo.client';
+import {ImageSeo} from '../ImageSeo.client.js';
 
 jest.mock('../../../foundation/Head/Head.client', () => ({
   Head({children}: {children: React.ReactNode}) {

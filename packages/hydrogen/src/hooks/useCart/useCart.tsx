@@ -1,5 +1,5 @@
 import React from 'react';
-import {CartContext} from '../../components/CartProvider/context';
+import {CartContext} from '../../components/CartProvider/context.js';
 
 /**
  * The `useCart` hook provides access to the cart object. It must be a descendent of a `CartProvider` component.

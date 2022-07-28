@@ -3,9 +3,9 @@ import {
   SellingPlanAllocationConnection,
   ProductVariantConnection,
   MoneyV2,
-} from '../../../storefront-api-types';
+} from '../../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
-import {getUnitPriceMeasurement} from '../../../utilities/tests/unitPriceMeasurement';
+import {getUnitPriceMeasurement} from '../../../utilities/tests/unitPriceMeasurement.js';
 
 const priceV2: MoneyV2 = {
   amount: '9.99',

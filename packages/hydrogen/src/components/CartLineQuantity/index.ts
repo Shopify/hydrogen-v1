@@ -1,1 +1,1 @@
-export {CartLineQuantity} from './CartLineQuantity.client';
+export {CartLineQuantity} from './CartLineQuantity.client.js';

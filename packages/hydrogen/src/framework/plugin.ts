@@ -1,19 +1,20 @@
-import type {HydrogenVitePluginOptions} from './types';
-import hydrogenConfig from './plugins/vite-plugin-hydrogen-config';
+import type {HydrogenVitePluginOptions} from './types.js';
+import hydrogenConfig from './plugins/vite-plugin-hydrogen-config.js';
 import type {Plugin} from 'vite';
-import hydrogenMiddleware from './plugins/vite-plugin-hydrogen-middleware';
-import hydrogenClientMiddleware from './plugins/vite-plugin-hydrogen-client-middleware';
-import hydrogenVirtualFiles from './plugins/vite-plugin-hydrogen-virtual-files';
-import platformEntry from './plugins/vite-plugin-platform-entry';
-import rsc from './plugins/vite-plugin-hydrogen-rsc';
-import ssrInterop from './plugins/vite-plugin-ssr-interop';
-import purgeQueryCache from './plugins/vite-plugin-purge-query-cache';
-import hydrationAutoImport from './plugins/vite-plugin-hydration-auto-import';
+import hydrogenMiddleware from './plugins/vite-plugin-hydrogen-middleware.js';
+import hydrogenClientMiddleware from './plugins/vite-plugin-hydrogen-client-middleware.js';
+import hydrogenVirtualFiles from './plugins/vite-plugin-hydrogen-virtual-files.js';
+import platformEntry from './plugins/vite-plugin-platform-entry.js';
+import rsc from './plugins/vite-plugin-hydrogen-rsc.js';
+import ssrInterop from './plugins/vite-plugin-ssr-interop.js';
+import purgeQueryCache from './plugins/vite-plugin-purge-query-cache.js';
+import hydrationAutoImport from './plugins/vite-plugin-hydration-auto-import.js';
 import inspect from 'vite-plugin-inspect';
 import react from '@vitejs/plugin-react';
-import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc';
-import clientImports from './plugins/vite-plugin-client-imports';
-import suppressWarnings from './plugins/vite-plugin-hydrogen-suppress-warnings';
+import cssRsc from './plugins/vite-plugin-css-rsc.js';
+import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc.js';
+import clientImports from './plugins/vite-plugin-client-imports.js';
+import suppressWarnings from './plugins/vite-plugin-hydrogen-suppress-warnings.js';
 import {assetsVersion} from './plugins/vite-plugin-assets-version';
 
 const hydrogenPlugin = (pluginOptions: HydrogenVitePluginOptions = {}) => {
@@ -27,7 +28,7 @@ const hydrogenPlugin = (pluginOptions: HydrogenVitePluginOptions = {}) => {
     react(),
     hydrationAutoImport(),
     ssrInterop(),
-    cssModulesRsc(),
+    pluginOptions.experimental?.css === 'global' ? cssRsc() : cssModulesRsc(),
     rsc(pluginOptions),
     platformEntry(),
     suppressWarnings(),

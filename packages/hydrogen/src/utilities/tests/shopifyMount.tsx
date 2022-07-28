@@ -1,16 +1,16 @@
 import React from 'react';
 import {createMount} from '@shopify/react-testing';
 import {BrowserHistory} from 'history';
-import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../../foundation/constants';
+import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../../foundation/constants.js';
 
-import {ShopifyConfig} from '../../types';
-import {ShopifyProvider} from '../../foundation/ShopifyProvider/ShopifyProvider.server';
-import {BrowserRouter} from '../../foundation/Router/BrowserRouter.client';
+import {ShopifyConfig} from '../../types.js';
+import {ShopifyProvider} from '../../foundation/ShopifyProvider/ShopifyProvider.server.js';
+import {BrowserRouter} from '../../foundation/Router/BrowserRouter.client.js';
 import {
   LocationServerProps,
   ServerProps,
   ServerPropsProvider,
-} from '../../foundation/ServerPropsProvider/ServerPropsProvider';
+} from '../../foundation/ServerPropsProvider/ServerPropsProvider.js';
 
 type SetServerProps = React.Dispatch<React.SetStateAction<ServerProps>>;
 export interface ShopifyProviderOptions {
@@ -41,6 +41,7 @@ export const mountWithProviders = createMount<
     <ServerPropsProvider
       setServerPropsForRsc={setServerProps}
       initialServerProps={serverProps}
+      setRscResponseFromApiRoute={() => {}}
     >
       <ShopifyProvider
         shopifyConfig={shopifyConfig}

@@ -1,4 +1,9 @@
-import {handleRequest, indexTemplate, isAsset, assetBasePath} from './virtual';
+import {
+  handleRequest,
+  indexTemplate,
+  isAsset,
+  assetBasePath,
+} from './virtual.js';
 
 declare global {
   // eslint-disable-next-line no-var

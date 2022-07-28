@@ -5,8 +5,8 @@ import {
   MutationCartNoteUpdateArgs,
   CartBuyerIdentityInput,
   MutationCartAttributesUpdateArgs,
-} from '../../storefront-api-types';
-import {CartFragmentFragment} from './graphql/CartFragment';
+} from '../../storefront-api-types.js';
+import {CartFragmentFragment} from './graphql/CartFragment.js';
 
 export type Status = State['status'];
 

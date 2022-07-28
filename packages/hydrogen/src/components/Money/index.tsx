@@ -1,1 +1,1 @@
-export {Money} from './Money.client';
+export {Money} from './Money.client.js';

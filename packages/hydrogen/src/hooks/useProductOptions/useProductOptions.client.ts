@@ -1,5 +1,5 @@
 import {useContext} from 'react';
-import {ProductOptionsContext} from '../../components/ProductOptionsProvider/context';
+import {ProductOptionsContext} from '../../components/ProductOptionsProvider/context.js';
 
 export function useProductOptions() {
   const context = useContext(ProductOptionsContext);

@@ -1,5 +1,5 @@
-import {SelectedOptions, OptionWithValues} from './types';
-import type {ProductVariant as ProductVariantType} from '../../storefront-api-types';
+import {SelectedOptions, OptionWithValues} from './types.js';
+import type {ProductVariant as ProductVariantType} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 export function getAllOptionValues(

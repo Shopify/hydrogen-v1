@@ -60,6 +60,8 @@ export default function MyProductVideo() {
 | -------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | data     | <code>PartialDeep&#60;VideoType&#62;</code> | An object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video). |
 | previewImageOptions? | <code>ShopifyLoaderParams</code>               | An object of image size options for the video's `previewImage`. Uses `shopifyImageLoader` to generate the `poster` URL.                                                                       |
+sourceProps | <code>HTMLAttributes<HtmlSourceElement> & {'data-testid'?: string}</code> | Props that will be passed to the `video` element's children `source` elements. |
+
 
 ## Required fields
 

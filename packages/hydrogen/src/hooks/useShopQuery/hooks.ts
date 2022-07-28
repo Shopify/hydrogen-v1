@@ -1,14 +1,14 @@
-import {useShop} from '../../foundation/useShop';
-import {getLoggerWithContext} from '../../utilities/log';
-import type {CachingStrategy, PreloadOptions} from '../../types';
-import {graphqlRequestBody} from '../../utilities';
-import {useServerRequest} from '../../foundation/ServerRequestProvider';
-import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
-import {sendMessageToClient} from '../../utilities/devtools';
-import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';
-import {META_ENV_SSR} from '../../foundation/ssr-interop';
-import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi';
-import {parseJSON} from '../../utilities/parse';
+import {useShop} from '../../foundation/useShop/index.js';
+import {getLoggerWithContext} from '../../utilities/log/index.js';
+import type {CachingStrategy, PreloadOptions} from '../../types.js';
+import {graphqlRequestBody} from '../../utilities/index.js';
+import {useServerRequest} from '../../foundation/ServerRequestProvider/index.js';
+import {injectGraphQLTracker} from '../../utilities/graphql-tracker.js';
+import {sendMessageToClient} from '../../utilities/devtools.js';
+import {fetchSync} from '../../foundation/fetchSync/server/fetchSync.js';
+import {META_ENV_SSR} from '../../foundation/ssr-interop.js';
+import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
+import {parseJSON} from '../../utilities/parse.js';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -92,7 +92,19 @@ export function useShopQuery<T>({
     try {
       data = response.json();
     } catch (error: any) {
-      useQueryError = new Error('Unable to parse response:\n' + text);
+      if (response.headers.get('content-length')) {
+        useQueryError = new Error(
+          `Unable to parse response (x-request-id: ${response.headers.get(
+            'x-request-id'
+          )}):\n${text}`
+        );
+      } else {
+        useQueryError = new Error(
+          `${response.status} ${
+            response.statusText
+          } (x-request-id: ${response.headers.get('x-request-id')})`
+        );
+      }
     }
   } catch (error: any) {
     // Pass-through thrown promise for Suspense functionality

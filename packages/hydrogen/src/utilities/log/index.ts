@@ -4,10 +4,12 @@ export {
   getLoggerWithContext,
   Logger,
   logServerResponse,
-} from './log';
+  type RenderType,
+  type LoggerConfig,
+} from './log.js';
 export {
   collectQueryCacheControlHeaders,
   logCacheControlHeaders,
-} from './log-cache-header';
-export {logCacheApiStatus} from './log-cache-api-status';
-export {collectQueryTimings, logQueryTimings} from './log-query-timeline';
+} from './log-cache-header.js';
+export {logCacheApiStatus} from './log-cache-api-status.js';
+export {collectQueryTimings, logQueryTimings} from './log-query-timeline.js';

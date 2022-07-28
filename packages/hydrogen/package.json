@@ -7,12 +7,16 @@
   "engines": {
     "node": ">=14"
   },
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
   "exports": {
     ".": "./dist/esnext/index.js",
+    "./experimental": {
+      "import": "./dist/esnext/experimental.js",
+      "require": "./dist/node/experimental.js"
+    },
     "./plugin": {
       "import": "./dist/esnext/framework/plugin.js",
       "require": "./dist/node/framework/plugin.js"
@@ -62,7 +66,9 @@
     "lint": "eslint --ext .ts src/** --no-error-on-unmatched-pattern",
     "format": "prettier --write --parser typescript \"src/**/*.ts\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
-    "prepack": "yarn build"
+    "prepack": "yarn build",
+    "test:vitest": "vitest",
+    "test:vitest:ci": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -83,6 +89,9 @@
     "@graphql-codegen/typescript-operations": "2.3.2",
     "@graphql-typed-document-node/core": "^3.1.0",
     "@rollup/plugin-graphql": "^1.0.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^14.3.0",
     "@types/body-parser": "^1.19.2",
     "@types/connect": "^3.4.34",
     "@types/graphql": "^14.5.0",
@@ -95,11 +104,14 @@
     "@types/ws": "^8.2.0",
     "babel-loader": "^8.2.2",
     "cpy-cli": "^3.1.0",
+    "eslint-plugin-import": "^2.26.0",
+    "happy-dom": "^6.0.4",
     "mkdirp": "^1.0.4",
     "npm-run-all": "^4.1.5",
     "postcss": "^8",
     "raw-loader": "^4.0.2",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "vitest": "^0.19.1"
   },
   "peerDependencies": {
     "body-parser": "^1.20.0",

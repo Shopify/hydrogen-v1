@@ -1,12 +1,12 @@
-export * from './shared-types';
-import {ShopifyConfig} from './shared-types';
+export * from './shared-types.js';
+import {ShopifyConfig} from './shared-types.js';
 
 import type {ServerResponse} from 'http';
-import type {Logger, LoggerConfig} from './utilities/log/log';
-import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
-import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
-import type {Metafield} from './storefront-api-types';
-import type {SessionStorageAdapter} from './foundation/session/session';
+import type {Logger, LoggerConfig} from './utilities/log/index.js';
+import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.js';
+import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.js';
+import type {Metafield} from './storefront-api-types.js';
+import type {SessionStorageAdapter} from './foundation/session/session-types.js';
 import type {PartialDeep, JsonValue} from 'type-fest';
 
 export type AssembleHtmlParams = {
@@ -81,6 +81,7 @@ export type InlineHydrogenConfig = ClientConfig & {
   logger?: LoggerConfig;
   session?: (log: Logger) => SessionStorageAdapter;
   poweredByHeader?: boolean;
+  serverErrorPage?: string;
   __EXPERIMENTAL__devTools?: boolean;
 };
 

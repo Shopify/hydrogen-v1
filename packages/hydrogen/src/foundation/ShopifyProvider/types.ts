@@ -1,6 +1,6 @@
-import type {CountryCode, LanguageCode} from '../../storefront-api-types';
+import type {CountryCode, LanguageCode} from '../../storefront-api-types.js';
 import type {ReactNode} from 'react';
-import type {ShopifyConfigFetcher, ShopifyConfig} from '../../types';
+import type {ShopifyConfigFetcher, ShopifyConfig} from '../../types.js';
 
 export interface ShopifyContextValue
   extends Omit<ShopifyConfig, 'defaultLanguageCode' | 'defaultCountryCode'> {
@@ -9,6 +9,9 @@ export interface ShopifyContextValue
   storefrontId: string | null;
 }
 
+// TODO: improve types with intrinsic string manipulation
+export type Locale = string;
+
 export interface LocalizationContextValue {
   country: {
     isoCode: `${CountryCode}`;
@@ -16,7 +19,7 @@ export interface LocalizationContextValue {
   language: {
     isoCode: `${LanguageCode}`;
   };
-  locale: `${LanguageCode}-${CountryCode}`;
+  locale: Locale;
 }
 
 export type ShopifyProviderProps = {

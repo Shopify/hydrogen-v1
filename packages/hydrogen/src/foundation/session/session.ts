@@ -1,23 +1,8 @@
-import {Logger} from '../../utilities/log';
-import {wrapPromise} from '../../utilities/suspense';
-import type {HydrogenResponse} from '../HydrogenResponse/HydrogenResponse.server';
-import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
-
-export type SessionSyncApi = {
-  get: () => Record<string, string>;
-};
-
-export type SessionApi = {
-  get: () => Promise<Record<string, string>>;
-  set: (key: string, value: string) => Promise<void>;
-  destroy: () => Promise<void>;
-};
-
-export type SessionStorageAdapter = {
-  get: (request: Request) => Promise<Record<string, string>>;
-  set: (request: Request, value: Record<string, string>) => Promise<string>;
-  destroy: (request: Request) => Promise<string>;
-};
+import {Logger} from '../../utilities/log/index.js';
+import {wrapPromise} from '../../utilities/suspense.js';
+import type {HydrogenResponse} from '../HydrogenResponse/HydrogenResponse.server.js';
+import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server.js';
+import type {SessionStorageAdapter} from './session-types.js';
 
 export function getSyncSessionApi(
   request: HydrogenRequest,

@@ -1,1 +1,5 @@
-export {useQuery} from './hooks';
+export {
+  useQuery,
+  type HydrogenUseQueryOptions,
+  shouldPreloadQuery,
+} from './hooks.js';

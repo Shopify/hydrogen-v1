@@ -5,8 +5,10 @@ import {
   logCacheControlHeaders,
   logQueryTimings,
   getLoggerWithContext,
-} from './utilities/log';
-import {getErrorMarkup} from './utilities/error';
+  setLogger,
+  type RenderType,
+} from './utilities/log/index.js';
+import {getErrorMarkup} from './utilities/error.js';
 import type {
   AssembleHtmlParams,
   RunSsrParams,
@@ -14,48 +16,47 @@ import type {
   ResolvedHydrogenConfig,
   ResolvedHydrogenRoutes,
   RequestHandler,
-} from './types';
-import type {RequestHandlerOptions} from './shared-types';
-import {Html, applyHtmlHead} from './foundation/Html/Html';
-import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
-import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
+} from './types.js';
+import type {RequestHandlerOptions} from './shared-types.js';
+import {Html, applyHtmlHead} from './foundation/Html/Html.js';
+import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.js';
+import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.js';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
-} from './foundation/ServerRequestProvider';
+} from './foundation/ServerRequestProvider/index.js';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
   renderApiRoute,
   getApiRoutes,
-} from './utilities/apiRoutes';
-import {ServerPropsProvider} from './foundation/ServerPropsProvider';
-import {isBotUA} from './utilities/bot-ua';
-import {getCache, setCache} from './foundation/runtime';
+} from './utilities/apiRoutes.js';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider/index.js';
+import {isBotUA} from './utilities/bot-ua.js';
+import {getCache, setCache} from './foundation/runtime.js';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
   rscRenderToReadableStream,
   createFromReadableStream,
   bufferReadableStream,
-} from './streaming.server';
-import {stripScriptsFromTemplate} from './utilities/template';
-import {setLogger, RenderType} from './utilities/log/log';
-import {Analytics} from './foundation/Analytics/Analytics.server';
-import {DevTools} from './foundation/DevTools/DevTools.server';
-import {getSyncSessionApi} from './foundation/session/session';
-import {parseJSON} from './utilities/parse';
-import {htmlEncode} from './utilities';
+} from './streaming.server.js';
+import {stripScriptsFromTemplate} from './utilities/template.js';
+import {Analytics} from './foundation/Analytics/Analytics.server.js';
+import {DevTools} from './foundation/DevTools/DevTools.server.js';
+import {getSyncSessionApi} from './foundation/session/session.js';
+import {parseJSON} from './utilities/parse.js';
+import {htmlEncode} from './utilities/index.js';
 import {splitCookiesString} from 'set-cookie-parser';
 import {
   deleteItemFromCache,
   getItemFromCache,
   isStale,
   setItemInCache,
-} from './foundation/Cache/cache';
-import {CacheShort, NO_STORE} from './foundation/Cache/strategies';
-import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes';
+} from './foundation/Cache/cache.js';
+import {CacheShort, NO_STORE} from './foundation/Cache/strategies/index.js';
+import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes.js';
 
 declare global {
   // This is provided by a Vite plugin
@@ -70,20 +71,20 @@ const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
 export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
-    const {cache, context, buyerIpHeader} = options;
+    const {cache, context, buyerIpHeader, headers} = options;
 
     const request = new HydrogenRequest(rawRequest);
     const url = new URL(request.url);
 
+    let sessionApi = options.sessionApi;
+
     const {default: inlineHydrogenConfig} = await import(
       // @ts-ignore
-      // eslint-disable-next-line node/no-missing-import
       'virtual__hydrogen.config.ts'
     );
 
     const {default: hydrogenRoutes} = await import(
       // @ts-ignore
-      // eslint-disable-next-line node/no-missing-import
       'virtual__hydrogen-routes.server.jsx'
     );
 
@@ -98,16 +99,16 @@ export const renderHydrogen = (App: any) => {
     setLogger(hydrogenConfig.logger);
     const log = getLoggerWithContext(request);
 
-    const response = new HydrogenResponse();
+    const response = new HydrogenResponse(null, {
+      headers: headers || {},
+    });
 
     if (hydrogenConfig.poweredByHeader ?? true) {
-      // If not defined in the config, always show the header
+      // If undefined in the config, then always show the header
       response.headers.set('powered-by', 'Shopify-Hydrogen');
     }
 
-    const sessionApi = hydrogenConfig.session
-      ? hydrogenConfig.session(log)
-      : undefined;
+    sessionApi ??= hydrogenConfig.session?.(log);
 
     request.ctx.session = getSyncSessionApi(request, response, log, sessionApi);
 
@@ -136,7 +137,11 @@ export const renderHydrogen = (App: any) => {
       );
 
       return apiResponse instanceof Request
-        ? handleRequest(apiResponse, options)
+        ? handleRequest(apiResponse, {
+            ...options,
+            sessionApi,
+            headers: apiResponse.headers,
+          })
         : apiResponse;
     }
 
@@ -237,7 +242,11 @@ async function processRequest(
     );
 
     return apiResponse instanceof Request
-      ? handleRequest(apiResponse, options)
+      ? handleRequest(apiResponse, {
+          ...options,
+          sessionApi,
+          headers: apiResponse.headers,
+        })
       : apiResponse;
   }
 
@@ -256,7 +265,7 @@ async function processRequest(
     cacheResponse(response, request, [buffered], revalidate);
 
     return new Response(buffered, {
-      headers: {'cache-control': response.cacheControlHeader},
+      headers: response.headers,
     });
   }
 
@@ -356,6 +365,7 @@ async function runSSR({
         <ServerPropsProvider
           initialServerProps={state as any}
           setServerPropsForRsc={() => {}}
+          setRscResponseFromApiRoute={() => {}}
         >
           <Suspense fallback={null}>
             <RscConsumer />
@@ -425,16 +435,23 @@ async function runSSR({
     const prepareForStreaming = () => {
       Object.assign(responseOptions, getResponseOptions(response, didError()));
 
-      /**
-       * TODO: This assumes `response.cache()` has been called _before_ any
-       * queries which might be caught behind Suspense. Clarify this or add
-       * additional checks downstream?
-       */
-      /**
-       * TODO: Also add `Vary` headers for `accept-language` and any other keys
-       * we want to shard our full-page cache for all Hydrogen storefronts.
-       */
-      responseOptions.headers.set('cache-control', response.cacheControlHeader);
+      if (responseOptions.status >= 400) {
+        responseOptions.headers.set('cache-control', 'no-store');
+      } else {
+        /**
+         * TODO: This assumes `response.cache()` has been called _before_ any
+         * queries which might be caught behind Suspense. Clarify this or add
+         * additional checks downstream?
+         */
+        /**
+         * TODO: Also add `Vary` headers for `accept-language` and any other keys
+         * we want to shard our full-page cache for all Hydrogen storefronts.
+         */
+        responseOptions.headers.set(
+          'cache-control',
+          response.cacheControlHeader
+        );
+      }
 
       if (isRedirect(responseOptions)) {
         return false;
@@ -500,6 +517,7 @@ async function runSSR({
         setTimeout(() => {
           writable.close();
           postRequestTasks('str', responseOptions.status, request, response);
+          response.status = responseOptions.status;
           cacheResponse(response, request, savedChunks, revalidate);
         }, 0);
       });
@@ -522,6 +540,7 @@ async function runSSR({
     const savedChunks = tagOnWrite(nodeResponse);
 
     nodeResponse.on('finish', () => {
+      response.status = nodeResponse.statusCode;
       cacheResponse(response, request, savedChunks, revalidate);
     });
 
@@ -722,16 +741,23 @@ function writeHeadToNodeResponse(
   if (nodeResponse.headersSent) return;
   log.trace('writeHeadToNodeResponse');
 
-  /**
-   * TODO: Also add `Vary` headers for `accept-language` and any other keys
-   * we want to shard our full-page cache for all Hydrogen storefronts.
-   */
-  nodeResponse.setHeader('cache-control', componentResponse.cacheControlHeader);
-
   const {headers, status, statusText} = getResponseOptions(
     componentResponse,
     error
   );
+
+  if (status >= 400) {
+    nodeResponse.setHeader('cache-control', 'no-store');
+  } else {
+    /**
+     * TODO: Also add `Vary` headers for `accept-language` and any other keys
+     * we want to shard our full-page cache for all Hydrogen storefronts.
+     */
+    nodeResponse.setHeader(
+      'cache-control',
+      componentResponse.cacheControlHeader
+    );
+  }
 
   nodeResponse.statusCode = status;
 

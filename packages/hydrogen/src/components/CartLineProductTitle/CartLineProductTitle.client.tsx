@@ -1,5 +1,5 @@
 import React from 'react';
-import {useCartLine} from '../CartLineProvider';
+import {useCartLine} from '../CartLineProvider/index.js';
 
 /**
  * The `CartLineProductTitle` component renders a `span` element (or the type of HTML element specified by

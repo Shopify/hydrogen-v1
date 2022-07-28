@@ -423,20 +423,22 @@ export default function MyPage(props: HydrogenRouteProps) {
   //
 }
 
-export const api: HydrogenApiRoute = async(request, options) => {
+export const api: HydrogenApiRoute = async (request, options) => {
   //
-}
+};
 
 // Alternate version of `api`:
-export async function api(request: HydrogenRequest, options: HydrogenApiRouteOptions) {
-
-}
+export async function api(
+  request: HydrogenRequest,
+  options: HydrogenApiRouteOptions
+) {}
 ```
 
 {% endcodeblock %}
 
 > Tip:
 > The Hello World template is available in [TypeScript](https://shopify.dev/custom-storefronts/hydrogen/templates#hello-world-template). You can also refer to the [example implementation of TypeScript](https://github.com/Shopify/hydrogen/tree/main/examples/typescript) in GitHub.
+
 ## Related components and hooks
 
 - [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)
@@ -448,6 +450,7 @@ export async function api(request: HydrogenRequest, options: HydrogenApiRouteOpt
 - [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
 - [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
 - [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
+- [`Form`](https://shopify.dev/api/hydrogen/components/framework/form)
 
 ## Next steps
 
@@ -456,3 +459,4 @@ export async function api(request: HydrogenRequest, options: HydrogenApiRouteOpt
 - Learn how to manage [cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache) for Hydrogen storefronts.
 - Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).
 - Learn how to [manage your server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) during your development process.
+- Learn more about [forms](https://shopify.dev/custom-storefronts/hydrogen/framework/forms).

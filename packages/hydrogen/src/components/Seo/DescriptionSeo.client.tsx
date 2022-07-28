@@ -1,6 +1,6 @@
 import React from 'react';
-import {Head} from '../../foundation/Head';
-import type {Seo as SeoType} from '../../storefront-api-types';
+import {Head} from '../../foundation/Head/index.js';
+import type {Seo as SeoType} from '../../storefront-api-types.js';
 
 export function DescriptionSeo({
   description,

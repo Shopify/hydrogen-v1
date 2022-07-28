@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
-import {CartLineContext} from './context';
-import {Cart} from '../CartProvider';
+import {CartLineContext} from './context.js';
+import {Cart} from '../CartProvider/index.js';
 
 /**
  * The `CartLineProvider` component creates a context for using a cart line.

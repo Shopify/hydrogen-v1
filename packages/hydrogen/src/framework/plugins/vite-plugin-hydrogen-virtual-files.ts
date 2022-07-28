@@ -1,8 +1,8 @@
 import {Plugin, ResolvedConfig, normalizePath, ViteDevServer} from 'vite';
 import path from 'path';
 import {promises as fs} from 'fs';
-import type {HydrogenVitePluginOptions} from '../types';
-import {viteception} from '../viteception';
+import type {HydrogenVitePluginOptions} from '../types.js';
+import {viteception} from '../viteception.js';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
@@ -10,6 +10,9 @@ export const HYDROGEN_DEFAULT_SERVER_ENTRY =
 // The character ":" breaks Vite with Node >= 16.15. Use "_" instead
 const VIRTUAL_PREFIX = 'virtual__';
 const PROXY_PREFIX = 'proxy__';
+
+const ERROR_FILE = 'error.jsx';
+const VIRTUAL_ERROR_FILE = VIRTUAL_PREFIX + ERROR_FILE;
 
 const HYDROGEN_CONFIG_ID = 'hydrogen.config.ts';
 const VIRTUAL_HYDROGEN_CONFIG_ID = VIRTUAL_PREFIX + HYDROGEN_CONFIG_ID;
@@ -50,6 +53,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           VIRTUAL_PROXY_HYDROGEN_CONFIG_ID,
           VIRTUAL_PROXY_HYDROGEN_ROUTES_ID,
           VIRTUAL_HYDROGEN_ROUTES_ID,
+          VIRTUAL_ERROR_FILE,
         ].includes(source)
       ) {
         // Virtual modules convention
@@ -97,6 +101,14 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
             code += `\nimport '${VIRTUAL_HYDROGEN_CONFIG_ID}';`;
           }
 
+          return {code};
+        });
+      }
+
+      if (id === '\0' + VIRTUAL_ERROR_FILE) {
+        return importHydrogenConfig().then((hc) => {
+          const errorPath = hc.serverErrorPage ?? '/src/Error.{jsx,tsx}';
+          const code = `const errorPage = import.meta.glob("${errorPath}");\n export default Object.values(errorPage)[0];`;
           return {code};
         });
       }

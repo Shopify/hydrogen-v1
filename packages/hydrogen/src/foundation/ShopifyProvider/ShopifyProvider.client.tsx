@@ -1,4 +1,4 @@
-import type {ShopifyContextValue, LocalizationContextValue} from './types';
+import type {ShopifyContextValue, LocalizationContextValue} from './types.js';
 import React, {createContext, ReactNode} from 'react';
 
 export const ShopifyContext = createContext<ShopifyContextValue | null>(null);

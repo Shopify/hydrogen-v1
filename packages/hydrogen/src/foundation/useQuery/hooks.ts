@@ -1,19 +1,22 @@
-import type {CachingStrategy, PreloadOptions, QueryKey} from '../../types';
+import type {CachingStrategy, PreloadOptions, QueryKey} from '../../types.js';
 import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
   collectQueryTimings,
-} from '../../utilities/log';
+} from '../../utilities/log/index.js';
 import {
   deleteItemFromCache,
   generateSubRequestCacheControlHeader,
   getItemFromCache,
   isStale,
   setItemInCache,
-} from '../Cache/cache-sub-request';
-import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
-import {CacheShort, NO_STORE} from '../Cache/strategies';
-import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
+} from '../Cache/cache-sub-request.js';
+import {
+  useRequestCacheData,
+  useServerRequest,
+} from '../ServerRequestProvider/index.js';
+import {CacheShort, NO_STORE} from '../Cache/strategies/index.js';
+import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server.js';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
