@@ -1,5 +1,9 @@
-import {CartProviderV2} from '@shopify/hydrogen';
+import {CartProviderV2, ShopifyProvider} from '@shopify/hydrogen';
 
 export default function NewCart() {
-  return <CartProviderV2 />;
+  return (
+    <ShopifyProvider>
+      <CartProviderV2 />
+    </ShopifyProvider>
+  );
 }
