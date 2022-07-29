@@ -91,7 +91,7 @@ async function createTodo({value, origin}) {
     definitionKey = createData.metafieldDefinitionCreate.createdDefinition.key;
   }
 
-  // add the new metafield to the definition
+  // Add the new metafield to the definition
   return updateTo({key: definitionKey, value, origin});
 }
 
