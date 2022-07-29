@@ -97,7 +97,7 @@ async function createTodo({value, origin}) {
 
 /*
     Create another metafield definition in the SHOp resource
-    to store our metafield on
+    to store the metafield
 */
 async function createMetafieldDefinition(nextKey) {
   const variables = {
