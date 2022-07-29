@@ -118,7 +118,7 @@ export async function api(
         return_to: customer?.return_to || body?.return_to || '',
       };
 
-      console.log('🔐 Generating a token for customer', customerInfo);
+      // console.log('🔐 Generating a token for customer', customerInfo);
 
       // Generating a token for customer
       const data = multipassify.generate(
