@@ -116,7 +116,7 @@ async function createMetafieldDefinition(nextKey) {
   });
 
   if (response?.data?.metafieldDefinitionCreate?.userErrors?.length) {
-    // metafield definition already exists
+    // Metafield definition already exists
     return {
       error: response.data.metafieldDefinitionCreate.userErrors[0].message,
       data: null,
