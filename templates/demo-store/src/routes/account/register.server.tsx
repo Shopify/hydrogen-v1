@@ -33,9 +33,7 @@ export async function api(
 
   if (
     !jsonBody.email ||
-    jsonBody.email === '' ||
-    !jsonBody.password ||
-    jsonBody.password === ''
+    !jsonBody.password
   ) {
     return new Response(
       JSON.stringify({error: 'Email and password are required'}),
