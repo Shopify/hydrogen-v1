@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {useMachine} from '@xstate/react/fsm';
 import {createMachine, assign} from '@xstate/fsm';
-import {CartFragmentFragment} from './graphql/CartFragment';
-import {useCartFetch} from './hooks.client';
-import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
-import {CartCreate, CartLineAdd, CartQuery} from './cart-queries';
+import {CartFragmentFragment} from './graphql/CartFragment.js';
+import {useCartFetch} from './hooks.client.js';
+import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery.js';
+import {CartCreate, CartLineAdd, CartQuery} from './cart-queries.js';
 import {
   AttributeInput,
   CartBuyerIdentityInput,
@@ -12,21 +12,20 @@ import {
   CartLineInput,
   CartLineUpdateInput,
   CountryCode,
-  LanguageCode,
-} from '../../storefront-api-types';
+} from '../../storefront-api-types.js';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
-} from './graphql/CartCreateMutation';
+} from './graphql/CartCreateMutation.js';
 import {
   CartLineAddMutation,
   CartLineAddMutationVariables,
-} from './graphql/CartLineAddMutation';
-import {CartContext} from './context';
-import {Cart, CartWithActions} from './types';
-import {flattenConnection} from '../../utilities';
-import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation';
-import {CartDiscountCodesUpdateMutationVariables} from './graphql/CartDiscountCodesUpdateMutation';
+} from './graphql/CartLineAddMutation.js';
+import {CartContext} from './context.js';
+import {Cart, CartWithActions} from './types.js';
+import {flattenConnection} from '../../utilities.js';
+import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.js';
+import {CartDiscountCodesUpdateMutationVariables} from './graphql/CartDiscountCodesUpdateMutation.js';
 
 type CartContext = {
   cart?: Cart;
@@ -499,6 +498,7 @@ fragment ImageFragment on Image {
 function cartFromGraphQL(cart: CartFragmentFragment): Cart {
   return {
     ...cart,
+    // @ts-expect-error While the cart still uses fragments, there will be a TS error here until we remove those fragments and get the type in-line
     lines: flattenConnection(cart.lines),
     note: cart.note ?? undefined,
   };
