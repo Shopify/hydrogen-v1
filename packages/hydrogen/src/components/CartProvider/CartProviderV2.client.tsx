@@ -23,7 +23,7 @@ import {
 } from './graphql/CartLineAddMutation.js';
 import {CartContext} from './context.js';
 import {Cart, CartWithActions} from './types.js';
-import {flattenConnection} from '../../utilities.js';
+import {flattenConnection} from '../../utilities/flattenConnection/index.js';
 import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.js';
 import {CartDiscountCodesUpdateMutationVariables} from './graphql/CartDiscountCodesUpdateMutation.js';
 
