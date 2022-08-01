@@ -18,6 +18,8 @@ export interface ImageSizeOptions {
 
 export interface ImageLoaderOptions {
   src: string;
+  // this is fixed in the hydrogen repo
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: {[key: string]: any};
 }
 

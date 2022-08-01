@@ -1,4 +1,4 @@
-import {ImageSizeOptions, useImageUrl} from '../Image/image_size';
+import {ImageSizeOptions, useImageUrl} from '../Image/image_size.js';
 import type {Video as VideoType} from '../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 
@@ -26,6 +26,10 @@ export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
     data.previewImage?.url as string | undefined,
     options
   );
+
+  if (import.meta.env.DEV) {
+    console.log('hi');
+  }
 
   if (!data.sources) {
     throw new Error(`<Video/> requires a 'data.sources' array`);
