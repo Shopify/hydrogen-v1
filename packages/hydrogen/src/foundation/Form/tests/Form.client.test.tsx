@@ -44,6 +44,26 @@ describe('<Form>', () => {
     });
   });
 
+  it('forwards the ref', (done) => {
+    mountWithProviders(
+      <Form
+        action="/account"
+        method="POST"
+        ref={(ref) => {
+          try {
+            expect(ref).toBeInstanceOf(HTMLFormElement);
+            done();
+          } catch (e) {
+            done(e);
+          }
+        }}
+      >
+        <input type="text" name="username" defaultValue="test" />
+        <button type="submit">Submit</button>
+      </Form>
+    );
+  });
+
   it('submits the form with a fetch', () => {
     const component = mountWithProviders(
       <Form action="/account" method="POST">

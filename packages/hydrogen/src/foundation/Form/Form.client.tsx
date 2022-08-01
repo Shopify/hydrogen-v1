@@ -12,15 +12,18 @@ interface FormProps {
   noValidate?: boolean;
 }
 
-export function Form({
-  action,
-  method,
-  children,
-  onSubmit,
-  encType = 'application/x-www-form-urlencoded',
-  noValidate,
-  ...props
-}: FormProps) {
+export const Form = React.forwardRef<HTMLFormElement, FormProps>(function Form(
+  {
+    action,
+    method,
+    children,
+    onSubmit,
+    encType = 'application/x-www-form-urlencoded',
+    noValidate,
+    ...props
+  },
+  ref
+) {
   const {setRscResponseFromApiRoute} = useInternalServerProps();
   const [_, startTransition] = (React as any).useTransition();
   const [loading, setLoading] = useState(false);
@@ -80,6 +83,7 @@ export function Form({
 
   return (
     <form
+      ref={ref}
       action={action}
       method={method}
       onSubmit={submit}
@@ -90,4 +94,4 @@ export function Form({
       {children instanceof Function ? children({loading, error}) : children}
     </form>
   );
-}
+});
