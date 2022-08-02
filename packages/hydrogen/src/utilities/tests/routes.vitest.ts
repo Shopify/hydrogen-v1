@@ -19,6 +19,7 @@ describe('Page routes', () => {
       {
         path: '/contact',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
     ]);
@@ -36,11 +37,13 @@ describe('Page routes', () => {
       {
         path: '/contact',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
     ]);
@@ -62,31 +65,37 @@ describe('Page routes', () => {
       {
         path: '/products',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/blogs',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/products/snowboards/fastones',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/articles',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/products/:handle',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/articles/:handle',
         resource: STUB_MODULE,
+        basePath: '',
         exact: false,
       },
     ]);
@@ -104,16 +113,19 @@ describe('Page routes', () => {
       {
         path: '/contact',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/products/:handle',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
     ]);
@@ -131,16 +143,19 @@ describe('Page routes', () => {
       {
         path: '/contact',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/products/:handle',
         resource: STUB_MODULE,
+        basePath: '',
         exact: false,
       },
     ]);
@@ -161,26 +176,31 @@ describe('Page routes', () => {
       {
         path: '/contact',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/products/:handle',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/blogs/:handle/:articleHandle',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/blogs/:handle/:articleHandle',
         resource: STUB_MODULE,
+        basePath: '',
         exact: false,
       },
     ]);
@@ -202,27 +222,32 @@ describe('Page routes', () => {
       {
         path: '/contact',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       // But in the routes, it needs to come first!
       {
         path: '/products/hoodie',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/products/:handle',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/blogs/:handle/:articleHandle',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
     ]);
@@ -240,11 +265,13 @@ describe('Page routes', () => {
       {
         path: '/contact',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
     ]);
@@ -262,11 +289,13 @@ describe('Page routes', () => {
       {
         path: '/contact',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
     ]);
@@ -288,11 +317,13 @@ describe('Page routes', () => {
       {
         path: '/foo/contact',
         resource: STUB_MODULE,
+        basePath: '/foo',
         exact: true,
       },
       {
         path: '/foo/',
         resource: STUB_MODULE,
+        basePath: '/foo',
         exact: true,
       },
     ]);
@@ -310,11 +341,13 @@ describe('Page routes', () => {
       {
         path: '/contact',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
       {
         path: '/',
         resource: STUB_MODULE,
+        basePath: '',
         exact: true,
       },
     ]);
@@ -336,6 +369,7 @@ describe('API routes', () => {
         path: '/contact',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
     ]);
   });
@@ -354,16 +388,19 @@ describe('API routes', () => {
         path: '/',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/contact',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/api',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
     ]);
   });
@@ -385,31 +422,37 @@ describe('API routes', () => {
         path: '/products',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/blogs',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/products/snowboards/fastones',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/articles',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/products/:handle',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/articles/:handle',
         exact: false,
         resource: STUB_MODULE,
+        basePath: '',
       },
     ]);
   });
@@ -427,16 +470,19 @@ describe('API routes', () => {
         path: '/contact',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/products/:handle',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
     ]);
   });
@@ -454,16 +500,19 @@ describe('API routes', () => {
         path: '/contact',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/products/:handle',
         exact: false,
         resource: STUB_MODULE,
+        basePath: '',
       },
     ]);
   });
@@ -484,26 +533,31 @@ describe('API routes', () => {
         path: '/contact',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/products/:handle',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/blogs/:handle/:articleHandle',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/blogs/:handle/:articleHandle',
         exact: false,
         resource: STUB_MODULE,
+        basePath: '',
       },
     ]);
   });
@@ -525,27 +579,32 @@ describe('API routes', () => {
         path: '/contact',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       // But in the routes, it needs to come first!
       {
         path: '/products/hoodie',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/products/:handle',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/blogs/:handle/:articleHandle',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
     ]);
   });
@@ -563,11 +622,13 @@ describe('API routes', () => {
         path: '/contact',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
     ]);
   });
@@ -585,11 +646,13 @@ describe('API routes', () => {
         path: '/contact',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
       {
         path: '/',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '',
       },
     ]);
   });
@@ -611,11 +674,13 @@ describe('API routes', () => {
         path: '/foo/contact',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '/foo',
       },
       {
         path: '/foo/',
         exact: true,
         resource: STUB_MODULE,
+        basePath: '/foo',
       },
     ]);
   });
