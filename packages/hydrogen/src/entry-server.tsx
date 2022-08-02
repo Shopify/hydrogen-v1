@@ -14,7 +14,6 @@ import type {
   RunSsrParams,
   RunRscParams,
   ResolvedHydrogenConfig,
-  ResolvedHydrogenRoutes,
   RequestHandler,
 } from './types.js';
 import type {RequestHandlerOptions} from './shared-types.js';
@@ -27,11 +26,7 @@ import {
 } from './foundation/ServerRequestProvider/index.js';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType} from 'stream';
-import {
-  getApiRouteFromURL,
-  renderApiRoute,
-  getApiRoutes,
-} from './utilities/apiRoutes.js';
+import {getApiRouteFromURL, renderApiRoute} from './utilities/apiRoutes.js';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider/index.js';
 import {isBotUA} from './utilities/bot-ua.js';
 import {getCache, setCache} from './foundation/runtime.js';
@@ -57,6 +52,7 @@ import {
 } from './foundation/Cache/cache.js';
 import {CacheShort, NO_STORE} from './foundation/Cache/strategies/index.js';
 import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes.js';
+import {createRoutes} from './utilities/routes.js';
 
 declare global {
   // This is provided by a Vite plugin
@@ -91,6 +87,7 @@ export const renderHydrogen = (App: any) => {
     const hydrogenConfig: ResolvedHydrogenConfig = {
       ...inlineHydrogenConfig,
       routes: hydrogenRoutes,
+      processedRoutes: createRoutes(hydrogenRoutes),
     };
 
     request.ctx.hydrogenConfig = hydrogenConfig;
@@ -227,7 +224,8 @@ async function processRequest(
 
   const log = getLoggerWithContext(request);
   const isRSCRequest = request.isRscRequest();
-  const apiRoute = !isRSCRequest && getApiRoute(url, hydrogenConfig.routes);
+  const apiRoute =
+    !isRSCRequest && getApiRouteFromURL(url, hydrogenConfig.processedRoutes);
 
   // The API Route might have a default export, making it also a server component
   // If it does, only render the API route if the request method is GET
@@ -303,11 +301,6 @@ async function getTemplate(
   }
 
   return template;
-}
-
-function getApiRoute(url: URL, routes: ResolvedHydrogenRoutes) {
-  const apiRoutes = getApiRoutes(routes);
-  return getApiRouteFromURL(url, apiRoutes);
 }
 
 function assembleHtml({

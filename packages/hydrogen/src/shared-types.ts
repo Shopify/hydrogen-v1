@@ -37,3 +37,20 @@ export type ShopifyConfig = {
   storefrontApiVersion: string;
   multipassSecret?: string;
 };
+
+export type InlineHydrogenRoutes =
+  | string
+  | {
+      files: string;
+      basePath?: string;
+    };
+
+export type HydrogenPluginOptions = {
+  [key: string]: any;
+};
+
+export type HydrogenPlugin = {
+  name: string;
+  url?: string;
+  routes?: InlineHydrogenRoutes;
+};
