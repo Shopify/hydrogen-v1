@@ -79,15 +79,21 @@ export const renderHydrogen = (App: any) => {
       'virtual__hydrogen.config.ts'
     );
 
-    const {default: hydrogenRoutes} = await import(
+    const {default: userRoutes, ...pluginRoutes} = await import(
       // @ts-ignore
       'virtual__hydrogen-routes.server.jsx'
     );
 
     const hydrogenConfig: ResolvedHydrogenConfig = {
       ...inlineHydrogenConfig,
-      routes: hydrogenRoutes,
-      processedRoutes: createRoutes(hydrogenRoutes),
+      routes: userRoutes,
+      processedRoutes: [
+        // TODO merge routes earlier
+        ...createRoutes(userRoutes),
+        ...Object.values(pluginRoutes)
+          .map((routes: any) => createRoutes(routes))
+          .flat(),
+      ],
     };
 
     request.ctx.hydrogenConfig = hydrogenConfig;

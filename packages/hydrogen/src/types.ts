@@ -80,6 +80,7 @@ export type InlineHydrogenConfig = ClientConfig & {
   session?: (log: Logger) => SessionStorageAdapter;
   poweredByHeader?: boolean;
   serverErrorPage?: string;
+  plugins?: HydrogenPlugin[];
   __EXPERIMENTAL__devTools?: boolean;
 };
 

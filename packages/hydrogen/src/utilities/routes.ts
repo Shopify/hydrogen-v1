@@ -54,6 +54,8 @@ export function createRoutes({
   const memoizedRoutes = memoizedRoutesMap.get(files);
   if (memoizedRoutes) return memoizedRoutes;
 
+  if (!basePath.startsWith('/')) basePath = '/' + basePath;
+
   const topLevelPrefix = basePath.replace('*', '').replace(/\/$/, '');
 
   const keys = Object.keys(files);

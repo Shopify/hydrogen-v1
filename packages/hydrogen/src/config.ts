@@ -1,4 +1,8 @@
-import type {InlineHydrogenConfig} from './types.js';
+import type {
+  InlineHydrogenConfig,
+  HydrogenPlugin,
+  HydrogenPluginOptions,
+} from './types.js';
 
 export const defineConfig = (params: InlineHydrogenConfig) => params;
 
@@ -9,3 +13,8 @@ export {PerformanceMetricsServerAnalyticsConnector} from './foundation/Analytics
 
 export {CookieSessionStorage} from './foundation/CookieSessionStorage/CookieSessionStorage.js';
 export {MemorySessionStorage} from './foundation/MemorySessionStorage/MemorySessionStorage.js';
+
+export const definePlugin =
+  <T extends HydrogenPluginOptions>(pluginFn: (opt: T) => HydrogenPlugin) =>
+  (options: T) =>
+    pluginFn(options);
