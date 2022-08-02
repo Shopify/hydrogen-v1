@@ -894,4 +894,16 @@ export default async function testCases({
       expect(await page.textContent('h2')).toContain('itBroke is not defined');
     });
   });
+
+  describe('Hydrogen Plugins', () => {
+    it('imports plugin routes', async () => {
+      const pluginRoute = getServerUrl() + '/my-plugin';
+      await page.goto(pluginRoute);
+      expect(await page.textContent('h1')).toContain('Hello My Plugin');
+
+      expect(await (await fetch(pluginRoute, {method: 'POST'})).text()).toEqual(
+        'Plugin OK'
+      );
+    });
+  });
 }
