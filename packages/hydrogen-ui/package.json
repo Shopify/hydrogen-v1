@@ -14,17 +14,31 @@
   ],
   "type": "module",
   "exports": {
-    ".": "./dist/index.js",
-    "./storefront-api-types": "./dist/storefront-api-types.d.ts",
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "development": "./dist/dev/index.js",
+        "production": "./dist/prod/index.js",
+        "default": "./dist/prod/index.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.cts",
+        "development": "./dist/dev/index.cjs",
+        "production": "./dist/prod/index.cjs",
+        "default": "./dist/prod/index.cjs"
+      },
+      "default": "./dist/prod/index.js"
+    },
+    "./storefront-api-types": "./dist/types/es/storefront-api-types.d.ts",
     "./storefront.schema.json": "./storefront.schema.json"
   },
   "typesVersions": {
     "*": {
       "/index.js": [
-        "./dist/index.d.ts"
+        "./dist/types/index.d.ts"
       ],
       "storefront-api-types": [
-        "./dist/storefront-api-types.d.ts"
+        "./dist/types/storefront-api-types.d.ts"
       ]
     }
   },
@@ -33,12 +47,12 @@
     "dev": "run-p dev:vite dev:ts copy-storefront-types",
     "dev:vite": "vite build --watch --emptyOutDir false --clearScreen false",
     "dev:ts": "tsc --watch",
-    "build": "run-p build:vite build:tsc copy-storefront-types",
-    "build:vite": "run-p build:vite:*",
-    "build:vite:prod": "vite build",
+    "build": "npm-run-all --parallel build:vite:* build:tsc:es --parallel build:tsc:cjs copy-storefront-types",
     "build:vite:dev": "vite build --mode devbuild",
-    "build:tsc": "tsc --emitDeclarationOnly",
-    "copy-storefront-types": "cpy ./src/storefront-api-types.d.ts ./dist/ --flat",
+    "build:vite:prod": "vite build",
+    "build:tsc:cjs": "cpy ./dist/types/index.d.ts ./dist/types/ --rename='index.d.cts' --flat",
+    "build:tsc:es": "tsc --emitDeclarationOnly",
+    "copy-storefront-types": "cpy ./src/storefront-api-types.d.ts ./dist/types/ --flat",
     "format": "prettier --write \"src/**/*\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
     "preview": "vite dev",
@@ -50,6 +64,7 @@
     "@faker-js/faker": "^7.3.0",
     "@graphql-codegen/cli": "^2.11.2",
     "@graphql-codegen/typescript": "^2.7.2",
+    "@rollup/plugin-replace": "^4.0.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.3.0",
