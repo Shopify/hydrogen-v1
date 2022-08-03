@@ -52,7 +52,7 @@ import {
 } from './foundation/Cache/cache.js';
 import {CacheShort, NO_STORE} from './foundation/Cache/strategies/index.js';
 import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes.js';
-import {mergeRouteSets} from './utilities/routes.js';
+import {findRouteMatches, mergeRouteSets} from './utilities/routes.js';
 
 declare global {
   // This is provided by a Vite plugin
@@ -222,9 +222,19 @@ async function processRequest(
 
   const log = getLoggerWithContext(request);
   const isRSCRequest = request.isRscRequest();
+  const decodedPathname = decodeURIComponent(
+    new URL(request.normalizedUrl).pathname
+  );
+  const matchedRoutes = findRouteMatches(
+    hydrogenConfig.routes,
+    decodedPathname
+  );
+
+  // These matched routes are used later in <FileRoutes> component
+  request.ctx.matchedRoutes = matchedRoutes;
+
   const apiRoute =
-    !isRSCRequest &&
-    getApiRouteFromURL(url, request.method, hydrogenConfig.routes);
+    !isRSCRequest && getApiRouteFromURL(matchedRoutes, request.method);
 
   // The API Route might have a default export, making it also a server component
   // If it does, only render the API route if the request method is GET
@@ -233,9 +243,7 @@ async function processRequest(
       request,
       apiRoute,
       hydrogenConfig,
-      {
-        session: sessionApi,
-      }
+      {session: sessionApi}
     );
 
     return apiResponse instanceof Request
@@ -250,7 +258,7 @@ async function processRequest(
   const state: Record<string, any> = isRSCRequest
     ? parseJSON(decodeURIComponent(url.searchParams.get('state') || '{}'))
     : {
-        pathname: decodeURIComponent(url.pathname),
+        pathname: decodedPathname,
         search: decodeURIComponent(url.search),
       };
 

@@ -25,33 +25,30 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
 
   if (routeRendered) return null;
 
-  const pageRoutes = routes
+  const {matches, details} = routes
     ? useMemo(
-        () => createRoutes({files: routes!, basePath, dirPrefix, sort: true}),
-        [routes, basePath, dirPrefix]
+        () =>
+          findRouteMatches(
+            createRoutes({files: routes, basePath, dirPrefix, sort: true}),
+            serverProps.pathname
+          ),
+        [routes, basePath, dirPrefix, serverProps.pathname]
       )
-    : request.ctx.hydrogenConfig!.routes;
-
-  const [matches, details] = findRouteMatches(pageRoutes, serverProps.pathname);
-
-  if (!details) return null;
+    : request.ctx.matchedRoutes!;
 
   const route = matches.find((route) => !!route.resource.default);
+  if (!route || !details) return null;
 
-  if (route) {
-    request.ctx.router.routeRendered = true;
-    request.ctx.router.routeParams = details.params;
-    const ServerComponent = route.resource.default;
+  request.ctx.router.routeRendered = true;
+  request.ctx.router.routeParams = details.params;
+  const ServerComponent = route.resource.default;
 
-    return (
-      <RouteParamsProvider
-        routeParams={details.params}
-        basePath={route.basePath ?? '/'}
-      >
-        <ServerComponent params={details.params} {...serverProps} />
-      </RouteParamsProvider>
-    );
-  }
-
-  return null;
+  return (
+    <RouteParamsProvider
+      routeParams={details.params}
+      basePath={route.basePath ?? '/'}
+    >
+      <ServerComponent params={details.params} {...serverProps} />
+    </RouteParamsProvider>
+  );
 }

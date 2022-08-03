@@ -1,6 +1,6 @@
 import type {ImportGlobEagerOutput} from '../types.js';
 import {log} from './log/log.js';
-import {matchPath} from './matchPath.js';
+import {matchPath, RouteMatchDetails} from './matchPath.js';
 
 export function extractPathFromRoutesKey(
   routesKey: string,
@@ -129,10 +129,15 @@ export function mergeRouteSets({
   return memoizedMergedRoutes;
 }
 
+export type RouteMatches = {
+  matches: ResolvedHydrogenRoute[];
+  details?: RouteMatchDetails;
+};
+
 export function findRouteMatches(
   routes: ResolvedHydrogenRoute[],
   pathname: string
-) {
+): RouteMatches {
   let details;
   const matches = [];
 
@@ -150,5 +155,5 @@ export function findRouteMatches(
     }
   }
 
-  return [matches, details] as const;
+  return {matches, details};
 }

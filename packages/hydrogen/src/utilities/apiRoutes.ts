@@ -13,7 +13,7 @@ import type {
 import {emptySessionImplementation} from '../foundation/session/session.js';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
 import {RSC_PATHNAME} from '../constants.js';
-import {findRouteMatches, ResolvedHydrogenRoute} from './routes.js';
+import type {RouteMatches} from './routes.js';
 
 type RouteParams = Record<string, string>;
 export type RequestOptions = {
@@ -33,18 +33,18 @@ export type ApiRouteMatch = {
 };
 
 export function getApiRouteFromURL(
-  url: URL,
-  method: string,
-  routes: ResolvedHydrogenRoute[]
+  {matches, details}: RouteMatches,
+  method: string
 ): ApiRouteMatch | null {
-  const [matches, details] = findRouteMatches(routes, url.pathname);
-
-  if (!details) return null;
-  if (method === 'GET' && matches.some((routes) => !!routes.resource.default))
-    return null;
-
   const route = matches.find((route) => !!route.resource.api);
-  if (!route) return null;
+
+  if (
+    !route ||
+    !details ||
+    (method === 'GET' && matches.some((routes) => !!routes.resource.default))
+  ) {
+    return null;
+  }
 
   return {
     resource: route.resource.api as ResourceGetter,

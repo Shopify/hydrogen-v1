@@ -33,6 +33,13 @@ function compilePath(
   return result;
 }
 
+export type RouteMatchDetails = {
+  path: string;
+  url: string;
+  isExact: boolean;
+  params: Record<string, string>;
+};
+
 /**
  * Public API for matching a URL pathname to a path.
  */
@@ -68,10 +75,5 @@ export function matchPath(pathname: string, options: MatchPathOptions = {}) {
         return memo;
       }, {} as Record<string, string>),
     };
-  }, null) as null | {
-    path: string;
-    url: string;
-    isExact: boolean;
-    params: Record<string, string>;
-  };
+  }, null) as null | RouteMatchDetails;
 }
