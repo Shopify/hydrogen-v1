@@ -43,14 +43,16 @@ const memoizedRoutesMap = new WeakMap<
   HydrogenProcessedRoute[]
 >();
 
+type CreateRoutesParams = SetOptional<
+  ResolvedHydrogenRoutes,
+  'basePath' | 'dirPrefix'
+>;
+
 export function createRoutes({
   files,
   basePath = '',
   dirPrefix = '',
-}: SetOptional<
-  ResolvedHydrogenRoutes,
-  'basePath' | 'dirPrefix'
->): HydrogenProcessedRoute[] {
+}: CreateRoutesParams): HydrogenProcessedRoute[] {
   const memoizedRoutes = memoizedRoutesMap.get(files);
   if (memoizedRoutes) return memoizedRoutes;
 
@@ -93,27 +95,23 @@ export function createRoutes({
   return processedRoutes;
 }
 
-export function findRoute<T>(
+export function findRouteMatches<T>(
   routes: HydrogenProcessedRoute[],
   pathname: string,
-  resourceName: string
+  resourceName: 'default' | 'api'
 ) {
-  let route, details;
+  let details;
+  const matches = [];
 
   for (let i = 0; i < routes.length; i++) {
-    if (!routes[i].resource[resourceName]) continue;
+    const matchDetails = matchPath(pathname, routes[i]);
+    if (matchDetails) {
+      details = matchDetails;
+      matches.push(routes[i]);
 
-    details = matchPath(pathname, routes[i]) as Record<string, any>;
-
-    if (details) {
-      route = routes[i];
-      break;
+      if (routes[i].resource[resourceName]) break;
     }
   }
 
-  return {
-    route,
-    resource: route?.resource[resourceName] as T | undefined,
-    details: details ?? {},
-  };
+  return [matches, details] as const;
 }

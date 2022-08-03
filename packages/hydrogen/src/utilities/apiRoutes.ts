@@ -13,7 +13,7 @@ import type {
 import {emptySessionImplementation} from '../foundation/session/session.js';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
 import {RSC_PATHNAME} from '../constants.js';
-import {findRoute, HydrogenProcessedRoute} from './routes.js';
+import {findRouteMatches, HydrogenProcessedRoute} from './routes.js';
 
 type RouteParams = Record<string, string>;
 export type RequestOptions = {
@@ -29,26 +29,30 @@ export type ResourceGetter = (
 
 export type ApiRouteMatch = {
   resource: ResourceGetter;
-  hasServerComponent: boolean;
   params: RouteParams;
 };
 
 export function getApiRouteFromURL(
   url: URL,
+  method: string,
   routes: HydrogenProcessedRoute[]
 ): ApiRouteMatch | null {
-  const {resource, details, route} = findRoute<ResourceGetter>(
+  const [matches, details] = findRouteMatches<ResourceGetter>(
     routes,
     url.pathname,
     'api'
   );
 
-  if (!resource) return null;
+  if (!details) return null;
+  if (method === 'GET' && matches.some((routes) => !!routes.resource.default))
+    return null;
+
+  const route = matches.find((route) => !!route.resource.api);
+  if (!route) return null;
 
   return {
-    resource,
+    resource: route.resource.api as ResourceGetter,
     params: details.params,
-    hasServerComponent: !!route!.resource.default,
   };
 }
 

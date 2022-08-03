@@ -3,7 +3,7 @@ import {useServerRequest} from '../ServerRequestProvider/index.js';
 
 import type {ImportGlobEagerOutput} from '../../types.js';
 import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client.js';
-import {createRoutes, findRoute} from '../../utilities/routes.js';
+import {createRoutes, findRouteMatches} from '../../utilities/routes.js';
 
 interface FileRoutesProps {
   /** The routes defined by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. */
@@ -32,23 +32,25 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
       )
     : request.ctx.hydrogenConfig!.processedRoutes;
 
-  const {
-    route,
-    details,
-    resource: ServerComponent,
-  } = findRoute<React.JSXElementConstructor<any>>(
+  const [matches, details] = findRouteMatches<React.JSXElementConstructor<any>>(
     pageRoutes,
     serverProps.pathname,
     'default'
   );
 
-  if (ServerComponent) {
+  if (!details) return null;
+
+  const route = matches.find((route) => !!route.resource.default);
+
+  if (route) {
     request.ctx.router.routeRendered = true;
     request.ctx.router.routeParams = details.params;
+    const ServerComponent = route.resource.default;
+
     return (
       <RouteParamsProvider
         routeParams={details.params}
-        basePath={route!.basePath ?? '/'}
+        basePath={route.basePath ?? '/'}
       >
         <ServerComponent params={details.params} {...serverProps} />
       </RouteParamsProvider>

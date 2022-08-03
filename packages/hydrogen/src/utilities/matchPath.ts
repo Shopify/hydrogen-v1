@@ -66,7 +66,12 @@ export function matchPath(pathname: string, options: MatchPathOptions = {}) {
       params: keys.reduce((memo: any, key, index) => {
         memo[key.name] = values[index];
         return memo;
-      }, {}),
+      }, {} as Record<string, string>),
     };
-  }, null);
+  }, null) as null | {
+    path: string;
+    url: string;
+    isExact: boolean;
+    params: Record<string, string>;
+  };
 }
