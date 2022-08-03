@@ -29,7 +29,7 @@
       },
       "default": "./dist/prod/index.js"
     },
-    "./storefront-api-types": "./dist/types/es/storefront-api-types.d.ts",
+    "./storefront-api-types": "./dist/types/storefront-api-types.d.ts",
     "./storefront.schema.json": "./storefront.schema.json"
   },
   "typesVersions": {
