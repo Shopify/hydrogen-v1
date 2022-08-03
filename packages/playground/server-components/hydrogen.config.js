@@ -1,5 +1,6 @@
 import {defineConfig, CookieSessionStorage} from '@shopify/hydrogen/config';
 import myTestPlugin from './my-test-plugin/plugin.js';
+import hydrogenMultipass from './multipass-plugin/plugin.js';
 
 export default defineConfig({
   shopify: {
@@ -17,5 +18,5 @@ export default defineConfig({
     debug() {},
   },
   serverErrorPage: '/src/500Error.tsx',
-  plugins: [myTestPlugin({})],
+  plugins: [myTestPlugin({}), hydrogenMultipass({})],
 });
