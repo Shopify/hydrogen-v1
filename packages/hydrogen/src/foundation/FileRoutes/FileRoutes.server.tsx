@@ -27,16 +27,12 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
 
   const pageRoutes = routes
     ? useMemo(
-        () => createRoutes({files: routes!, basePath, dirPrefix}),
+        () => createRoutes({files: routes!, basePath, dirPrefix, sort: true}),
         [routes, basePath, dirPrefix]
       )
     : request.ctx.hydrogenConfig!.processedRoutes;
 
-  const [matches, details] = findRouteMatches<React.JSXElementConstructor<any>>(
-    pageRoutes,
-    serverProps.pathname,
-    'default'
-  );
+  const [matches, details] = findRouteMatches(pageRoutes, serverProps.pathname);
 
   if (!details) return null;
 

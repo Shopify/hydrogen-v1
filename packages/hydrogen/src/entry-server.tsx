@@ -52,7 +52,7 @@ import {
 } from './foundation/Cache/cache.js';
 import {CacheShort, NO_STORE} from './foundation/Cache/strategies/index.js';
 import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes.js';
-import {createRoutes} from './utilities/routes.js';
+import {mergeRouteSets} from './utilities/routes.js';
 
 declare global {
   // This is provided by a Vite plugin
@@ -79,21 +79,15 @@ export const renderHydrogen = (App: any) => {
       'virtual__hydrogen.config.ts'
     );
 
-    const {default: userRoutes, ...pluginRoutes} = await import(
+    const allRoutes = await import(
       // @ts-ignore
       'virtual__hydrogen-routes.server.jsx'
     );
 
     const hydrogenConfig: ResolvedHydrogenConfig = {
       ...inlineHydrogenConfig,
-      routes: userRoutes,
-      processedRoutes: [
-        // TODO merge routes earlier
-        ...createRoutes(userRoutes),
-        ...Object.values(pluginRoutes)
-          .map((routes: any) => createRoutes(routes))
-          .flat(),
-      ],
+      routes: allRoutes.default,
+      processedRoutes: mergeRouteSets(allRoutes),
     };
 
     request.ctx.hydrogenConfig = hydrogenConfig;

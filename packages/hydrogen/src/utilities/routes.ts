@@ -1,5 +1,5 @@
 import type {SetOptional} from 'type-fest';
-import type {ImportGlobEagerOutput, ResolvedHydrogenRoutes} from '../types';
+import type {ResolvedHydrogenRoutes} from '../types';
 import {log} from './log/log.js';
 import {matchPath} from './matchPath.js';
 
@@ -38,24 +38,17 @@ export type HydrogenProcessedRoute = {
   exact: boolean;
 };
 
-const memoizedRoutesMap = new WeakMap<
-  ImportGlobEagerOutput,
-  HydrogenProcessedRoute[]
->();
-
 type CreateRoutesParams = SetOptional<
   ResolvedHydrogenRoutes,
   'basePath' | 'dirPrefix'
->;
+> & {sort?: boolean};
 
 export function createRoutes({
   files,
   basePath = '',
   dirPrefix = '',
+  sort = false,
 }: CreateRoutesParams): HydrogenProcessedRoute[] {
-  const memoizedRoutes = memoizedRoutesMap.get(files);
-  if (memoizedRoutes) return memoizedRoutes;
-
   if (!basePath.startsWith('/')) basePath = '/' + basePath;
 
   const topLevelPrefix = basePath.replace('*', '').replace(/\/$/, '');
@@ -85,20 +78,59 @@ export function createRoutes({
     };
   });
 
-  const processedRoutes = [
-    ...routes.filter((route) => !route.path.includes(':')),
-    ...routes.filter((route) => route.path.includes(':')),
-  ];
-
-  memoizedRoutesMap.set(files, processedRoutes);
-
-  return processedRoutes;
+  return sort
+    ? [
+        ...routes.filter((route) => !route.path.includes(':')),
+        ...routes.filter((route) => route.path.includes(':')),
+      ]
+    : routes;
 }
 
-export function findRouteMatches<T>(
+let memoizedMergedRoutes: HydrogenProcessedRoute[];
+let memoizedMergedRoutesKey: CreateRoutesParams;
+
+export function mergeRouteSets({
+  default: userRoutes,
+  ...pluginRoutes
+}: Record<string, CreateRoutesParams>) {
+  if (!memoizedMergedRoutes || memoizedMergedRoutesKey !== userRoutes) {
+    // TODO: Process routes and sort at build time
+    const allRoutes = [userRoutes, ...Object.values(pluginRoutes)]
+      .map(createRoutes)
+      .flat()
+      .sort((a, b) => {
+        // Compare based on pathname
+        const pathComparison = a.path.localeCompare(b.path);
+        if (pathComparison !== 0) return pathComparison;
+
+        // Similar pathname, it means this route is added in-app and via plugin
+        // Prioritize the one with a Server Component first, or one provided in-app otherwise.
+        if (a.resource.default) return -1;
+        if (b.resource.default) return 1;
+        return -1; // In-app route is always the first
+      });
+
+    const exactRoutes = [];
+    const dynamicRoutes = [];
+
+    for (const route of allRoutes) {
+      if (route.path.includes(':')) {
+        dynamicRoutes.push(route);
+      } else {
+        exactRoutes.push(route);
+      }
+    }
+
+    memoizedMergedRoutesKey = userRoutes;
+    memoizedMergedRoutes = [...exactRoutes, ...dynamicRoutes];
+  }
+
+  return memoizedMergedRoutes;
+}
+
+export function findRouteMatches(
   routes: HydrogenProcessedRoute[],
-  pathname: string,
-  resourceName: 'default' | 'api'
+  pathname: string
 ) {
   let details;
   const matches = [];
@@ -108,8 +140,12 @@ export function findRouteMatches<T>(
     if (matchDetails) {
       details = matchDetails;
       matches.push(routes[i]);
-
-      if (routes[i].resource[resourceName]) break;
+    } else if (details) {
+      // Routes are sorted alphabetically and there could be
+      // multiple matches due to plugins. Therefore, if we've
+      // matched a route already in this loop, we can stop
+      // checking when finding the next route that doesn't match.
+      break;
     }
   }
 

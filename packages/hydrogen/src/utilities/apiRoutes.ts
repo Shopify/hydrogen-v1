@@ -37,11 +37,7 @@ export function getApiRouteFromURL(
   method: string,
   routes: HydrogenProcessedRoute[]
 ): ApiRouteMatch | null {
-  const [matches, details] = findRouteMatches<ResourceGetter>(
-    routes,
-    url.pathname,
-    'api'
-  );
+  const [matches, details] = findRouteMatches(routes, url.pathname);
 
   if (!details) return null;
   if (method === 'GET' && matches.some((routes) => !!routes.resource.default))
