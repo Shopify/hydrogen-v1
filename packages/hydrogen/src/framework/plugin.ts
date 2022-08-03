@@ -15,7 +15,7 @@ import cssRsc from './plugins/vite-plugin-css-rsc.js';
 import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc.js';
 import clientImports from './plugins/vite-plugin-client-imports.js';
 import suppressWarnings from './plugins/vite-plugin-hydrogen-suppress-warnings.js';
-import {assetsVersion} from './plugins/vite-plugin-assets-version';
+import assetsVersion from './plugins/vite-plugin-assets-version.js';
 
 const hydrogenPlugin = (pluginOptions: HydrogenVitePluginOptions = {}) => {
   return [

@@ -1,6 +1,6 @@
 import {Plugin} from 'vite';
 
-export function assetsVersion(): Plugin {
+export default function assetsVersion(): Plugin {
   return {
     name: 'augment-with-version',
     augmentChunkHash() {
