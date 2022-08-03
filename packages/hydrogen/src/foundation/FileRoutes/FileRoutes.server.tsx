@@ -30,7 +30,7 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
         () => createRoutes({files: routes!, basePath, dirPrefix, sort: true}),
         [routes, basePath, dirPrefix]
       )
-    : request.ctx.hydrogenConfig!.processedRoutes;
+    : request.ctx.hydrogenConfig!.routes;
 
   const [matches, details] = findRouteMatches(pageRoutes, serverProps.pathname);
 

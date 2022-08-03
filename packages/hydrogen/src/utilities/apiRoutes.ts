@@ -13,7 +13,7 @@ import type {
 import {emptySessionImplementation} from '../foundation/session/session.js';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
 import {RSC_PATHNAME} from '../constants.js';
-import {findRouteMatches, HydrogenProcessedRoute} from './routes.js';
+import {findRouteMatches, ResolvedHydrogenRoute} from './routes.js';
 
 type RouteParams = Record<string, string>;
 export type RequestOptions = {
@@ -35,7 +35,7 @@ export type ApiRouteMatch = {
 export function getApiRouteFromURL(
   url: URL,
   method: string,
-  routes: HydrogenProcessedRoute[]
+  routes: ResolvedHydrogenRoute[]
 ): ApiRouteMatch | null {
   const [matches, details] = findRouteMatches(routes, url.pathname);
 

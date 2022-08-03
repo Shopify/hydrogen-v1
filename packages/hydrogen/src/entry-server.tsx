@@ -86,8 +86,7 @@ export const renderHydrogen = (App: any) => {
 
     const hydrogenConfig: ResolvedHydrogenConfig = {
       ...inlineHydrogenConfig,
-      routes: allRoutes.default,
-      processedRoutes: mergeRouteSets(allRoutes),
+      routes: mergeRouteSets(allRoutes),
     };
 
     request.ctx.hydrogenConfig = hydrogenConfig;
@@ -225,7 +224,7 @@ async function processRequest(
   const isRSCRequest = request.isRscRequest();
   const apiRoute =
     !isRSCRequest &&
-    getApiRouteFromURL(url, request.method, hydrogenConfig.processedRoutes);
+    getApiRouteFromURL(url, request.method, hydrogenConfig.routes);
 
   // The API Route might have a default export, making it also a server component
   // If it does, only render the API route if the request method is GET

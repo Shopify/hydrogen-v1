@@ -12,7 +12,7 @@ import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenRespo
 import type {Metafield} from './storefront-api-types.js';
 import type {SessionStorageAdapter} from './foundation/session/session-types.js';
 import type {PartialDeep, JsonValue} from 'type-fest';
-import type {HydrogenProcessedRoute} from './utilities/routes.js';
+import type {ResolvedHydrogenRoute} from './utilities/routes.js';
 
 export type AssembleHtmlParams = {
   ssrHtml: string;
@@ -53,12 +53,6 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
-export type ResolvedHydrogenRoutes = {
-  files: ImportGlobEagerOutput;
-  dirPrefix: string;
-  basePath: string;
-};
-
 type ConfigFetcher<T> = (request: HydrogenRequest) => T | Promise<T>;
 
 export type ShopifyConfigFetcher = ConfigFetcher<ShopifyConfig>;
@@ -85,8 +79,7 @@ export type InlineHydrogenConfig = ClientConfig & {
 };
 
 export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {
-  routes: ResolvedHydrogenRoutes;
-  processedRoutes: HydrogenProcessedRoute[];
+  routes: ResolvedHydrogenRoute[];
 };
 
 export type ClientConfig = {

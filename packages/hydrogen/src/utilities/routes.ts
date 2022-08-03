@@ -1,5 +1,4 @@
-import type {SetOptional} from 'type-fest';
-import type {ResolvedHydrogenRoutes} from '../types';
+import type {ImportGlobEagerOutput} from '../types.js';
 import {log} from './log/log.js';
 import {matchPath} from './matchPath.js';
 
@@ -31,24 +30,26 @@ export function extractPathFromRoutesKey(
   return path;
 }
 
-export type HydrogenProcessedRoute = {
+export type ResolvedHydrogenRoute = {
   path: string;
   basePath: string;
   resource: Record<string, Function>;
   exact: boolean;
 };
 
-type CreateRoutesParams = SetOptional<
-  ResolvedHydrogenRoutes,
-  'basePath' | 'dirPrefix'
-> & {sort?: boolean};
+type CreateRoutesParams = {
+  files: ImportGlobEagerOutput;
+  dirPrefix?: string;
+  basePath?: string;
+  sort?: boolean;
+};
 
 export function createRoutes({
   files,
   basePath = '',
   dirPrefix = '',
   sort = false,
-}: CreateRoutesParams): HydrogenProcessedRoute[] {
+}: CreateRoutesParams): ResolvedHydrogenRoute[] {
   if (!basePath.startsWith('/')) basePath = '/' + basePath;
 
   const topLevelPrefix = basePath.replace('*', '').replace(/\/$/, '');
@@ -86,7 +87,7 @@ export function createRoutes({
     : routes;
 }
 
-let memoizedMergedRoutes: HydrogenProcessedRoute[];
+let memoizedMergedRoutes: ResolvedHydrogenRoute[];
 let memoizedMergedRoutesKey: CreateRoutesParams;
 
 export function mergeRouteSets({
@@ -129,7 +130,7 @@ export function mergeRouteSets({
 }
 
 export function findRouteMatches(
-  routes: HydrogenProcessedRoute[],
+  routes: ResolvedHydrogenRoute[],
   pathname: string
 ) {
   let details;
