@@ -1,14 +1,10 @@
 import {Plugin} from 'vite';
 
-export default function assetsVersion(): Plugin {
+export default function assetsVersion(version?: string): Plugin {
   return {
     name: 'augment-with-version',
     augmentChunkHash() {
-      const version =
-        process.env.HYDROGEN_ASSETS_VERSION ??
-        process.env.ASSETS_VERSION ??
-        '1';
-      return `${version}`;
+      return version ?? '';
     },
   };
 }

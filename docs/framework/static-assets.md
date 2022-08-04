@@ -60,18 +60,11 @@ This can be helpful when the asset is cached but you want to change the behaviou
 
 {% codeblock terminal %}
 
-```bash
-$ HYDROGEN_ASSETS_VERSION=v1 yarn build
-```
-
-{% endcodeblock %}
-
-or
-
-{% codeblock terminal %}
-
-```bash
-$ ASSETS_VERSION=v1 yarn build
+```js
+// vite.config.js
+export default {
+  plugins: [hydrogen({assetHashVersion: 'v2'})]
+}
 ```
 
 {% endcodeblock %}

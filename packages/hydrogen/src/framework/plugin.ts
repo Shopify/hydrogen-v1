@@ -32,7 +32,8 @@ const hydrogenPlugin = (pluginOptions: HydrogenVitePluginOptions = {}) => {
     rsc(pluginOptions),
     platformEntry(),
     suppressWarnings(),
-    assetsVersion(),
+    pluginOptions.assetHashVersion &&
+      assetsVersion(pluginOptions.assetHashVersion),
     pluginOptions.purgeQueryCacheOnBuild && purgeQueryCache(),
   ] as Plugin[];
 };
