@@ -35,6 +35,8 @@ export type ResolvedHydrogenRoute = {
   basePath: string;
   resource: Record<string, Function>;
   exact: boolean;
+  // Route is from the user app (not from a plugin)
+  app?: boolean;
 };
 
 type CreateRoutesParams = {
@@ -42,6 +44,7 @@ type CreateRoutesParams = {
   dirPrefix?: string;
   basePath?: string;
   sort?: boolean;
+  app?: boolean;
 };
 
 export function createRoutes({
@@ -49,6 +52,7 @@ export function createRoutes({
   basePath = '',
   dirPrefix = '',
   sort = false,
+  app = false,
 }: CreateRoutesParams): ResolvedHydrogenRoute[] {
   if (!basePath.startsWith('/')) basePath = '/' + basePath;
 
@@ -76,6 +80,7 @@ export function createRoutes({
       basePath: topLevelPrefix,
       resource: files[key],
       exact,
+      app,
     };
   });
 
@@ -95,6 +100,9 @@ export function mergeRouteSets({
   ...pluginRoutes
 }: Record<string, CreateRoutesParams>) {
   if (!memoizedMergedRoutes || memoizedMergedRoutesKey !== userRoutes) {
+    // Mark these routes as user-app-provided (vs plugin-provided)
+    userRoutes.app = true;
+
     // TODO: Process routes and sort at build time
     const allRoutes = [userRoutes, ...Object.values(pluginRoutes)]
       .map(createRoutes)
@@ -105,10 +113,12 @@ export function mergeRouteSets({
         if (pathComparison !== 0) return pathComparison;
 
         // Similar pathname, it means this route is added in-app and via plugin
-        // Prioritize the one with a Server Component first, or one provided in-app otherwise.
+        // Prioritize the one with Server Component, and the one provided in-app.
+        if (a.app && a.resource.default) return -1;
+        if (b.app && b.resource.default) return 1;
         if (a.resource.default) return -1;
         if (b.resource.default) return 1;
-        return -1; // In-app route is always the first
+        return b.app ? 1 : -1;
       });
 
     const exactRoutes = [];
