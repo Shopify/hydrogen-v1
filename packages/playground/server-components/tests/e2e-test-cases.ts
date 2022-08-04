@@ -895,15 +895,27 @@ export default async function testCases({
     });
   });
 
-  describe('Hydrogen Plugins', () => {
+  describe.only('Hydrogen Plugins', () => {
     it('imports plugin routes', async () => {
-      const pluginRoute = getServerUrl() + '/my-plugin';
+      const pluginRoute = getServerUrl() + '/plugin-route';
       await page.goto(pluginRoute);
       expect(await page.textContent('h1')).toContain('Hello My Plugin');
 
       expect(await (await fetch(pluginRoute, {method: 'POST'})).text()).toEqual(
         'Plugin OK'
       );
+    });
+
+    it('runs app middleware', async () => {
+      expect(
+        await (await fetch(getServerUrl() + '/app-middleware')).text()
+      ).toEqual('App middleware OK');
+    });
+
+    it('runs plugin middlewares', async () => {
+      expect(
+        await (await fetch(getServerUrl() + '/plugin-middleware')).text()
+      ).toEqual('Plugin middleware OK');
     });
   });
 }
