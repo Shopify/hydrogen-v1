@@ -895,7 +895,7 @@ export default async function testCases({
     });
   });
 
-  describe.only('Hydrogen Plugins', () => {
+  describe('Hydrogen Plugins', () => {
     it('imports plugin routes', async () => {
       const pluginRoute = getServerUrl() + '/plugin-route';
       await page.goto(pluginRoute);
