@@ -174,7 +174,7 @@ async function generateRoutesCode(hc: HydrogenConfig, root: string) {
 
       if (!plugin.routes) {
         try {
-          await fs.access(path.join(absoluteUrl, 'routes'));
+          await fs.access(path.resolve(absoluteUrl, 'routes'));
         } catch {
           // Plugin does not provide `routes`
           continue;

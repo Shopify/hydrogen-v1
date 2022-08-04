@@ -24,17 +24,22 @@ export function resolvePluginUrl(plugin: HydrogenPlugin, root = process.cwd()) {
     importUrl = path.dirname(importUrl);
   }
 
+  const pkgJsonPath = path.resolve(importUrl, 'package.json');
+
   try {
-    absoluteUrl = path.dirname(
-      require.resolve(path.join(importUrl, 'package.json'))
-    );
+    absoluteUrl = path.dirname(require.resolve(pkgJsonPath));
   } catch (error) {
-    throw new Error(`Could not resolve Hydrogen Plugin "${plugin.name}"`, {
-      cause: error as Error,
-    });
+    throw new Error(
+      `Could not resolve Hydrogen Plugin "${plugin.name}" in ${path.dirname(
+        pkgJsonPath
+      )}`,
+      {
+        cause: error as Error,
+      }
+    );
   }
 
-  importUrl = path.relative(root, normalizePath(absoluteUrl));
+  importUrl = normalizePath(path.relative(root, normalizePath(absoluteUrl)));
   if (!importUrl.startsWith('/')) {
     importUrl = '/' + importUrl;
   }
