@@ -78,33 +78,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
 
       if (id === '\0' + VIRTUAL_HYDROGEN_ROUTES_ID) {
         return importHydrogenConfig().then(async (hc) => {
-          let code = generateRoutesCodeExport(hc.routes);
-
-          if (hc.plugins) {
-            for (let index = 0; index < hc.plugins.length; index++) {
-              const plugin = hc.plugins[index];
-              const [importUrl, absoluteUrl] = resolvePluginUrl(
-                plugin,
-                config.root
-              );
-
-              if (!plugin.routes) {
-                try {
-                  await fs.access(path.join(absoluteUrl, 'routes'));
-                } catch {
-                  // Plugin does not provide `routes`
-                  continue;
-                }
-              }
-
-              const routes =
-                typeof plugin.routes === 'string'
-                  ? {files: plugin.routes}
-                  : plugin.routes || {files: './routes'};
-
-              code += generateRoutesCodeExport(routes, importUrl, `p${index}`);
-            }
-          }
+          let code = await generateRoutesCode(hc, config.root);
 
           if (config.command === 'serve') {
             // Add dependency on Hydrogen config for HMR
@@ -143,7 +117,36 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
   }
 };
 
-function generateRoutesCodeExport(
+async function generateRoutesCode(hc: HydrogenConfig, root: string) {
+  let code = generateRouteExport(hc.routes);
+
+  if (hc.plugins) {
+    for (let index = 0; index < hc.plugins.length; index++) {
+      const plugin = hc.plugins[index];
+      const [importUrl, absoluteUrl] = resolvePluginUrl(plugin, root);
+
+      if (!plugin.routes) {
+        try {
+          await fs.access(path.join(absoluteUrl, 'routes'));
+        } catch {
+          // Plugin does not provide `routes`
+          continue;
+        }
+      }
+
+      const routes =
+        typeof plugin.routes === 'string'
+          ? {files: plugin.routes}
+          : plugin.routes || {files: './routes'};
+
+      code += generateRouteExport(routes, importUrl, `p${index}`);
+    }
+  }
+
+  return code;
+}
+
+function generateRouteExport(
   routes: HydrogenConfig['routes'],
   baseResolvePath?: string,
   exportName?: string
