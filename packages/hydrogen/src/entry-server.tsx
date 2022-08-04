@@ -218,25 +218,25 @@ async function processRequest(
   hydrogenConfig: ResolvedHydrogenConfig,
   revalidate = false
 ) {
+  const {dev, nonce, indexTemplate, streamableResponse: nodeResponse} = options;
+  const log = getLoggerWithContext(request);
+
   const {default: runMiddlewares} = await import(
     // @ts-ignore
     'virtual__hydrogen-middleware.ts'
   );
 
-  const maybeResponse = await runMiddlewares({
+  const maybeResponse = await runMiddlewares(hydrogenConfig, {
     request,
     response,
-    hydrogenConfig,
-    sessionApi,
+    session: sessionApi,
+    log,
   });
 
   if (maybeResponse instanceof Response) {
     return maybeResponse;
   }
 
-  const {dev, nonce, indexTemplate, streamableResponse: nodeResponse} = options;
-
-  const log = getLoggerWithContext(request);
   const isRSCRequest = request.isRscRequest();
   const decodedPathname = decodeURIComponent(
     new URL(request.normalizedUrl).pathname

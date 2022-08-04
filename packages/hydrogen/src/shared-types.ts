@@ -53,4 +53,6 @@ export type HydrogenPlugin = {
   name: string;
   url?: string;
   routes?: InlineHydrogenRoutes;
+  context?: Record<string, any>;
+  middleware?: string;
 };

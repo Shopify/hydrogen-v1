@@ -133,29 +133,27 @@ async function generateMiddlewareCode(hc: HydrogenConfig, root: string) {
   let code = await readVirtualTemplate('middleware');
 
   const possibleMiddlewares = [
-    // @ts-ignore
-    (hc.middleware ?? '/src/middleware').replace(/^\.\//, '/'),
+    [(hc.middleware ?? '/src/middleware').replace(/^\.\//, '/')],
   ];
 
   hc.plugins?.forEach((plugin) => {
     const [importUrl] = resolvePluginUrl(plugin, root);
 
-    possibleMiddlewares.push(
-      importUrl +
-        // @ts-ignore
-        (plugin.middleware ?? '/middleware').replace(/^\.\//, '/')
-    );
+    possibleMiddlewares.push([
+      importUrl + (plugin.middleware ?? '/middleware').replace(/^\.\//, '/'),
+      plugin.name,
+    ]);
   });
 
   code = code.replace(
     '//@INJECT_MIDDLEWARES',
     '\n' +
       possibleMiddlewares
-        .map((filepath) => {
+        .map(([filepath, name]) => {
           // TODO use require.resolve here instead of globEager
-          return `middlewares.push(import.meta.globEager('${filepath}${
+          return `middlewares.push([import.meta.globEager('${filepath}${
             /\.[jt]s$/.test(filepath) ? '' : '.{js,ts}'
-          }'));`;
+          }'), '${name}']);`;
         })
         .join('\n') +
       '\n'

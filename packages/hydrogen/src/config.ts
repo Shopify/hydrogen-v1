@@ -1,8 +1,12 @@
 import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.js';
+import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.js';
+import type {Logger} from './utilities/log/log.js';
+import type {SessionStorageAdapter} from './foundation/session/session-types.js';
 import type {
   InlineHydrogenConfig,
   HydrogenPlugin,
   HydrogenPluginOptions,
+  ResolvedHydrogenConfig,
 } from './types.js';
 
 export const defineConfig = (params: InlineHydrogenConfig) => params;
@@ -22,6 +26,10 @@ export const definePlugin =
 
 export type HandleMiddlewareParams = {
   request: HydrogenRequest;
+  response: HydrogenResponse;
+  session: SessionStorageAdapter;
+  log: Logger;
+  hydrogenConfig: ResolvedHydrogenConfig;
 };
 
 export const defineMiddleware = (

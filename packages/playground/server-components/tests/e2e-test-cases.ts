@@ -104,6 +104,8 @@ export default async function testCases({
     expect(defaultContext).toContain('{"test1":true}');
     const scopedContext = await page.textContent('#scoped-context');
     expect(scopedContext).toContain('{"test2":true}');
+    const pluginContext = await page.textContent('#plugin-context');
+    expect(pluginContext).toContain('{"test1":true,"test2":true}');
   });
 
   it.skip('should render server props in client component', async () => {
