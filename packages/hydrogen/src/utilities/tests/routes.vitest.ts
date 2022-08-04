@@ -694,7 +694,7 @@ describe('API routes', () => {
   });
 });
 
-describe.only('Merging route sets', () => {
+describe('Merging route sets', () => {
   it('merges different sets of routes and sorts them accordingly', () => {
     const userFiles: ImportGlobEagerOutput = {
       './routes/contact.server.jsx': STUB_MODULE_ALL,
@@ -756,7 +756,7 @@ describe.only('Merging route sets', () => {
         resource: STUB_MODULE_COMPONENT_ONLY,
         basePath: '',
         exact: true,
-        app: false,
+        app: undefined,
       },
       // 4. Prioritize routes with server components
       {
@@ -764,7 +764,7 @@ describe.only('Merging route sets', () => {
         resource: STUB_MODULE_COMPONENT_ONLY,
         basePath: '',
         exact: true,
-        app: false,
+        app: undefined,
       },
       {
         path: '/products/:handle',

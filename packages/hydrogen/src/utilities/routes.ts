@@ -75,13 +75,16 @@ export function createRoutes({
       );
     }
 
-    return {
+    const result = {
       path: topLevelPrefix + path,
       basePath: topLevelPrefix,
       resource: files[key],
       exact,
-      app,
-    };
+    } as ResolvedHydrogenRoute;
+
+    if (app) result.app = true;
+
+    return result;
   });
 
   return sort
