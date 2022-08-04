@@ -8,7 +8,7 @@
     "packages/playground/*"
   ],
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "scripts": {
     "dev": "yarn turbo run dev --parallel --filter=@shopify/hydrogen-ui --filter=@shopify/hydrogen",
