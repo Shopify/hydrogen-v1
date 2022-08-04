@@ -5,6 +5,7 @@ import type {HydrogenVitePluginOptions} from '../types.js';
 import {viteception} from '../viteception.js';
 import type {HydrogenConfig} from '../../config.js';
 import {resolvePluginUrl} from '../load-config.js';
+import {readVirtualTemplate} from '../virtual-templates/index.js';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
@@ -25,6 +26,9 @@ const HYDROGEN_ROUTES_ID = 'hydrogen-routes.server.jsx';
 const VIRTUAL_HYDROGEN_ROUTES_ID = VIRTUAL_PREFIX + HYDROGEN_ROUTES_ID;
 export const VIRTUAL_PROXY_HYDROGEN_ROUTES_ID =
   VIRTUAL_PREFIX + PROXY_PREFIX + HYDROGEN_ROUTES_ID;
+
+const HYDROGEN_MIDDLEWARE_ID = 'hydrogen-middleware.ts';
+const VIRTUAL_HYDROGEN_MIDDLEWARE_ID = VIRTUAL_PREFIX + HYDROGEN_MIDDLEWARE_ID;
 
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
@@ -56,6 +60,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           VIRTUAL_PROXY_HYDROGEN_CONFIG_ID,
           VIRTUAL_PROXY_HYDROGEN_ROUTES_ID,
           VIRTUAL_HYDROGEN_ROUTES_ID,
+          VIRTUAL_HYDROGEN_MIDDLEWARE_ID,
           VIRTUAL_ERROR_FILE,
         ].includes(source)
       ) {
@@ -89,6 +94,13 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         });
       }
 
+      if (id === '\0' + VIRTUAL_HYDROGEN_MIDDLEWARE_ID) {
+        return importHydrogenConfig().then(async (hc) => {
+          const code = await generateMiddlewareCode(hc, config.root);
+          return {code};
+        });
+      }
+
       if (id === '\0' + VIRTUAL_ERROR_FILE) {
         return importHydrogenConfig().then((hc) => {
           const errorPath = hc.serverErrorPage ?? '/src/Error.{jsx,tsx}';
@@ -116,6 +128,41 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
     return cachedHydrogenConfig as HydrogenConfig;
   }
 };
+
+async function generateMiddlewareCode(hc: HydrogenConfig, root: string) {
+  let code = await readVirtualTemplate('middleware');
+
+  const possibleMiddlewares = [
+    // @ts-ignore
+    (hc.middleware ?? '/src/middleware').replace(/^\.\//, '/'),
+  ];
+
+  hc.plugins?.forEach((plugin) => {
+    const [importUrl] = resolvePluginUrl(plugin, root);
+
+    possibleMiddlewares.push(
+      importUrl +
+        // @ts-ignore
+        (plugin.middleware ?? '/middleware').replace(/^\.\//, '/')
+    );
+  });
+
+  code = code.replace(
+    '//@INJECT_MIDDLEWARES',
+    '\n' +
+      possibleMiddlewares
+        .map((filepath) => {
+          // TODO use require.resolve here instead of globEager
+          return `middlewares.push(import.meta.globEager('${filepath}${
+            /\.[jt]s$/.test(filepath) ? '' : '.{js,ts}'
+          }'));`;
+        })
+        .join('\n') +
+      '\n'
+  );
+
+  return code;
+}
 
 async function generateRoutesCode(hc: HydrogenConfig, root: string) {
   let code = generateRouteExport(hc.routes);

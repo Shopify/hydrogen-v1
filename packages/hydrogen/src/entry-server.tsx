@@ -218,6 +218,22 @@ async function processRequest(
   hydrogenConfig: ResolvedHydrogenConfig,
   revalidate = false
 ) {
+  const {default: runMiddlewares} = await import(
+    // @ts-ignore
+    'virtual__hydrogen-middleware.ts'
+  );
+
+  const maybeResponse = await runMiddlewares({
+    request,
+    response,
+    hydrogenConfig,
+    sessionApi,
+  });
+
+  if (maybeResponse instanceof Response) {
+    return maybeResponse;
+  }
+
   const {dev, nonce, indexTemplate, streamableResponse: nodeResponse} = options;
 
   const log = getLoggerWithContext(request);

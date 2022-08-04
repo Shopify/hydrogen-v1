@@ -1,3 +1,4 @@
+import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.js';
 import type {
   InlineHydrogenConfig,
   HydrogenPlugin,
@@ -18,3 +19,13 @@ export const definePlugin =
   <T extends HydrogenPluginOptions>(pluginFn: (opt: T) => HydrogenPlugin) =>
   (options: T) =>
     pluginFn(options);
+
+export type HandleMiddlewareParams = {
+  request: HydrogenRequest;
+};
+
+export const defineMiddleware = (
+  middleware: (
+    middlewareParams: HandleMiddlewareParams
+  ) => void | Response | Promise<void | Response>
+) => middleware;
