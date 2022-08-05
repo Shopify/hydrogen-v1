@@ -1,97 +1,60 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useMachine} from '@xstate/react/fsm';
-import {createMachine, assign} from '@xstate/fsm';
+import {createMachine, assign, StateMachine} from '@xstate/fsm';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
-import {useCartFetch} from './hooks.client.js';
-import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery.js';
-import {CartCreate, CartLineAdd, CartQuery} from './cart-queries.js';
 import {
   AttributeInput,
   CartBuyerIdentityInput,
   CartInput,
   CartLineInput,
   CartLineUpdateInput,
-  CountryCode,
 } from '../../storefront-api-types.js';
-import {
-  CartCreateMutation,
-  CartCreateMutationVariables,
-} from './graphql/CartCreateMutation.js';
-import {
-  CartLineAddMutation,
-  CartLineAddMutationVariables,
-} from './graphql/CartLineAddMutation.js';
 import {CartContext} from './context.js';
-import {Cart, CartWithActions} from './types.js';
+import {
+  Cart,
+  CartWithActions,
+  CartMachineContext,
+  CartMachineEvent,
+  CartMachineTypeState,
+} from './types.js';
 import {flattenConnection} from '../../utilities/flattenConnection/index.js';
 import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.js';
 import {CartDiscountCodesUpdateMutationVariables} from './graphql/CartDiscountCodesUpdateMutation.js';
+import {useCartActions} from './CartActions.client.js';
 
-type CartContext = {
-  cart?: Cart;
-  errors?: any;
-};
-
-type FetchCartEvent = {
-  type: 'FETCH_CART';
-  payload: {
-    cartId: string;
+function invokeCart(
+  actions: [string]
+): StateMachine.Config<CartMachineContext, CartMachineEvent>['states']['on'] {
+  return {
+    entry: actions,
+    on: {
+      RESOLVE: {
+        target: 'idle',
+        actions: [
+          assign({
+            cart: (context, event) => event?.payload?.cart,
+          }),
+        ],
+      },
+      ERROR: {
+        target: 'error',
+        actions: assign({
+          errors: (context, event) => event?.payload?.errors,
+        }),
+      },
+    },
   };
-};
+}
 
-type CreateCartEvent = {
-  type: 'CREATE_CART';
-  payload: CartInput;
-};
-
-type AddCartLineEvent = {
-  type: 'ADD_CARTLINE';
-  payload: {
-    cartId: string;
-    lines: CartLineInput[];
-  };
-};
-
-type RemoveCartLineEvent = {type: 'REMOVE_CARTLINE'};
-
-type UpdateCartLineEvent = {type: 'UPDATE_CARTLINE'};
-
-type CartEvent =
-  | FetchCartEvent
-  | CreateCartEvent
-  | AddCartLineEvent
-  | RemoveCartLineEvent
-  | UpdateCartLineEvent
-  | {type: 'DELETE_CART'}
-  | {type: 'RESOLVE'; payload: {cart: Cart}}
-  | {type: 'ERROR'; payload: {errors: any}};
-
-type CartTypeState =
-  | {
-      value: 'No Cart';
-      context: CartContext & {
-        cart: undefined;
-        errors?: any;
-      };
-    }
-  | {
-      value: 'hasCart';
-      context: CartContext & {
-        cart: Cart;
-        errors?: any;
-      };
-    }
-  | {value: 'Fetching'; context: CartContext}
-  | {value: 'CreatingCart'; context: CartContext}
-  | {value: 'RemovingCartLine'; context: CartContext}
-  | {value: 'UpdatingCartLine'; context: CartContext}
-  | {value: 'AddingCartLine'; context: CartContext};
-
-const cartMachine = createMachine<CartContext, CartEvent, CartTypeState>({
+const cartMachine = createMachine<
+  CartMachineContext,
+  CartMachineEvent,
+  CartMachineTypeState
+>({
   id: 'Cart',
-  initial: 'No Cart',
+  initial: 'uninitialized',
   states: {
-    'No Cart': {
+    uninitialized: {
       on: {
         FETCH_CART: {
           target: 'Fetching',
@@ -99,15 +62,15 @@ const cartMachine = createMachine<CartContext, CartEvent, CartTypeState>({
         CREATE_CART: {
           target: 'CreatingCart',
         },
+        ADD_CARTLINE: {
+          target: 'CreatingCart',
+        },
       },
     },
-    hasCart: {
+    idle: {
       on: {
         REMOVE_CARTLINE: {
           target: 'RemovingCartLine',
-        },
-        DELETE_CART: {
-          target: 'DeletingCart',
         },
         ADD_CARTLINE: {
           target: 'AddingCartLine',
@@ -117,93 +80,24 @@ const cartMachine = createMachine<CartContext, CartEvent, CartTypeState>({
         },
       },
     },
-    Fetching: {
-      entry: ['fetchCart'],
+    error: {
       on: {
-        RESOLVE: {
-          target: 'hasCart',
-          actions: [
-            assign({
-              cart: (context, event) => event.payload.cart,
-            }),
-          ],
+        REMOVE_CARTLINE: {
+          target: 'RemovingCartLine',
         },
-        ERROR: {
-          target: 'No Cart',
-          actions: assign({
-            errors: (context, event) => event.payload.errors,
-          }),
+        ADD_CARTLINE: {
+          target: 'AddingCartLine',
+        },
+        UPDATE_CARTLINE: {
+          target: 'UpdatingCartLine',
         },
       },
     },
-    CreatingCart: {
-      entry: ['createCart'],
-      on: {
-        RESOLVE: {
-          target: 'hasCart',
-          actions: assign({
-            cart: (context, event): Cart => event.payload.cart,
-          }),
-        },
-        ERROR: {
-          target: 'No Cart',
-          actions: assign({
-            errors: (context, event) => event.payload.errors,
-          }),
-        },
-      },
-    },
-    RemovingCartLine: {
-      entry: ['removeCartLine'],
-      on: {
-        RESOLVE: {
-          target: 'hasCart',
-          actions: assign({
-            cart: (context, event) => event.payload.cart,
-          }),
-        },
-        ERROR: {
-          target: 'hasCart',
-          actions: assign({
-            errors: (context, event) => event.payload.errors,
-          }),
-        },
-      },
-    },
-    UpdatingCartLine: {
-      entry: ['updateCartLine'],
-      on: {
-        RESOLVE: {
-          target: 'hasCart',
-          actions: assign({
-            cart: (context, event) => event.payload.cart,
-          }),
-        },
-        ERROR: {
-          target: 'hasCart',
-          actions: assign({
-            errors: (context, event) => event.payload.errors,
-          }),
-        },
-      },
-    },
-    AddingCartLine: {
-      entry: ['addCartLine'],
-      on: {
-        RESOLVE: {
-          target: 'hasCart',
-          actions: assign({
-            cart: (context, event) => event.payload.cart,
-          }),
-        },
-        ERROR: {
-          target: 'hasCart',
-          actions: assign({
-            errors: (context, event) => event.payload.errors,
-          }),
-        },
-      },
-    },
+    Fetching: invokeCart(['fetchCart']),
+    CreatingCart: invokeCart(['createCart']),
+    RemovingCartLine: invokeCart(['removeCartLine']),
+    UpdatingCartLine: invokeCart(['updateCartLine']),
+    AddingCartLine: invokeCart(['addCartLine']),
   },
 });
 
@@ -211,7 +105,7 @@ export function CartProviderV2({
   children,
   numCartLines,
   data: cart,
-  cartFragment = defaultCartFragment,
+  cartFragment,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
@@ -221,56 +115,22 @@ export function CartProviderV2({
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
   cartFragment?: string;
 }) {
-  const fetchCart = useCartFetch();
-
-  const cartFetch = useCallback(
-    async (cartId: string) => {
-      return fetchCart<CartQueryQueryVariables, CartQueryQuery>({
-        query: CartQuery(cartFragment),
-        variables: {
-          id: cartId,
-          numCartLines,
-          country: CountryCode.Us,
-        },
-      });
-    },
-    [fetchCart, cartFragment, numCartLines]
-  );
-
-  const cartCreate = useCallback(
-    async (cart: CartInput) => {
-      return fetchCart<CartCreateMutationVariables, CartCreateMutation>({
-        query: CartCreate(cartFragment),
-        variables: {
-          input: cart,
-          numCartLines,
-          country: CountryCode.Us,
-        },
-      });
-    },
-    [cartFragment, fetchCart, numCartLines]
-  );
-
-  const cartLineAdd = useCallback(
-    async (cartId: string, lines: CartLineInput[]) => {
-      return fetchCart<CartLineAddMutationVariables, CartLineAddMutation>({
-        query: CartLineAdd(cartFragment),
-        variables: {
-          cartId,
-          lines,
-          numCartLines,
-          country: CountryCode.Us,
-        },
-      });
-    },
-    [cartFragment, fetchCart, numCartLines]
-  );
+  const {
+    cartFetch,
+    cartCreate,
+    cartLineAdd,
+    cartLineUpdate,
+    cartLineRemove,
+    cartFragment: usedCartFragment,
+  } = useCartActions({
+    numCartLines,
+    cartFragment,
+  });
 
   const [state, send, service] = useMachine(cartMachine, {
     actions: {
       fetchCart: (_, event) => {
         if (event.type !== 'FETCH_CART') return;
-
         cartFetch(event?.payload?.cartId).then((res) => {
           if (res?.errors || !res?.data?.cart) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
@@ -295,16 +155,40 @@ export function CartProviderV2({
         });
       },
       addCartLine: (context, event) => {
-        console.log(event);
-        if (event.type !== 'ADD_CARTLINE') return;
+        if (event.type !== 'ADD_CARTLINE' || !context?.cart?.id) return;
 
-        cartLineAdd(event.payload.cartId, event.payload.lines).then((res) => {
+        cartLineAdd(context.cart.id, event.payload.lines).then((res) => {
           if (res?.errors || !res.data?.cartLinesAdd?.cart) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
           }
           send({
             type: 'RESOLVE',
             payload: {cart: cartFromGraphQL(res.data?.cartLinesAdd.cart)},
+          });
+        });
+      },
+      updateCartLine: (context, event) => {
+        if (event.type !== 'UPDATE_CARTLINE' || !context?.cart?.id) return;
+        cartLineUpdate(context.cart.id, event.payload.lines).then((res) => {
+          if (res?.errors || !res.data?.cartLinesUpdate?.cart) {
+            return send({type: 'ERROR', payload: {errors: res?.errors}});
+          }
+          send({
+            type: 'RESOLVE',
+            payload: {cart: cartFromGraphQL(res.data?.cartLinesUpdate.cart)},
+          });
+        });
+      },
+
+      removeCartLine: (context, event) => {
+        if (event.type !== 'UPDATE_CARTLINE' || !context?.cart?.id) return;
+        cartLineRemove(context.cart.id, event.payload.lines).then((res) => {
+          if (res?.errors || !res.data?.cartLinesUpdate?.cart) {
+            return send({type: 'ERROR', payload: {errors: res?.errors}});
+          }
+          send({
+            type: 'RESOLVE',
+            payload: {cart: cartFromGraphQL(res.data?.cartLinesUpdate.cart)},
           });
         });
       },
@@ -317,12 +201,13 @@ export function CartProviderV2({
   }, [service]);
 
   function tempTransposeStatus(
-    status: CartTypeState['value']
+    status: CartMachineTypeState['value']
   ): CartWithActions['status'] {
     switch (status) {
-      case 'No Cart':
+      case 'uninitialized':
         return 'uninitialized';
-      case 'hasCart':
+      case 'idle':
+      case 'error':
         return 'idle';
       case 'Fetching':
         return 'fetching';
@@ -348,26 +233,26 @@ export function CartProviderV2({
         });
       },
       linesAdd(lines: CartLineInput[]) {
-        if (state.value === 'hasCart') {
-          send({
-            type: 'ADD_CARTLINE',
-            payload: {
-              cartId: state.context.cart!.id!,
-              lines,
-            },
-          });
-        } else {
-          send({
-            type: 'CREATE_CART',
-            payload: {lines},
-          });
-        }
+        send({
+          type: 'ADD_CARTLINE',
+          payload: {lines},
+        });
       },
       linesRemove(lines: string[]) {
-        // removeLineItem(lines, state);
+        send({
+          type: 'REMOVE_CARTLINE',
+          payload: {
+            lines,
+          },
+        });
       },
       linesUpdate(lines: CartLineUpdateInput[]) {
-        // updateLineItem(lines, state);
+        send({
+          type: 'UPDATE_CARTLINE',
+          payload: {
+            lines,
+          },
+        });
       },
       noteUpdate(note: CartNoteUpdateMutationVariables['note']) {
         // noteUpdate(note, state);
@@ -383,9 +268,9 @@ export function CartProviderV2({
       ) {
         // discountCodesUpdate(discountCodes, state);
       },
-      cartFragment,
+      cartFragment: usedCartFragment,
     };
-  }, [cartFragment, send, state.context, state.value]);
+  }, [usedCartFragment, send, state.context, state.value]);
 
   return (
     <CartContext.Provider value={cartContextValue}>
@@ -393,107 +278,6 @@ export function CartProviderV2({
     </CartContext.Provider>
   );
 }
-
-export const defaultCartFragment = `
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  totalQuantity
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        cost {
-          totalAmount {
-            amount
-            currencyCode
-          }
-          compareAtAmountPerQuantity {
-            amount
-            currencyCode
-          }
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  cost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
-`;
 
 function cartFromGraphQL(cart: CartFragmentFragment): Cart {
   return {
