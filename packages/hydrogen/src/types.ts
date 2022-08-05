@@ -3,6 +3,7 @@ import type {
   InlineHydrogenRoutes,
   HydrogenPlugin,
   ShopifyConfig,
+  HydrogenEvents,
 } from './shared-types.js';
 
 import type {ServerResponse} from 'http';
@@ -76,6 +77,7 @@ export type InlineHydrogenConfig = ClientConfig & {
   serverErrorPage?: string;
   middleware?: string;
   plugins?: HydrogenPlugin[];
+  events?: HydrogenEvents;
   __EXPERIMENTAL__devTools?: boolean;
 };
 

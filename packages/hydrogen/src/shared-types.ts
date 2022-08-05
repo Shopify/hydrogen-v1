@@ -49,10 +49,18 @@ export type HydrogenPluginOptions = {
   [key: string]: any;
 };
 
+export type GenericEventHandler = (payload: any) => void | Promise<void>;
+export type HydrogenEventName = 'pageView' | 'addToCart';
+export type HydrogenEvents = Record<
+  HydrogenEventName | string,
+  GenericEventHandler
+>;
+
 export type HydrogenPlugin = {
   name: string;
   url?: string;
   routes?: InlineHydrogenRoutes;
   context?: Record<string, any>;
   middleware?: string;
+  events: HydrogenEvents;
 };
