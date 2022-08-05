@@ -32,14 +32,14 @@ function invokeCart(
         target: 'idle',
         actions: [
           assign({
-            cart: (context, event) => event?.payload?.cart,
+            cart: (_, event) => event?.payload?.cart,
           }),
         ],
       },
       ERROR: {
         target: 'error',
         actions: assign({
-          errors: (context, event) => event?.payload?.errors,
+          errors: (_, event) => event?.payload?.errors,
         }),
       },
     },
@@ -142,7 +142,8 @@ export function CartProviderV2({
         });
       },
       createCart: (_, event) => {
-        if (event.type !== 'CREATE_CART') return;
+        if (event.type !== 'CREATE_CART' && event.type !== 'ADD_CARTLINE')
+          return;
 
         cartCreate(event?.payload).then((res) => {
           if (res?.errors || !res.data?.cartCreate?.cart) {

@@ -39,6 +39,7 @@ function App({request}: HydrogenRouteProps) {
             <Route path="*" page={<NotFound />} />
           </Router>
         </CartProviderV2>
+        {/* </CartProvider> */}
         <PerformanceMetrics />
         {import.meta.env.DEV && <PerformanceMetricsDebug />}
         <ShopifyAnalytics />
