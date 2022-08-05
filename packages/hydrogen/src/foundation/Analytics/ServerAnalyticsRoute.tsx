@@ -2,6 +2,7 @@ import type {
   ResolvedHydrogenConfig,
   HydrogenEvents,
   HydrogenEventName,
+  HydrogenEventPrefix,
 } from '../../types.js';
 import {getLoggerWithContext, log} from '../../utilities/log/index.js';
 import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server.js';
@@ -109,7 +110,7 @@ function runEvents(request: HydrogenRequest, bodyPromise?: Promise<any>) {
 
 export function emitEvent(
   request: HydrogenRequest,
-  eventName: HydrogenEventName,
+  eventName: HydrogenEventName | HydrogenEventPrefix,
   payload?: any
 ) {
   const hc = request.ctx.hydrogenConfig!;
@@ -119,8 +120,15 @@ export function emitEvent(
 
   const log = getLoggerWithContext(request);
 
+  let eventPrefix: 'query' | 'mutation' | undefined;
+  if (eventName.includes(':'))
+    [eventPrefix, eventName] = eventName.split(':') as any;
+
   for (const eventSet of events) {
-    const eventHandler = eventSet[eventName];
+    const eventHandler = eventPrefix
+      ? eventSet?.[eventPrefix]?.[eventName as string]
+      : eventSet[eventName as HydrogenEventName];
+
     if (eventHandler) {
       const maybePromise = eventHandler({
         headers: request.headers,

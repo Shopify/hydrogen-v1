@@ -50,11 +50,17 @@ export type HydrogenPluginOptions = {
 };
 
 export type GenericEventHandler = (payload: any) => void | Promise<void>;
+
+export type HydrogenEventPrefix = `query:${string}` | `mutation:${string}`;
+
 export type HydrogenEventName = 'pageView' | 'addToCart';
-export type HydrogenEvents = Record<
-  HydrogenEventName | string,
-  GenericEventHandler
->;
+
+export type HydrogenEvents = Partial<
+  Record<HydrogenEventName, GenericEventHandler>
+> & {
+  query?: Record<string, GenericEventHandler>;
+  mutation?: Record<string, GenericEventHandler>;
+};
 
 export type HydrogenPlugin = {
   name: string;

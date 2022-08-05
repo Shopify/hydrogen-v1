@@ -1,6 +1,10 @@
 import {useShop} from '../../foundation/useShop/index.js';
 import {getLoggerWithContext} from '../../utilities/log/index.js';
-import type {CachingStrategy, PreloadOptions} from '../../types.js';
+import type {
+  CachingStrategy,
+  PreloadOptions,
+  HydrogenEventPrefix,
+} from '../../types.js';
 import {graphqlRequestBody} from '../../utilities/index.js';
 import {useServerRequest} from '../../foundation/ServerRequestProvider/index.js';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker.js';
@@ -9,6 +13,7 @@ import {fetchSync} from '../../foundation/fetchSync/server/fetchSync.js';
 import {META_ENV_SSR} from '../../foundation/ssr-interop.js';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
 import {parseJSON} from '../../utilities/parse.js';
+import {emitEvent} from '../../foundation/Analytics/ServerAnalyticsRoute.js';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -207,6 +212,18 @@ export function useShopQuery<T>({
         }
       },
     });
+  }
+
+  if (data?.data) {
+    const [, , action] = query.match(/(^|\s)(query|mutation)(\s|{)/) || [];
+    if (action) {
+      Object.entries(data.data as Object).forEach(([name, result]) => {
+        emitEvent(serverRequest, `${action}:${name}` as HydrogenEventPrefix, {
+          variables,
+          result,
+        });
+      });
+    }
   }
 
   return data!;
