@@ -85,3 +85,79 @@ export type CartAction =
   | {type: 'resolve'; cart: Cart}
   | {type: 'reject'; errors: any}
   | {type: 'resetCart'};
+
+// State Machine types
+export type CartMachineContext = {
+  cart?: Cart;
+  errors?: any;
+};
+
+export type FetchCartEvent = {
+  type: 'FETCH_CART';
+  payload: {
+    cartId: string;
+  };
+};
+
+export type CreateCartEvent = {
+  type: 'CREATE_CART';
+  payload: CartInput;
+};
+
+export type AddCartLineEvent = {
+  type: 'ADD_CARTLINE';
+  payload: {
+    lines: CartLineInput[];
+  };
+};
+
+export type RemoveCartLineEvent = {
+  type: 'REMOVE_CARTLINE';
+  payload: {
+    lines: string[];
+  };
+};
+
+export type UpdateCartLineEvent = {
+  type: 'UPDATE_CARTLINE';
+  payload: {
+    lines: CartLineUpdateInput[];
+  };
+};
+
+export type CartMachineEvent =
+  | FetchCartEvent
+  | CreateCartEvent
+  | AddCartLineEvent
+  | RemoveCartLineEvent
+  | UpdateCartLineEvent
+  | {type: 'RESOLVE'; payload: {cart: Cart}}
+  | {type: 'ERROR'; payload: {errors: any}};
+
+export type CartMachineTypeState =
+  | {
+      value: 'uninitialized';
+      context: CartMachineContext & {
+        cart: undefined;
+        errors?: any;
+      };
+    }
+  | {
+      value: 'idle';
+      context: CartMachineContext & {
+        cart: Cart;
+        errors?: any;
+      };
+    }
+  | {
+      value: 'error';
+      context: CartMachineContext & {
+        cart?: Cart;
+        errors: any;
+      };
+    }
+  | {value: 'Fetching'; context: CartMachineContext}
+  | {value: 'CreatingCart'; context: CartMachineContext}
+  | {value: 'RemovingCartLine'; context: CartMachineContext}
+  | {value: 'UpdatingCartLine'; context: CartMachineContext}
+  | {value: 'AddingCartLine'; context: CartMachineContext};
