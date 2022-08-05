@@ -307,6 +307,7 @@ export function CartProvider({
       }
 
       dispatch({type: 'resolve', cart: cartFromGraphQL(data.cart)});
+      return {cart: data?.cart};
     },
     [fetchCart, cartFragment, numCartLines, countryCode]
   );
@@ -371,6 +372,11 @@ export function CartProvider({
           data.cartCreate.cart.id
         );
       }
+
+      const newCart = data?.cartCreate?.cart
+        ? cartFromGraphQL(data?.cartCreate?.cart)
+        : undefined;
+      return {cart: newCart, errors};
     },
     [
       onCreate,
@@ -384,249 +390,270 @@ export function CartProvider({
 
   const addLineItem = useCallback(
     async (lines: CartLineInput[], state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'addLineItem'});
-        onLineAdd?.();
-        const {data, errors} = await fetchCart<
-          CartLineAddMutationVariables,
-          CartLineAddMutation
-        >({
-          query: CartLineAdd(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            lines,
-            numCartLines,
-            country: countryCode,
-          },
+      if (state.status !== 'idle') return {};
+
+      dispatch({type: 'addLineItem'});
+      onLineAdd?.();
+      const {data, errors} = await fetchCart<
+        CartLineAddMutationVariables,
+        CartLineAddMutation
+      >({
+        query: CartLineAdd(cartFragment),
+        variables: {
+          cartId: state.cart.id!,
+          lines,
+          numCartLines,
+          country: countryCode,
+        },
+      });
+
+      if (errors) {
+        dispatch({
+          type: 'reject',
+          errors,
         });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartLinesAdd?.cart) {
-          ClientAnalytics.publish(
-            ClientAnalytics.eventNames.ADD_TO_CART,
-            true,
-            {
-              addedCartLines: lines,
-              cart: data.cartLinesAdd.cart,
-            }
-          );
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartLinesAdd.cart),
-          });
-        }
       }
+
+      if (data?.cartLinesAdd?.cart) {
+        ClientAnalytics.publish(ClientAnalytics.eventNames.ADD_TO_CART, true, {
+          addedCartLines: lines,
+          cart: data.cartLinesAdd.cart,
+        });
+        dispatch({
+          type: 'resolve',
+          cart: cartFromGraphQL(data.cartLinesAdd.cart),
+        });
+      }
+
+      const newCart = data?.cartLinesAdd?.cart
+        ? cartFromGraphQL(data?.cartLinesAdd?.cart)
+        : undefined;
+      return {cart: newCart, errors};
     },
     [onLineAdd, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const removeLineItem = useCallback(
     async (lines: string[], state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'removeLineItem', lines});
+      if (state.status !== 'idle') return {};
 
-        onLineRemove?.();
+      dispatch({type: 'removeLineItem', lines});
 
-        const {data, errors} = await fetchCart<
-          CartLineRemoveMutationVariables,
-          CartLineRemoveMutation
-        >({
-          query: CartLineRemove(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            lines,
-            numCartLines,
-            country: countryCode,
-          },
+      onLineRemove?.();
+
+      const {data, errors} = await fetchCart<
+        CartLineRemoveMutationVariables,
+        CartLineRemoveMutation
+      >({
+        query: CartLineRemove(cartFragment),
+        variables: {
+          cartId: state.cart.id!,
+          lines,
+          numCartLines,
+          country: countryCode,
+        },
+      });
+
+      if (errors) {
+        dispatch({
+          type: 'reject',
+          errors,
         });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartLinesRemove?.cart) {
-          ClientAnalytics.publish(
-            ClientAnalytics.eventNames.REMOVE_FROM_CART,
-            true,
-            {
-              removedCartLines: lines,
-              cart: data.cartLinesRemove.cart,
-            }
-          );
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartLinesRemove.cart),
-          });
-        }
       }
+
+      if (data?.cartLinesRemove?.cart) {
+        ClientAnalytics.publish(
+          ClientAnalytics.eventNames.REMOVE_FROM_CART,
+          true,
+          {
+            removedCartLines: lines,
+            cart: data.cartLinesRemove.cart,
+          }
+        );
+        dispatch({
+          type: 'resolve',
+          cart: cartFromGraphQL(data.cartLinesRemove.cart),
+        });
+      }
+
+      const newCart = data?.cartLinesRemove?.cart
+        ? cartFromGraphQL(data?.cartLinesRemove?.cart)
+        : undefined;
+      return {cart: newCart, errors};
     },
     [onLineRemove, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const updateLineItem = useCallback(
     async (lines: CartLineUpdateInput[], state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'updateLineItem', lines});
+      if (state.status !== 'idle') return {};
 
-        onLineUpdate?.();
+      dispatch({type: 'updateLineItem', lines});
 
-        const {data, errors} = await fetchCart<
-          CartLineUpdateMutationVariables,
-          CartLineUpdateMutation
-        >({
-          query: CartLineUpdate(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            lines,
-            numCartLines,
-            country: countryCode,
-          },
+      onLineUpdate?.();
+
+      const {data, errors} = await fetchCart<
+        CartLineUpdateMutationVariables,
+        CartLineUpdateMutation
+      >({
+        query: CartLineUpdate(cartFragment),
+        variables: {
+          cartId: state.cart.id!,
+          lines,
+          numCartLines,
+          country: countryCode,
+        },
+      });
+      if (errors) {
+        dispatch({
+          type: 'reject',
+          errors,
         });
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartLinesUpdate?.cart) {
-          ClientAnalytics.publish(
-            ClientAnalytics.eventNames.UPDATE_CART,
-            true,
-            {
-              updatedCartLines: lines,
-              oldCart: state.cart,
-            }
-          );
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartLinesUpdate.cart),
-          });
-        }
       }
+
+      if (data?.cartLinesUpdate?.cart) {
+        ClientAnalytics.publish(ClientAnalytics.eventNames.UPDATE_CART, true, {
+          updatedCartLines: lines,
+          oldCart: state.cart,
+        });
+        dispatch({
+          type: 'resolve',
+          cart: cartFromGraphQL(data.cartLinesUpdate.cart),
+        });
+      }
+
+      const newCart = data?.cartLinesUpdate?.cart
+        ? cartFromGraphQL(data?.cartLinesUpdate?.cart)
+        : undefined;
+      return {cart: newCart, errors};
     },
     [onLineUpdate, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const noteUpdate = useCallback(
     async (note: CartNoteUpdateMutationVariables['note'], state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'noteUpdate'});
+      if (state.status !== 'idle') return {};
 
-        onNoteUpdate?.();
+      dispatch({type: 'noteUpdate'});
 
-        const {data, errors} = await fetchCart<
-          CartNoteUpdateMutationVariables,
-          CartNoteUpdateMutation
-        >({
-          query: CartNoteUpdate(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            note,
-            numCartLines,
-            country: countryCode,
-          },
+      onNoteUpdate?.();
+
+      const {data, errors} = await fetchCart<
+        CartNoteUpdateMutationVariables,
+        CartNoteUpdateMutation
+      >({
+        query: CartNoteUpdate(cartFragment),
+        variables: {
+          cartId: state.cart.id!,
+          note,
+          numCartLines,
+          country: countryCode,
+        },
+      });
+
+      if (errors) {
+        dispatch({
+          type: 'reject',
+          errors,
         });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartNoteUpdate?.cart) {
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartNoteUpdate.cart),
-          });
-        }
       }
+
+      if (data?.cartNoteUpdate?.cart) {
+        dispatch({
+          type: 'resolve',
+          cart: cartFromGraphQL(data.cartNoteUpdate.cart),
+        });
+      }
+
+      const newCart = data?.cartNoteUpdate?.cart
+        ? cartFromGraphQL(data?.cartNoteUpdate?.cart)
+        : undefined;
+      return {cart: newCart, errors};
     },
     [onNoteUpdate, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const buyerIdentityUpdate = useCallback(
     async (buyerIdentity: CartBuyerIdentityInput, state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'buyerIdentityUpdate'});
+      if (state.status !== 'idle') return {};
 
-        onBuyerIdentityUpdate?.();
+      dispatch({type: 'buyerIdentityUpdate'});
 
-        const {data, errors} = await fetchCart<
-          CartBuyerIdentityUpdateMutationVariables,
-          CartBuyerIdentityUpdateMutation
-        >({
-          query: CartBuyerIdentityUpdate(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            buyerIdentity,
-            numCartLines,
-            country: countryCode,
-          },
+      onBuyerIdentityUpdate?.();
+
+      const {data, errors} = await fetchCart<
+        CartBuyerIdentityUpdateMutationVariables,
+        CartBuyerIdentityUpdateMutation
+      >({
+        query: CartBuyerIdentityUpdate(cartFragment),
+        variables: {
+          cartId: state.cart.id!,
+          buyerIdentity,
+          numCartLines,
+          country: countryCode,
+        },
+      });
+
+      if (errors) {
+        dispatch({
+          type: 'reject',
+          errors,
         });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartBuyerIdentityUpdate?.cart) {
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartBuyerIdentityUpdate.cart),
-          });
-        }
       }
+
+      if (data?.cartBuyerIdentityUpdate?.cart) {
+        dispatch({
+          type: 'resolve',
+          cart: cartFromGraphQL(data.cartBuyerIdentityUpdate.cart),
+        });
+      }
+
+      const newCart = data?.cartBuyerIdentityUpdate?.cart
+        ? cartFromGraphQL(data?.cartBuyerIdentityUpdate?.cart)
+        : undefined;
+      return {cart: newCart, errors};
     },
     [onBuyerIdentityUpdate, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const cartAttributesUpdate = useCallback(
     async (attributes: AttributeInput[], state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'cartAttributesUpdate'});
+      if (state.status !== 'idle') return {};
+      dispatch({type: 'cartAttributesUpdate'});
 
-        onAttributesUpdate?.();
+      onAttributesUpdate?.();
 
-        const {data, errors} = await fetchCart<
-          CartAttributesUpdateMutationVariables,
-          CartAttributesUpdateMutation
-        >({
-          query: CartAttributesUpdate(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            attributes,
-            numCartLines,
-            country: countryCode,
-          },
+      const {data, errors} = await fetchCart<
+        CartAttributesUpdateMutationVariables,
+        CartAttributesUpdateMutation
+      >({
+        query: CartAttributesUpdate(cartFragment),
+        variables: {
+          cartId: state.cart.id!,
+          attributes,
+          numCartLines,
+          country: countryCode,
+        },
+      });
+
+      if (errors) {
+        dispatch({
+          type: 'reject',
+          errors,
         });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartAttributesUpdate?.cart) {
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartAttributesUpdate.cart),
-          });
-        }
       }
+
+      if (data?.cartAttributesUpdate?.cart) {
+        dispatch({
+          type: 'resolve',
+          cart: cartFromGraphQL(data.cartAttributesUpdate.cart),
+        });
+      }
+
+      const newCart = data?.cartAttributesUpdate?.cart
+        ? cartFromGraphQL(data?.cartAttributesUpdate?.cart)
+        : undefined;
+      return {cart: newCart, errors};
     },
     [onAttributesUpdate, fetchCart, cartFragment, numCartLines, countryCode]
   );
@@ -636,46 +663,50 @@ export function CartProvider({
       discountCodes: CartDiscountCodesUpdateMutationVariables['discountCodes'],
       state: State
     ) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'discountCodesUpdate'});
+      if (state.status !== 'idle') return {};
 
-        onDiscountCodesUpdate?.();
+      dispatch({type: 'discountCodesUpdate'});
 
-        const {data, errors} = await fetchCart<
-          CartDiscountCodesUpdateMutationVariables,
-          CartDiscountCodesUpdateMutation
-        >({
-          query: CartDiscountCodesUpdate(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            discountCodes,
-            numCartLines,
-            country: countryCode,
-          },
+      onDiscountCodesUpdate?.();
+
+      const {data, errors} = await fetchCart<
+        CartDiscountCodesUpdateMutationVariables,
+        CartDiscountCodesUpdateMutation
+      >({
+        query: CartDiscountCodesUpdate(cartFragment),
+        variables: {
+          cartId: state.cart.id!,
+          discountCodes,
+          numCartLines,
+          country: countryCode,
+        },
+      });
+
+      if (errors) {
+        dispatch({
+          type: 'reject',
+          errors,
         });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartDiscountCodesUpdate?.cart) {
-          ClientAnalytics.publish(
-            ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
-            true,
-            {
-              updatedDiscountCodes: discountCodes,
-              cart: data.cartDiscountCodesUpdate.cart,
-            }
-          );
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartDiscountCodesUpdate.cart),
-          });
-        }
       }
+
+      if (data?.cartDiscountCodesUpdate?.cart) {
+        ClientAnalytics.publish(
+          ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
+          true,
+          {
+            updatedDiscountCodes: discountCodes,
+            cart: data.cartDiscountCodesUpdate.cart,
+          }
+        );
+        dispatch({
+          type: 'resolve',
+          cart: cartFromGraphQL(data.cartDiscountCodesUpdate.cart),
+        });
+      }
+      const newCart = data?.cartDiscountCodesUpdate?.cart
+        ? cartFromGraphQL(data?.cartDiscountCodesUpdate?.cart)
+        : undefined;
+      return {cart: newCart, errors};
     },
     [onDiscountCodesUpdate, fetchCart, cartFragment, numCartLines, countryCode]
   );
@@ -717,32 +748,30 @@ export function CartProvider({
       error: 'error' in state ? state.error : undefined,
       totalQuantity: 'cart' in state ? state?.cart?.totalQuantity ?? 0 : 0,
       cartCreate,
-      linesAdd(lines: CartLineInput[]) {
-        if ('cart' in state && state.cart.id) {
-          addLineItem(lines, state);
-        } else {
-          cartCreate({lines});
-        }
+      async linesAdd(lines: CartLineInput[]) {
+        return 'cart' in state && state.cart.id
+          ? addLineItem(lines, state)
+          : cartCreate({lines});
       },
-      linesRemove(lines: string[]) {
-        removeLineItem(lines, state);
+      async linesRemove(lines: string[]) {
+        return removeLineItem(lines, state);
       },
-      linesUpdate(lines: CartLineUpdateInput[]) {
-        updateLineItem(lines, state);
+      async linesUpdate(lines: CartLineUpdateInput[]) {
+        return updateLineItem(lines, state);
       },
-      noteUpdate(note: CartNoteUpdateMutationVariables['note']) {
-        noteUpdate(note, state);
+      async noteUpdate(note: CartNoteUpdateMutationVariables['note']) {
+        return noteUpdate(note, state);
       },
-      buyerIdentityUpdate(buyerIdentity: CartBuyerIdentityInput) {
-        buyerIdentityUpdate(buyerIdentity, state);
+      async buyerIdentityUpdate(buyerIdentity: CartBuyerIdentityInput) {
+        return buyerIdentityUpdate(buyerIdentity, state);
       },
-      cartAttributesUpdate(attributes: AttributeInput[]) {
-        cartAttributesUpdate(attributes, state);
+      async cartAttributesUpdate(attributes: AttributeInput[]) {
+        return cartAttributesUpdate(attributes, state);
       },
-      discountCodesUpdate(
+      async discountCodesUpdate(
         discountCodes: CartDiscountCodesUpdateMutationVariables['discountCodes']
       ) {
-        discountCodesUpdate(discountCodes, state);
+        return discountCodesUpdate(discountCodes, state);
       },
       cartFragment,
     };

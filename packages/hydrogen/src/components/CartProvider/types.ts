@@ -37,23 +37,33 @@ export interface CartWithActions extends Cart {
   /** If an error occurred on the previous cart action, then `error` will exist and `cart` will be put back into the last valid status it was in. */
   error?: string;
   /** A callback that creates a cart. Expects the same input you would provide to the Storefront API's `cartCreate` mutation. */
-  cartCreate: (cart: CartInput) => void;
+  cartCreate: (cart: CartInput) => Promise<{cart?: Cart; errors?: any}>;
   /** A callback that adds lines to the cart. Expects the same `lines` input that you would provide to the Storefront API's `cartLinesAdd` mutation. If a cart doesn't already exist, then it will create the cart for you. */
-  linesAdd: (lines: CartLineInput[]) => void;
+  linesAdd: (lines: CartLineInput[]) => Promise<{cart?: Cart; errors?: any}>;
   /** A callback that removes lines from the cart. Expects the same `lines` input that you would provide to the Storefront API's `cartLinesRemove` mutation. Only lines that are included in the `lines` parameter will be in the cart afterwards. */
-  linesRemove: (lines: string[]) => void;
+  linesRemove: (lines: string[]) => Promise<{cart?: Cart; errors?: any}>;
   /** A callback that updates lines in the cart. Expects the same `lines` input that you would provide to the Storefront API's `cartLinesUpdate` mutation. If a line item is not included in the `lines` parameter, it will still exist in the cart and will not be changed. */
-  linesUpdate: (lines: CartLineUpdateInput[]) => void;
+  linesUpdate: (
+    lines: CartLineUpdateInput[]
+  ) => Promise<{cart?: Cart; errors?: any}>;
   /** A callback that updates the note in the cart. Expects the same `note` input that you would provide to the Storefront API's `cartNoteUpdate` mutation. */
-  noteUpdate: (note: MutationCartNoteUpdateArgs['note']) => void;
+  noteUpdate: (note: MutationCartNoteUpdateArgs['note']) => Promise<{
+    cart?: Cart;
+    errors?: any;
+  }>;
   /** A callback that updates the buyer identity in the cart. Expects the same `buyerIdentity` input that you would provide to the Storefront API's `cartBuyerIdentityUpdate` mutation. */
-  buyerIdentityUpdate: (buyerIdenity: CartBuyerIdentityInput) => void;
+  buyerIdentityUpdate: (buyerIdenity: CartBuyerIdentityInput) => Promise<{
+    cart?: Cart;
+    errors?: any;
+  }>;
   /** A callback that updates the cart attributes. Expects the same `attributes` input that you would provide to the Storefront API's `cartAttributesUpdate` mutation. */
   cartAttributesUpdate: (
     attributes: MutationCartAttributesUpdateArgs['attributes']
-  ) => void;
+  ) => Promise<{cart?: Cart; errors?: any}>;
   /** A callback that updates the cart's discount codes. Expects the same `codes` input that you would provide to the Storefront API's `cartDiscountCodesUpdate` mutation. */
-  discountCodesUpdate: (discountCodes: string[]) => void;
+  discountCodesUpdate: (
+    discountCodes: string[]
+  ) => Promise<{cart?: Cart; errors?: any}>;
   /** The total number of items in the cart, across all lines. If there are no lines, then the value is 0. */
   totalQuantity: number;
   /** The fragment used to query the cart object for all queries and mutations. */
