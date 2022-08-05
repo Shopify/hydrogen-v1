@@ -4,6 +4,7 @@ import React, {
   useReducer,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 import type {Reducer} from 'react';
 import {flattenConnection} from '../../utilities/flattenConnection/index.js';
@@ -69,6 +70,18 @@ import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery.js';
 
 import type {CartWithActions} from './types.js';
 import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
+
+import {createClient, Provider, useQuery, useMutation, useClient} from 'urql';
+import {useShop} from '../../client.js';
+import {
+  SHOPIFY_STOREFRONT_ID_HEADER,
+  STOREFRONT_API_PUBLIC_TOKEN_HEADER,
+  SHOPIFY_STOREFRONT_Y_HEADER,
+  SHOPIFY_STOREFRONT_S_HEADER,
+  SHOPIFY_S,
+  SHOPIFY_Y,
+} from '../../constants.js';
+import {parse} from 'worktop/cookie';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
@@ -218,6 +231,21 @@ function cartReducer(state: State, action: CartAction): State {
   );
 }
 
+function useFetchCart(options: any) {
+  return useQuery({
+    query: CartQuery(defaultCartFragment),
+    ...options,
+  });
+}
+
+function useAddCartLine() {
+  return useMutation(CartLineAdd(defaultCartFragment));
+}
+
+function useCreateCart() {
+  return useMutation(CartCreate(defaultCartFragment));
+}
+
 /**
  * The `CartProvider` component creates a context for using a cart. It creates a cart object and callbacks
  * that can be accessed by any descendent component using the `useCart` hook and related hooks. It also carries out
@@ -227,7 +255,7 @@ function cartReducer(state: State, action: CartAction): State {
  * The `CartProvider` component must be a descendent of the `ShopifyProvider` component.
  * You must use this component if you want to use the `useCart` hook or related hooks, or if you would like to use the `AddToCartButton` component.
  */
-export function CartProvider({
+export function CartProviderInternal({
   children,
   numCartLines,
   onCreate,
@@ -280,6 +308,7 @@ export function CartProvider({
     (state, dispatch) => cartReducer(state, dispatch),
     initialStatus
   );
+
   const fetchCart = useCartFetch();
 
   const countryChanged =
@@ -331,24 +360,32 @@ export function CartProvider({
         cart.buyerIdentity.customerAccessToken = customerAccessToken;
       }
 
-      const {data, errors} = await fetchCart<
-        CartCreateMutationVariables,
-        CartCreateMutation
-      >({
-        query: CartCreate(cartFragment),
-        variables: {
-          input: cart,
-          numCartLines,
-          country: countryCode,
-        },
+      // const {data, errors: error} = await fetchCart<
+      //   CartCreateMutationVariables,
+      //   CartCreateMutation
+      // >({
+      //   query: CartCreate(cartFragment),
+      //   variables: {
+      //     input: cart,
+      //     numCartLines,
+      //     country: countryCode,
+      //   },
+      // });
+
+      const {data, error} = await uCreateCart({
+        input: cart,
+        numCartLines,
+        country: countryCode,
       });
 
-      if (errors) {
+      if (error) {
         dispatch({
           type: 'reject',
-          errors,
+          errors: error,
         });
       }
+
+      console.log(data);
 
       if (data?.cartCreate?.cart) {
         if (cart.lines) {
@@ -387,23 +424,29 @@ export function CartProvider({
       if (state.status === 'idle') {
         dispatch({type: 'addLineItem'});
         onLineAdd?.();
-        const {data, errors} = await fetchCart<
-          CartLineAddMutationVariables,
-          CartLineAddMutation
-        >({
-          query: CartLineAdd(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            lines,
-            numCartLines,
-            country: countryCode,
-          },
+        // const {data, errors} = await fetchCart<
+        //   CartLineAddMutationVariables,
+        //   CartLineAddMutation
+        // >({
+        //   query: CartLineAdd(cartFragment),
+        //   variables: {
+        //     cartId: state.cart.id!,
+        //     lines,
+        //     numCartLines,
+        //     country: countryCode,
+        //   },
+        // });
+        const {data, error} = await uAddCartLine({
+          cartId: state.cart.id!,
+          lines,
+          numCartLines,
+          country: countryCode,
         });
 
-        if (errors) {
+        if (error) {
           dispatch({
             type: 'reject',
-            errors,
+            errors: error,
           });
         }
 
@@ -681,6 +724,7 @@ export function CartProvider({
   );
 
   const didFetchCart = useRef(false);
+  const [cartId, setCartId] = useState<string | null>(null);
 
   useEffect(() => {
     if (
@@ -689,9 +733,24 @@ export function CartProvider({
       !didFetchCart.current
     ) {
       didFetchCart.current = true;
-      cartFetch(localStorage.getItem(CART_ID_STORAGE_KEY)!);
+      setCartId(localStorage.getItem(CART_ID_STORAGE_KEY));
+      // cartFetch(localStorage.getItem(CART_ID_STORAGE_KEY)!);
     }
   }, [cartFetch, state]);
+
+  const [result] = useFetchCart({
+    variables: {
+      id: cartId,
+      numCartLines,
+      country: countryCode,
+    },
+    pause: !cartId,
+  });
+
+  console.log(result);
+
+  const [, uAddCartLine] = useAddCartLine();
+  const [, uCreateCart] = useCreateCart();
 
   useEffect(() => {
     if (!countryChanged) return;
@@ -764,6 +823,77 @@ export function CartProvider({
     <CartContext.Provider value={cartContextValue}>
       {children}
     </CartContext.Provider>
+  );
+}
+
+export function CartProvider({
+  children,
+  ...props
+}: {
+  /** Any `ReactNode` elements. */
+  children: React.ReactNode;
+  numCartLines?: number;
+  /** A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API. */
+  onCreate?: () => void;
+  /** A callback that is invoked when the process to add a line item to the cart begins, but before the line item is added to the Storefront API. */
+  onLineAdd?: () => void;
+  /** A callback that is invoked when the process to remove a line item to the cart begins, but before the line item is removed from the Storefront API. */
+  onLineRemove?: () => void;
+  /** A callback that is invoked when the process to update a line item in the cart begins, but before the line item is updated in the Storefront API. */
+  onLineUpdate?: () => void;
+  /** A callback that is invoked when the process to add or update a note in the cart begins, but before the note is added or updated in the Storefront API. */
+  onNoteUpdate?: () => void;
+  /** A callback that is invoked when the process to update the buyer identity begins, but before the buyer identity is updated in the Storefront API. */
+  onBuyerIdentityUpdate?: () => void;
+  /** A callback that is invoked when the process to update the cart attributes begins, but before the attributes are updated in the Storefront API. */
+  onAttributesUpdate?: () => void;
+  /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
+  onDiscountCodesUpdate?: () => void;
+  /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
+  data?: CartFragmentFragment;
+  /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
+  cartFragment?: string;
+  /** A customer access token that's accessible on the server if there's a customer login. */
+  customerAccessToken?: CartBuyerIdentityInput['customerAccessToken'];
+  /** The ISO country code for i18n. */
+  countryCode?: CountryCode;
+}) {
+  const {storeDomain, storefrontApiVersion, storefrontToken, storefrontId} =
+    useShop();
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    'X-SDK-Variant': 'hydrogen',
+    'X-SDK-Version': storefrontApiVersion,
+    [STOREFRONT_API_PUBLIC_TOKEN_HEADER]: storefrontToken,
+  };
+
+  if (storefrontId) {
+    headers[SHOPIFY_STOREFRONT_ID_HEADER] = storefrontId;
+  }
+
+  // Find Shopify cookies
+  const cookieData = parse(document.cookie);
+  if (cookieData[SHOPIFY_Y] && cookieData[SHOPIFY_S]) {
+    headers[SHOPIFY_STOREFRONT_Y_HEADER] = cookieData[SHOPIFY_Y];
+    headers[SHOPIFY_STOREFRONT_S_HEADER] = cookieData[SHOPIFY_S];
+  }
+
+  const url = `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`;
+
+  const client = useRef(
+    createClient({
+      url,
+      fetchOptions: {
+        headers,
+      },
+    })
+  );
+
+  return (
+    <Provider value={client.current}>
+      <CartProviderInternal {...props}>{children}</CartProviderInternal>
+    </Provider>
   );
 }
 
