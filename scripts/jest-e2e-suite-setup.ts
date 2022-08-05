@@ -88,9 +88,9 @@ beforeAll(async () => {
       server = await (await createServer(options)).listen();
       // use resolved port/base from server
       const base = server.config.base === '/' ? '' : server.config.base;
-      (
-        global as any
-      ).viteTestUrl = `http://localhost:${server.config.server.port}${base}`;
+      // @ts-ignore
+      global.viteTestUrl = `http://localhost:${server.config.server.port}${base}`;
+      global.viteDevServer = server;
     } else {
       process.env.VITE_INLINE = 'inline-build';
       // determine build watch

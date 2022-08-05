@@ -18,4 +18,11 @@ export default defineConfig({
   },
   serverErrorPage: '/src/500Error.tsx',
   plugins: [myTestPlugin({})],
+  events: {
+    pageView() {
+      if (globalThis.__viteDevServer?.testMeta) {
+        globalThis.__viteDevServer.testMeta.appEvents.push('pageView');
+      }
+    },
+  },
 });

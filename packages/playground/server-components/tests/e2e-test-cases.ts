@@ -3,6 +3,7 @@ import {htmlEncode} from '../../../hydrogen/src/utilities';
 import fetch from 'node-fetch';
 import {resolve} from 'path';
 import type {Browser, Page} from 'playwright';
+import type {ViteDevServer} from 'vite';
 
 declare global {
   const browser: Browser;
@@ -12,6 +13,7 @@ import {edit, untilUpdated} from '../../utilities';
 
 type TestOptions = {
   getServerUrl: () => string;
+  getDevServer?: () => ViteDevServer;
   isWorker?: boolean;
   isBuild?: boolean;
 };
@@ -23,6 +25,7 @@ const SHOPIFY_PERFORMANCE_ENDPOINT =
 
 export default async function testCases({
   getServerUrl,
+  getDevServer,
   isBuild,
   isWorker,
 }: TestOptions) {
@@ -725,6 +728,28 @@ export default async function testCases({
 
       expect(response.status).toBe(200);
       expect(text).toContain(`some value`);
+    });
+  });
+
+  describe('Hydrogen Events', () => {
+    if (isBuild) return;
+
+    let server;
+    beforeEach(() => {
+      server = getDevServer();
+      // @ts-ignore
+      server.testMeta = {appEvents: [], pluginEvents: []};
+    });
+
+    it('runs pageView event', async () => {
+      await Promise.all([
+        page.waitForRequest('**/__event?page-view'),
+        page.goto(getServerUrl()),
+      ]);
+
+      // The index page is loaded twice so there are 2 pageView events.
+      await untilUpdated(() => server.testMeta.appEvents.pop(), 'pageView');
+      await untilUpdated(() => server.testMeta.pluginEvents.pop(), 'pageView');
     });
   });
 
