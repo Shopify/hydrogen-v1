@@ -2,7 +2,7 @@
 
 This repo demonstrates how to seamlessly integrate [Shopify Plus](https://www.shopify.com/plus) [multipass](https://shopify.dev/api/multipass) with Hydrogen's customer and checkout [sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions) 
 
-Multipass allows you to:
+Multipass enables you to do the following:
 
 - Persist the customer [session](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions) state between the hydrogen experience and the checkout experience. eg — stay logged in / out
 - Automatically log in or create a new account based on a external site's user information.
