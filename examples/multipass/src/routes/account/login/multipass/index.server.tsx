@@ -213,7 +213,7 @@ async function handleLoggedOutResponse(options: LoggedOutResponseType) {
   // Force logging off the user in the checkout
   const encodedCheckoutUrl = encodeURIComponent(return_to);
 
-  // e.g checkoutDomain `checkout.hydrogen.shop` or `shop.example.com` or `your-store.myshopify.com`
+  // For example, checkoutDomain `checkout.hydrogen.shop` or `shop.example.com` or `{shop}.myshopify.com`.
   const logOutUrl = `https://${checkoutDomain}/account/logout?return_url=${encodedCheckoutUrl}&step=contact_information`;
   return new Response(JSON.stringify({data: {url: logOutUrl}, error: null}));
 }
