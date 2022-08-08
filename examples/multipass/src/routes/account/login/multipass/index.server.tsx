@@ -234,7 +234,7 @@ function NotLoggedInResponse(options: NotLoggedInResponseType) {
       'Required `customer` was not found in session.',
     MISSING_EMAIL: 'Required customer `email` was not provided.',
     MISSING_RETURN_TO_URL:
-      'Required customer `return_to` url was not provided.',
+      'Required customer `return_to` URL was not provided.',
     MISSING_CUSTOMER_ACCESS_TOKEN: 'No customerAccessToken found.',
     FAILED_GENERATING_MULTIPASS: 'Could not generate a multipass url.',
     FORCING_CHECKOUT_LOGOUT: 'Forcing checkout customer logout.',
