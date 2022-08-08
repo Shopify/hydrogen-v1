@@ -22,13 +22,17 @@ export async function multipass(
     // from the session. If not, it will throw.
     const body = customer ? {customer} : {return_to};
 
+    // Get the ip address of the client to pass to the multipass as remote_ip
+    const ipfy = await fetch('https://api.ipify.org?format=json');
+    const {ip} = await ipfy.json();
+
     // Generate multipass token POST `/account/login/multipass`
     const response = await fetch('/account/login/multipass', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({...body, client_ip: ip}),
     });
 
     if (!response.ok) {
