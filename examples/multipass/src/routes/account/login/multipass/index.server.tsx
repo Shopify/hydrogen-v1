@@ -250,7 +250,7 @@ function NotLoggedInResponse(options: NotLoggedInResponseType) {
     error = ERRORS[errorKey] ?? 'UNKNOWN_ERROR';
   }
 
-  // always return the original url
+  // Always return the original URL.
   return new Response(JSON.stringify({data: {url}, error}), {
     status: 200,
     headers: {'Content-Type': 'application/json'},
