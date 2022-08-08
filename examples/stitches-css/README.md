@@ -14,7 +14,7 @@ Stitches is a CSS-in-JS with near-zero runtime, SSR, multi-variant support, and 
 
 **Requirements:**
 
-- Node.js version 16.5.0 or higher
+- Node.js version 16.14.0 or higher
 - Yarn
 
 ```bash
