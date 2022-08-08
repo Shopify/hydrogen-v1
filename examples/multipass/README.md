@@ -8,7 +8,7 @@ Multipass enables you to do the following:
 - Log in or create a new account automatically, based on an external site's user information.
 - Log in or create accounts by leveraging a third-party auth service such as [Google Sign in](https://developers.google.com/identity/gsi/web/guides/overview).
 
-To generate a multipass key visit this [link](https://www.shopify.com/admin/settings/checkout?shpxid=4b620f16-EA6D-46D2-8851-DB05208459BB)
+Generate a multipass key (secret) in the [Shopify admin](https://www.shopify.com/admin/settings/checkout)
 
 ## Required environment variables
 
