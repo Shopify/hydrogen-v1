@@ -261,7 +261,7 @@ function getCorsHeaders(origin: string): {[key: string]: string} {
   // Only requests from these origins will pass pre-flight checks
   const allowedOrigin = [
     origin,
-    // .. add other domains you'd like to allow to multipass from
+    // Add other domains that you'd like to allow to multipass from
   ].find((allowedHost) => origin.includes(allowedHost));
 
   return {
