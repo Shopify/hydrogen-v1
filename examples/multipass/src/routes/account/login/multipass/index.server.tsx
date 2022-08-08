@@ -258,7 +258,7 @@ function NotLoggedInResponse(options: NotLoggedInResponseType) {
 }
 
 function getCorsHeaders(origin: string): {[key: string]: string} {
-  // only requests from these origins will pass pre-flight checks
+  // Only requests from these origins will pass pre-flight checks
   const allowedOrigin = [
     origin,
     // .. add other domains you'd like to allow to multipass from
