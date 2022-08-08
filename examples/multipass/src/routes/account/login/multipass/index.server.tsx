@@ -116,9 +116,8 @@ export async function api(
         ...customer,
         created_at: new Date().toISOString(),
         return_to: customer?.return_to || body?.return_to || '',
+        remote_ip: body.client_ip,
       };
-
-      // console.log('🔐 Generating a token for customer', customerInfo);
 
       // Generating a token for customer
       const data = multipassify.generate(
