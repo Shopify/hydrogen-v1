@@ -1,4 +1,5 @@
-import {useSession, useFlashSession} from '@shopify/hydrogen';
+import {useSession} from '@shopify/hydrogen';
+import {useFlashSession} from '@shopify/hydrogen/experimental';
 import {Form} from '@shopify/hydrogen/experimental';
 import {
   LoginForm,

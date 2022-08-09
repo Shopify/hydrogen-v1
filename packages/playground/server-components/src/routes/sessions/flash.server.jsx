@@ -1,4 +1,4 @@
-import {useFlashSession} from '@shopify/hydrogen';
+import {useFlashSession} from '@shopify/hydrogen/experimental';
 
 export default function Flash() {
   const someData = useFlashSession('someData');
