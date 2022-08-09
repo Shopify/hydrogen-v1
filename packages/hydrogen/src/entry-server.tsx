@@ -184,7 +184,7 @@ export const renderHydrogen = (App: any) => {
           });
 
           // Asynchronously wait for it in workers
-          request.ctx.runtime?.waitUntil(staleWhileRevalidatePromise);
+          request.ctx.runtime?.waitUntil?.(staleWhileRevalidatePromise);
         }
 
         return cachedResponse;
@@ -900,7 +900,7 @@ async function cacheResponse(
       const cachePutPromise = Promise.resolve(true).then(() =>
         saveCacheResponse(response, request, chunks)
       );
-      request.ctx.runtime?.waitUntil(cachePutPromise);
+      request.ctx.runtime?.waitUntil?.(cachePutPromise);
     }
   }
 }
