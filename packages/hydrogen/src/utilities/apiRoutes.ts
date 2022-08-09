@@ -17,7 +17,7 @@ import type {
 } from '../foundation/session/session-types.js';
 import {emptySessionImplementation} from '../foundation/session/session.js';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
-import {RSC_PATHNAME} from '../constants.js';
+import {FORM_REDIRECT_COOKIE, RSC_PATHNAME} from '../constants.js';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
@@ -293,6 +293,7 @@ export async function renderApiRoute(
       // Doing so prevents odd refresh / back behavior. The redirect response also should *never* be cached.
       response.headers.set('Location', newUrl.href);
       response.headers.set('Cache-Control', 'no-store');
+      response.headers.append('Set-Cookie', `${FORM_REDIRECT_COOKIE}=1`);
 
       return new Response(null, {
         status: 303,

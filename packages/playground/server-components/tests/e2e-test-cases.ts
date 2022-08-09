@@ -728,7 +728,9 @@ export default async function testCases({
     it('clears flash session data after read', async () => {
       const response = await fetch(getServerUrl() + '/sessions/flash', {
         headers: {
-          cookie: '__session=%7B%22someData%22%3A%22some%20value%22%7D',
+          cookie:
+            '__session=%7B%22someData%22%3A%22some%20value%22%7D' +
+            ';Hydrogen-Redirect=1',
         },
       });
 
