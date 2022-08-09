@@ -16,7 +16,7 @@ react-i18next is a powerful internationalization framework for React / React Nat
 
 **Requirements:**
 
-- Node.js version 16.5.0 or higher
+- Node.js version 16.14.0 or higher
 - Yarn
 
 ```bash

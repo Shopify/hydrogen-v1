@@ -41,8 +41,6 @@ export default function cssRsc() {
         const tags = [] as HtmlTagDescriptor[];
 
         const foundCssFiles = new Set<string>();
-        const {browserHash = ''} =
-          (server as any)._optimizedDeps?.metadata || {};
 
         for (const [key, value] of server.moduleGraph.idToModuleMap.entries()) {
           if (
@@ -71,11 +69,6 @@ export default function cssRsc() {
                 url = url.includes('?')
                   ? url.replace('?', timestampQuery + '&')
                   : url + timestampQuery;
-              }
-
-              if (browserHash && !url.includes('v=')) {
-                // Append the hash at the end
-                url += (url.includes('?') ? '&' : '?') + `v=${browserHash}`;
               }
 
               tags.push(

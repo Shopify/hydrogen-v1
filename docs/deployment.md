@@ -235,22 +235,19 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 
     {% codeblock file, filename: 'wrangler.toml' %}
 
-    ```
-    name = "PROJECT_NAME"
-    type = "javascript"
+    ```toml
     account_id = ""
-    workers_dev = true
-    route = ""
-    zone_id = ""
     compatibility_date = "2022-01-28"
     compatibility_flags = ["streams_enable_constructors"]
+    main = "dist/worker/index.js"
+    name = "PROJECT_NAME"
+    route = ""
+    workers_dev = true
 
     [site]
     bucket = "dist/client"
-    entry-point = "dist/worker"
 
     [build]
-    upload.format = "service-worker"
     command = "yarn && yarn build"
     ```
 

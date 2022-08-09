@@ -14,7 +14,7 @@ For a real-world custom example using Shopify, Hydrogen and Sanity, [check out t
 
 **Requirements:**
 
-- Node.js version 16.5.0 or higher
+- Node.js version 16.14.0 or higher
 - Yarn
 
 ```bash
