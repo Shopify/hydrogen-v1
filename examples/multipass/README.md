@@ -1,6 +1,6 @@
 # Multipass + Google Sign in
 
-This repo demonstrates how to seamlessly integrate [Shopify Plus](https://www.shopify.com/plus) [multipass](https://shopify.dev/api/multipass) with Hydrogen's customer and checkout [sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions) 
+This repo demonstrates how to seamlessly integrate [Shopify Plus](https://www.shopify.com/plus) [multipass](https://shopify.dev/api/multipass) with Hydrogen's customer and checkout [sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
 
 Multipass enables you to do the following:
 
@@ -47,7 +47,7 @@ Hydrogen is a React framework and SDK that you can use to build fast and dynamic
 
 **Requirements:**
 
-- Node.js version 16.5.0 or higher
+- Node.js version 16.14.0 or higher
 - Yarn
 
 ```bash

@@ -21,7 +21,7 @@ In the following diagram, none of the queries (`shopInfo`, `CollectionDetails`, 
 
 ![Shows a diagram of queries that haven't been preloaded](/assets/custom-storefronts/hydrogen/preload-queries-none-set.png)
 
-The `shopInfo` and `CollectionDetails` queries must finish loading before `layoutContent` can start. Subsequently, `layoutContent` must finish loading before `localization` can start. This behavior is called a request waterfall, and it can severely reduce your app performance. 
+The `shopInfo` and `CollectionDetails` queries must finish loading before `layoutContent` can start. Subsequently, `layoutContent` must finish loading before `localization` can start. This behavior is called a request waterfall, and it can severely reduce your app performance.
 
 Because none of these queries have dependencies, it would be ideal if they all started to load in parallel up front. This process is called preloading queries, and Hydrogen does it by default:
 
@@ -54,7 +54,7 @@ In development mode, Hydrogen detects request waterfalls, and warns you that the
 
 ### Routes with parameters
 
-Preloaded queries work similarly for routes with parameters, like `Product` and `Collection`, except that each route with a different parameter has its own preloaded queries. 
+Preloaded queries work similarly for routes with parameters, like `Product` and `Collection`, except that each route with a different parameter has its own preloaded queries.
 
 For example, the first time a user visits `/collections/freestyle-collection`, no queries will be preloaded. Similarly, the first time a user visits `/collections/backcountry-collection`, no queries will be preloaded. However, the second time that a user visits either route, queries will be preloaded. It's important that each route has separate preloaded queries, otherwise the results of one might show up for the results of the other.
 
@@ -81,7 +81,7 @@ const data = fetchSync('https://my.api.com/data.json', {
 <aside class="note beta">
 <h4>Experimental feature</h4>
 
-<p>The `showQueryTiming` property is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
+<p>The <code>showQueryTiming</code> property is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
 
 </aside>
 
