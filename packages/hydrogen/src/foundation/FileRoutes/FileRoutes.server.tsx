@@ -40,6 +40,7 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
     () => createPageRoutes(routes!, basePath, dirPrefix),
     [routes, basePath, dirPrefix]
   );
+  const appOutlets = request.ctx.hydrogenConfig!.outlets;
 
   let foundRoute, foundRouteDetails;
 
@@ -52,18 +53,35 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
     }
   }
 
+  console.log('Found route', foundRoute, foundRouteDetails.params);
+
   if (foundRoute) {
     request.ctx.router.routeRendered = true;
     request.ctx.router.routeParams = foundRouteDetails.params;
+
+    let withProps: any;
+    if (serverProps.outlet) {
+      console.log('Found outlet:', serverProps.outlet);
+      const FoundOutlet = (appOutlets[serverProps.outlet] ||
+        foundRoute.outlets[serverProps.outlet]) as keyof JSX.IntrinsicElements;
+      withProps = (
+        <FoundOutlet params={foundRouteDetails.params} {...serverProps} />
+      );
+    } else {
+      withProps = (
+        <foundRoute.component
+          params={foundRouteDetails.params}
+          {...serverProps}
+        />
+      );
+    }
+
     return (
       <RouteParamsProvider
         routeParams={foundRouteDetails.params}
         basePath={basePath}
       >
-        <foundRoute.component
-          params={foundRouteDetails.params}
-          {...serverProps}
-        />
+        {withProps}
       </RouteParamsProvider>
     );
   }
@@ -74,6 +92,7 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
 interface HydrogenRoute {
   component: any;
   path: string;
+  outlets: Record<string, any>;
   exact: boolean;
 }
 
@@ -102,9 +121,17 @@ export function createPageRoutes(
         );
       }
 
+      const outlets: Record<string, any> = {};
+      Object.keys(pages[key]).forEach((exportName: any) => {
+        if (exportName !== 'default' && exportName !== 'api') {
+          outlets[exportName] = pages[key][exportName];
+        }
+      });
+
       return {
         path: topLevelPrefix + path,
         component: pages[key].default,
+        outlets,
         exact,
       };
     })

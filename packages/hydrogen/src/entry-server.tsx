@@ -68,7 +68,7 @@ const DOCTYPE = '<!DOCTYPE html>';
 const CONTENT_TYPE = 'Content-Type';
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
-export const renderHydrogen = (App: any) => {
+export const renderHydrogen = (App: any, outlets?: Record<string, any>) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
     const {cache, context, buyerIpHeader, headers} = options;
 
@@ -92,6 +92,7 @@ export const renderHydrogen = (App: any) => {
     const hydrogenConfig: ResolvedHydrogenConfig = {
       ...inlineHydrogenConfig,
       routes: hydrogenRoutes,
+      outlets,
     };
 
     request.ctx.hydrogenConfig = hydrogenConfig;
@@ -347,6 +348,8 @@ async function runSSR({
   log,
   revalidate,
 }: RunSsrParams) {
+  console.log('runSSR');
+
   let ssrDidError: Error | undefined;
   const didError = () => rsc.didError() ?? ssrDidError;
 
@@ -654,11 +657,13 @@ async function runSSR({
  * Run the RSC/Flight part of the App
  */
 function runRSC({App, state, log, request, response}: RunRscParams) {
+  console.log('runRSC');
+
   const serverProps = {...state, request, response, log};
   request.ctx.router.serverProps = serverProps;
   preloadRequestCacheData(request);
 
-  const AppRSC = state?.subRoute ? (
+  const AppRSC = state?.outlet ? (
     <ServerRequestProvider request={request}>
       <App {...serverProps} />
     </ServerRequestProvider>

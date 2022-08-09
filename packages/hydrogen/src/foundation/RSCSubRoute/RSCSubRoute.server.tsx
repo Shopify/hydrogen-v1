@@ -1,41 +1,93 @@
-import React, {cloneElement, ReactElement} from 'react';
+import React, {ReactElement} from 'react';
+import {CachingStrategy} from '../../types';
+import {CacheShort} from '../Cache/strategies';
 // import {ErrorBoundary} from 'react-error-boundary';
 import {useServerRequest} from '../ServerRequestProvider';
 import {RSCSubRouteClient} from './RSCSubRoute.client';
 
 export type RSCSubRouteProps = {
+  outletName: string;
+  /** The server props of this RSC route */
+  serverProps: any;
   /** The state of this RSC route */
   state: any;
-  /** The URL path where the route exists. The path can contain variables. For example, `/products/:handle`. */
-  path: string;
+  cache: CachingStrategy;
   /** A reference to a React Server Component that's rendered when the route is active. */
-  page: ReactElement;
+  component: ({...componentProps}: any) => JSX.Element | undefined;
+  fallback?: ReactElement;
 };
 
 export function RSCSubRoute({
+  outletName,
+  serverProps,
   state,
-  path,
-  page,
-}: RSCSubRouteProps): ReactElement {
+  component,
+  cache,
+  fallback,
+}: RSCSubRouteProps) {
+  // console.log('RSCSubRoute', state, component);
   const request = useServerRequest();
-  const {serverProps} = request.ctx.router;
   const isRSC = request.isRscRequest();
-  const clientState = {
-    ...state,
-    pathname: `/${path}`,
-    subRoute: true,
-  };
 
-  return isRSC ? (
-    <RSCSubRouteClient state={clientState} isRSC={isRSC} />
-  ) : (
-    <RSCSubRouteClient state={clientState} isRSC={isRSC}>
-      {cloneElement(page, serverProps)}
-    </RSCSubRouteClient>
-  );
+  if (serverProps.outlet && component) {
+    console.log('RSCSub', serverProps.outlet, serverProps.response.cache);
+    serverProps.response.cache(cache);
+    return component ? component(state) : null;
+  } else if (isRSC) {
+    console.log('RSCSub - RSC');
+    return (
+      <RSCSubRouteClient outletName={outletName} state={state} isRSC={isRSC} />
+    );
+  } else {
+    console.log('RSCSub - SSR');
+    return (
+      <RSCSubRouteClient outletName={outletName} state={state} isRSC={isRSC}>
+        {component(serverProps)}
+      </RSCSubRouteClient>
+    );
+  }
 }
 
-// try
-// 1. Render SSR
-// 2. Client-side set children as init state, and bound app state
-// 3. RSC takes over in useEffect (app wide rsc state)
+export function defineRSCOutlet({
+  outletName,
+  component,
+  dependency = [],
+  cache = CacheShort(),
+  fallback,
+}: {
+  outletName: string;
+  component: ({...componentProps}: any) => JSX.Element;
+  dependency?: string[];
+  cache?: CachingStrategy;
+  fallback?: ReactElement;
+}) {
+  return (serverProps: any) => {
+    console.log('defineOutlet', component);
+
+    const dependencyState = dependency.reduce(function (obj: any, key) {
+      if (key in serverProps) obj[key] = serverProps[key];
+      return obj;
+    }, {});
+
+    serverProps.response?.cache(cache);
+
+    return (
+      <>
+        {/* @ts-ignore */}
+        <RSCSubRoute
+          outletName={outletName}
+          serverProps={serverProps}
+          state={{
+            ...dependencyState,
+            pathname: serverProps.pathname,
+            search: serverProps.search,
+            outlet: serverProps.outlet,
+          }}
+          cache={cache}
+          component={component}
+          fallback={fallback}
+        />
+      </>
+    );
+  };
+}

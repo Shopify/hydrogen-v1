@@ -1,14 +1,21 @@
-import {useUrl} from '@shopify/hydrogen';
+import {
+  useLocalization,
+  useShopQuery,
+  CacheLong,
+  gql,
+  type HydrogenRouteProps,
+  useUrl,
+} from '@shopify/hydrogen';
+import type {Menu} from '@shopify/hydrogen/storefront-api-types';
 
-import {Section, Heading, FooterMenu, CountrySelector} from '~/components';
-import type {EnhancedMenu} from '~/lib/utils';
+import {parseMenu} from '~/lib/utils';
+import {Section, Heading, FooterMenu, CountrySelector} from '../index';
 
-/**
- * A server component that specifies the content of the footer on the website
- */
-export function Footer({menu}: {menu?: EnhancedMenu}) {
+const FOOTER_MENU_HANDLE = 'footer';
+
+export const Footer = ({response}: HydrogenRouteProps) => {
   const {pathname} = useUrl();
-
+  const {footerMenu: menu} = useLayoutQuery();
   const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
   const countryCode = localeMatch ? localeMatch[1] : null;
 
@@ -43,4 +50,61 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
       </div>
     </Section>
   );
+};
+
+function useLayoutQuery() {
+  const {
+    language: {isoCode: languageCode},
+  } = useLocalization();
+
+  const {data} = useShopQuery<{
+    footerMenu: Menu;
+  }>({
+    query: SHOP_QUERY,
+    variables: {
+      language: languageCode,
+      footerMenuHandle: FOOTER_MENU_HANDLE,
+    },
+    cache: CacheLong(),
+    preload: '*',
+  });
+
+  /*
+    Modify specific links/routes (optional)
+    @see: https://shopify.dev/api/storefront/unstable/enums/MenuItemType
+    e.g here we map:
+      - /blogs/news -> /news
+      - /blog/news/blog-post -> /news/blog-post
+      - /collections/all -> /products
+  */
+  const customPrefixes = {BLOG: '', CATALOG: 'products'};
+
+  const footerMenu = data?.footerMenu
+    ? parseMenu(data.footerMenu, customPrefixes)
+    : undefined;
+
+  return {footerMenu};
 }
+
+const SHOP_QUERY = gql`
+  fragment MenuItem on MenuItem {
+    id
+    resourceId
+    tags
+    title
+    type
+    url
+  }
+  query layoutFooterMenus($language: LanguageCode, $footerMenuHandle: String!)
+  @inContext(language: $language) {
+    footerMenu: menu(handle: $footerMenuHandle) {
+      id
+      items {
+        ...MenuItem
+        items {
+          ...MenuItem
+        }
+      }
+    }
+  }
+`;

@@ -11,7 +11,7 @@ import type {Blog} from '@shopify/hydrogen/storefront-api-types';
 import {Suspense} from 'react';
 
 import {CustomFont, PageHeader, Section} from '~/components';
-import {Layout, NotFound} from '~/components/index.server';
+import {NotFound} from '~/components/index.server';
 import {ATTR_LOADING_EAGER} from '~/lib/const';
 
 const BLOG_HANDLE = 'journal';
@@ -50,7 +50,7 @@ export default function Post({params, response}: HydrogenRouteProps) {
   ).format(new Date(publishedAt));
 
   return (
-    <Layout>
+    <>
       {/* Loads Fraunces custom font only on articles */}
       <CustomFont />
       <Suspense>
@@ -82,7 +82,7 @@ export default function Post({params, response}: HydrogenRouteProps) {
           className="article"
         />
       </Section>
-    </Layout>
+    </>
   );
 }
 

@@ -1,5 +1,4 @@
 import {Heading, Input, PageHeader} from '~/components';
-import {Layout} from '~/components/index.server';
 
 export function SearchPage({
   searchTerm,
@@ -9,7 +8,7 @@ export function SearchPage({
   children: React.ReactNode;
 }) {
   return (
-    <Layout>
+    <>
       <PageHeader>
         <Heading as="h1" size="copy">
           Search
@@ -28,6 +27,6 @@ export function SearchPage({
         </form>
       </PageHeader>
       {children}
-    </Layout>
+    </>
   );
 }

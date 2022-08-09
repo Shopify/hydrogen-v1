@@ -13,7 +13,7 @@ import {
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {PageHeader, ProductGrid, Section, Text} from '~/components';
-import {NotFound, Layout} from '~/components/index.server';
+import {NotFound} from '~/components/index.server';
 
 const pageBy = 48;
 
@@ -49,7 +49,7 @@ export default function Collection({params}: HydrogenRouteProps) {
   });
 
   return (
-    <Layout>
+    <>
       <Suspense>
         <Seo type="collection" data={collection} />
       </Suspense>
@@ -71,7 +71,7 @@ export default function Collection({params}: HydrogenRouteProps) {
           url={`/collections/${handle}?country=${country}`}
         />
       </Section>
-    </Layout>
+    </>
   );
 }
 

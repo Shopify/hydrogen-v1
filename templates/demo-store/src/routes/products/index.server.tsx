@@ -16,7 +16,7 @@ import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 
 export default function AllProducts() {
   return (
-    <Layout>
+    <>
       <Seo type="page" data={{title: 'All Products'}} />
       <PageHeader heading="All Products" variant="allCollections" />
       <Section>
@@ -24,7 +24,7 @@ export default function AllProducts() {
           <AllProductsGrid />
         </Suspense>
       </Section>
-    </Layout>
+    </>
   );
 }
 

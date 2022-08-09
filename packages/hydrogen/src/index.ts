@@ -30,7 +30,7 @@ export {useServerProps} from './foundation/useServerProps';
 export {FileRoutes} from './foundation/FileRoutes/FileRoutes.server';
 export {Route} from './foundation/Route/Route.server';
 export {Router} from './foundation/Router/Router.server';
-export {RSCSubRoute} from './foundation/RSCSubRoute/RSCSubRoute.server';
+export {defineRSCOutlet} from './foundation/RSCSubRoute/RSCSubRoute.server';
 export {log, type Logger} from './utilities/log';
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
 export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.server';

@@ -8,7 +8,7 @@ import {
 import {Suspense} from 'react';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {Button, FeaturedCollections, PageHeader, Text} from '~/components';
-import {ProductSwimlane, Layout} from '~/components/index.server';
+import {ProductSwimlane} from '~/components/index.server';
 import type {
   CollectionConnection,
   ProductConnection,
@@ -30,7 +30,7 @@ export function NotFound({
   const description = `We couldn’t find the ${type} you’re looking for. Try checking the URL or heading back to the home page.`;
 
   return (
-    <Layout>
+    <>
       <PageHeader heading={heading}>
         <Text width="narrow" as="p">
           {description}
@@ -42,7 +42,7 @@ export function NotFound({
       <Suspense>
         <FeaturedSection />
       </Suspense>
-    </Layout>
+    </>
   );
 }
 

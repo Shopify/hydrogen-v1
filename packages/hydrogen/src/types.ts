@@ -43,10 +43,7 @@ export type Hook = (
   params: {url: URL} & Record<string, any>
 ) => any | Promise<any>;
 
-export type ImportGlobEagerOutput = Record<
-  string,
-  Record<'default' | 'api', any>
->;
+export type ImportGlobEagerOutput = Record<string, Record<string, any>>;
 
 export type InlineHydrogenRoutes =
   | string
@@ -86,6 +83,7 @@ export type InlineHydrogenConfig = ClientConfig & {
 
 export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {
   routes: ResolvedHydrogenRoutes;
+  outlets: Record<string, any>;
 };
 
 export type ClientConfig = {

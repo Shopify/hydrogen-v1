@@ -14,7 +14,6 @@ import type {
 import {Suspense} from 'react';
 
 import {ArticleCard, Grid, PageHeader} from '~/components';
-import {Layout} from '~/components/index.server';
 import {getImageLoadingPriority, PAGINATION_SIZE} from '~/lib/const';
 
 const BLOG_HANDLE = 'Journal';
@@ -26,14 +25,14 @@ export default function Blog({
   response.cache(CacheLong());
 
   return (
-    <Layout>
+    <>
       <Seo type="page" data={{title: 'All Journals'}} />
       <PageHeader heading={BLOG_HANDLE} className="gap-0">
         <Suspense>
           <JournalsGrid pageBy={pageBy} />
         </Suspense>
       </PageHeader>
-    </Layout>
+    </>
   );
 }
 

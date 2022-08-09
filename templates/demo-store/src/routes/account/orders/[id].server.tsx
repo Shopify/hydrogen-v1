@@ -22,7 +22,6 @@ import type {
 import {Suspense} from 'react';
 
 import {Text, PageHeader, Heading} from '~/components';
-import {Layout} from '~/components/index.server';
 import {statusMessage} from '~/lib/utils';
 
 export default function OrderDetails({response}: HydrogenRouteProps) {
@@ -71,7 +70,7 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
     firstDiscount?.percentage;
 
   return (
-    <Layout>
+    <>
       <Suspense>
         <Seo type="noindex" data={{title: `Order ${order.name}`}} />
       </Suspense>
@@ -314,7 +313,7 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 

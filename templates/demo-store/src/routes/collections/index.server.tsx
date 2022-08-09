@@ -3,12 +3,12 @@ import {useShopQuery, useLocalization, gql, Seo} from '@shopify/hydrogen';
 import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 
 import {PageHeader, Section, Grid} from '~/components';
-import {Layout, CollectionCard} from '~/components/index.server';
+import {CollectionCard} from '~/components/index.server';
 import {getImageLoadingPriority, PAGINATION_SIZE} from '~/lib/const';
 
 export default function Collections() {
   return (
-    <Layout>
+    <>
       <Seo type="page" data={{title: 'All Collections'}} />
       <PageHeader heading="Collections" />
       <Section>
@@ -16,7 +16,7 @@ export default function Collections() {
           <CollectionGrid />
         </Suspense>
       </Section>
-    </Layout>
+    </>
   );
 }
 

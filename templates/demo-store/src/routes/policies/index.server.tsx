@@ -9,7 +9,7 @@ import {
 import type {Shop} from '@shopify/hydrogen/storefront-api-types';
 
 import {PageHeader, Section, Heading} from '~/components';
-import {Layout, NotFound} from '~/components/index.server';
+import {NotFound} from '~/components/index.server';
 
 export default function Policies() {
   const {
@@ -52,7 +52,7 @@ export default function Policies() {
   }
 
   return (
-    <Layout>
+    <>
       <PageHeader heading="Policies" />
       <Section padding="x" className="mb-24">
         {policies.map((policy) => {
@@ -66,7 +66,7 @@ export default function Policies() {
           );
         })}
       </Section>
-    </Layout>
+    </>
   );
 }
 

@@ -9,7 +9,6 @@ import {
 } from '@shopify/hydrogen';
 
 import {AccountRecoverForm} from '~/components';
-import {Layout} from '~/components/index.server';
 
 /**
  * A form for the user to fill out to _initiate_ a password reset.
@@ -21,12 +20,12 @@ export default function AccountRecover({response}: HydrogenRouteProps) {
   response.cache(CacheNone());
 
   return (
-    <Layout>
+    <>
       <Suspense>
         <Seo type="noindex" data={{title: 'Recover password'}} />
       </Suspense>
       <AccountRecoverForm />
-    </Layout>
+    </>
   );
 }
 

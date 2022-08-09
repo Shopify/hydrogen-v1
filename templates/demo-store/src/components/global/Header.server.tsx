@@ -7,17 +7,16 @@ import {
 } from '@shopify/hydrogen';
 import type {Menu, Shop} from '@shopify/hydrogen/storefront-api-types';
 
-import {Footer} from '~/components/index.server';
+import {Header as HeaderClient} from '~/components';
 import {parseMenu} from '~/lib/utils';
 
-const FOOTER_MENU_HANDLE = 'footer';
+const HEADER_MENU_HANDLE = 'main-menu';
+const SHOP_NAME_FALLBACK = 'Hydrogen';
 
-export default function FooterMenu({response}: HydrogenRouteProps) {
-  response.cache(CacheLong());
-
-  const {footerMenu} = useLayoutQuery();
-  return <Footer menu={footerMenu} />;
-}
+export const Header = () => {
+  const {shopName, headerMenu} = useLayoutQuery();
+  return <HeaderClient title={shopName} menu={headerMenu} />;
+};
 
 function useLayoutQuery() {
   const {
@@ -25,16 +24,19 @@ function useLayoutQuery() {
   } = useLocalization();
 
   const {data} = useShopQuery<{
-    footerMenu: Menu;
+    shop: Shop;
+    headerMenu: Menu;
   }>({
     query: SHOP_QUERY,
     variables: {
       language: languageCode,
-      footerMenuHandle: FOOTER_MENU_HANDLE,
+      headerMenuHandle: HEADER_MENU_HANDLE,
     },
     cache: CacheLong(),
     preload: '*',
   });
+
+  const shopName = data ? data.shop.name : SHOP_NAME_FALLBACK;
 
   /*
     Modify specific links/routes (optional)
@@ -46,11 +48,11 @@ function useLayoutQuery() {
   */
   const customPrefixes = {BLOG: '', CATALOG: 'products'};
 
-  const footerMenu = data?.footerMenu
-    ? parseMenu(data.footerMenu, customPrefixes)
+  const headerMenu = data?.headerMenu
+    ? parseMenu(data.headerMenu, customPrefixes)
     : undefined;
 
-  return {footerMenu};
+  return {headerMenu, shopName};
 }
 
 const SHOP_QUERY = gql`
@@ -62,9 +64,12 @@ const SHOP_QUERY = gql`
     type
     url
   }
-  query layoutFooterMenus($language: LanguageCode, $footerMenuHandle: String!)
+  query layoutHeaderMenus($language: LanguageCode, $headerMenuHandle: String!)
   @inContext(language: $language) {
-    footerMenu: menu(handle: $footerMenuHandle) {
+    shop {
+      name
+    }
+    headerMenu: menu(handle: $headerMenuHandle) {
       id
       items {
         ...MenuItem

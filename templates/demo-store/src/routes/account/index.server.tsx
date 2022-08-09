@@ -22,7 +22,7 @@ import {
   LogoutButton,
   PageHeader,
 } from '~/components';
-import {Layout, ProductSwimlane} from '~/components/index.server';
+import {ProductSwimlane} from '~/components/index.server';
 import type {
   Collection,
   CollectionConnection,
@@ -114,7 +114,7 @@ function AuthenticatedAccount({
     : 'Account Details';
 
   return (
-    <Layout>
+    <>
       <Suspense>
         <Seo type="noindex" data={{title: 'Account details'}} />
       </Suspense>
@@ -141,7 +141,7 @@ function AuthenticatedAccount({
           <ProductSwimlane data={featuredProducts} />
         </>
       )}
-    </Layout>
+    </>
   );
 }
 

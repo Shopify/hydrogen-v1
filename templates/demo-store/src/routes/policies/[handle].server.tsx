@@ -10,7 +10,7 @@ import {
 import {Suspense} from 'react';
 
 import {Button, PageHeader, Section} from '~/components';
-import {NotFound, Layout} from '~/components/index.server';
+import {NotFound} from '~/components/index.server';
 
 export default function Policy({params}: HydrogenRouteProps) {
   const {
@@ -64,7 +64,7 @@ export default function Policy({params}: HydrogenRouteProps) {
   });
 
   return (
-    <Layout>
+    <>
       <Suspense>
         <Seo type="page" data={page} />
       </Suspense>
@@ -92,7 +92,7 @@ export default function Policy({params}: HydrogenRouteProps) {
           />
         </div>
       </Section>
-    </Layout>
+    </>
   );
 }
 

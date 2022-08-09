@@ -11,7 +11,6 @@ import {
 } from '@shopify/hydrogen';
 
 import {AccountLoginForm} from '~/components';
-import {Layout} from '~/components/index.server';
 
 export default function Login({response}: HydrogenRouteProps) {
   response.cache(CacheNone());
@@ -27,12 +26,12 @@ export default function Login({response}: HydrogenRouteProps) {
   });
 
   return (
-    <Layout>
+    <>
       <Suspense>
         <Seo type="noindex" data={{title: 'Login'}} />
       </Suspense>
       <AccountLoginForm shopName={name} />
-    </Layout>
+    </>
   );
 }
 

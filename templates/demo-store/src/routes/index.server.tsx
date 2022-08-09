@@ -8,6 +8,7 @@ import {
   useLocalization,
   useShopQuery,
   RSCSubRoute,
+  defineRSCOutlet,
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
@@ -18,7 +19,13 @@ import {
   CollectionConnection,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
-import TestRSCSubRoute from './sub-routes/TestRSCSubRoute.server';
+
+const Test = ({id}: {id: string}) => <p>Test RSC Outlet {id}</p>;
+export const TestRSCOutlet = defineRSCOutlet({
+  outletName: 'TestRSCOutlet',
+  component: Test,
+  dependency: ['id'],
+});
 
 export default function Homepage() {
   useServerAnalytics({
@@ -28,19 +35,15 @@ export default function Homepage() {
   });
 
   return (
-    <Layout>
-      <RSCSubRoute
-        state={{}}
-        path="sub-routes/TestRSCSubRoute"
-        page={<TestRSCSubRoute />}
-      />
+    <>
+      <TestRSCOutlet id="123" />
       <Suspense>
         <SeoForHomepage />
       </Suspense>
       <Suspense>
         <HomepageContent />
       </Suspense>
-    </Layout>
+    </>
   );
 }
 

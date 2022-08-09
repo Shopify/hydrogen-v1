@@ -9,19 +9,18 @@ import {
 } from '@shopify/hydrogen';
 
 import {AccountCreateForm} from '~/components';
-import {Layout} from '~/components/index.server';
 import {getApiErrorMessage} from '~/lib/utils';
 
 export default function Register({response}: HydrogenRouteProps) {
   response.cache(CacheNone());
 
   return (
-    <Layout>
+    <>
       <Suspense>
         <Seo type="noindex" data={{title: 'Register'}} />
       </Suspense>
       <AccountCreateForm />
-    </Layout>
+    </>
   );
 }
 
