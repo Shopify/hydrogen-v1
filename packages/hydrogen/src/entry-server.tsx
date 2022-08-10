@@ -106,6 +106,7 @@ export const renderHydrogen = (App: any) => {
 
     if (request.cookies.get(FORM_REDIRECT_COOKIE)) {
       response.headers.set('SET-COOKIE', `${FORM_REDIRECT_COOKIE}=`);
+      response.doNotStream();
     }
 
     if (hydrogenConfig.poweredByHeader ?? true) {
@@ -363,7 +364,7 @@ async function runSSR({
 
   const AppSSR = (
     <Html
-      template={shouldStream(request, response) ? noScriptTemplate : template}
+      template={response.canStream() ? noScriptTemplate : template}
       hydrogenConfig={request.ctx.hydrogenConfig!}
     >
       <ServerRequestProvider request={request}>
@@ -382,7 +383,7 @@ async function runSSR({
 
   log.trace('start ssr');
 
-  const rscReadable = shouldStream(request, response)
+  const rscReadable = response.canStream()
     ? new ReadableStream({
         start(controller) {
           log.trace('rsc start chunks');
@@ -434,7 +435,7 @@ async function runSSR({
       );
     }
 
-    if (shouldStream(request, response)) log.trace('worker ready to stream');
+    if (response.canStream()) log.trace('worker ready to stream');
     ssrReadable.allReady.then(() => log.trace('worker complete ssr'));
 
     const prepareForStreaming = () => {
@@ -474,7 +475,7 @@ async function runSSR({
       return true;
     };
 
-    const shouldFlushBody = shouldStream(request, response)
+    const shouldFlushBody = response.canStream()
       ? prepareForStreaming()
       : await ssrReadable.allReady.then(prepareForStreaming);
 
@@ -484,7 +485,7 @@ async function runSSR({
 
       const writingSSR = bufferReadableStream(
         ssrReadable.getReader(),
-        shouldStream(request, response)
+        response.canStream()
           ? (chunk) => {
               bufferedSsr += chunk;
 
@@ -507,13 +508,13 @@ async function runSSR({
 
       const writingRSC = bufferReadableStream(
         rscReadable.getReader(),
-        shouldStream(request, response)
+        response.canStream()
           ? (scriptTag) => writable.write(encoder.encode(scriptTag))
           : undefined
       );
 
       Promise.all([writingSSR, writingRSC]).then(([ssrHtml, rscPayload]) => {
-        if (!shouldStream(request, response)) {
+        if (!response.canStream()) {
           const html = assembleHtml({ssrHtml, rscPayload, request, template});
           writable.write(encoder.encode(html));
         }
@@ -532,7 +533,7 @@ async function runSSR({
       postRequestTasks('str', responseOptions.status, request, response);
     }
 
-    if (shouldStream(request, response)) {
+    if (response.canStream()) {
       return new Response(transform.readable, responseOptions);
     }
 
@@ -568,7 +569,7 @@ async function runSSR({
           return nodeResponse.end();
         }
 
-        if (!shouldStream(request, response)) return;
+        if (!response.canStream()) return;
 
         startWritingToNodeResponse(nodeResponse, dev ? didError() : undefined);
 
@@ -587,7 +588,7 @@ async function runSSR({
 
         if (
           !revalidate &&
-          (shouldStream(request, response) || nodeResponse.writableEnded)
+          (response.canStream() || nodeResponse.writableEnded)
         ) {
           postRequestTasks('str', nodeResponse.statusCode, request, response);
           return;
@@ -949,11 +950,4 @@ async function saveCacheResponse(
     );
     deleteItemFromCache(request.cacheKey(true));
   }
-}
-
-function shouldStream(
-  request: HydrogenRequest,
-  response: HydrogenResponse
-): boolean {
-  return !request.cookies.get(FORM_REDIRECT_COOKIE) && response.canStream();
 }
