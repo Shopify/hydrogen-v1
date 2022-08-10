@@ -149,3 +149,21 @@ export function emitEvent(
     }
   }
 }
+
+export function emitEventFromQuery(
+  request: HydrogenRequest,
+  query: string,
+  variables: Record<string, any> | undefined,
+  result: any
+) {
+  if (result?.data) {
+    const match = query.match(/(^|\s)(query|mutation)(\s|{)/);
+    const action = match?.[2] as 'query' | 'mutation' | undefined;
+
+    if (action) {
+      Object.entries(result.data as Object).forEach(([name, result]) => {
+        emitEvent(request, `${action}:${name}`, {variables, result});
+      });
+    }
+  }
+}

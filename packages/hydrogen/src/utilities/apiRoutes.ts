@@ -1,4 +1,4 @@
-import {ResolvedHydrogenConfig} from '../types.js';
+import type {ResolvedHydrogenConfig} from '../types.js';
 import {
   getLoggerWithContext,
   logServerResponse,
@@ -14,6 +14,7 @@ import {emptySessionImplementation} from '../foundation/session/session.js';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
 import {RSC_PATHNAME} from '../constants.js';
 import type {RouteMatches} from './routes.js';
+import {emitEventFromQuery} from '../foundation/Analytics/ServerAnalyticsRoute.js';
 
 type RouteParams = Record<string, string>;
 export type RequestOptions = {
@@ -104,7 +105,11 @@ function queryShopBuilder(
       }
     );
 
-    return await fetcher();
+    const data = await fetcher();
+
+    emitEventFromQuery(request, query, variables, data);
+
+    return data;
   };
 }
 
