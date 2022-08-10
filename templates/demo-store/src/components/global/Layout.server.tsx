@@ -1,10 +1,5 @@
 import {Suspense} from 'react';
-import {
-  useLocalization,
-  useShopQuery,
-  gql,
-  CacheCustom,
-} from '@shopify/hydrogen';
+import {useLocalization, useShopQuery, CacheLong, gql} from '@shopify/hydrogen';
 import type {Menu, Shop} from '@shopify/hydrogen/storefront-api-types';
 
 import {Header} from '~/components';
@@ -68,10 +63,7 @@ function useLayoutQuery() {
       headerMenuHandle: HEADER_MENU_HANDLE,
       footerMenuHandle: FOOTER_MENU_HANDLE,
     },
-    cache: CacheCustom({
-      maxAge: 30,
-      staleWhileRevalidate: 30,
-    }),
+    cache: CacheLong(),
     preload: '*',
   });
 
