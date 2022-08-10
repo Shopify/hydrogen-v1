@@ -60,6 +60,7 @@ export type HydrogenEvents = Partial<
 > & {
   query?: Record<string, GenericEventHandler>;
   mutation?: Record<string, GenericEventHandler>;
+  custom?: Record<string, GenericEventHandler>;
 };
 
 export type HydrogenPlugin = {
@@ -68,5 +69,5 @@ export type HydrogenPlugin = {
   routes?: InlineHydrogenRoutes;
   context?: Record<string, any>;
   middleware?: string;
-  events: HydrogenEvents;
+  events?: HydrogenEvents;
 };

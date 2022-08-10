@@ -99,6 +99,7 @@ function runEvents(request: HydrogenRequest, bodyPromise?: Promise<any>) {
   const eventName = url.search
     .replace('?', '')
     .toLowerCase()
+    .replace(/^c-/, 'custom:')
     .replace(/[_-]([a-z])/g, (_, m1) => m1.toUpperCase()) as HydrogenEventName;
 
   if (!eventName) return;
