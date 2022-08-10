@@ -1,5 +1,6 @@
 /**
- * Export all client components from here to ensure they're available in both import * paths. This is because we transform `@shopify/hydrogen` to `@shopify/hydrogen/client`
+ * Export all client components from here to ensure they're available in both import
+ * paths. This is because we transform `@shopify/hydrogen` to `@shopify/hydrogen/client`
  * inside client components during the client build only, but when the same components
  * run during SSR, they reference this path.
  */

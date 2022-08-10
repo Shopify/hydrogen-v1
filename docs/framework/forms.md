@@ -107,8 +107,8 @@ In the previous example, when the user is not found, the current page is re-rend
 import {Form, useFlashSession} from '@shopify/hydrogen/experimental';
 
 export default function Login() {
-  // `useFlashSession` also clears the value after reading it. This makes it
-  // so that if the user refreshes the page, the validation error goes away.
+  // `useFlashSession` also clears the value after reading it. This way,
+  // if the user refreshes the page, the validation error goes away.
   const loginError = useFlashSession('loginError');
 
   return (
@@ -130,7 +130,7 @@ export default function Login() {
 
 {% endcodeblock %}
 
-The page initially loads without a session loginError value. If the login mutation fails, then the server components re-render with the `loginError` session value and display a message to the user. Because it uses `useFlashSession`, instead of `useSession`, the value is subsequently cleared. If the user refreshes the page, the validation error goes away.
+The page initially loads without a session `loginError` value. If the login mutation fails, then the server components re-render with the `loginError` session value and display a message to the user. Because it uses `useFlashSession` instead of `useSession`, the value is subsequently cleared. If the user refreshes the page, then the validation error goes away.
 
 ## Client validation and feedback
 

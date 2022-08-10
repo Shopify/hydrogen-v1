@@ -15,7 +15,7 @@ The `useFlashSession` hook reads session data and subsequently clears it in serv
 
 ## Example code
 
-{% codeblock file, filename: 'component.server.jsx' %}
+{% codeblock file, filename: 'src/component.server.jsx' %}
 
 ```jsx
 import {Form, useFlashSession} from '@shopify/hydrogen/experimental';
@@ -54,7 +54,7 @@ export async function api(request) {
 
 ## Return value
 
-The `useFlashSession` hook returns data from the session. It also clears that data so that it will be gone the next time it is read.
+The `useFlashSession` hook returns data from the session. It also clears that data so that it will be gone the next time that it's read.
 
 ## Considerations
 
