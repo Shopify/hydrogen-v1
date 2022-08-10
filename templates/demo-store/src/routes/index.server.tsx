@@ -7,14 +7,13 @@ import {
   useServerAnalytics,
   useLocalization,
   useShopQuery,
-  RSCSubRoute,
   defineRSCOutlet,
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
 import {FeaturedCollections, Hero} from '~/components';
-import {Layout, ProductSwimlane} from '~/components/index.server';
+import {ProductSwimlane} from '~/components/index.server';
 import {
   CollectionConnection,
   ProductConnection,
