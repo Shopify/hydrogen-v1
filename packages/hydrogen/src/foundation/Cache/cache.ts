@@ -142,6 +142,10 @@ export function isStale(request: Request, response: Response) {
   const cacheControl = response.headers.get('real-cache-control');
   let responseMaxAge = 0;
 
+  menulog(request.url, () => {
+    console.log('isStale - layoutMenu', responseDate, cacheControl);
+  });
+
   if (cacheControl) {
     const maxAgeMatch = cacheControl.match(/max-age=(\d*)/);
     if (maxAgeMatch && maxAgeMatch.length > 1) {
@@ -159,9 +163,19 @@ export function isStale(request: Request, response: Response) {
 
   const result = age > responseMaxAge;
 
+  menulog(request.url, () => {
+    console.log('isStale - layoutMenu', result, `${age} > ${responseMaxAge}`);
+  });
+
   if (result) {
     logCacheApiStatus('STALE', request.url);
   }
 
   return result;
+}
+
+function menulog(url: string, cb: () => void) {
+  if (/layoutMenu/.test(url)) {
+    cb();
+  }
 }
