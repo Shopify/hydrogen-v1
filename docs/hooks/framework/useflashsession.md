@@ -33,7 +33,7 @@ export default function Login() {
   );
 }
 
-export async function api(request) {
+export async function api(request, {session}) {
   const data = await request.formData();
   const username = data.get('username');
   const password = data.get('password');

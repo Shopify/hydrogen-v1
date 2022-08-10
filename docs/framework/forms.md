@@ -84,7 +84,7 @@ export async function api(request, {session}) {
     // We couldn't find the user.
     // Re-render the login page with a login error displayed
     await session.set('loginError', true);
-    return new Request('/login?error');
+    return new Request('/login');
   }
 
   // Save the user to the session
