@@ -118,12 +118,11 @@ export async function setItemInCache(
 
   // CF will override cache-control, so we need to keep a
   // non-modified real-cache-control
-  response.headers.set('cache-control', cacheControlString);
   response.headers.set('real-cache-control', cacheControlString);
   response.headers.set('cache-put-date', new Date().toUTCString());
 
   menulog(request.url, () => {
-    console.log('PUT - layoutMenu', cacheControlString);
+    console.log('PUT - layoutMenu', request.headers.get('cache-control'));
   });
 
   logCacheApiStatus('PUT', request.url);
