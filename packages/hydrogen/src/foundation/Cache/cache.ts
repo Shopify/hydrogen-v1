@@ -122,6 +122,10 @@ export async function setItemInCache(
   response.headers.set('real-cache-control', cacheControlString);
   response.headers.set('cache-put-date', new Date().toUTCString());
 
+  menulog(request.url, () => {
+    console.log('PUT - layoutMenu', cacheControlString);
+  });
+
   logCacheApiStatus('PUT', request.url);
   await cache.put(request, response);
 }
