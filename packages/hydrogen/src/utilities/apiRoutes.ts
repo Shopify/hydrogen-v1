@@ -1,9 +1,4 @@
-import {
-  ResolvedHydrogenConfig,
-  ResolvedHydrogenRoutes,
-  ImportGlobEagerOutput,
-} from '../types.js';
-import {matchPath} from './matchPath.js';
+import type {ResolvedHydrogenConfig} from '../types.js';
 import {
   getLoggerWithContext,
   logServerResponse,
@@ -18,9 +13,8 @@ import type {
 import {emptySessionImplementation} from '../foundation/session/session.js';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
 import {RSC_PATHNAME} from '../constants.js';
-
-let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
-let memoizedRawRoutes: ImportGlobEagerOutput = {};
+import type {RouteMatches} from './routes.js';
+import {emitEventFromQuery} from '../foundation/Analytics/ServerAnalyticsRoute.js';
 
 type RouteParams = Record<string, string>;
 export type RequestOptions = {
@@ -34,107 +28,28 @@ export type ResourceGetter = (
   requestOptions: RequestOptions
 ) => Promise<Response | Object | String>;
 
-interface HydrogenApiRoute {
-  path: string;
-  resource: ResourceGetter;
-  hasServerComponent: boolean;
-}
-
 export type ApiRouteMatch = {
   resource: ResourceGetter;
-  hasServerComponent: boolean;
   params: RouteParams;
 };
 
-export function extractPathFromRoutesKey(
-  routesKey: string,
-  dirPrefix: string | RegExp
-) {
-  let path = routesKey
-    .replace(dirPrefix, '')
-    .replace(/\.server\.(t|j)sx?$/, '')
-    /**
-     * Replace /index with /
-     */
-    .replace(/\/index$/i, '/')
-    /**
-     * Only lowercase the first letter. This allows the developer to use camelCase
-     * dynamic paths while ensuring their standard routes are normalized to lowercase.
-     */
-    .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
-    /**
-     * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
-     */
-    .replace(/\[(?:[.]{3})?(\w+?)\]/g, (_match, param: string) => `:${param}`);
-
-  if (path.endsWith('/') && path !== '/') {
-    path = path.substring(0, path.length - 1);
-  }
-
-  return path;
-}
-
-export function getApiRoutes({
-  files: routes,
-  basePath: topLevelPath = '',
-  dirPrefix = '',
-}: Partial<ResolvedHydrogenRoutes>): Array<HydrogenApiRoute> {
-  if (!routes || memoizedRawRoutes === routes) return memoizedApiRoutes;
-
-  const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
-
-  const keys = Object.keys(routes);
-
-  const apiRoutes = keys
-    .filter((key) => routes[key].api)
-    .map((key) => {
-      const path = extractPathFromRoutesKey(key, dirPrefix);
-
-      /**
-       * Catch-all routes [...handle].jsx don't need an exact match
-       * https://reactrouter.com/core/api/Route/exact-bool
-       */
-      const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
-
-      return {
-        path: topLevelPrefix + path,
-        resource: routes[key].api,
-        hasServerComponent: !!routes[key].default,
-        exact,
-      };
-    });
-
-  memoizedApiRoutes = [
-    ...apiRoutes.filter((route) => !route.path.includes(':')),
-    ...apiRoutes.filter((route) => route.path.includes(':')),
-  ];
-
-  memoizedRawRoutes = routes;
-
-  return memoizedApiRoutes;
-}
-
 export function getApiRouteFromURL(
-  url: URL,
-  routes: Array<HydrogenApiRoute>
+  {matches, details}: RouteMatches,
+  method: string
 ): ApiRouteMatch | null {
-  let foundRoute, foundRouteDetails;
+  const route = matches.find((route) => !!route.resource.api);
 
-  for (let i = 0; i < routes.length; i++) {
-    foundRouteDetails = matchPath(url.pathname, routes[i]);
-
-    if (foundRouteDetails) {
-      foundRoute = routes[i];
-      break;
-    }
+  if (
+    !route ||
+    !details ||
+    (method === 'GET' && matches.some((routes) => !!routes.resource.default))
+  ) {
+    return null;
   }
-
-  if (!foundRoute) return null;
 
   return {
-    resource: foundRoute.resource,
-    params: foundRouteDetails.params,
-    hasServerComponent: foundRoute.hasServerComponent,
+    resource: route.resource.api as ResourceGetter,
+    params: details.params,
   };
 }
 
@@ -190,7 +105,11 @@ function queryShopBuilder(
       }
     );
 
-    return await fetcher();
+    const data = await fetcher();
+
+    emitEventFromQuery(request, query, variables, data);
+
+    return data;
   };
 }
 

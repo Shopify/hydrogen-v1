@@ -37,3 +37,37 @@ export type ShopifyConfig = {
   storefrontApiVersion: string;
   multipassSecret?: string;
 };
+
+export type InlineHydrogenRoutes =
+  | string
+  | {
+      files: string;
+      basePath?: string;
+    };
+
+export type HydrogenPluginOptions = {
+  [key: string]: any;
+};
+
+export type GenericEventHandler = (payload: any) => void | Promise<void>;
+
+export type HydrogenEventPrefix = `query:${string}` | `mutation:${string}`;
+
+export type HydrogenEventName = 'pageView' | 'addToCart';
+
+export type HydrogenEvents = Partial<
+  Record<HydrogenEventName, GenericEventHandler>
+> & {
+  query?: Record<string, GenericEventHandler>;
+  mutation?: Record<string, GenericEventHandler>;
+  custom?: Record<string, GenericEventHandler>;
+};
+
+export type HydrogenPlugin = {
+  name: string;
+  url?: string;
+  routes?: InlineHydrogenRoutes;
+  context?: Record<string, any>;
+  middleware?: string;
+  events?: HydrogenEvents;
+};

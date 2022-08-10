@@ -3,6 +3,7 @@ import {htmlEncode} from '../../../hydrogen/src/utilities';
 import fetch from 'node-fetch';
 import {resolve} from 'path';
 import type {Browser, Page} from 'playwright';
+import type {ViteDevServer} from 'vite';
 
 declare global {
   const browser: Browser;
@@ -12,6 +13,7 @@ import {edit, untilUpdated} from '../../utilities';
 
 type TestOptions = {
   getServerUrl: () => string;
+  getDevServer?: () => ViteDevServer;
   isWorker?: boolean;
   isBuild?: boolean;
 };
@@ -23,6 +25,7 @@ const SHOPIFY_PERFORMANCE_ENDPOINT =
 
 export default async function testCases({
   getServerUrl,
+  getDevServer,
   isBuild,
   isWorker,
 }: TestOptions) {
@@ -104,6 +107,8 @@ export default async function testCases({
     expect(defaultContext).toContain('{"test1":true}');
     const scopedContext = await page.textContent('#scoped-context');
     expect(scopedContext).toContain('{"test2":true}');
+    const pluginContext = await page.textContent('#plugin-context');
+    expect(pluginContext).toContain('{"test1":true,"test2":true}');
   });
 
   it.skip('should render server props in client component', async () => {
@@ -726,6 +731,28 @@ export default async function testCases({
     });
   });
 
+  describe('Hydrogen Events', () => {
+    if (isBuild) return;
+
+    let server;
+    beforeEach(() => {
+      server = getDevServer();
+      // @ts-ignore
+      server.testMeta = {appEvents: [], pluginEvents: []};
+    });
+
+    it('runs pageView event', async () => {
+      await Promise.all([
+        page.waitForRequest('**/__event?page-view'),
+        page.goto(getServerUrl()),
+      ]);
+
+      // The index page is loaded twice so there are 2 pageView events.
+      await untilUpdated(() => server.testMeta.appEvents.pop(), 'pageView');
+      await untilUpdated(() => server.testMeta.pluginEvents.pop(), 'pageView');
+    });
+  });
+
   describe('Shopify analytics', () => {
     it('should emit page-view event', async () => {
       const analyticFullPage = getServerUrl() + '/analytics/full';
@@ -892,6 +919,30 @@ export default async function testCases({
       await page.goto(getServerUrl() + '/error');
       expect(await page.textContent('h1')).toContain('Custom Error Page');
       expect(await page.textContent('h2')).toContain('itBroke is not defined');
+    });
+  });
+
+  describe('Hydrogen Plugins', () => {
+    it('imports plugin routes', async () => {
+      const pluginRoute = getServerUrl() + '/plugin-route';
+      await page.goto(pluginRoute);
+      expect(await page.textContent('h1')).toContain('Hello My Plugin');
+
+      expect(await (await fetch(pluginRoute, {method: 'POST'})).text()).toEqual(
+        'Plugin OK'
+      );
+    });
+
+    it('runs app middleware', async () => {
+      expect(
+        await (await fetch(getServerUrl() + '/app-middleware')).text()
+      ).toEqual('App middleware OK');
+    });
+
+    it('runs plugin middlewares', async () => {
+      expect(
+        await (await fetch(getServerUrl() + '/plugin-middleware')).text()
+      ).toEqual('Plugin middleware OK');
     });
   });
 }

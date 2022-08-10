@@ -3,6 +3,9 @@ import path from 'path';
 import {promises as fs} from 'fs';
 import type {HydrogenVitePluginOptions} from '../types.js';
 import {viteception} from '../viteception.js';
+import type {HydrogenConfig} from '../../config.js';
+import {resolvePluginUrl} from '../load-config.js';
+import {readVirtualTemplate} from '../virtual-templates/index.js';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
@@ -24,9 +27,13 @@ const VIRTUAL_HYDROGEN_ROUTES_ID = VIRTUAL_PREFIX + HYDROGEN_ROUTES_ID;
 export const VIRTUAL_PROXY_HYDROGEN_ROUTES_ID =
   VIRTUAL_PREFIX + PROXY_PREFIX + HYDROGEN_ROUTES_ID;
 
+const HYDROGEN_MIDDLEWARE_ID = 'hydrogen-middleware.ts';
+const VIRTUAL_HYDROGEN_MIDDLEWARE_ID = VIRTUAL_PREFIX + HYDROGEN_MIDDLEWARE_ID;
+
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
   let server: ViteDevServer;
+  let cachedHydrogenConfig: HydrogenConfig | undefined;
 
   return {
     name: 'hydrogen:virtual-files',
@@ -53,6 +60,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           VIRTUAL_PROXY_HYDROGEN_CONFIG_ID,
           VIRTUAL_PROXY_HYDROGEN_ROUTES_ID,
           VIRTUAL_HYDROGEN_ROUTES_ID,
+          VIRTUAL_HYDROGEN_MIDDLEWARE_ID,
           VIRTUAL_ERROR_FILE,
         ].includes(source)
       ) {
@@ -66,6 +74,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       // Likely due to a bug in Vite, but virtual modules cannot be loaded
       // directly using ssrLoadModule from a Vite plugin. It needs to be proxied as follows:
       if (id === '\0' + VIRTUAL_PROXY_HYDROGEN_CONFIG_ID) {
+        cachedHydrogenConfig = undefined;
         return `import hc from '${VIRTUAL_HYDROGEN_CONFIG_ID}'; export default hc;`;
       }
       if (id === '\0' + VIRTUAL_PROXY_HYDROGEN_ROUTES_ID) {
@@ -73,34 +82,21 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       }
 
       if (id === '\0' + VIRTUAL_HYDROGEN_ROUTES_ID) {
-        return importHydrogenConfig().then((hc) => {
-          let routesPath: string =
-            (typeof hc.routes === 'string' ? hc.routes : hc.routes?.files) ??
-            '/src/routes';
-
-          if (routesPath.startsWith('./')) {
-            routesPath = routesPath.slice(1);
-          }
-
-          if (!routesPath.includes('*')) {
-            if (!routesPath.endsWith('/')) {
-              routesPath += '/';
-            }
-
-            routesPath += '**/*.server.[jt](s|sx)';
-          }
-
-          const [dirPrefix] = routesPath.split('/*');
-
-          let code = `export default {\n  dirPrefix: '${dirPrefix}',\n  basePath: '${
-            hc.routes?.basePath ?? ''
-          }',\n  files: import.meta.globEager('${routesPath}')\n};`;
+        return importHydrogenConfig().then(async (hc) => {
+          let code = await generateRoutesCode(hc, config.root);
 
           if (config.command === 'serve') {
             // Add dependency on Hydrogen config for HMR
             code += `\nimport '${VIRTUAL_HYDROGEN_CONFIG_ID}';`;
           }
 
+          return {code};
+        });
+      }
+
+      if (id === '\0' + VIRTUAL_HYDROGEN_MIDDLEWARE_ID) {
+        return importHydrogenConfig().then(async (hc) => {
+          const code = await generateMiddlewareCode(hc, config.root);
           return {code};
         });
       }
@@ -116,18 +112,116 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
   } as Plugin;
 
   async function importHydrogenConfig() {
-    if (server) {
-      const loaded = await server.ssrLoadModule(
-        VIRTUAL_PROXY_HYDROGEN_CONFIG_ID
-      );
+    if (!cachedHydrogenConfig) {
+      if (server) {
+        const loaded = await server.ssrLoadModule(
+          VIRTUAL_PROXY_HYDROGEN_CONFIG_ID
+        );
 
-      return loaded.default;
+        cachedHydrogenConfig = loaded.default;
+      } else {
+        const {loaded} = await viteception([VIRTUAL_PROXY_HYDROGEN_CONFIG_ID]);
+        cachedHydrogenConfig = loaded[0].default;
+      }
     }
 
-    const {loaded} = await viteception([VIRTUAL_PROXY_HYDROGEN_CONFIG_ID]);
-    return loaded[0].default;
+    return cachedHydrogenConfig as HydrogenConfig;
   }
 };
+
+async function generateMiddlewareCode(hc: HydrogenConfig, root: string) {
+  let code = await readVirtualTemplate('middleware');
+
+  const possibleMiddlewares = [
+    [(hc.middleware ?? '/src/middleware').replace(/^\.\//, '/')],
+  ];
+
+  hc.plugins?.forEach((plugin) => {
+    const [importUrl] = resolvePluginUrl(plugin, root);
+
+    possibleMiddlewares.push([
+      importUrl + (plugin.middleware ?? '/middleware').replace(/^\.\//, '/'),
+      plugin.name,
+    ]);
+  });
+
+  code = code.replace(
+    '//@INJECT_MIDDLEWARES',
+    '\n' +
+      possibleMiddlewares
+        .map(([filepath, name]) => {
+          // TODO use require.resolve here instead of globEager
+          return `middlewares.push([import.meta.globEager('${filepath}${
+            /\.[jt]s$/.test(filepath) ? '' : '.{js,ts}'
+          }'), '${name}']);`;
+        })
+        .join('\n') +
+      '\n'
+  );
+
+  return code;
+}
+
+async function generateRoutesCode(hc: HydrogenConfig, root: string) {
+  let code = generateRouteExport(hc.routes);
+
+  if (hc.plugins) {
+    for (let index = 0; index < hc.plugins.length; index++) {
+      const plugin = hc.plugins[index];
+      const [importUrl, absoluteUrl] = resolvePluginUrl(plugin, root);
+
+      if (!plugin.routes) {
+        try {
+          await fs.access(path.resolve(absoluteUrl, 'routes'));
+        } catch {
+          // Plugin does not provide `routes`
+          continue;
+        }
+      }
+
+      const routes =
+        typeof plugin.routes === 'string'
+          ? {files: plugin.routes}
+          : plugin.routes || {files: './routes'};
+
+      code += generateRouteExport(routes, importUrl, `p${index}`);
+    }
+  }
+
+  return code;
+}
+
+function generateRouteExport(
+  routes: HydrogenConfig['routes'],
+  baseResolvePath?: string,
+  exportName?: string
+) {
+  let routesPath: string =
+    (typeof routes === 'string' ? routes : routes?.files) ?? '/src/routes';
+
+  if (routesPath.startsWith('./')) {
+    routesPath = routesPath.slice(1);
+    if (baseResolvePath) {
+      routesPath = baseResolvePath + routesPath;
+    }
+  }
+
+  if (!routesPath.includes('*')) {
+    if (!routesPath.endsWith('/')) {
+      routesPath += '/';
+    }
+
+    routesPath += '**/*.server.[jt](s|sx)';
+  }
+
+  const [dirPrefix] = routesPath.split('/*');
+
+  return `export ${
+    exportName ? `const ${exportName} =` : 'default'
+  } {\n  dirPrefix: '${dirPrefix}',\n  basePath: '${
+    (typeof routes !== 'string' && routes?.basePath) || ''
+  }',\n  files: import.meta.globEager('${routesPath}')\n};\n`;
+}
 
 async function findHydrogenConfigPath(root: string, userProvidedPath?: string) {
   let configPath = userProvidedPath;

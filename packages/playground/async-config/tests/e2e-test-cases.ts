@@ -1,13 +1,16 @@
 import fetch from 'node-fetch';
+import type {ViteDevServer} from 'vite';
 
 type TestOptions = {
   getServerUrl: () => string;
+  getDevServer?: () => ViteDevServer;
   isWorker?: boolean;
   isBuild?: boolean;
 };
 
 export default async function testCases({
   getServerUrl,
+  getDevServer,
   isBuild,
   isWorker,
 }: TestOptions) {

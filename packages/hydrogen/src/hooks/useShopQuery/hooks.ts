@@ -9,6 +9,7 @@ import {fetchSync} from '../../foundation/fetchSync/server/fetchSync.js';
 import {META_ENV_SSR} from '../../foundation/ssr-interop.js';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
 import {parseJSON} from '../../utilities/parse.js';
+import {emitEventFromQuery} from '../../foundation/Analytics/ServerAnalyticsRoute.js';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -208,6 +209,8 @@ export function useShopQuery<T>({
       },
     });
   }
+
+  emitEventFromQuery(serverRequest, query, variables, data);
 
   return data!;
 }

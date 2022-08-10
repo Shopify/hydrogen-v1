@@ -73,6 +73,8 @@ function publishEvent(eventname: string, payload: any) {
       subs[key](payload);
     });
   }
+
+  pushToServer({body: JSON.stringify(payload)}, eventname);
 }
 
 function subscribe(
@@ -110,6 +112,11 @@ function pushToServer(init?: RequestInit, searchParam?: string) {
         },
       },
       init
+    )
+  ).catch((error) =>
+    console.warn(
+      `Could not emit Hydrogen Event "${searchParam}" to the server.`,
+      error
     )
   );
 }

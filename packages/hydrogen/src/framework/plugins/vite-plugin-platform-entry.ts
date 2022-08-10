@@ -123,6 +123,11 @@ export default () => {
           ([, value]) => value.type === 'chunk' && value.isEntry
         )!;
 
+        if (value.type === 'chunk') {
+          // Plugins use `import.meta.url`
+          value.code = value.code.replaceAll('import.meta.url', "''");
+        }
+
         delete bundle[key];
         value.fileName = SSR_BUNDLE_NAME;
         bundle[SSR_BUNDLE_NAME] = value;
