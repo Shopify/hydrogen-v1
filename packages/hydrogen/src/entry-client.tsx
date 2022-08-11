@@ -133,26 +133,32 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 
   // Fixes hydration in `useId`: https://github.com/Shopify/hydrogen/issues/1589
   const ServerRequestProviderMock = () => null;
-
-  hydrateRoot(
-    root,
-    <RootComponent>
-      <ServerRequestProviderMock />
-      <ErrorBoundary
-        FallbackComponent={
-          CustomErrorPage
-            ? ({error}) => (
-                <CustomErrorWrapper error={error} errorPage={CustomErrorPage} />
-              )
-            : DefaultError
-        }
-      >
-        <Suspense fallback={null}>
-          <Content clientWrapper={ClientWrapper} />
-        </Suspense>
-      </ErrorBoundary>
-    </RootComponent>
-  );
+  requestIdleCallback?.(() => {
+    React.startTransition(() => {
+      hydrateRoot(
+        root,
+        <RootComponent>
+          <ServerRequestProviderMock />
+          <ErrorBoundary
+            FallbackComponent={
+              CustomErrorPage
+                ? ({error}) => (
+                    <CustomErrorWrapper
+                      error={error}
+                      errorPage={CustomErrorPage}
+                    />
+                  )
+                : DefaultError
+            }
+          >
+            <Suspense fallback={null}>
+              <Content clientWrapper={ClientWrapper} />
+            </Suspense>
+          </ErrorBoundary>
+        </RootComponent>
+      );
+    });
+  });
 };
 
 export default renderHydrogen;
