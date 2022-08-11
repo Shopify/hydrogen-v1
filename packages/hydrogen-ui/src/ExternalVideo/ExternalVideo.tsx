@@ -1,6 +1,6 @@
-import {useMemo} from 'react';
-import type {ExternalVideo as ExternalVideoType} from '../storefront-api-types';
-import type {PartialDeep} from 'type-fest';
+import { useMemo } from 'react';
+import type { ExternalVideo as ExternalVideoType } from '../storefront-api-types';
+import type { PartialDeep } from 'type-fest';
 
 interface ExternalVideoProps {
   /**
@@ -31,6 +31,7 @@ export function ExternalVideo(
     frameBorder = '0',
     allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
     allowFullScreen = true,
+    loading = "lazy",
     ...passthroughProps
   } = props;
 
@@ -49,6 +50,7 @@ export function ExternalVideo(
       allowFullScreen={allowFullScreen}
       src={url}
       data-testid="video-iframe"
+      loading={loading}
     ></iframe>
   );
 }
