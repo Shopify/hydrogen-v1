@@ -108,7 +108,7 @@ Aside from the [default events](#default-events) that Hydrogen supports, you can
 
     ```jsx
     <Banner onClick={(event) => {
-      ClientAnalytics.publish('select_promotion', {
+      ClientAnalytics.publish('select_promotion', true, {
         creative_name: "Summer Banner",
         creative_slot: "featured_app_1",
         ...
