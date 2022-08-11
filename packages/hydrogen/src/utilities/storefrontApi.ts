@@ -20,6 +20,10 @@ export function getStorefrontApiRequestHeaders({
   const secretToken = getOxygenVariable(
     OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE
   );
+
+  // temp log, waiting for mini-oxygen env vars fix
+  console.log('secretToken', secretToken);
+
   const storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
 
   /**

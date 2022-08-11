@@ -17,7 +17,12 @@ import type {
 } from '../foundation/session/session-types.js';
 import {emptySessionImplementation} from '../foundation/session/session.js';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
-import {FORM_REDIRECT_COOKIE, RSC_PATHNAME} from '../constants.js';
+import {
+  STOREFRONT_API_SECRET_TOKEN_WARNING,
+  STOREFRONT_API_PUBLIC_TOKEN_HEADER,
+  FORM_REDIRECT_COOKIE,
+  RSC_PATHNAME,
+} from '../constants.js';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
@@ -172,11 +177,17 @@ function queryShopBuilder(
 
     const {storeDomain, storefrontApiVersion, storefrontToken} = shopifyConfig;
     const buyerIp = request.getBuyerIp();
+    const log = getLoggerWithContext(request);
 
     const extraHeaders = getStorefrontApiRequestHeaders({
       buyerIp,
       storefrontToken,
     });
+
+    // warn the user that a secret token is needed in production
+    if (extraHeaders[STOREFRONT_API_PUBLIC_TOKEN_HEADER] && !__HYDROGEN_DEV__) {
+      log.warn(STOREFRONT_API_SECRET_TOKEN_WARNING);
+    }
 
     const fetcher = fetchBuilder<T>(
       `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,

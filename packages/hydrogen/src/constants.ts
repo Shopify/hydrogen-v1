@@ -3,6 +3,7 @@ export const EVENT_PATHNAME = '/__event';
 export const EVENT_PATHNAME_REGEX = new RegExp(`^${EVENT_PATHNAME}/`);
 export const OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE =
   'SHOPIFY_STOREFRONT_API_SECRET_TOKEN';
+export const STOREFRONT_API_SECRET_TOKEN_WARNING = `Public access tokens can't be used in production. Please configure a SHOPIFY_STOREFRONT_API_SECRET_TOKEN.`;
 export const STOREFRONT_API_SECRET_TOKEN_HEADER =
   'Shopify-Storefront-Private-Token';
 export const STOREFRONT_API_PUBLIC_TOKEN_HEADER =

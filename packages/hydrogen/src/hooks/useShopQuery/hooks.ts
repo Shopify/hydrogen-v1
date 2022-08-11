@@ -9,6 +9,10 @@ import {fetchSync} from '../../foundation/fetchSync/server/fetchSync.js';
 import {META_ENV_SSR} from '../../foundation/ssr-interop.js';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
 import {parseJSON} from '../../utilities/parse.js';
+import {
+  STOREFRONT_API_SECRET_TOKEN_WARNING,
+  STOREFRONT_API_PUBLIC_TOKEN_HEADER,
+} from '../../constants.js';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -216,12 +220,18 @@ function useCreateShopRequest(body: string) {
   const {storeDomain, storefrontToken, storefrontApiVersion} = useShop();
 
   const request = useServerRequest();
+  const log = getLoggerWithContext(request);
   const buyerIp = request.getBuyerIp();
 
   const extraHeaders = getStorefrontApiRequestHeaders({
     buyerIp,
     storefrontToken,
   });
+
+  // warn the user that a secret token is needed in production
+  if (extraHeaders[STOREFRONT_API_PUBLIC_TOKEN_HEADER] && !__HYDROGEN_DEV__) {
+    log.warn(STOREFRONT_API_SECRET_TOKEN_WARNING);
+  }
 
   return {
     key: [storeDomain, storefrontApiVersion, body],
