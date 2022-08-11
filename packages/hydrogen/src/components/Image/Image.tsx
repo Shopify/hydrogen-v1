@@ -5,8 +5,8 @@ import {
   addImageSizeParametersToUrl,
   IMG_SRC_SET_SIZES,
 } from '../../utilities/index.js';
-import type { Image as ImageType } from '../../storefront-api-types.js';
-import type { PartialDeep, Simplify, SetRequired } from 'type-fest';
+import type {Image as ImageType} from '../../storefront-api-types.js';
+import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
 
 type HtmlImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
 
@@ -94,7 +94,6 @@ function ShopifyImage({
   loader = shopifyImageLoader,
   loaderOptions,
   widths,
-  decoding = "async",
   ...rest
 }: ShopifyImageProps) {
   if (!data.url) {
@@ -103,12 +102,13 @@ function ShopifyImage({
 
   if (__HYDROGEN_DEV__ && !data.altText && !rest.alt) {
     console.warn(
-      `<Image/>: the 'data' prop should have the 'altText' property, or the 'alt' prop, and one of them should not be empty. ${`Image: ${data.id ?? data.url
+      `<Image/>: the 'data' prop should have the 'altText' property, or the 'alt' prop, and one of them should not be empty. ${`Image: ${
+        data.id ?? data.url
       }`}`
     );
   }
 
-  const { width: imgElementWidth, height: imgElementHeight } =
+  const {width: imgElementWidth, height: imgElementHeight} =
     getShopifyImageDimensions({
       data,
       loaderOptions,
@@ -120,7 +120,8 @@ function ShopifyImage({
 
   if (__HYDROGEN_DEV__ && (!imgElementWidth || !imgElementHeight)) {
     console.warn(
-      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. ${`Image: ${data.id ?? data.url
+      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. ${`Image: ${
+        data.id ?? data.url
       }`}`
     );
   }
@@ -136,7 +137,8 @@ function ShopifyImage({
     });
     if (typeof finalSrc !== 'string' || !finalSrc) {
       throw new Error(
-        `<Image/>: 'loader' did not return a valid string. ${`Image: ${data.id ?? data.url
+        `<Image/>: 'loader' did not return a valid string. ${`Image: ${
+          data.id ?? data.url
         }`}`
       );
     }
@@ -170,7 +172,6 @@ function ShopifyImage({
       width={imgElementWidth ?? undefined}
       height={imgElementHeight ?? undefined}
       srcSet={finalSrcset}
-      decoding={decoding}
     />
   );
   /* eslint-enable hydrogen/prefer-image-component */
@@ -262,7 +263,7 @@ function ExternalImage<GenericLoaderOpts>({
   let finalSrc = src;
 
   if (loader) {
-    finalSrc = loader({ src, width, height, ...loaderOptions });
+    finalSrc = loader({src, width, height, ...loaderOptions});
     if (typeof finalSrc !== 'string' || !finalSrc) {
       throw new Error(`<Image/>: 'loader' did not return a valid string`);
     }
