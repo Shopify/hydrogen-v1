@@ -724,6 +724,24 @@ export default async function testCases({
       expect(response.status).toBe(200);
       expect(text).toContain(`some value`);
     });
+
+    it('clears flash session data after read', async () => {
+      const response = await fetch(getServerUrl() + '/sessions/flash', {
+        headers: {
+          cookie:
+            '__session=%7B%22someData%22%3A%22some%20value%22%7D' +
+            ';Hydrogen-Redirect=1',
+        },
+      });
+
+      const text = await response.text();
+
+      expect(response.status).toBe(200);
+      expect(response.headers.get('Set-Cookie')).toBe(
+        '__session=%7B%7D; Expires=Sun, 08 Jun 2025 00:39:38 GMT'
+      );
+      expect(text).toContain(`some value`);
+    });
   });
 
   describe('Shopify analytics', () => {

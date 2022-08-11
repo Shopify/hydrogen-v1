@@ -1,4 +1,5 @@
-import {useSession, useUrl} from '@shopify/hydrogen';
+import {useSession} from '@shopify/hydrogen';
+import {useFlashSession} from '@shopify/hydrogen/experimental';
 import {Form} from '@shopify/hydrogen/experimental';
 import {
   LoginForm,
@@ -18,8 +19,7 @@ const users = [
 
 export default function Account() {
   const {user} = useSession();
-  const url = useUrl();
-  const loginError = url.searchParams.get(LOGIN_ERROR);
+  const loginError = useFlashSession(LOGIN_ERROR);
 
   if (user)
     return (
@@ -54,10 +54,12 @@ export async function api(request, {session}) {
   const password = data.get('password');
 
   if (!username) {
-    return new Request(`/account?${LOGIN_ERROR}=${INVALID_USERNAME}`);
+    await session.set(LOGIN_ERROR, INVALID_USERNAME);
+    return new Request(`/account`);
   }
   if (!password) {
-    return new Request(`/account?${LOGIN_ERROR}=${INVALID_PASSWORD}`);
+    await session.set(LOGIN_ERROR, INVALID_PASSWORD);
+    return new Request(`/account`);
   }
 
   const user = users.find(
@@ -65,7 +67,8 @@ export async function api(request, {session}) {
   );
 
   if (!user) {
-    return new Request(`/account?${LOGIN_ERROR}=${INVALID_USER}`);
+    await session.set(LOGIN_ERROR, INVALID_USER);
+    return new Request(`/account`);
   }
 
   await session.set('user', user.username);
