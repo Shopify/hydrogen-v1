@@ -1,13 +1,13 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {useLocation} from '../../foundation/Router/BrowserRouter.client.js';
-import {createPath} from 'history';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useLocation } from '../../foundation/Router/BrowserRouter.client.js';
+import { createPath } from 'history';
 import {
   buildPath,
   useNavigate,
 } from '../../foundation/useNavigate/useNavigate.js';
-import {RSC_PATHNAME} from '../../constants.js';
-import {useInternalServerProps} from '../../foundation/useServerProps/use-server-props.js';
-import {useBasePath} from '../../foundation/useRouteParams/RouteParamsProvider.client.js';
+import { RSC_PATHNAME } from '../../constants.js';
+import { useInternalServerProps } from '../../foundation/useServerProps/use-server-props.js';
+import { useBasePath } from '../../foundation/useRouteParams/RouteParamsProvider.client.js';
 
 export interface LinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
@@ -25,7 +25,15 @@ export interface LinkProps
   scroll?: boolean;
   /** Override the `basePath` inherited from the Route */
   basePath?: string;
+  /** Make the route change concurrental in `React 18` */
+  transitionable?: boolean;
 }
+
+/**
+ * Uses `React.startTransition` in first place and fallback to `requestIdleCallback` when using version less than `React 18` and
+ * due to browser compatibility reason we need to fallback to `queueMicrotask`.
+*/
+const startIdleTransitionTask = React.startTransition || self?.requestIdleCallback || queueMicrotask
 
 /**
  * The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all
@@ -53,6 +61,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       clientState,
       prefetch = true,
       scroll = true,
+      transitionable = true,
     } = props;
 
     const to = buildPath(props.basePath ?? routeBasePath, props.to);
@@ -70,14 +79,25 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
           // If the URL hasn't changed, the regular <a> will do a replace
           const replace =
-            !!_replace || createPath(location) === createPath({pathname: to});
+            !!_replace || createPath(location) === createPath({ pathname: to });
 
-          navigate(to, {
-            replace,
-            scroll,
-            clientState,
-            basePath: '/', // path was already resolved with the base
-          });
+          if (transitionable) {
+            startIdleTransitionTask(() => {
+              navigate(to, {
+                replace,
+                scroll,
+                clientState,
+                basePath: '/', // path was already resolved with the base
+              });
+            })
+          } else {
+            navigate(to, {
+              replace,
+              scroll,
+              clientState,
+              basePath: '/', // path was already resolved with the base
+            });
+          }
         }
       },
       [
@@ -90,6 +110,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         navigate,
         clientState,
         scroll,
+        transitionable
       ]
     );
 
@@ -180,11 +201,11 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   }
 );
 
-function Prefetch({pathname}: {pathname: string}) {
-  const {getProposedLocationServerProps} = useInternalServerProps();
+function Prefetch({ pathname }: { pathname: string }) {
+  const { getProposedLocationServerProps } = useInternalServerProps();
   const location = useLocation();
 
-  const newPath = createPath({pathname});
+  const newPath = createPath({ pathname });
 
   if (pathname.startsWith('http') || newPath === createPath(location)) {
     return null;
