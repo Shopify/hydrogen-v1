@@ -44,7 +44,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           config.root,
           pluginOptions.configPath
         ).then((hcPath: string) => {
-          resolvedConfigPath = hcPath;
+          resolvedConfigPath = normalizePath(hcPath);
           // This direct dependency on a real file
           // makes HMR work for the virtual module.
           return this.resolve(hcPath, importer, {skipSelf: true});
