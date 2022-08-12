@@ -110,6 +110,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
             // https://github.com/nfriedly/set-cookie-parser/issues/50
             'set-cookie-parser',
             'undici',
+            '@xstate/react/fsm',
           ],
         },
 
