@@ -56,7 +56,7 @@ export function ExternalVideo(props: ExternalVideoProps) {
       loading={loading}
     ></iframe>
   );
-}
+})
 
 interface YouTube {
   autoplay?: 0 | 1;
