@@ -20,10 +20,10 @@ type PropsWeControl = 'src';
  * The `ExternalVideo` component renders an embedded video for the Storefront
  * API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
  */
-export const ExternalVideo = (
+export const ExternalVideo = memo((
   props: Omit<JSX.IntrinsicElements['iframe'], PropsWeControl> &
     ExternalVideoProps
-) => memo({
+) => {
   const {
     data,
     options,
