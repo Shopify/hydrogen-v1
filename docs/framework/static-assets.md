@@ -56,8 +56,6 @@ $ HYDROGEN_ASSET_BASE_URL=https://mycdn.example/path/to/folder yarn build
 ## Asset Versioning
 If asset content hasn't changed but you want to regenerate the already-compiled assets, then you can use the following configuration:
 
-The configuration adds an optional string to force all files to be recompiled with a new hash. This can be helpful when the asset is cached but you want to change the behaviour of your cache or the response headers that are currently cached, such as in a CDN or user's browser.
-
 {% codeblock terminal %}
 
 ```js
@@ -68,6 +66,8 @@ export default {
 ```
 
 {% endcodeblock %}
+
+The configuration adds an optional string to force all files to be recompiled with a new hash. This can be helpful when the asset is cached but you want to change the behaviour of your cache or the response headers that are currently cached, such as in a CDN or user's browser.
 
 ## Considerations and limitations
 
