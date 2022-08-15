@@ -84,9 +84,8 @@ describe('<ExternalVideo />', () => {
 
   it(`throws when 'data.embedUrl' isn't passed`, () => {
     // to silence the test runner's console.error from being called
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => render(<ExternalVideo data={{id: 'hi'}} />)).toThrow();
     expect(console.error).toHaveBeenCalled();
-    consoleSpy.mockRestore();
   });
 });

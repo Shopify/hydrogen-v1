@@ -83,7 +83,8 @@ export async function api(request, {session}) {
   if (!userId) {
     // We couldn't find the user.
     // Re-render the login page with a login error displayed
-    return new Request('/login?error');
+    await session.set('loginError', true);
+    return new Request('/login');
   }
 
   // Save the user to the session
@@ -98,15 +99,18 @@ export async function api(request, {session}) {
 
 Read data in the API route from the `Form` by using the [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) API. The API route must respond with a `new Request()`. This renders the server components for the given page. You can re-render the current page, or render an entirely different page in the app.
 
-In the previous example, when the user is not found, the current page is re-rendered with a search parameter. The following code updates the server component to render the login error:
+In the previous example, when the user is not found, the current page is re-rendered with an error set on the session. The following code updates the server component to render the login error:
 
 {% codeblock file, filename: 'login.server.jsx' %}
 
 ```tsx
-import {Form} from '@shopify/hydrogen/experimental';
+import {Form, useFlashSession} from '@shopify/hydrogen/experimental';
 
 export default function Login() {
-  const url = useUrl();
+  // `useFlashSession` also clears the value after reading it. This way,
+  // if the user refreshes the page, the validation error goes away.
+  const loginError = useFlashSession('loginError');
+
   return (
     <Form action="/login" method="post">
       <label>
@@ -115,7 +119,7 @@ export default function Login() {
       <label>
         Password <input type="password" name="password" />
       </label>
-      {url.searchParams.get('error') ? (
+      {loginError ? (
         <h2 className="text-red-700">Invalid username or password</h2>
       ) : null}
       <button type="submit">Submit</button>
@@ -126,9 +130,7 @@ export default function Login() {
 
 {% endcodeblock %}
 
-The page initially loads without a search parameter. If the login mutation fails, then the server components re-render with the `error` search parameter and display a message to the user.
-
-The downside to this approach is that the error state is within the URL, which means the error message persists if the page is refreshed. This won't be a problem with flashed session data.
+The page initially loads without a session `loginError` value. If the login mutation fails, then the server components re-render with the `loginError` session value and display a message to the user. Because the component uses `useFlashSession` instead of `useSession`, the value is subsequently cleared. If the user refreshes the page, then the validation error goes away.
 
 ## Client validation and feedback
 

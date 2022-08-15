@@ -1,5 +1,5 @@
 import React from 'react';
-import {vi, type SpyInstance} from 'vitest';
+import {vi} from 'vitest';
 import {render} from '@testing-library/react';
 import {ShopifyTestProviders} from '../../../utilities/tests/provider-helpers.js';
 import {

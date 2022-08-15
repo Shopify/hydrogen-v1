@@ -5,15 +5,15 @@
   "scripts": {
     "dev": "shopify hydrogen dev",
     "build": "shopify hydrogen build --entry ../test-utils/worker-entry",
-    "build:server": "shopify hydrogen build --target node",
+    "build:server": "shopify hydrogen build --target node --verbose",
     "start:node": "node ../test-utils/start-node",
     "start:worker": "node ../test-utils/start-worker"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
     "vite": "^2.9.0",
-    "@shopify/cli": "latest",
-    "@shopify/cli-hydrogen": "latest"
+    "@shopify/cli": "^3.3.3",
+    "@shopify/cli-hydrogen": "^3.3.3"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "*",

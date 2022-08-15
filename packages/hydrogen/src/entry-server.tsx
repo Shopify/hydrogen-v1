@@ -57,6 +57,7 @@ import {
 } from './foundation/Cache/cache.js';
 import {CacheShort, NO_STORE} from './foundation/Cache/strategies/index.js';
 import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes.js';
+import {FORM_REDIRECT_COOKIE} from './constants.js';
 
 declare global {
   // This is provided by a Vite plugin
@@ -102,6 +103,11 @@ export const renderHydrogen = (App: any) => {
     const response = new HydrogenResponse(null, {
       headers: headers || {},
     });
+
+    if (request.cookies.get(FORM_REDIRECT_COOKIE)) {
+      response.headers.set('SET-COOKIE', `${FORM_REDIRECT_COOKIE}=`);
+      response.doNotStream();
+    }
 
     if (hydrogenConfig.poweredByHeader ?? true) {
       // If undefined in the config, then always show the header

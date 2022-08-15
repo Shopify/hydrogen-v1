@@ -1,59 +1,56 @@
 import React from 'react';
+import {vi} from 'vitest';
+import {render, screen} from '@testing-library/react';
 import {Image} from '../index.js';
-import {mount} from '@shopify/react-testing';
 import {getPreviewImage} from '../../../utilities/tests/media.js';
 import * as utilities from '../../../utilities/index.js';
 
 describe('<Image />', () => {
-  let consoleWarnSpy: jest.SpyInstance;
-  beforeEach(() => {
-    consoleWarnSpy = jest.spyOn(console, 'warn');
-    consoleWarnSpy.mockImplementation(() => {});
+  beforeAll(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
-  afterEach(() => {
-    consoleWarnSpy.mockRestore();
-  });
+
   describe('Shopify image data', () => {
     it('renders an `img` element', () => {
-      const image = getPreviewImage();
-      const {url: src, altText, id, width, height} = image;
+      const previewImage = getPreviewImage();
+      const {url: src, altText, id, width, height} = previewImage;
+      render(<Image data={previewImage} />);
 
-      const component = mount(<Image data={image} />);
+      const image = screen.getByRole('img');
 
-      expect(component).toContainReactComponent('img', {
-        src,
-        alt: altText,
-        id,
-        width,
-        height,
-        loading: 'lazy',
-      });
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', src);
+      expect(image).toHaveAttribute('id', id);
+      expect(image).toHaveAttribute('alt', altText);
+      expect(image).toHaveAttribute('width', `${width}`);
+      expect(image).toHaveAttribute('height', `${height}`);
+      expect(image).toHaveAttribute('loading', 'lazy');
     });
 
     it('renders an `img` element with provided `id`', () => {
-      const image = getPreviewImage();
+      const previewImage = getPreviewImage();
       const id = 'catImage';
+      render(<Image data={previewImage} id={id} />);
 
-      const component = mount(<Image data={image} id={id} />);
+      const image = screen.getByRole('img');
 
-      expect(component).toContainReactComponent('img', {
-        id,
-      });
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('id', id);
     });
 
     it('renders an `img` element with provided `loading` value', () => {
-      const image = getPreviewImage();
+      const previewImage = getPreviewImage();
       const loading = 'eager';
+      render(<Image data={previewImage} loading={loading} />);
 
-      const component = mount(<Image data={image} loading={loading} />);
+      const image = screen.getByRole('img');
 
-      expect(component).toContainReactComponent('img', {
-        loading,
-      });
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('loading', loading);
     });
 
     it('renders an `img` with `width` and `height` values', () => {
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
       });
       const options = {scale: 2 as const};
@@ -61,23 +58,22 @@ describe('<Image />', () => {
         width: 200,
         height: 100,
       };
-      jest
-        .spyOn(utilities, 'getShopifyImageDimensions')
-        .mockReturnValue(mockDimensions);
 
-      const component = mount(<Image data={image} loaderOptions={options} />);
+      vi.spyOn(utilities, 'getShopifyImageDimensions').mockReturnValue(
+        mockDimensions
+      );
 
-      expect(component).toContainReactComponent('img', {
-        width: mockDimensions.width,
-        height: mockDimensions.height,
-      });
+      render(<Image data={previewImage} loaderOptions={options} />);
 
-      // @ts-expect-error clear the mock that was created earlier
-      utilities.getShopifyImageDimensions.mockRestore();
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('width', `${mockDimensions.width}`);
+      expect(image).toHaveAttribute('height', `${mockDimensions.height}`);
     });
 
     it('renders an `img` element without `width` and `height` attributes when invalid dimensions are provided', () => {
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
       });
       const options = {scale: 2 as const};
@@ -86,22 +82,22 @@ describe('<Image />', () => {
         height: null,
       };
 
-      jest
-        .spyOn(utilities, 'getShopifyImageDimensions')
-        .mockReturnValue(mockDimensions);
-      const component = mount(<Image data={image} loaderOptions={options} />);
+      vi.spyOn(utilities, 'getShopifyImageDimensions').mockReturnValue(
+        mockDimensions
+      );
 
-      const img = component.find('img');
-      expect(img?.prop('width')).toBeUndefined();
-      expect(img?.prop('height')).toBeUndefined();
+      render(<Image data={previewImage} loaderOptions={options} />);
 
-      // @ts-expect-error This was mocked out and needs to be restored
-      utilities.getShopifyImageDimensions.mockRestore();
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).not.toHaveAttribute('width');
+      expect(image).not.toHaveAttribute('height');
     });
 
     describe('Loaders', () => {
       it('calls `shopifyImageLoader()` when no `loader` prop is provided', () => {
-        const image = getPreviewImage({
+        const previewImage = getPreviewImage({
           url: 'https://cdn.shopify.com/someimage.jpg',
         });
 
@@ -110,39 +106,44 @@ describe('<Image />', () => {
 
         const options = {width: 100, height: 200, scale: 2 as const};
 
-        const shopifyImageLoaderSpy = jest
+        const shopifyImageLoaderSpy = vi
           .spyOn(utilities, 'shopifyImageLoader')
           .mockReturnValue(transformedSrc);
 
-        const component = mount(<Image data={image} loaderOptions={options} />);
+        render(<Image data={previewImage} loaderOptions={options} />);
 
         expect(shopifyImageLoaderSpy).toHaveBeenCalledWith({
-          src: image.url,
+          src: previewImage.url,
           ...options,
         });
-        expect(component).toContainReactComponent('img', {
-          src: transformedSrc,
-        });
 
-        // @ts-expect-error This was mocked out and needs to be restored
-        utilities.shopifyImageLoader.mockRestore();
+        const image = screen.getByRole('img');
+
+        expect(image).toBeInTheDocument();
+        expect(image).toHaveAttribute('src', transformedSrc);
       });
     });
 
     it('allows passthrough props', () => {
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
       });
 
-      const component = mount(
-        <Image data={image} className="fancyImage" id="123" alt="Fancy image" />
+      render(
+        <Image
+          data={previewImage}
+          className="fancyImage"
+          id="123"
+          alt="Fancy image"
+        />
       );
 
-      expect(component).toContainReactComponent('img', {
-        className: 'fancyImage',
-        id: '123',
-        alt: 'Fancy image',
-      });
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveClass('fancyImage');
+      expect(image).toHaveAttribute('id', '123');
+      expect(image).toHaveAttribute('alt', 'Fancy image');
     });
 
     it('generates a default srcset', () => {
@@ -151,17 +152,18 @@ describe('<Image />', () => {
       const expectedSrcset = sizes
         .map((size) => `${mockUrl}?width=${size} ${size}w`)
         .join(', ');
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: mockUrl,
         width: 2560,
         height: 2560,
       });
 
-      const component = mount(<Image data={image} />);
+      render(<Image data={previewImage} />);
 
-      expect(component).toContainReactComponent('img', {
-        srcSet: expectedSrcset,
-      });
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('srcSet', expectedSrcset);
     });
 
     it('generates a default srcset up to the image height and width', () => {
@@ -170,157 +172,177 @@ describe('<Image />', () => {
       const expectedSrcset = sizes
         .map((size) => `${mockUrl}?width=${size} ${size}w`)
         .join(', ');
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: mockUrl,
         width: 832,
         height: 832,
       });
 
-      const component = mount(<Image data={image} />);
+      render(<Image data={previewImage} />);
 
-      expect(component).toContainReactComponent('img', {
-        srcSet: expectedSrcset,
-      });
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('srcSet', expectedSrcset);
     });
 
     it(`uses scale to multiply the srcset width but not the element width, and when crop is missing, does not include height in srcset`, () => {
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
         width: 500,
         height: 500,
       });
 
-      const component = mount(
-        <Image data={image} loaderOptions={{scale: 2}} />
-      );
+      render(<Image data={previewImage} loaderOptions={{scale: 2}} />);
 
-      expect(component).toContainReactComponent('img', {
-        width: 500,
-        height: 500,
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute(
+        'srcSet',
         // height is not applied if there is no crop
         // width is not doulbe of the passed width, but instead double of the value in 'sizes_array' / '[number]w'
-        srcSet: `${image.url}?width=704 352w`,
-      });
+        `${previewImage.url}?width=704 352w`
+      );
+      expect(image).toHaveAttribute('width', '500');
+      expect(image).toHaveAttribute('height', '500');
     });
 
     it(`uses scale to multiply the srcset width but not the element width, and when crop is there, includes height in srcset`, () => {
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
         width: 500,
         height: 500,
       });
 
-      const component = mount(
+      render(
         <Image
-          data={image}
+          data={previewImage}
           loaderOptions={{scale: 2, crop: 'bottom'}}
           width={500}
           height={250}
         />
       );
 
-      expect(component).toContainReactComponent('img', {
-        width: 500,
-        height: 250,
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute(
+        'srcSet',
         // height is the aspect ratio (of width + height) * srcSet width, so in this case it should be half of width
-        srcSet: `${image.url}?width=704&height=352&crop=bottom 352w`,
-      });
+        `${previewImage.url}?width=704&height=352&crop=bottom 352w`
+      );
+      expect(image).toHaveAttribute('width', '500');
+      expect(image).toHaveAttribute('height', '250');
     });
 
     it(`uses scale to multiply the srcset width but not the element width, and when crop is there, includes height in srcset using data.width / data.height for the aspect ratio`, () => {
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
         width: 500,
         height: 500,
       });
 
-      const component = mount(
-        <Image data={image} loaderOptions={{scale: 2, crop: 'bottom'}} />
+      render(
+        <Image data={previewImage} loaderOptions={{scale: 2, crop: 'bottom'}} />
       );
 
-      expect(component).toContainReactComponent('img', {
-        width: 500,
-        height: 500,
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute(
+        'srcSet',
         // height is the aspect ratio (of data.width + data.height) * srcSet width, so in this case it should be the same as width
-        srcSet: `${image.url}?width=704&height=704&crop=bottom 352w`,
-      });
+        `${previewImage.url}?width=704&height=704&crop=bottom 352w`
+      );
+      expect(image).toHaveAttribute('width', '500');
+      expect(image).toHaveAttribute('height', '500');
     });
 
     it(`uses scale to multiply the srcset width but not the element width, and when crop is there, calculates height based on aspect ratio in srcset`, () => {
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
         width: 500,
         height: 1000,
       });
 
-      const component = mount(
-        <Image data={image} loaderOptions={{scale: 2, crop: 'bottom'}} />
+      render(
+        <Image data={previewImage} loaderOptions={{scale: 2, crop: 'bottom'}} />
       );
 
-      expect(component).toContainReactComponent('img', {
-        width: 500,
-        height: 1000,
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute(
+        'srcSet',
         // height is the aspect ratio (of data.width + data.height) * srcSet width, so in this case it should be double the width
-        srcSet: `${image.url}?width=704&height=1408&crop=bottom 352w`,
-      });
+        `${previewImage.url}?width=704&height=1408&crop=bottom 352w`
+      );
+      expect(image).toHaveAttribute('width', '500');
+      expect(image).toHaveAttribute('height', '1000');
     });
 
     it(`should pass through width (as an inline prop) when it's a string, and use the first size in the size array for the URL width`, () => {
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
         width: 100,
         height: 100,
       });
 
-      const component = mount(<Image data={image} width="100%" />);
+      render(<Image data={previewImage} width="100%" />);
 
-      expect(component).toContainReactComponent('img', {
-        width: '100%',
-        src: `${image.url}?width=352`,
-        height: undefined, // make sure height isn't NaN
-      });
+      const image = screen.getByRole('img');
+
+      console.log(image.getAttribute('srcSet'));
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', `${previewImage.url}?width=352`);
+      expect(image).toHaveAttribute('width', '100%');
+      expect(image).not.toHaveAttribute('height');
     });
 
     it(`should pass through width (as part of loaderOptions) when it's a string, and use the first size in the size array for the URL width`, () => {
-      const image = getPreviewImage({
+      const previewImage = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
         width: 100,
         height: 100,
       });
 
-      const component = mount(
-        <Image data={image} loaderOptions={{width: '100%'}} />
-      );
+      render(<Image data={previewImage} loaderOptions={{width: '100%'}} />);
 
-      expect(component).toContainReactComponent('img', {
-        width: '100%',
-        src: `${image.url}?width=352`,
-        height: undefined, // make sure height isn't NaN
-      });
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', `${previewImage.url}?width=352`);
+      expect(image).toHaveAttribute('width', '100%');
+      expect(image).not.toHaveAttribute('height');
     });
   });
 
   describe('External image', () => {
     it('renders an `img` element', () => {
       const {url: src, altText, id, width, height} = getPreviewImage();
-      const component = mount(
+
+      render(
         <Image src={src} alt={altText} id={id} width={width} height={height} />
       );
 
-      expect(component).toContainReactComponent('img', {
-        src,
-        alt: altText,
-        id,
-        width,
-        height,
-        loading: 'lazy',
-      });
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', src);
+      expect(image).toHaveAttribute('id', id);
+      expect(image).toHaveAttribute('alt', altText);
+      expect(image).toHaveAttribute('width', `${width}`);
+      expect(image).toHaveAttribute('height', `${height}`);
+      expect(image).toHaveAttribute('loading', 'lazy');
     });
 
     it('renders an `img` element with provided `loading` value', () => {
       const {url: src, id, width, height} = getPreviewImage();
       const loading = 'eager';
-      const component = mount(
+
+      render(
         <Image
           src={src}
           id={id}
@@ -331,30 +353,20 @@ describe('<Image />', () => {
         />
       );
 
-      expect(component).toContainReactComponent('img', {
-        loading,
-      });
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('loading', loading);
     });
 
     describe('Width and height checks', () => {
-      let consoleErrorSpy: jest.SpyInstance;
-
-      beforeEach(() => {
-        consoleErrorSpy = jest.spyOn(console, 'error');
-        consoleErrorSpy.mockImplementation(() => {});
-      });
-
-      afterEach(() => {
-        consoleErrorSpy.mockRestore();
-      });
-
       it('throws an error when the `width` is set to zero', () => {
         const {url: src, id} = getPreviewImage();
         const width = 0;
         const height = 100;
 
         expect(() => {
-          mount(
+          render(
             <Image src={src} id={id} width={width} height={height} alt="" />
           );
         }).toThrowError(
@@ -368,7 +380,7 @@ describe('<Image />', () => {
         const height = 0;
 
         expect(() => {
-          mount(
+          render(
             <Image src={src} id={id} width={width} height={height} alt="" />
           );
         }).toThrowError(
@@ -387,14 +399,14 @@ describe('<Image />', () => {
         url: 'https://cdn.shopify.com/someimage.jpg',
       });
       const transformedSrc = 'https://cdn.shopify.com/someimage_100x200@2x.jpg';
-      const loaderMock = jest.fn().mockReturnValue(transformedSrc);
+      const loaderMock = vi.fn().mockReturnValue(transformedSrc);
       const loaderOptions = {
         width: 100,
         height: 200,
         scale: 2 as const,
       };
 
-      const component = mount(
+      render(
         <Image
           src={src}
           id={id}
@@ -406,9 +418,10 @@ describe('<Image />', () => {
         />
       );
 
-      expect(component).toContainReactComponent('img', {
-        src: transformedSrc,
-      });
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', transformedSrc);
 
       expect(loaderMock).toHaveBeenCalledWith({
         src,
@@ -418,7 +431,7 @@ describe('<Image />', () => {
 
     it('allows passthrough props', () => {
       const {url: src, width, height} = getPreviewImage();
-      const component = mount(
+      render(
         <Image
           src={src}
           alt="Fancy image"
@@ -429,11 +442,12 @@ describe('<Image />', () => {
         />
       );
 
-      expect(component).toContainReactComponent('img', {
-        className: 'fancyImage',
-        id: '123',
-        alt: 'Fancy image',
-      });
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('id', '123');
+      expect(image).toHaveAttribute('alt', 'Fancy image');
+      expect(image).toHaveClass('fancyImage');
     });
 
     it('generates a srcset when a loader and a widths prop are provided', () => {
@@ -466,7 +480,7 @@ describe('<Image />', () => {
         )
         .join(', ');
 
-      const component = mount(
+      render(
         <Image
           src={mockUrl}
           loader={loader as any}
@@ -478,13 +492,13 @@ describe('<Image />', () => {
         />
       );
 
-      expect(component).toContainReactComponent('img', {
-        srcSet: expectedSrcset,
-      });
+      const image = screen.getByRole('img');
+
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('srcSet', expectedSrcset);
     });
   });
 
-  // eslint-disable-next-line jest/expect-expect
   it.skip(`typescript types`, () => {
     // this test is actually just using //@ts-expect-error as the assertion, and don't need to execute in order to have TS validation on them
     // I don't love this idea, but at the moment I also don't have other great ideas for how to easily test our component TS types
