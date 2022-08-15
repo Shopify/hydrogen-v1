@@ -54,9 +54,9 @@ $ HYDROGEN_ASSET_BASE_URL=https://mycdn.example/path/to/folder yarn build
 > Make sure to check the `dist/client/index.html` file to verify that the URLs point to the provided URL.
 
 ## Asset Versioning
-When the content of your assets' haven't changed but you want to regenerate the assets already compiled, you can use this configuration, an optional string, to force all files to be recompiled with a new hash.
+If asset content hasn't changed but you want to regenerate the already-compiled assets, then you can use the following configuration:
 
-This can be helpful when the asset is cached but you want to change the behaviour of your cache or the response headers that are currently cached like in a CDN or user's browser.
+The configuration adds an optional string to force all files to be recompiled with a new hash. This can be helpful when the asset is cached but you want to change the behaviour of your cache or the response headers that are currently cached, such as in a CDN or user's browser.
 
 {% codeblock terminal %}
 
