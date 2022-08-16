@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import {hydrateRoot} from 'react-dom/client';
 import type {ClientConfig, ClientHandler} from './types.js';
-import {ErrorBoundary} from 'react-error-boundary';
+import {ErrorBoundary} from 'react-error-boundary/dist/react-error-boundary.esm';
 import {
   createFromFetch,
   createFromReadableStream,
