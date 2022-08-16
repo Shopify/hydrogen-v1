@@ -10,8 +10,8 @@
     "preview": "shopify hydrogen preview"
   },
   "devDependencies": {
-    "@shopify/cli": "latest",
-    "@shopify/cli-hydrogen": "latest",
+    "@shopify/cli": "^3.3.3",
+    "@shopify/cli-hydrogen": "^3.3.3",
     "vite": "^2.9.0"
   },
   "dependencies": {

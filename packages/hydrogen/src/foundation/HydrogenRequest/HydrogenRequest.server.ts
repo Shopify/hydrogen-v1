@@ -77,6 +77,7 @@ export class HydrogenRequest extends Request {
     router: RouterContextData;
     buyerIpHeader?: string;
     session?: SessionSyncApi;
+    flashSession: Record<string, any>;
     runtime?: RuntimeContext;
     scopes: Map<string, Record<string, any>>;
     localization?: LocalizationContextValue;
@@ -114,6 +115,7 @@ export class HydrogenRequest extends Request {
       },
       preloadQueries: new Map(),
       scopes: new Map(),
+      flashSession: {},
     };
     this.cookies = this.parseCookies();
   }
