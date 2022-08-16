@@ -7,19 +7,19 @@ import React, {
   useEffect,
   ComponentType,
 } from 'react';
-import { hydrateRoot } from 'react-dom/client';
-import type { ClientConfig, ClientHandler } from './types.js';
-import { ErrorBoundary } from 'react-error-boundary';
+import {hydrateRoot} from 'react-dom/client';
+import type {ClientConfig, ClientHandler} from './types.js';
+import {ErrorBoundary} from 'react-error-boundary';
 import {
   createFromFetch,
   createFromReadableStream,
   // @ts-ignore
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
-import { RSC_PATHNAME } from './constants.js';
-import { ServerPropsProvider } from './foundation/ServerPropsProvider/index.js';
-import type { DevServerMessage } from './utilities/devtools.js';
-import type { LocationServerProps } from './foundation/ServerPropsProvider/ServerPropsProvider.js';
-import { ClientAnalytics } from './foundation/Analytics/index.js';
+import {RSC_PATHNAME} from './constants.js';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider/index.js';
+import type {DevServerMessage} from './utilities/devtools.js';
+import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider.js';
+import {ClientAnalytics} from './foundation/Analytics/index.js';
 // @ts-expect-error
 import CustomErrorPage from 'virtual__error.jsx';
 
@@ -106,7 +106,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   if (import.meta.hot) {
     import.meta.hot.on(
       'hydrogen-browser-console',
-      ({ type, data }: DevServerMessage) => {
+      ({type, data}: DevServerMessage) => {
         if (type === 'warn') {
           console.warn(data);
         }
@@ -133,29 +133,26 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 
   // Fixes hydration in `useId`: https://github.com/Shopify/hydrogen/issues/1589
   const ServerRequestProviderMock = () => null;
-  requestIdleCallback?.(() => {
-    React.startTransition(() => {
-      hydrateRoot(
-        root,
-        <RootComponent>
-          <ServerRequestProviderMock />
-          <ErrorBoundary
-            FallbackComponent={
-              CustomErrorPage
-                ? ({ error }) => (
-                  <CustomErrorWrapper error={error} errorPage={CustomErrorPage} />
-                )
-                : DefaultError
-            }
-          >
-            <Suspense fallback={null}>
-              <Content clientWrapper={ClientWrapper} />
-            </Suspense>
-          </ErrorBoundary>
-        </RootComponent>
-      );
-    })
-  })
+
+  hydrateRoot(
+    root,
+    <RootComponent>
+      <ServerRequestProviderMock />
+      <ErrorBoundary
+        FallbackComponent={
+          CustomErrorPage
+            ? ({error}) => (
+                <CustomErrorWrapper error={error} errorPage={CustomErrorPage} />
+              )
+            : DefaultError
+        }
+      >
+        <Suspense fallback={null}>
+          <Content clientWrapper={ClientWrapper} />
+        </Suspense>
+      </ErrorBoundary>
+    </RootComponent>
+  );
 };
 
 export default renderHydrogen;
@@ -166,7 +163,7 @@ interface APIRouteRscResponse {
 }
 
 function Content({
-  clientWrapper: ClientWrapper = ({ children }: { children: JSX.Element }) =>
+  clientWrapper: ClientWrapper = ({children}: {children: JSX.Element}) =>
     children,
 }: {
   clientWrapper: ElementType;
@@ -202,12 +199,12 @@ function CustomErrorWrapper({
   errorPage,
 }: {
   error: Error;
-  errorPage: () => Promise<{ default: ComponentType<any> }>;
+  errorPage: () => Promise<{default: ComponentType<any>}>;
 }) {
   const Error = React.lazy(errorPage);
   return (
     <ErrorBoundary
-      FallbackComponent={({ error: errorRenderingCustomPage }) => {
+      FallbackComponent={({error: errorRenderingCustomPage}) => {
         if (import.meta.env.DEV) {
           console.error(
             'Error rendering custom error page:\n' + errorRenderingCustomPage
@@ -223,7 +220,7 @@ function CustomErrorWrapper({
   );
 }
 
-function DefaultError({ error }: { error: Error }) {
+function DefaultError({error}: {error: Error}) {
   return (
     <div
       style={{
@@ -231,15 +228,15 @@ function DefaultError({ error }: { error: Error }) {
         textAlign: 'center',
       }}
     >
-      <h1 style={{ fontSize: '2em', marginBottom: '1em', fontWeight: 'bold' }}>
+      <h1 style={{fontSize: '2em', marginBottom: '1em', fontWeight: 'bold'}}>
         Something&apos;s wrong here...
       </h1>
 
-      <div style={{ fontSize: '1.1em' }}>
+      <div style={{fontSize: '1.1em'}}>
         <p>We found an error while loading this page.</p>
         <p>
           Please, refresh or go back to the{' '}
-          <a href="/" style={{ textDecoration: 'underline' }}>
+          <a href="/" style={{textDecoration: 'underline'}}>
             home page
           </a>
           .
