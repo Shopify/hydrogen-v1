@@ -94,7 +94,7 @@ function ShopifyImage({
   loader = shopifyImageLoader,
   loaderOptions,
   widths,
-  decoding = "async",
+  decoding = 'async',
   ...rest
 }: ShopifyImageProps) {
   if (!data.url) {
@@ -103,7 +103,8 @@ function ShopifyImage({
 
   if (__HYDROGEN_DEV__ && !data.altText && !rest.alt) {
     console.warn(
-      `<Image/>: the 'data' prop should have the 'altText' property, or the 'alt' prop, and one of them should not be empty. ${`Image: ${data.id ?? data.url
+      `<Image/>: the 'data' prop should have the 'altText' property, or the 'alt' prop, and one of them should not be empty. ${`Image: ${
+        data.id ?? data.url
       }`}`
     );
   }
@@ -120,7 +121,8 @@ function ShopifyImage({
 
   if (__HYDROGEN_DEV__ && (!imgElementWidth || !imgElementHeight)) {
     console.warn(
-      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. ${`Image: ${data.id ?? data.url
+      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. ${`Image: ${
+        data.id ?? data.url
       }`}`
     );
   }
@@ -136,7 +138,8 @@ function ShopifyImage({
     });
     if (typeof finalSrc !== 'string' || !finalSrc) {
       throw new Error(
-        `<Image/>: 'loader' did not return a valid string. ${`Image: ${data.id ?? data.url
+        `<Image/>: 'loader' did not return a valid string. ${`Image: ${
+          data.id ?? data.url
         }`}`
       );
     }
@@ -236,7 +239,7 @@ function ExternalImage<GenericLoaderOpts>({
   loaderOptions,
   widths,
   loading,
-  decoding = "async",
+  decoding = 'async',
   ...rest
 }: ExternalImageProps<GenericLoaderOpts>) {
   if (!width || !height) {
