@@ -60,6 +60,7 @@ The `<Link>` component automatically prepends a `basePath` to the destination UR
 | prefetch?       | <code>boolean</code> | Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). |
 | scroll?         | <code>boolean</code> | Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to `true`.                                                                                                                                    |
 | basePath? | <code>string</code> | Override the `basePath` inherited from the `<Route>`.
+| transitionable? | <code>boolean</code> | Whether to make route change concurrental. Defaults to `true`.
 
 ## Component type
 
