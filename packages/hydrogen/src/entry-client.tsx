@@ -3,6 +3,7 @@ import React, {
   useState,
   StrictMode,
   Fragment,
+  startTransition,
   type ElementType,
   useEffect,
   ComponentType,
@@ -30,6 +31,22 @@ const cache = new Map();
 // Hydrate an SSR response from <meta> tags placed in the DOM.
 const flightChunks: string[] = [];
 const FLIGHT_ATTRIBUTE = 'data-flight';
+
+const requestIdleCallbackHydrogen =
+  (typeof self !== 'undefined' &&
+    self.requestIdleCallback &&
+    self.requestIdleCallback.bind(window)) ||
+  function (cb) {
+    const start = Date.now();
+    return setTimeout(function () {
+      cb({
+        didTimeout: false,
+        timeRemaining() {
+          return Math.max(0, 50 - (Date.now() - start));
+        },
+      });
+    }, 1);
+  };
 
 function addElementToFlightChunks(el: Element) {
   // We don't need to decode, because `.getAttribute` already decodes
@@ -133,8 +150,9 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 
   // Fixes hydration in `useId`: https://github.com/Shopify/hydrogen/issues/1589
   const ServerRequestProviderMock = () => null;
-  requestIdleCallback?.(() => {
-    React.startTransition(() => {
+
+  requestIdleCallbackHydrogen(() => {
+    startTransition(() => {
       hydrateRoot(
         root,
         <RootComponent>
