@@ -1,4 +1,4 @@
-import {useLayoutEffect} from 'react';
+import {useEffect} from 'react';
 
 /*
   We use this button's onClick handler to measure when hydration
@@ -10,7 +10,7 @@ import {useLayoutEffect} from 'react';
 */
 let hydrated = false;
 export default function HydrationComplete({children}) {
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (hydrated) return;
     hydrated = true;
     const hydrationEvent = new CustomEvent('hydration-complete', {

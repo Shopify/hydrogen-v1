@@ -1,17 +1,24 @@
 import {useState, useEffect} from 'react';
-import {useUrl} from '../../foundation/useUrl/useUrl.js';
-import {loadScript, type ScriptProps} from './loadScript.js';
+import {useUrl} from '../useUrl/useUrl.js';
+import {loadScript, type PostHydrationProps} from './loadScript.js';
 import {loadScriptOnIdle} from './loadScriptOnIdle.js';
 
 export type ScriptState = 'loading' | 'done' | 'error';
 
 let prevPathname = '';
 
-// TODO: async won't work with `onIdle` strategy
-export function useLoadScript(options: ScriptProps) {
+type UseScriptProps = {
+  /* because the hook form is stateful we don't accept `beforeHydration` */
+  strategy?: Exclude<
+    PostHydrationProps['strategy'],
+    'beforeHydration' | 'worker'
+  >;
+} & PostHydrationProps;
+
+export function useLoadScript(options: UseScriptProps) {
   const {pathname} = useUrl();
   const [status, setStatus] = useState<ScriptState>('loading');
-  const stringifiedOptions = JSON.stringify(options);
+  const optionString = JSON.stringify(options);
   const pathChanged = prevPathname ? pathname !== prevPathname : false;
   const reloadOnNav = options?.reload && pathChanged;
 
@@ -23,9 +30,13 @@ export function useLoadScript(options: ScriptProps) {
     }
 
     async function loadScriptWrapper() {
+      let loaded;
       try {
-        // TODO:
-        const loaded = await loadScript(options);
+        if (options?.strategy === 'afterHydration') {
+          loaded = await loadScript(options);
+        } else if (options?.strategy === 'onIdle') {
+          loaded = await loadScriptOnIdle(options);
+        }
         if (loaded) {
           setStatus('done');
         }
@@ -35,7 +46,7 @@ export function useLoadScript(options: ScriptProps) {
     }
 
     loadScriptWrapper();
-  }, [stringifiedOptions, options, status, pathname]);
+  }, [optionString, options, status, pathname]);
 
   // if reload === true, reload on path change
   useEffect(() => {

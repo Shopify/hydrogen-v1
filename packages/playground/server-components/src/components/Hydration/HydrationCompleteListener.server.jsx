@@ -9,13 +9,12 @@ export default function HydrationCompleteListener() {
           const start = performance.now();
           let end;
           let interval;
-          let clicks = 0;
 
           // This event is fired by the button click handler which will
           // only happen when the button is hydrated.
           window.addEventListener('hydration-complete', function() {
             end = performance.now();
-            const message = '💦 hydration completed in: '+ Math.round(end - start) + 'ms, ticks: ' + clicks + ', time/tick: ' + Math.round((end - start) / clicks) + 'ms';
+            const message = '💦 Hydration completed in: '+ Math.round(end - start) + 'ms';
             console.log('------------------------------------------------------------');
             console.log(message);
             console.log('------------------------------------------------------------');

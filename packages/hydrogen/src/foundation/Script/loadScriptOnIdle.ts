@@ -21,16 +21,16 @@ TODO: write to the dom with a requestAnimationFrame inside loadScript
  */
 
 // Handles onIdle strategy
-export function loadScriptOnIdle(props: ScriptProps) {
+export async function loadScriptOnIdle(props: ScriptProps) {
   if (document.readyState === 'complete') {
-    requestIdleCallback((deadline) => {
+    return requestIdleCallback((deadline) => {
       return loadScript(props)
         .then((script) => script)
         .catch((error) => error);
     });
   } else {
     window.addEventListener('load', () => {
-      requestIdleCallback((deadline) => {
+      return requestIdleCallback((deadline) => {
         console.log('requestIdleCallback:load');
         return loadScript(props)
           .then((script) => script)

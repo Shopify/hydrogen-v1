@@ -27,11 +27,15 @@
   />
 */
 import {useEffect} from 'react';
-import {loadScriptBeforeHydration} from './loadScriptBeforeHydration.js';
 import {loadScriptOnIdle} from './loadScriptOnIdle.js';
-import {loadScript, LoadCache, type ScriptProps} from './loadScript.js';
+import {
+  loadScript,
+  LoadCache,
+  ScriptCache,
+  type PostHydrationProps,
+} from './loadScript.js';
 
-export function Script(props: ScriptProps): JSX.Element | null {
+export function ScriptPostHydration(props: PostHydrationProps): null {
   const {
     id,
     src = '',
@@ -47,14 +51,14 @@ export function Script(props: ScriptProps): JSX.Element | null {
     const hasLoaded = key && LoadCache.has(key);
     if (!onReady) return;
     if (!hasLoaded) return;
-    onReady();
-  }, [onReady, key]);
+    const cachedScript = ScriptCache.get(key);
+    if (!cachedScript) return;
+    onReady(cachedScript.script);
+  }, [key, onReady]);
 
   // Load script based on delayed loading strategy
   useEffect(() => {
     (async () => {
-      if (strategy === 'beforeHydration') return;
-      // default strategy
       if (strategy === 'afterHydration') {
         await loadScript(props);
       } else if (strategy === 'onIdle') {
@@ -63,8 +67,5 @@ export function Script(props: ScriptProps): JSX.Element | null {
     })();
   }, [props, strategy]);
 
-  // Load script with an eager strategy
-  return strategy === 'beforeHydration'
-    ? loadScriptBeforeHydration({id, src, ...props})
-    : null;
+  return null;
 }

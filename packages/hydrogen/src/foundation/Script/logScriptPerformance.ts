@@ -11,9 +11,9 @@ export function logScriptPerformance(key: string, src: string | undefined) {
     }
   }
   const durationNoThrottle = Math.ceil(performance.now() - loadTime);
-  const duration4G = durationNoThrottle * 3; // ~3x slower than no throttle
+  const duration4G = durationNoThrottle * 6; // ~6x slower than no throttle
   const duration = duration4G;
-  // console.log(`📡 ${src} ${duration}ms ${duration4G}ms`);
+  // console.log(`📡 ${src} ${durationNoThrottle}ms ${duration4G}ms`);
 
   const time = duration > 1000 ? `${duration / 1000}s` : `${duration}ms`;
   const score = duration > 500 ? 'bad' : duration > 375 ? 'ok' : 'good';

@@ -132,11 +132,7 @@ function ScriptHead() {
       <section className="head-script">
         <p>Loading script in the head...</p>
       </section>
-      <Script
-        src="/scripts/cdn?script=head-script.js"
-        id="head-script"
-        target="head"
-      />
+      <Script src="/scripts/cdn?script=head-script.js" id="head-script" />
     </>
   );
 }
@@ -156,6 +152,8 @@ function ScriptsBeforeHydration() {
             window._learnq = window._learnq || {};
           `,
         }}
+        target="head"
+        data-test="head-script"
       />
 
       <Script id="beforeHydration-children" strategy="beforeHydration">

@@ -1,5 +1,5 @@
 import React from 'react';
-import type {ScriptProps} from './loadScript';
+import type {BeforeHydrationProps} from './loadScript';
 
 /*
   Adds an inline <script> tag before react hydrates on the client.
@@ -46,23 +46,31 @@ import type {ScriptProps} from './loadScript';
     id="inline-before-hydration-script"
     strategy="beforeHydration"
   />
-
-  TODO:
-    - lint/ts should prevent using:
-      - `target`
-      - `module`
-      - `onReady`
-      - `onLoad`
-      - `onError` as these would be ignored
 */
-export function loadScriptBeforeHydration(props: ScriptProps): JSX.Element {
-  const {id = '', src: srcProp = null} = props;
+
+const ignoreProps = ['strategy', 'onReady', 'target'];
+
+type AllowedBeforeHydrationProps = Exclude<
+  BeforeHydrationProps,
+  typeof ignoreProps
+>;
+
+export function ScriptBeforeHydration(
+  passedProps: BeforeHydrationProps
+): JSX.Element {
+  const {id = '', src: srcProp = null} = passedProps;
   const src = typeof srcProp === 'string' ? srcProp : undefined;
-  delete props.strategy;
-  delete props.target;
-  delete props.onReady;
-  delete props.onLoad;
-  delete props.onError;
+
+  // Remove props that are not allowed on <script> tags
+  const props = Object.keys(passedProps).reduce<AllowedBeforeHydrationProps>(
+    (acc, key) => {
+      if (ignoreProps.includes(key)) {
+        delete acc[key];
+      }
+      return acc;
+    },
+    {...passedProps}
+  );
 
   const isInlineScript =
     !src &&
