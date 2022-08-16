@@ -1,4 +1,4 @@
-import {useMemo, memo} from 'react';
+import {useMemo} from 'react';
 import type {ExternalVideo as ExternalVideoType} from '../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 
@@ -20,7 +20,7 @@ type PropsWeControl = 'src';
  * The `ExternalVideo` component renders an embedded video for the Storefront
  * API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
  */
-export const ExternalVideo = memo((
+export const ExternalVideo = (
   props: Omit<JSX.IntrinsicElements['iframe'], PropsWeControl> &
     ExternalVideoProps
 ) => {
@@ -53,7 +53,7 @@ export const ExternalVideo = memo((
       loading={loading}
     ></iframe>
   );
-})
+}
 
 interface YouTube {
   autoplay?: 0 | 1;
