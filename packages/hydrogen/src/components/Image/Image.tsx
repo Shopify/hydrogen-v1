@@ -5,8 +5,8 @@ import {
   addImageSizeParametersToUrl,
   IMG_SRC_SET_SIZES,
 } from '../../utilities/index.js';
-import type { Image as ImageType } from '../../storefront-api-types.js';
-import type { PartialDeep, Simplify, SetRequired } from 'type-fest';
+import type {Image as ImageType} from '../../storefront-api-types.js';
+import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
 
 type HtmlImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
 
@@ -108,7 +108,7 @@ function ShopifyImage({
     );
   }
 
-  const { width: imgElementWidth, height: imgElementHeight } =
+  const {width: imgElementWidth, height: imgElementHeight} =
     getShopifyImageDimensions({
       data,
       loaderOptions,
@@ -263,7 +263,7 @@ function ExternalImage<GenericLoaderOpts>({
   let finalSrc = src;
 
   if (loader) {
-    finalSrc = loader({ src, width, height, ...loaderOptions });
+    finalSrc = loader({src, width, height, ...loaderOptions});
     if (typeof finalSrc !== 'string' || !finalSrc) {
       throw new Error(`<Image/>: 'loader' did not return a valid string`);
     }
