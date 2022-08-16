@@ -30,12 +30,6 @@ export interface LinkProps
 }
 
 /**
- * Uses `React.startTransition` in first place and fallback to `requestIdleCallback` when using version less than `React 18` and
- * due to browser compatibility reason we need to fallback to `queueMicrotask`.
-*/
-const startIdleTransitionTask = React.startTransition || self?.requestIdleCallback || queueMicrotask
-
-/**
  * The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all
  * properties available to the `<a>` element are also available to the `Link` component.
  * For more information, refer to the [`<a>` element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).
@@ -82,7 +76,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
             !!_replace || createPath(location) === createPath({ pathname: to });
 
           if (transitionable) {
-            startIdleTransitionTask(() => {
+            startTransition(() => {
               navigate(to, {
                 replace,
                 scroll,
