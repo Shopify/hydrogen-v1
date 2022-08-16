@@ -13,7 +13,7 @@ import {
 import {RSC_PATHNAME} from '../../constants';
 
 type RSCSubRouteClientProps = {
-  outletName: string;
+  section: string;
   /** The state of this RSC route */
   state: any;
   isRSC: boolean;
@@ -24,12 +24,12 @@ const DEFAULT_MAX_AGE = 500;
 const cache = new Map();
 
 export function RSCSubRouteClient({
-  outletName,
+  section,
   state,
   isRSC,
   children,
 }: RSCSubRouteClientProps) {
-  console.log('RSCSubRouteClient', outletName);
+  console.log('RSCSubRouteClient', section);
   const [_, startTransition] = useTransition();
   const [response, setResponse] = useState(<Suspense>{children}</Suspense>);
   const [expiry, setExpiry] = useState(Date.now() + DEFAULT_MAX_AGE);
@@ -42,7 +42,7 @@ export function RSCSubRouteClient({
           ...state,
           pathname: window.location.pathname,
           search: window.location.search,
-          outlet: outletName,
+          section,
         });
         if (cachedEntry.expiry > expiry) {
           setExpiry(cachedEntry.expiry);
@@ -68,7 +68,7 @@ function getSubServerResponse(state: any) {
   const key = JSON.stringify(state);
   const cacheEntry = cache.get(key);
 
-  console.log('cache', state.outlet, cacheEntry);
+  console.log('cache', state.section, cacheEntry);
 
   if (cacheEntry && Date.now() < cacheEntry.expiry) {
     console.log('cached', cacheEntry);

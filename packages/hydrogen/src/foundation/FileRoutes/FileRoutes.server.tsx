@@ -14,6 +14,7 @@ interface FileRoutesProps {
   basePath?: string;
   /** The portion of the file route path that shouldn't be a part of the URL. You need to modify this if you want to import routes from a location other than the default `src/routes`. */
   dirPrefix?: string | RegExp;
+  sections?: ImportGlobEagerOutput;
 }
 
 /**
@@ -21,7 +22,12 @@ interface FileRoutesProps {
  * [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. You can have multiple
  * instances of this component to source file routes from multiple locations.
  */
-export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
+export function FileRoutes({
+  routes,
+  basePath,
+  dirPrefix,
+  sections,
+}: FileRoutesProps) {
   const request = useServerRequest();
   const {routeRendered, serverProps} = request.ctx.router;
 
@@ -32,16 +38,18 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
     routes = fileRoutes.files;
     dirPrefix ??= fileRoutes.dirPrefix;
     basePath ??= fileRoutes.basePath;
+    sections ??= fileRoutes.sections;
   }
 
   basePath ??= '/';
 
-  const createdPageRoutes = useMemo(
+  const pageRoutes = useMemo(
     () => createPageRoutes(routes!, basePath, dirPrefix),
     [routes, basePath, dirPrefix]
   );
-  const pageRoutes = createdPageRoutes.pageRoutes;
-  const appOutlets = request.ctx.hydrogenConfig!.outlets;
+  const appSections = useMemo(() => createSections(sections!), [sections]);
+
+  console.log('sections', appSections);
 
   let foundRoute, foundRouteDetails;
 
@@ -61,15 +69,14 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
     request.ctx.router.routeParams = foundRouteDetails.params;
 
     let withProps: any;
-    if (serverProps.outlet) {
-      console.log('Found outlet:', serverProps.outlet);
-      const FoundOutlet = (appOutlets[serverProps.outlet] ||
-        createdPageRoutes.outlets[
-          serverProps.outlet
-        ]) as keyof JSX.IntrinsicElements;
-      console.log(FoundOutlet);
+    if (serverProps.section) {
+      console.log('Found section:', serverProps.section);
+      const FoundSection = appSections[
+        serverProps.section
+      ] as keyof JSX.IntrinsicElements;
+      console.log(FoundSection);
       withProps = (
-        <FoundOutlet params={foundRouteDetails.params} {...serverProps} />
+        <FoundSection params={foundRouteDetails.params} {...serverProps} />
       );
     } else {
       withProps = (
@@ -99,16 +106,11 @@ interface HydrogenRoute {
   exact: boolean;
 }
 
-interface CreatedPageRoutes {
-  outlets: Record<string, any>;
-  pageRoutes: HydrogenRoute[];
-}
-
 export function createPageRoutes(
   pages: ImportGlobEagerOutput,
   topLevelPath = '*',
   dirPrefix: string | RegExp = ''
-): CreatedPageRoutes {
+): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const keys = Object.keys(pages);
@@ -147,11 +149,32 @@ export function createPageRoutes(
   /**
    * Place static paths BEFORE dynamic paths to grant priority.
    */
-  return {
-    outlets,
-    pageRoutes: [
-      ...routes.filter((route) => !route.path.includes(':')),
-      ...routes.filter((route) => route.path.includes(':')),
-    ],
-  };
+  return [
+    ...routes.filter((route) => !route.path.includes(':')),
+    ...routes.filter((route) => route.path.includes(':')),
+  ];
+}
+
+export function createSections(
+  pages: ImportGlobEagerOutput
+): Record<string, any> {
+  const keys = Object.keys(pages);
+
+  const sections: Record<string, any> = {};
+  keys.forEach((key) => {
+    const exportKeys = Object.keys(pages[key]);
+    if (pages[key].default && exportKeys.length === 1) {
+      log?.warn(
+        `${key} has a default export which will not be registered as a section`
+      );
+    }
+
+    exportKeys.forEach((exportName: any) => {
+      if (exportName !== 'default') {
+        sections[exportName] = pages[key][exportName];
+      }
+    });
+  });
+
+  return sections;
 }

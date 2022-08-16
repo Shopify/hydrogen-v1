@@ -6,7 +6,7 @@ import {useServerRequest} from '../ServerRequestProvider';
 import {RSCSubRouteClient} from './RSCSubRoute.client';
 
 export type RSCSubRouteProps = {
-  outletName: string;
+  section: string;
   /** The server props of this RSC route */
   serverProps: any;
   /** The state of this RSC route */
@@ -17,7 +17,7 @@ export type RSCSubRouteProps = {
 };
 
 export function RSCSubRoute({
-  outletName,
+  section,
   serverProps,
   state,
   component,
@@ -27,32 +27,30 @@ export function RSCSubRoute({
   const request = useServerRequest();
   const isRSC = request.isRscRequest();
 
-  if (serverProps.outlet && component) {
-    console.log('RSCSub', serverProps.outlet);
+  if (serverProps.section && component) {
+    console.log('RSCSub - RSC', serverProps.section);
     return component ? component(state) : null;
   } else if (isRSC) {
-    console.log('RSCSub - RSC');
-    return (
-      <RSCSubRouteClient outletName={outletName} state={state} isRSC={isRSC} />
-    );
+    console.log('RSCSub - nested RSC');
+    return <RSCSubRouteClient section={section} state={state} isRSC={isRSC} />;
   } else {
     console.log('RSCSub - SSR');
     return (
-      <RSCSubRouteClient outletName={outletName} state={state} isRSC={isRSC}>
+      <RSCSubRouteClient section={section} state={state} isRSC={isRSC}>
         {component(serverProps)}
       </RSCSubRouteClient>
     );
   }
 }
 
-export function defineRSCOutlet({
-  outletName,
+export function defineSection({
+  section,
   component,
   dependency = [],
   cache = CacheShort(),
   fallback,
 }: {
-  outletName: string;
+  section: string;
   component: ({...componentProps}: any) => JSX.Element;
   dependency?: string[];
   cache?: CachingStrategy;
@@ -60,7 +58,7 @@ export function defineRSCOutlet({
 }) {
   return (serverProps: any) => {
     // serverProps only exist when rendering RSC
-    console.log('defineOutlet', component);
+    console.log('defineSection', serverProps.section, component);
 
     const dependencyState = dependency.reduce(function (obj: any, key) {
       if (key in serverProps) obj[key] = serverProps[key];
@@ -73,13 +71,13 @@ export function defineRSCOutlet({
       <>
         {/* @ts-ignore */}
         <RSCSubRoute
-          outletName={outletName}
+          section={section}
           serverProps={serverProps}
           state={{
             ...dependencyState,
             pathname: serverProps.pathname,
             search: serverProps.search,
-            outlet: serverProps.outlet,
+            section: serverProps.section,
           }}
           component={component}
           fallback={fallback}

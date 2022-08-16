@@ -8,12 +8,11 @@ import {
   useShopQuery,
   useRouteParams,
   Link,
-  defineRSCOutlet,
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
 import {getExcerpt} from '~/lib/utils';
-import {NotFound, ProductSwimlane} from '~/components/index.server';
+import {NotFound} from '~/components/index.server';
 import {
   Heading,
   ProductDetail,
@@ -22,6 +21,7 @@ import {
   Section,
   Text,
 } from '~/components';
+import {ProductRecommendation} from '~/sections/ProductRecommendation.server';
 
 export default function Product() {
   const {handle} = useRouteParams();
@@ -121,17 +121,11 @@ export default function Product() {
             </div>
           </div>
         </Section>
-        <OutletProductRecommendation2 data={id} />
+        <ProductRecommendation data={id} />
       </ProductOptionsProvider>
     </>
   );
 }
-
-export const OutletProductRecommendation2 = defineRSCOutlet({
-  outletName: 'OutletProductRecommendation2',
-  component: ProductSwimlane,
-  dependency: ['data'],
-});
 
 const PRODUCT_QUERY = gql`
   ${MEDIA_FRAGMENT}

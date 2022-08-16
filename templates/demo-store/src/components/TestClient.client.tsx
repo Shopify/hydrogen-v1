@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 const options = [
   'Test Client 1',
@@ -10,7 +10,9 @@ const options = [
 export function TestClient({defaultSelected}: {defaultSelected: string}) {
   const [selected, setSelected] = useState(defaultSelected);
 
-  console.log('render TestClient:', selected, defaultSelected);
+  useEffect(() => {
+    setSelected(defaultSelected);
+  }, [defaultSelected]);
 
   return (
     <div className="border border-primary p-6" role="list">

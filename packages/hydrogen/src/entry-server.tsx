@@ -68,7 +68,7 @@ const DOCTYPE = '<!DOCTYPE html>';
 const CONTENT_TYPE = 'Content-Type';
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
-export const renderHydrogen = (App: any, outlets?: Record<string, any>) => {
+export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
     const {cache, context, buyerIpHeader, headers} = options;
 
@@ -92,7 +92,6 @@ export const renderHydrogen = (App: any, outlets?: Record<string, any>) => {
     const hydrogenConfig: ResolvedHydrogenConfig = {
       ...inlineHydrogenConfig,
       routes: hydrogenRoutes,
-      outlets,
     };
 
     request.ctx.hydrogenConfig = hydrogenConfig;
@@ -356,7 +355,7 @@ async function runSSR({
   let ssrDidError: Error | undefined;
   const didError = () => rsc.didError() ?? ssrDidError;
 
-  const [rscReadableForFizz] = rsc.readable.tee();
+  const [rscReadableForFizz, rscReadableForFlight] = rsc.readable.tee();
   const rscResponse = createFromReadableStream(rscReadableForFizz);
   const RscConsumer = () => rscResponse.readRoot();
 
@@ -384,21 +383,21 @@ async function runSSR({
 
   log.trace('start ssr');
 
-  // const rscReadable = response.canStream()
-  //   ? new ReadableStream({
-  //       start(controller) {
-  //         log.trace('rsc start chunks');
-  //         const encoder = new TextEncoder();
-  //         bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
-  //           const metaTag = flightContainer(chunk);
-  //           controller.enqueue(encoder.encode(metaTag));
-  //         }).then(() => {
-  //           log.trace('rsc finish chunks');
-  //           return controller.close();
-  //         });
-  //       },
-  //     })
-  //   : rscReadableForFlight;
+  const rscReadable = response.canStream()
+    ? new ReadableStream({
+        start(controller) {
+          log.trace('rsc start chunks');
+          const encoder = new TextEncoder();
+          bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
+            const metaTag = flightContainer(chunk);
+            controller.enqueue(encoder.encode(metaTag));
+          }).then(() => {
+            log.trace('rsc finish chunks');
+            return controller.close();
+          });
+        },
+      })
+    : rscReadableForFlight;
 
   if (__HYDROGEN_WORKER__) {
     const encoder = new TextEncoder();
@@ -500,16 +499,16 @@ async function runSSR({
           : undefined
       );
 
-      // const writingRSC = bufferReadableStream(
-      //   rscReadable.getReader(),
-      //   response.canStream()
-      //     ? (scriptTag) => writable.write(encoder.encode(scriptTag))
-      //     : undefined
-      // );
+      const writingRSC = bufferReadableStream(
+        rscReadable.getReader(),
+        response.canStream()
+          ? (scriptTag) => writable.write(encoder.encode(scriptTag))
+          : undefined
+      );
 
-      Promise.all([writingSSR]).then(([ssrHtml]) => {
+      Promise.all([writingSSR, writingRSC]).then(([ssrHtml, rscPayload]) => {
         if (!response.canStream()) {
-          const html = assembleHtml({ssrHtml, request, template});
+          const html = assembleHtml({ssrHtml, rscPayload, request, template});
           writable.write(encoder.encode(html));
         }
 
@@ -570,10 +569,10 @@ async function runSSR({
           if (!nodeResponse.writableEnded) pipe(nodeResponse);
         }, 0);
 
-        // bufferReadableStream(rscReadable.getReader(), (chunk) => {
-        //   log.trace('rsc chunk');
-        //   if (!nodeResponse.writableEnded) nodeResponse.write(chunk);
-        // });
+        bufferReadableStream(rscReadable.getReader(), (chunk) => {
+          log.trace('rsc chunk');
+          if (!nodeResponse.writableEnded) nodeResponse.write(chunk);
+        });
       },
       async onAllReady() {
         log.trace('node complete ssr');
@@ -594,15 +593,15 @@ async function runSSR({
         }
 
         const bufferedResponse = await createNodeWriter();
-        // const bufferedRscPromise = bufferReadableStream(
-        //   rscReadable.getReader()
-        // );
+        const bufferedRscPromise = bufferReadableStream(
+          rscReadable.getReader()
+        );
 
         let ssrHtml = '';
         bufferedResponse.on('data', (chunk) => (ssrHtml += chunk.toString()));
         bufferedResponse.once('error', (error) => (ssrDidError = error));
         bufferedResponse.once('end', async () => {
-          // const rscPayload = await bufferedRscPromise;
+          const rscPayload = await bufferedRscPromise;
 
           const error = didError();
           startWritingToNodeResponse(nodeResponse, dev ? error : undefined);
@@ -610,7 +609,7 @@ async function runSSR({
           let html = template;
 
           if (!error) {
-            html = assembleHtml({ssrHtml, request, template});
+            html = assembleHtml({ssrHtml, rscPayload, request, template});
             postRequestTasks('ssr', nodeResponse.statusCode, request, response);
           }
 
@@ -666,7 +665,7 @@ function runRSC({App, state, log, request, response}: RunRscParams) {
   request.ctx.router.serverProps = serverProps;
   preloadRequestCacheData(request);
 
-  const AppRSC = state?.outlet ? (
+  const AppRSC = state?.section ? (
     <ServerRequestProvider request={request}>
       <App {...serverProps} />
     </ServerRequestProvider>

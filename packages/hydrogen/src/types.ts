@@ -56,6 +56,7 @@ export type ResolvedHydrogenRoutes = {
   files: ImportGlobEagerOutput;
   dirPrefix: string;
   basePath: string;
+  sections: ImportGlobEagerOutput;
 };
 
 type ConfigFetcher<T> = (request: HydrogenRequest) => T | Promise<T>;
@@ -83,7 +84,6 @@ export type InlineHydrogenConfig = ClientConfig & {
 
 export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {
   routes: ResolvedHydrogenRoutes;
-  outlets: Record<string, any>;
 };
 
 export type ClientConfig = {

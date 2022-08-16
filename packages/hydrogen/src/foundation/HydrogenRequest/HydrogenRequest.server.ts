@@ -162,12 +162,12 @@ export class HydrogenRequest extends Request {
       const urlPreloadCache = preloadCache.get(this.url);
 
       mergeMapEntries(combinedPreloadQueries, urlPreloadCache);
-      if (!state.outlet) {
+      if (!state.section) {
         mergeMapEntries(combinedPreloadQueries, preloadCache.get(PRELOAD_ALL));
       }
 
       return combinedPreloadQueries;
-    } else if (!state.outlet && preloadCache.has(PRELOAD_ALL)) {
+    } else if (!state.section && preloadCache.has(PRELOAD_ALL)) {
       return preloadCache.get(PRELOAD_ALL);
     }
   }
