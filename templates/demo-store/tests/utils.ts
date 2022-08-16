@@ -5,7 +5,10 @@ import {
 } from 'playwright';
 import '@shopify/hydrogen/web-polyfills';
 import type {Server} from 'http';
-import {createServer as createViteDevServer, version} from 'vite';
+
+// `version` is only exported in Vite 3
+import * as vite from 'vite';
+const {createServer: createViteDevServer, version} = vite;
 
 export interface HydrogenSession {
   page: Page;
