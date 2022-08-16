@@ -65,6 +65,13 @@ The `ExternalVideo` component requires the following field from the Storefront A
 }
 ```
 
+## Default Prop Values
+
+- `frameBorder='0'`
+- `allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'`
+- `allowFullScreen='true'`
+- `loading='lazy'`
+
 
 ## Component type
 
