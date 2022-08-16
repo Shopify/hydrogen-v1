@@ -19,20 +19,6 @@ Improve the developer experience:
 - [Add autocompletion for the Storefront API](#storefront-api-graphql-autocompletion)
 - [Add TypeScript types for Storefront API objects](#typescript-types)
 
-## Component Types
-
-Hydrogen-UI exposes three different types of components, that match the [React Server Components (RSC)](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#capabilities--constraints-of-server-and-client-components) specification. However, you do not need to be using a RSC-compatible framework in order to use some of these components. Here's a breakdown:
-
-| Import from                   | Works in non-RSC code / frameworks |
-| ----------------------------- | ---------------------------------- |
-| `@shopify/hydrogen-ui/client` | Yes ✅                             |
-| `@shopify/hydrogen-ui/shared` | Yes ✅                             |
-| `@shopify/hydrogen-ui/server` | No ❌                              |
-
-When using non-RSC-compatible frameworks, you can view the `/client` and `/shared` import paths as traditional components with essentially no difference between them.
-
-When using RSC-compatible frameworks, then `/client` and `/shared` will have the restrictions as outlined in the RSC doc outlined above.
-
 ## Storefront API GraphQL autocompletion
 
 To enable GraphQL autocompletion for the Storefront API in your IDE:
@@ -69,6 +55,14 @@ const productTitle: Pick<Product, 'title'> = '';
 
 const productExceptTitle: Omit<Product, 'title'> = {};
 ```
+
+## Development and Production bundles
+
+Hydrogen-UI has a development and production bundle; the development bundle has additional warnings and messages that the production bundle does not have.
+
+Depending on the bundler or runtime you're using, it may automatically choose the correct bundle by following the `package.json#exports` of Hydrogen-UI. If it's not automatic, then you may need to configure your bundler / runtime to use the `development` and `production` conditions to enable this feature.
+
+The production bundle is used by default if your bundler / runtime doesn't understand the export conditions.
 
 ## Common Problems
 
