@@ -25,8 +25,8 @@
     --font-size-heading: 2.25rem; /* text-4xl */
     --font-size-display: 3.75rem; /* text-6xl */
   }
-  @supports (height: 100lvh) {
-    --screen-height: 100lvh;
+  @supports (height: 100svh) {
+    --screen-height: 100svh;
   }
 }
 
