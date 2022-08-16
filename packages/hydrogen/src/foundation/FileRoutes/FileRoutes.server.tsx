@@ -36,10 +36,11 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
 
   basePath ??= '/';
 
-  const pageRoutes = useMemo(
+  const createdPageRoutes = useMemo(
     () => createPageRoutes(routes!, basePath, dirPrefix),
     [routes, basePath, dirPrefix]
   );
+  const pageRoutes = createdPageRoutes.pageRoutes;
   const appOutlets = request.ctx.hydrogenConfig!.outlets;
 
   let foundRoute, foundRouteDetails;
@@ -53,7 +54,7 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
     }
   }
 
-  console.log('Found route', foundRoute, foundRouteDetails.params);
+  console.log('Found route', foundRoute, foundRouteDetails);
 
   if (foundRoute) {
     request.ctx.router.routeRendered = true;
@@ -63,7 +64,10 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
     if (serverProps.outlet) {
       console.log('Found outlet:', serverProps.outlet);
       const FoundOutlet = (appOutlets[serverProps.outlet] ||
-        foundRoute.outlets[serverProps.outlet]) as keyof JSX.IntrinsicElements;
+        createdPageRoutes.outlets[
+          serverProps.outlet
+        ]) as keyof JSX.IntrinsicElements;
+      console.log(FoundOutlet);
       withProps = (
         <FoundOutlet params={foundRouteDetails.params} {...serverProps} />
       );
@@ -92,19 +96,24 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
 interface HydrogenRoute {
   component: any;
   path: string;
-  outlets: Record<string, any>;
   exact: boolean;
+}
+
+interface CreatedPageRoutes {
+  outlets: Record<string, any>;
+  pageRoutes: HydrogenRoute[];
 }
 
 export function createPageRoutes(
   pages: ImportGlobEagerOutput,
   topLevelPath = '*',
   dirPrefix: string | RegExp = ''
-): HydrogenRoute[] {
+): CreatedPageRoutes {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const keys = Object.keys(pages);
 
+  const outlets: Record<string, any> = {};
   const routes = keys
     .map((key) => {
       const path = extractPathFromRoutesKey(key, dirPrefix);
@@ -121,7 +130,6 @@ export function createPageRoutes(
         );
       }
 
-      const outlets: Record<string, any> = {};
       Object.keys(pages[key]).forEach((exportName: any) => {
         if (exportName !== 'default' && exportName !== 'api') {
           outlets[exportName] = pages[key][exportName];
@@ -131,7 +139,6 @@ export function createPageRoutes(
       return {
         path: topLevelPrefix + path,
         component: pages[key].default,
-        outlets,
         exact,
       };
     })
@@ -140,8 +147,11 @@ export function createPageRoutes(
   /**
    * Place static paths BEFORE dynamic paths to grant priority.
    */
-  return [
-    ...routes.filter((route) => !route.path.includes(':')),
-    ...routes.filter((route) => route.path.includes(':')),
-  ];
+  return {
+    outlets,
+    pageRoutes: [
+      ...routes.filter((route) => !route.path.includes(':')),
+      ...routes.filter((route) => route.path.includes(':')),
+    ],
+  };
 }

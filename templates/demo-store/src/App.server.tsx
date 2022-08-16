@@ -11,6 +11,7 @@ import {
   ShopifyProvider,
   CartProvider,
   defineRSCOutlet,
+  CacheLong,
 } from '@shopify/hydrogen';
 
 import {HeaderFallback} from '~/components';
@@ -22,11 +23,13 @@ import {Footer} from './components/global/Footer.server';
 export const HeaderRSCOutlet = defineRSCOutlet({
   outletName: 'HeaderRSCOutlet',
   component: Header,
+  cache: CacheLong(),
 });
 
 export const FooterRSCOutlet = defineRSCOutlet({
   outletName: 'FooterRSCOutlet',
   component: Footer,
+  cache: CacheLong(),
 });
 
 function App({request, outlet}: HydrogenRouteProps) {

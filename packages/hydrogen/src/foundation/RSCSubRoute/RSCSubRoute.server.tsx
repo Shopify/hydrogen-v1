@@ -11,7 +11,6 @@ export type RSCSubRouteProps = {
   serverProps: any;
   /** The state of this RSC route */
   state: any;
-  cache: CachingStrategy;
   /** A reference to a React Server Component that's rendered when the route is active. */
   component: ({...componentProps}: any) => JSX.Element | undefined;
   fallback?: ReactElement;
@@ -22,7 +21,6 @@ export function RSCSubRoute({
   serverProps,
   state,
   component,
-  cache,
   fallback,
 }: RSCSubRouteProps) {
   // console.log('RSCSubRoute', state, component);
@@ -30,8 +28,7 @@ export function RSCSubRoute({
   const isRSC = request.isRscRequest();
 
   if (serverProps.outlet && component) {
-    console.log('RSCSub', serverProps.outlet, serverProps.response.cache);
-    serverProps.response.cache(cache);
+    console.log('RSCSub', serverProps.outlet);
     return component ? component(state) : null;
   } else if (isRSC) {
     console.log('RSCSub - RSC');
@@ -62,6 +59,7 @@ export function defineRSCOutlet({
   fallback?: ReactElement;
 }) {
   return (serverProps: any) => {
+    // serverProps only exist when rendering RSC
     console.log('defineOutlet', component);
 
     const dependencyState = dependency.reduce(function (obj: any, key) {
@@ -83,7 +81,6 @@ export function defineRSCOutlet({
             search: serverProps.search,
             outlet: serverProps.outlet,
           }}
-          cache={cache}
           component={component}
           fallback={fallback}
         />

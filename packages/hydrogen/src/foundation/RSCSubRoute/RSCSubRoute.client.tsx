@@ -66,7 +66,6 @@ export function RSCSubRouteClient({
 
 function getSubServerResponse(state: any) {
   const key = JSON.stringify(state);
-
   const cacheEntry = cache.get(key);
 
   console.log('cache', state.outlet, cacheEntry);
