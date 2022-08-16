@@ -3,6 +3,8 @@ gid: 044c475e-f28g-444b-a984-26e7ebb8bec4
 title: Analytics
 description: Learn about the analytics support built into Hydrogen.
 ---
+> Caution:
+> Include the `storefrontId` prop in the Hydrogen config to avoid breaking the analytics dashboard in the Shopify admin. Learn more about [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
 
 Hydrogen includes support for analytics that give you insight into how customers are interacting with a custom storefront.
 
@@ -311,7 +313,7 @@ To send analytics data from the server-side, complete the following steps:
 
     {% endcodeblock %}
 
-    {% codeblock file, filename: 'hydrogen.config.js' %}
+    {% codeblock file, filename: 'hydrogen.config.ts' %}
 
     ```js
     import * as MyServerAnalyticsConnector from '/components/MyServerAnalyticsConnector.jsx'
