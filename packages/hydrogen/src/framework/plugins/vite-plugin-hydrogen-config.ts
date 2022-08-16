@@ -12,13 +12,15 @@ export default () => {
   return {
     name: 'hydrogen:config',
     config: async (config, env) => {
+      // @ts-ignore
+      const isSsrBuild = env.ssrBuild ?? !!config.build?.ssr;
       /**
        * By default, SSR dedupe logic gets bundled which runs `require('module')`.
        * We don't want this in our workers runtime, because `require` is not supported.
        */
       rollupOptions.output = {
-        format: isWorker || !env.ssrBuild ? 'es' : 'cjs',
-        inlineDynamicImports: env.ssrBuild ? true : undefined,
+        format: isWorker || !isSsrBuild ? 'es' : 'cjs',
+        inlineDynamicImports: isSsrBuild ? true : undefined,
       };
 
       if (process.env.NODE_ENV !== 'development' && !process.env.LOCAL_DEV) {
