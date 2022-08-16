@@ -26,7 +26,6 @@ import {
   ServerRequestProvider,
 } from './foundation/ServerRequestProvider/index.js';
 import type {ServerResponse} from 'http';
-import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
   renderApiRoute,
@@ -58,6 +57,15 @@ import {
 import {CacheShort, NO_STORE} from './foundation/Cache/strategies/index.js';
 import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes.js';
 import {FORM_REDIRECT_COOKIE} from './constants.js';
+
+// Importing 'stream' directly breaks Vite resolve
+// when building for workers, even though this code
+// does not run in a worker. Looks like tree-shaking
+// kicks in after the import analysis/bundle.
+// @ts-ignore
+import stream from 'virtual__stream';
+import type {PassThrough as PassThroughType} from 'stream';
+const PassThrough = stream.PassThrough as typeof PassThroughType;
 
 declare global {
   // This is provided by a Vite plugin
@@ -601,7 +609,7 @@ async function runSSR({
           return nodeResponse.end();
         }
 
-        const bufferedResponse = await createNodeWriter();
+        const bufferedResponse = new PassThrough();
         const bufferedRscPromise = bufferReadableStream(
           rscReadable.getReader()
         );
@@ -777,16 +785,6 @@ function writeHeadToNodeResponse(
 function isRedirect(response: {status?: number; statusCode?: number}) {
   const status = response.status ?? response.statusCode ?? 0;
   return status >= 300 && status < 400;
-}
-
-async function createNodeWriter() {
-  // Importing 'stream' directly breaks Vite resolve
-  // when building for workers, even though this code
-  // does not run in a worker. Looks like tree-shaking
-  // kicks in after the import analysis/bundle.
-  const streamImport = __HYDROGEN_WORKER__ ? '' : 'stream';
-  const {PassThrough} = await import(streamImport);
-  return new PassThrough() as InstanceType<typeof PassThroughType>;
 }
 
 function flightContainer(chunk: string) {

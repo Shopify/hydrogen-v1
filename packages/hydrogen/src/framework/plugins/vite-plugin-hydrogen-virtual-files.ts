@@ -24,6 +24,8 @@ const VIRTUAL_HYDROGEN_ROUTES_ID = VIRTUAL_PREFIX + HYDROGEN_ROUTES_ID;
 export const VIRTUAL_PROXY_HYDROGEN_ROUTES_ID =
   VIRTUAL_PREFIX + PROXY_PREFIX + HYDROGEN_ROUTES_ID;
 
+const VIRTUAL_STREAM_ID = 'virtual__stream';
+
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
   let server: ViteDevServer;
@@ -54,6 +56,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           VIRTUAL_PROXY_HYDROGEN_ROUTES_ID,
           VIRTUAL_HYDROGEN_ROUTES_ID,
           VIRTUAL_ERROR_FILE,
+          VIRTUAL_STREAM_ID,
         ].includes(source)
       ) {
         // Virtual modules convention
@@ -63,6 +66,14 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       }
     },
     load(id) {
+      if (id === '\0' + VIRTUAL_STREAM_ID) {
+        return {
+          code: process.env.WORKER
+            ? `export default {};`
+            : `export {default} from 'stream';`,
+        };
+      }
+
       // Likely due to a bug in Vite, but virtual modules cannot be loaded
       // directly using ssrLoadModule from a Vite plugin. It needs to be proxied as follows:
       if (id === '\0' + VIRTUAL_PROXY_HYDROGEN_CONFIG_ID) {
