@@ -2,7 +2,7 @@ import {Plugin} from 'vite';
 
 export default function assetsVersion(version?: string): Plugin {
   return {
-    name: 'augment-with-version',
+    name: 'hydrogen:augment-with-version',
     augmentChunkHash() {
       return version ?? '';
     },
