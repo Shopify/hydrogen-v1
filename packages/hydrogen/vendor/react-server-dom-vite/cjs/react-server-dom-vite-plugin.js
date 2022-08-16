@@ -18,6 +18,8 @@ var vite = require('vite');
 var fs = require('fs');
 var path = require('path');
 
+var isVite3 = vite.version?.startsWith('3.');
+
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
   if (typeof o === "string") return _arrayLikeToArray(o, minLen);
@@ -392,7 +394,8 @@ function findClientBoundaries(moduleGraph) {
         return moduleNode.meta && moduleNode.meta.isClientComponent;
       });
 
-      if (clientModule && (!optimizeBoundaries || isDirectImportInServer(clientModule))) {
+      // TODO: broken in Vite 3
+      if (clientModule && (isVite3 || (!optimizeBoundaries || isDirectImportInServer(clientModule)))) {
         clientBoundaries.push(clientModule.file);
       }
     }
@@ -410,8 +413,11 @@ async function findClientBoundariesForClientBuild(serverEntries, optimizeBoundar
   var server = await vite.createServer({
     clearScreen: false,
     server: {
-      middlewareMode: 'ssr'
-    }
+      middlewareMode: isVite3 ? true : 'ssr',
+      hmr: false,
+    },
+    // @ts-ignore
+    appType: 'custom',
   });
 
   try {
@@ -434,7 +440,8 @@ var hashImportsPlugin = {
     if (rscViteFileRE.test(id)) {
       var s = new MagicString(code);
       s.replace(/\/\*\s*HASH_BEGIN\s*\*\/\s*([^]+?)\/\*\s*HASH_END\s*\*\//gm, function (_, imports) {
-        return imports.trim().replace(/"([^"]+?)":/gm, function (__, relativePath) {
+        return imports.trim().replace(/"([^"]+?)":/gm, function (all, relativePath) {
+          if (relativePath === '__VITE_PRELOAD__') return all;
           var absolutePath = path.resolve(path.dirname(id.split('?')[0]), relativePath);
           return "\"" + getComponentId(vite.normalizePath(absolutePath)) + "\":";
         });
