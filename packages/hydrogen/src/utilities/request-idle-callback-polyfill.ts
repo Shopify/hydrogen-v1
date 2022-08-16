@@ -1,3 +1,4 @@
+// polyfill for Safari and IE
 export const requestIdleCallback =
   (typeof self !== 'undefined' &&
     self.requestIdleCallback &&
