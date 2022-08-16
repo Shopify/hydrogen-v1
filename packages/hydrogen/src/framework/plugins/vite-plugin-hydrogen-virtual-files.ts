@@ -3,6 +3,7 @@ import path from 'path';
 import {promises as fs} from 'fs';
 import type {HydrogenVitePluginOptions} from '../types.js';
 import {viteception} from '../viteception.js';
+import {isVite3} from '../../utilities/vite.js';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
@@ -103,9 +104,13 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
 
           const [dirPrefix] = routesPath.split('/*');
 
+          const importGlob = isVite3
+            ? `import.meta.glob('${routesPath}', {eager: true})`
+            : `import.meta.globEager('${routesPath}')`;
+
           let code = `export default {\n  dirPrefix: '${dirPrefix}',\n  basePath: '${
             hc.routes?.basePath ?? ''
-          }',\n  files: import.meta.globEager('${routesPath}')\n};`;
+          }',\n  files: ${importGlob}\n};`;
 
           if (config.command === 'serve') {
             // Add dependency on Hydrogen config for HMR

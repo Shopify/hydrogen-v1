@@ -5,7 +5,7 @@ import {
 } from 'playwright';
 import '@shopify/hydrogen/web-polyfills';
 import type {Server} from 'http';
-import {createServer as createViteDevServer} from 'vite';
+import {createServer as createViteDevServer, version} from 'vite';
 
 export interface HydrogenSession {
   page: Page;
@@ -58,8 +58,9 @@ async function createNodeServer() {
 }
 
 async function createDevServer() {
+  const isVite3 = version?.startsWith('3.');
   const app = await createViteDevServer({
-    server: {force: true},
+    [isVite3 ? 'optimizeDeps' : 'server']: {force: true},
     logLevel: 'silent',
   });
   const server = await app.listen(0);
