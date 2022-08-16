@@ -124,7 +124,9 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       return loaded.default;
     }
 
-    const {loaded} = await viteception([VIRTUAL_PROXY_HYDROGEN_CONFIG_ID]);
+    const {loaded} = await viteception([VIRTUAL_PROXY_HYDROGEN_CONFIG_ID], {
+      root: config.root,
+    });
     return loaded[0].default;
   }
 };
