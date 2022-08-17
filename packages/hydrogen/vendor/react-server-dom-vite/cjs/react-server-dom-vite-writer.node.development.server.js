@@ -234,6 +234,11 @@ function processModelChunk(request, id, model) {
   var row = serializeRowHeader('J', id) + json + '\n';
   return stringToChunk(row);
 }
+function processReferenceChunk(request, id, reference) {
+  var json = stringify(reference);
+  var row = serializeRowHeader('J', id) + json + '\n';
+  return stringToChunk(row);
+}
 function processModuleChunk(request, id, moduleMetaData) {
   var json = stringify(moduleMetaData);
   var row = serializeRowHeader('M', id) + json + '\n';
@@ -576,6 +581,7 @@ var startInlineScript = stringToPrecomputedChunk('<script>');
 var endInlineScript = stringToPrecomputedChunk('</script>');
 var startScriptSrc = stringToPrecomputedChunk('<script src="');
 var startModuleSrc = stringToPrecomputedChunk('<script type="module" src="');
+var scriptIntegirty = stringToPrecomputedChunk('" integrity="');
 var endAsyncScript = stringToPrecomputedChunk('" async=""></script>');
 
 var textSeparator = stringToPrecomputedChunk('<!-- -->');
@@ -1053,6 +1059,10 @@ function getOrCreateServerContext(globalName) {
   return ContextRegistry[globalName];
 }
 
+var PENDING = 0;
+var COMPLETED = 1;
+var ABORTED = 3;
+var ERRORED = 4;
 var ReactCurrentDispatcher = ReactSharedInternals.ReactCurrentDispatcher;
 
 function defaultErrorHandler(error) {
@@ -1063,7 +1073,8 @@ var OPEN = 0;
 var CLOSING = 1;
 var CLOSED = 2;
 function createRequest(model, bundlerConfig, onError, context, identifierPrefix) {
-  var pingedSegments = [];
+  var abortSet = new Set();
+  var pingedTasks = [];
   var request = {
     status: OPEN,
     fatalError: null,
@@ -1072,7 +1083,8 @@ function createRequest(model, bundlerConfig, onError, context, identifierPrefix)
     cache: new Map(),
     nextChunkId: 0,
     pendingChunks: 0,
-    pingedSegments: pingedSegments,
+    abortableTasks: abortSet,
+    pingedTasks: pingedTasks,
     completedModuleChunks: [],
     completedJSONChunks: [],
     completedErrorChunks: [],
@@ -1088,8 +1100,8 @@ function createRequest(model, bundlerConfig, onError, context, identifierPrefix)
   };
   request.pendingChunks++;
   var rootContext = createRootContext(context);
-  var rootSegment = createSegment(request, model, rootContext);
-  pingedSegments.push(rootSegment);
+  var rootTask = createTask(request, model, rootContext, abortSet);
+  pingedTasks.push(rootTask);
   return request;
 }
 
@@ -1187,28 +1199,30 @@ function attemptResolveElement(type, key, ref, props) {
   throw new Error("Unsupported server component type: " + describeValueForErrorMessage(type));
 }
 
-function pingSegment(request, segment) {
-  var pingedSegments = request.pingedSegments;
-  pingedSegments.push(segment);
+function pingTask(request, task) {
+  var pingedTasks = request.pingedTasks;
+  pingedTasks.push(task);
 
-  if (pingedSegments.length === 1) {
+  if (pingedTasks.length === 1) {
     scheduleWork(function () {
       return performWork(request);
     });
   }
 }
 
-function createSegment(request, model, context) {
+function createTask(request, model, context, abortSet) {
   var id = request.nextChunkId++;
-  var segment = {
+  var task = {
     id: id,
+    status: PENDING,
     model: model,
     context: context,
     ping: function () {
-      return pingSegment(request, segment);
+      return pingTask(request, task);
     }
   };
-  return segment;
+  abortSet.add(task);
+  return task;
 }
 
 function serializeByValueID(id) {
@@ -1443,12 +1457,12 @@ function resolveModelToJSON(request, parent, key, value) {
       }
     } catch (x) {
       if (typeof x === 'object' && x !== null && typeof x.then === 'function') {
-        // Something suspended, we'll need to create a new segment and resolve it later.
+        // Something suspended, we'll need to create a new task and resolve it later.
         request.pendingChunks++;
-        var newSegment = createSegment(request, value, getActiveContext());
-        var ping = newSegment.ping;
+        var newTask = createTask(request, value, getActiveContext(), request.abortableTasks);
+        var ping = newTask.ping;
         x.then(ping, ping);
-        return serializeByRefID(newSegment.id);
+        return serializeByRefID(newTask.id);
       } else {
         logRecoverableError(request, x); // Something errored. We'll still send everything we have up until this point.
         // We'll replace this element with a lazy reference that throws on the client
@@ -1656,34 +1670,43 @@ function emitProviderChunk(request, id, contextName) {
   request.completedJSONChunks.push(processedChunk);
 }
 
-function retrySegment(request, segment) {
-  switchContext(segment.context);
+function retryTask(request, task) {
+  if (task.status !== PENDING) {
+    // We completed this by other means before we had a chance to retry it.
+    return;
+  }
+
+  switchContext(task.context);
 
   try {
-    var _value3 = segment.model;
+    var _value3 = task.model;
 
     while (typeof _value3 === 'object' && _value3 !== null && _value3.$$typeof === REACT_ELEMENT_TYPE) {
       // TODO: Concatenate keys of parents onto children.
       var element = _value3; // Attempt to render the server component.
-      // Doing this here lets us reuse this same segment if the next component
+      // Doing this here lets us reuse this same task if the next component
       // also suspends.
 
-      segment.model = _value3;
+      task.model = _value3;
       _value3 = attemptResolveElement(element.type, element.key, element.ref, element.props);
     }
 
-    var processedChunk = processModelChunk(request, segment.id, _value3);
+    var processedChunk = processModelChunk(request, task.id, _value3);
     request.completedJSONChunks.push(processedChunk);
+    request.abortableTasks.delete(task);
+    task.status = COMPLETED;
   } catch (x) {
     if (typeof x === 'object' && x !== null && typeof x.then === 'function') {
       // Something suspended again, let's pick it back up later.
-      var ping = segment.ping;
+      var ping = task.ping;
       x.then(ping, ping);
       return;
     } else {
+      request.abortableTasks.delete(task);
+      task.status = ERRORED;
       logRecoverableError(request, x); // This errored, we need to serialize this error to the
 
-      emitErrorChunk(request, segment.id, x);
+      emitErrorChunk(request, task.id, x);
     }
   }
 }
@@ -1696,12 +1719,12 @@ function performWork(request) {
   prepareToUseHooksForRequest(request);
 
   try {
-    var pingedSegments = request.pingedSegments;
-    request.pingedSegments = [];
+    var pingedTasks = request.pingedTasks;
+    request.pingedTasks = [];
 
-    for (var i = 0; i < pingedSegments.length; i++) {
-      var segment = pingedSegments[i];
-      retrySegment(request, segment);
+    for (var i = 0; i < pingedTasks.length; i++) {
+      var task = pingedTasks[i];
+      retryTask(request, task);
     }
 
     if (request.destination !== null) {
@@ -1715,6 +1738,15 @@ function performWork(request) {
     setCurrentCache(prevCache);
     resetHooksForRequest();
   }
+}
+
+function abortTask(task, request, errorId) {
+  task.status = ABORTED; // Instead of emitting an error per task.id, we emit a model that only
+  // has a single value referencing the error.
+
+  var ref = serializeByValueID(errorId);
+  var processedChunk = processReferenceChunk(request, task.id, ref);
+  request.completedJSONChunks.push(processedChunk);
 }
 
 function flushCompletedChunks(request, destination) {
@@ -1818,6 +1850,34 @@ function startFlowing(request, destination) {
     logRecoverableError(request, error);
     fatalError(request, error);
   }
+} // This is called to early terminate a request. It creates an error at all pending tasks.
+
+function abort(request, reason) {
+  try {
+    var abortableTasks = request.abortableTasks;
+
+    if (abortableTasks.size > 0) {
+      // We have tasks to abort. We'll emit one error row and then emit a reference
+      // to that row from every row that's still remaining.
+      var _error = reason === undefined ? new Error('The render was aborted by the server without a reason.') : reason;
+
+      logRecoverableError(request, _error);
+      request.pendingChunks++;
+      var errorId = request.nextChunkId++;
+      emitErrorChunk(request, errorId, _error);
+      abortableTasks.forEach(function (task) {
+        return abortTask(task, request, errorId);
+      });
+      abortableTasks.clear();
+    }
+
+    if (request.destination !== null) {
+      flushCompletedChunks(request, request.destination);
+    }
+  } catch (error) {
+    logRecoverableError(request, error);
+    fatalError(request, error);
+  }
 }
 
 function importServerContexts(contexts) {
@@ -1873,6 +1933,9 @@ function renderToPipeableStream(model, options) {
       startFlowing(request, destination);
       destination.on('drain', createDrainHandler(destination, request));
       return destination;
+    },
+    abort: function (reason) {
+      abort(request, reason);
     }
   };
 }
