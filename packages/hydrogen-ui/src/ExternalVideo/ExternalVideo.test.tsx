@@ -1,10 +1,11 @@
+import * as React from 'react';
 import {render, screen} from '@testing-library/react';
 import {PartialDeep} from 'type-fest';
 import type {
   ExternalVideo as ExternalVideoType,
   Image,
-} from '../storefront-api-types';
-import {ExternalVideo} from './ExternalVideo';
+} from '../storefront-api-types.js';
+import {ExternalVideo} from './ExternalVideo.js';
 import {faker} from '@faker-js/faker';
 import {vi} from 'vitest';
 
@@ -78,6 +79,7 @@ describe('<ExternalVideo />', () => {
 
   it(`throws when 'data.embedUrl' isn't passed`, () => {
     // to silence the test runner's console.error from being called
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => render(<ExternalVideo data={{id: 'hi'}} />)).toThrow();
     expect(console.error).toHaveBeenCalled();

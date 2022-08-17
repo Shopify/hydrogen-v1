@@ -304,7 +304,7 @@ function ReactFlightVitePlugin() {
           throw new Error('[react-server-dom-vite] Parameter serverBuildEntries is required for client build');
         }
 
-        return findClientBoundariesForClientBuild(serverBuildEntries, optimizeBoundaries !== false).then(injectGlobs);
+        return findClientBoundariesForClientBuild(serverBuildEntries, optimizeBoundaries !== false, config.root).then(injectGlobs);
       }
     },
     handleHotUpdate: function (_ref2) {
@@ -408,9 +408,10 @@ function findClientBoundaries(moduleGraph) {
   return clientBoundaries;
 }
 
-async function findClientBoundariesForClientBuild(serverEntries, optimizeBoundaries) {
+async function findClientBoundariesForClientBuild(serverEntries, optimizeBoundaries, root) {
   // Viteception
   var server = await vite.createServer({
+    root: root,
     clearScreen: false,
     server: {
       middlewareMode: isVite3 ? true : 'ssr',

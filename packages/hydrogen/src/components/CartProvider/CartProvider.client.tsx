@@ -358,6 +358,7 @@ export function CartProvider({
             {
               addedCartLines: cart.lines,
               cart: data.cartCreate.cart,
+              prevCart: null,
             }
           );
         }
@@ -414,6 +415,7 @@ export function CartProvider({
             {
               addedCartLines: lines,
               cart: data.cartLinesAdd.cart,
+              prevCart: state.cart,
             }
           );
           dispatch({
@@ -460,6 +462,7 @@ export function CartProvider({
             {
               removedCartLines: lines,
               cart: data.cartLinesRemove.cart,
+              prevCart: state.cart,
             }
           );
           dispatch({
@@ -505,6 +508,8 @@ export function CartProvider({
             {
               updatedCartLines: lines,
               oldCart: state.cart,
+              cart: data.cartLinesUpdate.cart,
+              prevCart: state.cart,
             }
           );
           dispatch({
@@ -668,6 +673,7 @@ export function CartProvider({
             {
               updatedDiscountCodes: discountCodes,
               cart: data.cartDiscountCodesUpdate.cart,
+              prevCart: state.cart,
             }
           );
           dispatch({

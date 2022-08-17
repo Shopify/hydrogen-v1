@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type {Image as ImageType} from '../storefront-api-types';
+import type {Image as ImageType} from '../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 export type Width = string | 'original';
@@ -18,6 +18,8 @@ export interface ImageSizeOptions {
 
 export interface ImageLoaderOptions {
   src: string;
+  // this is fixed in the hydrogen repo
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: {[key: string]: any};
 }
 

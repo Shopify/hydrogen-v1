@@ -1,14 +1,19 @@
+import * as React from 'react';
 import {createRoot} from 'react-dom/client';
-import * as Shared from './src/index.shared';
+import * as HUI from './src/index.js';
 
 const container = document.getElementById('app');
+if (!container) {
+  throw new Error('Could not get #app');
+}
 const root = createRoot(container);
 
 // change what's rendered here to test out a component in isolation
+// eslint-disable-next-line react/no-unescaped-entities
 root.render(<div>Change me in 'dev-entry-point.tsx'</div>);
 // for example:
 // root.render(
-//   <Shared.Video
+//   <HUI.Video
 //     data={{
 //       id: 'video',
 //       previewImage: {

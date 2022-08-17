@@ -1,5 +1,5 @@
-import {ImageSizeOptions, useImageUrl} from '../Image/image_size';
-import type {Video as VideoType} from '../storefront-api-types';
+import {ImageSizeOptions, useImageUrl} from '../Image/image_size.js';
+import type {Video as VideoType} from '../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 interface VideoProps {
@@ -26,6 +26,10 @@ export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
     data.previewImage?.url as string | undefined,
     options
   );
+
+  if (__HYDROGEN_DEV__) {
+    console.warn('hello dev warning');
+  }
 
   if (!data.sources) {
     throw new Error(`<Video/> requires a 'data.sources' array`);
