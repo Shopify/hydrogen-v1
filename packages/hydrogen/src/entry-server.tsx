@@ -79,10 +79,13 @@ export const renderHydrogen = (App: any) => {
 
     let sessionApi = options.sessionApi;
 
-    const {default: inlineHydrogenConfig} = await import(
+    const {default: importedConfig} = await import(
       // @ts-ignore
       'virtual__hydrogen.config.ts'
     );
+
+    const inlineHydrogenConfig =
+      typeof importedConfig === 'function' ? importedConfig() : importedConfig;
 
     const {default: hydrogenRoutes} = await import(
       // @ts-ignore

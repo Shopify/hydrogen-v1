@@ -3,6 +3,7 @@ import path from 'path';
 import {promises as fs} from 'fs';
 import type {HydrogenVitePluginOptions} from '../types.js';
 import {viteception} from '../viteception.js';
+import MagicString from 'magic-string';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
@@ -27,6 +28,7 @@ export const VIRTUAL_PROXY_HYDROGEN_ROUTES_ID =
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
   let server: ViteDevServer;
+  let resolvedConfigPath: string;
 
   return {
     name: 'hydrogen:virtual-files',
@@ -41,11 +43,12 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         return findHydrogenConfigPath(
           config.root,
           pluginOptions.configPath
-        ).then((hcPath: string) =>
+        ).then((hcPath: string) => {
+          resolvedConfigPath = normalizePath(hcPath);
           // This direct dependency on a real file
           // makes HMR work for the virtual module.
-          this.resolve(hcPath, importer, {skipSelf: true})
-        );
+          return this.resolve(hcPath, importer, {skipSelf: true});
+        });
       }
 
       if (
@@ -66,7 +69,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       // Likely due to a bug in Vite, but virtual modules cannot be loaded
       // directly using ssrLoadModule from a Vite plugin. It needs to be proxied as follows:
       if (id === '\0' + VIRTUAL_PROXY_HYDROGEN_CONFIG_ID) {
-        return `import hc from '${VIRTUAL_HYDROGEN_CONFIG_ID}'; export default hc;`;
+        return `import hc from '${VIRTUAL_HYDROGEN_CONFIG_ID}'; export default typeof hc === 'function' ? hc() : hc;`;
       }
       if (id === '\0' + VIRTUAL_PROXY_HYDROGEN_ROUTES_ID) {
         return `import hr from '${VIRTUAL_HYDROGEN_ROUTES_ID}'; export default hr;`;
@@ -111,6 +114,21 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           const code = `const errorPage = import.meta.glob("${errorPath}");\n export default Object.values(errorPage)[0];`;
           return {code};
         });
+      }
+    },
+    transform(code, id) {
+      if (id === resolvedConfigPath) {
+        const s = new MagicString(code);
+        // Wrap in function to avoid evaluating `Oxygen.env`
+        // in the config until we have polyfilled it properly.
+        s.replace(/export\s+default\s+(\w+)\s*\(/g, (all, m1) =>
+          all.replace(m1, `() => ${m1}`)
+        );
+
+        return {
+          code: s.toString(),
+          map: s.generateMap({file: id, source: id}),
+        };
       }
     },
   } as Plugin;
