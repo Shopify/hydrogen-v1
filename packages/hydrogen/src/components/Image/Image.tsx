@@ -94,6 +94,7 @@ function ShopifyImage({
   loader = shopifyImageLoader,
   loaderOptions,
   widths,
+  decoding = 'async',
   ...rest
 }: ShopifyImageProps) {
   if (!data.url) {
@@ -172,6 +173,7 @@ function ShopifyImage({
       width={imgElementWidth ?? undefined}
       height={imgElementHeight ?? undefined}
       srcSet={finalSrcset}
+      decoding={decoding}
     />
   );
   /* eslint-enable hydrogen/prefer-image-component */
@@ -237,6 +239,7 @@ function ExternalImage<GenericLoaderOpts>({
   loaderOptions,
   widths,
   loading,
+  decoding = 'async',
   ...rest
 }: ExternalImageProps<GenericLoaderOpts>) {
   if (!width || !height) {
@@ -300,6 +303,7 @@ function ExternalImage<GenericLoaderOpts>({
       alt={alt ?? ''}
       loading={loading ?? 'lazy'}
       srcSet={finalSrcset}
+      decoding={decoding}
     />
   );
   /* eslint-enable hydrogen/prefer-image-component */

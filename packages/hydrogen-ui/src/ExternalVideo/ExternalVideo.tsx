@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import type {ExternalVideo as ExternalVideoType} from '../storefront-api-types';
+import type {ExternalVideo as ExternalVideoType} from '../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 interface ExternalVideoProps {
@@ -119,7 +119,8 @@ export function addParametersToEmbeddedVideoUrl(
   }
 
   const params = Object.keys(parameters).reduce((accumulator, param) => {
-    const value = (parameters as any)[param];
+    // @ts-expect-error This needs to be fixed when we migrate components from hydrogen to here.
+    const value = parameters[param];
     if (value == null) {
       return accumulator;
     }
