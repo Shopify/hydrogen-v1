@@ -6,7 +6,6 @@ export interface ShopifyContextValue
   extends Omit<ShopifyConfig, 'defaultLanguageCode' | 'defaultCountryCode'> {
   defaultLanguageCode: `${LanguageCode}`;
   defaultCountryCode: `${CountryCode}`;
-  storefrontId: string | null;
 }
 
 // TODO: improve types with intrinsic string manipulation
