@@ -90,12 +90,19 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
 
           let code = `export default {\n  dirPrefix: '${dirPrefix}',\n  basePath: '${
             hc.routes?.basePath ?? ''
-          }',\n  files: import.meta.globEager('${routesPath}')\n};`;
+          }',\n  files: import.meta.globEager('${routesPath}'),\n  sections: import.meta.globEager('/src/sections/**/*.server.[jt](s|sx)')\n};`;
 
           if (config.command === 'serve') {
             // Add dependency on Hydrogen config for HMR
             code += `\nimport '${VIRTUAL_HYDROGEN_CONFIG_ID}';`;
           }
+
+          // export default {
+          //   dirPrefix: '/src/routes',
+          //   basePath: '',
+          //   files: import.meta.globEager('/src/routes/**/*.server.[jt](s|sx)'),
+          //   sections: import.meta.globEager('/src/sections/**/*.server.[jt](s|sx)'),
+          // };
 
           return {code};
         });

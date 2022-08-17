@@ -18,6 +18,7 @@ type HydrogenSectionClientProps = {
   state: any;
   isRSC: boolean;
   children?: ReactElement;
+  fallback?: JSX.Element;
 };
 
 const DEFAULT_MAX_AGE = 500;
@@ -28,6 +29,7 @@ export function HydrogenSectionClient({
   state,
   isRSC,
   children,
+  fallback,
 }: HydrogenSectionClientProps) {
   console.log('HydrogenSectionClient', section);
   const [_, startTransition] = useTransition();
@@ -54,9 +56,13 @@ export function HydrogenSectionClient({
 
   return (
     <ErrorBoundary
-      fallbackRender={() => {
-        return null;
-      }}
+      fallback={
+        fallback || (
+          <div className="text-notice border border-notice p-6">
+            {section} section had an error
+          </div>
+        )
+      }
     >
       {/* @ts-ignore */}
       {response && response.readRoot ? response.readRoot() : response}
