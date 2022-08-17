@@ -111,7 +111,7 @@
     "postcss": "^8",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
-    "vitest": "^0.19.1"
+    "vitest": "^0.22.0"
   },
   "peerDependencies": {
     "body-parser": "^1.20.0",
