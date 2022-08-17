@@ -44,9 +44,7 @@
   },
   "sideEffects": false,
   "scripts": {
-    "dev": "run-p dev:vite dev:ts copy-storefront-types",
-    "dev:vite": "vite build --watch --emptyOutDir false --clearScreen false",
-    "dev:ts": "tsc --watch",
+    "dev": "vite dev",
     "build": "npm-run-all --parallel build:vite:* build:tsc:es --parallel build:tsc:cjs copy-storefront-types",
     "build:vite:dev": "vite build --mode devbuild",
     "build:vite:prod": "vite build",
@@ -55,7 +53,6 @@
     "copy-storefront-types": "cpy ./src/storefront-api-types.d.ts ./dist/types/ --flat",
     "format": "prettier --write \"src/**/*\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
-    "preview": "vite dev",
     "test": "vitest",
     "test:ci": "vitest run --coverage",
     "typecheck": "tsc --noEmit"
