@@ -24,11 +24,8 @@ export async function api(
 
   if (
     !jsonBody.id ||
-    jsonBody.id === '' ||
     !jsonBody.password ||
-    jsonBody.password === '' ||
-    !jsonBody.resetToken ||
-    jsonBody.resetToken === ''
+    !jsonBody.resetToken
   ) {
     return new Response(
       JSON.stringify({error: 'Incorrect password or reset token.'}),
