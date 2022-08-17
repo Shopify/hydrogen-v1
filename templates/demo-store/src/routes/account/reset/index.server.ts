@@ -22,11 +22,7 @@ export async function api(
 
   const jsonBody = await request.json();
 
-  if (
-    !jsonBody.id ||
-    !jsonBody.password ||
-    !jsonBody.resetToken
-  ) {
+  if (!jsonBody.id || !jsonBody.password || !jsonBody.resetToken) {
     return new Response(
       JSON.stringify({error: 'Incorrect password or reset token.'}),
       {

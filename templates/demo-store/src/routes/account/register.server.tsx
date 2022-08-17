@@ -31,10 +31,7 @@ export async function api(
 ) {
   const jsonBody = await request.json();
 
-  if (
-    !jsonBody.email ||
-    !jsonBody.password
-  ) {
+  if (!jsonBody.email || !jsonBody.password) {
     return new Response(
       JSON.stringify({error: 'Email and password are required'}),
       {status: 400},
