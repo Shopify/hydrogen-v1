@@ -2,4 +2,4 @@
 '@shopify/hydrogen': patch
 ---
 
-`<Image/>` now by default sets the attribute `decoding='async'` to potentially improve performance.
+`<Image/>` now sets the attribute `decoding='async'` by default, to potentially improve performance.
