@@ -14,11 +14,9 @@
 
 var esModuleLexer = require('es-module-lexer');
 var MagicString = require('magic-string');
-var vite = require('vite');
 var fs = require('fs');
 var path = require('path');
-
-var isVite3 = vite.version?.startsWith('3.');
+var vite = require('vite');
 
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
@@ -96,6 +94,10 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
 
 var assign = Object.assign;
 
+var normalizePath = vite.normalizePath,
+    transformWithEsbuild = vite.transformWithEsbuild,
+    createServer = vite.createServer;
+var isVite3 = vite.version && vite.version.startsWith('3.');
 var rscViteFileRE = /\/react-server-dom-vite.js/;
 var noProxyRE = /[&?]no-proxy($|&)/;
 
@@ -269,11 +271,11 @@ function ReactFlightVitePlugin() {
         var injectGlobs = function (clientComponents) {
           var importerPath = path.dirname(id);
           var importers = clientComponents.map(function (absolutePath) {
-            return vite.normalizePath(path.relative(importerPath, absolutePath));
+            return normalizePath(path.relative(importerPath, absolutePath));
           });
           var injectedGlobs = "Object.assign(Object.create(null), " + importers.map(function (glob) {
             return (// Mark the globs to modify the result after Vite resolves them.
-              "\n/* HASH_BEGIN */ " + ("import.meta.glob('" + vite.normalizePath(glob) + "') /* HASH_END */")
+              "\n/* HASH_BEGIN */ " + ("import.meta.glob('" + normalizePath(glob) + "') /* HASH_END */")
             );
           }).join(', ') + ");";
           s.replace(INJECTING_RE, injectedGlobs);
@@ -360,7 +362,7 @@ async function proxyClientComponent(filepath, src) {
     src = await fs.promises.readFile(filepath, 'utf-8');
   }
 
-  var _await$transformWithE = await vite.transformWithEsbuild(src, filepath),
+  var _await$transformWithE = await transformWithEsbuild(src, filepath),
       code = _await$transformWithE.code;
 
   var _parse = esModuleLexer.parse(code),
@@ -394,8 +396,7 @@ function findClientBoundaries(moduleGraph) {
         return moduleNode.meta && moduleNode.meta.isClientComponent;
       });
 
-      // TODO: broken in Vite 3
-      if (clientModule && (isVite3 || (!optimizeBoundaries || isDirectImportInServer(clientModule)))) {
+      if (clientModule && (!optimizeBoundaries || isDirectImportInServer(clientModule))) {
         clientBoundaries.push(clientModule.file);
       }
     }
@@ -410,15 +411,14 @@ function findClientBoundaries(moduleGraph) {
 
 async function findClientBoundariesForClientBuild(serverEntries, optimizeBoundaries, root) {
   // Viteception
-  var server = await vite.createServer({
+  var server = await createServer({
     root: root,
     clearScreen: false,
     server: {
       middlewareMode: isVite3 ? true : 'ssr',
-      hmr: false,
+      hmr: false
     },
-    // @ts-ignore
-    appType: 'custom',
+    appType: 'custom'
   });
 
   try {
@@ -444,7 +444,7 @@ var hashImportsPlugin = {
         return imports.trim().replace(/"([^"]+?)":/gm, function (all, relativePath) {
           if (relativePath === '__VITE_PRELOAD__') return all;
           var absolutePath = path.resolve(path.dirname(id.split('?')[0]), relativePath);
-          return "\"" + getComponentId(vite.normalizePath(absolutePath)) + "\":";
+          return "\"" + getComponentId(normalizePath(absolutePath)) + "\":";
         });
       });
       return {
@@ -536,17 +536,20 @@ function isDirectImportInServer(originalMod, currentMod, accModInfo) {
   });
 }
 
-function resolveModPath(modPath, dirname, retryExtension) {
-  var absolutePath = '';
+var RESOLVE_EXTENSIONS = ['', '.js', '.ts', '.jsx', '.tsx', '/index', '/index.js', '/index.ts', '/index.jsx', '/index.tsx']; // Resolve relative paths  and aliases. Examples:
+// - import {XYZ} from '~/components' => import {XYZ} from '<absolute>/src/components/index.ts'
+// - import {XYZ} from '/src/component.client' => import {XYZ} from '<absolute>/src/component.client.jsx'`
 
-  try {
-    absolutePath = modPath.startsWith('.') ? vite.normalizePath(path.resolve(dirname, modPath)) : modPath;
-    return vite.normalizePath(require.resolve(absolutePath + (retryExtension || '')));
-  } catch (error) {
-    if (!/\.[jt]sx?$/.test(absolutePath) && retryExtension !== '.tsx') {
-      // Node cannot infer .[jt]sx extensions.
-      // Append them here and retry a couple of times.
-      return resolveModPath(absolutePath, dirname, retryExtension ? '.tsx' : '.jsx');
+function resolveModPath(modPath, dirname) {
+  var extensions = /\.[jt]sx?$/.test(modPath) ? [''] : RESOLVE_EXTENSIONS;
+
+  for (var i = 0; i < extensions.length; i++) {
+    var extension = extensions[i];
+
+    try {
+      var absolutePath = modPath.startsWith('.') ? normalizePath(path.resolve(dirname, modPath)) : modPath;
+      return normalizePath(require.resolve(absolutePath + extension));
+    } catch (error) {// Do not throw, this is likely a virtual module or another exception
     }
   }
 }
@@ -558,7 +561,7 @@ function augmentModuleGraph(moduleGraph, id, code, root, resolveAlias) {
   var _id$split = id.split('?'),
       source = _id$split[0];
 
-  var dirname = vite.normalizePath(path.dirname(source));
+  var dirname = normalizePath(path.dirname(source));
 
   var _parse2 = esModuleLexer.parse(code),
       rawImports = _parse2[0],
@@ -589,7 +592,7 @@ function augmentModuleGraph(moduleGraph, id, code, root, resolveAlias) {
 
     if (modPath && modPath.startsWith('/src/')) {
       // Vite default alias
-      modPath = vite.normalizePath(path.join(root, modPath));
+      modPath = normalizePath(path.join(root, modPath));
     }
 
     var resolvedPath = resolveModPath(modPath, dirname);
