@@ -163,6 +163,7 @@ fragment CartFragment on Cart {
             product {
               handle
               title
+              id
             }
             selectedOptions {
               name
