@@ -1,12 +1,9 @@
-import type {RequestHandler} from '../types';
-// @ts-ignore
-// eslint-disable-next-line node/no-missing-import
-import entrypoint from '__SERVER_ENTRY__';
-// @ts-ignore
-// eslint-disable-next-line node/no-missing-import
-import indexTemplate from '__INDEX_TEMPLATE__?raw';
-
-const handleRequest = entrypoint as RequestHandler;
+import {
+  handleRequest,
+  indexTemplate,
+  isAsset,
+  assetBasePath,
+} from './virtual.js';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -22,6 +19,13 @@ export default {
     env: unknown,
     context: {waitUntil: (promise: Promise<any>) => void}
   ) {
+    // Proxy assets to the CDN. This should be removed
+    // once the proxy is implemented in Oxygen itself.
+    const url = new URL(request.url);
+    if (assetBasePath && isAsset(url.pathname)) {
+      return fetch(request.url.replace(url.origin, assetBasePath), request);
+    }
+
     if (!globalThis.Oxygen) {
       globalThis.Oxygen = {env};
     }

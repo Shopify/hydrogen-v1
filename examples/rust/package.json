@@ -11,9 +11,9 @@
     "preview": "shopify hydrogen preview"
   },
   "devDependencies": {
-    "@shopify/cli": "latest",
-    "@shopify/cli-hydrogen": "latest",
-    "typescript": "^4.6.4",
+    "@shopify/cli": "^3.3.3",
+    "@shopify/cli-hydrogen": "^3.3.3",
+    "typescript": "^4.7.2",
     "vite": "^2.9.0"
   },
   "dependencies": {

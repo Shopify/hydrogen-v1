@@ -1,19 +1,21 @@
-import type {ShopifyContextValue} from '../ShopifyProvider/types';
-import {getTime} from '../../utilities/timing';
-import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
-import type {QueryTiming} from '../../utilities/log/log-query-timeline';
+import type {
+  ShopifyContextValue,
+  LocalizationContextValue,
+} from '../ShopifyProvider/types.js';
+import {getTime} from '../../utilities/timing.js';
+import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header.js';
+import type {QueryTiming} from '../../utilities/log/log-query-timeline.js';
 import type {
   ResolvedHydrogenConfig,
   PreloadOptions,
   QueryKey,
   RuntimeContext,
-} from '../../types';
-import {hashKey} from '../../utilities/hash';
+} from '../../types.js';
+import {hashKey} from '../../utilities/hash.js';
 import {HelmetData as HeadData} from 'react-helmet-async';
-import {RSC_PATHNAME} from '../../constants';
-import {SessionSyncApi} from '../session/session';
-import {parseJSON} from '../../utilities/parse';
-import {LocalizationContextValue} from '../../components/LocalizationProvider/LocalizationContext.client';
+import {RSC_PATHNAME} from '../../constants.js';
+import type {SessionSyncApi} from '../session/session-types.js';
+import {parseJSON} from '../../utilities/parse.js';
 
 export type PreloadQueryEntry = {
   key: QueryKey;
@@ -75,6 +77,7 @@ export class HydrogenRequest extends Request {
     router: RouterContextData;
     buyerIpHeader?: string;
     session?: SessionSyncApi;
+    flashSession: Record<string, any>;
     runtime?: RuntimeContext;
     scopes: Map<string, Record<string, any>>;
     localization?: LocalizationContextValue;
@@ -92,9 +95,9 @@ export class HydrogenRequest extends Request {
 
     this.time = getTime();
     this.id = generateId();
-    this.normalizedUrl = this.isRscRequest()
-      ? normalizeUrl(this.url)
-      : this.url;
+    this.normalizedUrl = decodeURIComponent(
+      this.isRscRequest() ? normalizeUrl(this.url) : this.url
+    );
 
     this.ctx = {
       cache: new Map(),
@@ -112,6 +115,7 @@ export class HydrogenRequest extends Request {
       },
       preloadQueries: new Map(),
       scopes: new Map(),
+      flashSession: {},
     };
     this.cookies = this.parseCookies();
   }
@@ -195,7 +199,7 @@ export class HydrogenRequest extends Request {
 
   public async formData(): Promise<FormData> {
     // @ts-ignore
-    if (!__HYDROGEN_WORKER__ && super.formData) return super.formData();
+    if (__HYDROGEN_WORKER__ || super.formData) return super.formData();
 
     const contentType = this.headers.get('Content-Type') || '';
 

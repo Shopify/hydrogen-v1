@@ -1,5 +1,5 @@
-import {SelectedOptions, OptionWithValues} from './types';
-import type {ProductVariant as ProductVariantType} from '../../storefront-api-types';
+import {SelectedOptions, OptionWithValues} from './types.js';
+import type {ProductVariant as ProductVariantType} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 export function getAllOptionValues(
@@ -45,7 +45,7 @@ export function getOptions(
 ): OptionWithValues[] {
   const map = variants.reduce((memo, variant) => {
     if (!variant.selectedOptions) {
-      throw new Error(`getOptions requires 'variant.selectedOptions`);
+      throw new Error(`'getOptions' requires 'variant.selectedOptions'`);
     }
     variant?.selectedOptions?.forEach((opt) => {
       memo[opt?.name ?? ''] = memo[opt?.name ?? ''] || new Set();

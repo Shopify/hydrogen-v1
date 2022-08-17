@@ -3,6 +3,7 @@
 // affecting the files generated in the CJS build.
 
 import type {IncomingMessage, ServerResponse} from 'http';
+import type {SessionStorageAdapter} from './foundation/session/session-types';
 
 export interface RuntimeContext {
   waitUntil: (fn: Promise<any>) => void;
@@ -18,6 +19,8 @@ export interface RequestHandlerOptions {
   context?: RuntimeContext;
   nonce?: string;
   buyerIpHeader?: string;
+  sessionApi?: SessionStorageAdapter;
+  headers?: Headers;
 }
 
 export interface RequestHandler {
@@ -27,7 +30,8 @@ export interface RequestHandler {
 }
 
 export type ShopifyConfig = {
-  defaultLocale?: string;
+  defaultLanguageCode?: string;
+  defaultCountryCode?: string;
   storeDomain: string;
   storefrontToken: string;
   storefrontApiVersion: string;

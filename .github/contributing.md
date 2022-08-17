@@ -5,7 +5,7 @@
 
 **Requirements:**
 
-- Node.js version 16.5.0 or higher
+- Node.js version 16.14.0 or higher
 - Yarn
 
 ```bash
@@ -53,7 +53,8 @@ Hydrogen is a Yarn v1 monorepo. It consists of several key packages:
 
 For more information, check out the following resources:
 
-- [Decision Log](./contributing/decisions.md)
+- [Decisions](../docs/decisions/)
+- [Decision Log (outdated)](./contributing/decisions.md)
 - [Principles & Assumptions](./contributing/principles.md)
 
 ## Formatting and Linting
@@ -105,8 +106,6 @@ Considerations:
 - You can use markdown in your changeset to include code examples, headings, and more. However, **please use plain text for the first line of your changeset**. The formatting of the GitHub release notes does not support headings as the first line of the changeset.
 - When selecting packages for the changesets, only select packages which are published. Do not include private packages, as it will cause the build to fail. _Hopefully these are removed from the list of options in a [future Changesets release](https://github.com/changesets/changesets/issues/436)_.
 
-> **Important**: Until our official release, we will only release `minor` and `patch` updates. This means that breaking changes will be included in minor releases. Once we officially launch Hydrogen, we'll switch to `1.0.0` and follow a normal semantic release pattern.
-
 ## Contributing Examples
 
 Hydrogen welcomes example projects to the repository to showcase different types of Hydrogen integrations inside the `/examples` folder.
@@ -132,7 +131,7 @@ Hydrogen is a React framework and SDK that you can use to build fast and dynamic
 
 **Requirements:**
 
-- Node.js version 16.5.0 or higher
+- Node.js version 16.14.0 or higher
 - Yarn
 
 ```bash

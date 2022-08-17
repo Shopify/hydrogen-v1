@@ -11,6 +11,7 @@ import {
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
+import {getExcerpt} from '~/lib/utils';
 import {NotFound, Layout, ProductSwimlane} from '~/components/index.server';
 import {
   Heading,
@@ -51,14 +52,8 @@ export default function Product() {
     },
   });
 
-  const {media, title, vendor, description, id} = product;
+  const {media, title, vendor, descriptionHtml, id} = product;
   const {shippingPolicy, refundPolicy} = shop;
-
-  function getExcerpt(text: string) {
-    const regex = /<p.*>(.*?)<\/p>/;
-    const correspondingText = regex.exec(text);
-    return correspondingText ? correspondingText[1] : '';
-  }
 
   return (
     <Layout>
@@ -75,7 +70,7 @@ export default function Product() {
             <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:h-screen md:pt-nav hiddenScroll md:overflow-y-scroll">
               <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
                 <div className="grid gap-2">
-                  <Heading as="h1" className="whitespace-normal">
+                  <Heading as="h1" format className="whitespace-normal">
                     {title}
                   </Heading>
                   {vendor && (
@@ -84,10 +79,10 @@ export default function Product() {
                 </div>
                 <ProductForm />
                 <div className="grid gap-4 py-4">
-                  {description && (
+                  {descriptionHtml && (
                     <ProductDetail
                       title="Product Details"
-                      content={description}
+                      content={descriptionHtml}
                     />
                   )}
                   {shippingPolicy?.body && (
@@ -119,11 +114,6 @@ export default function Product() {
 
 const PRODUCT_QUERY = gql`
   ${MEDIA_FRAGMENT}
-  fragment Metafield on Metafield {
-    value
-    namespace
-    id
-  }
   query Product(
     $country: CountryCode
     $language: LanguageCode
@@ -133,19 +123,10 @@ const PRODUCT_QUERY = gql`
       id
       title
       vendor
-      description
-      details: metafield(namespace: "demo", key: "details") {
-        ...Metafield
-      }
-      sizeFit: metafield(namespace: "demo", key: "sizeFit") {
-        ...Metafield
-      }
-      delivery: metafield(namespace: "demo", key: "delivery") {
-        ...Metafield
-      }
+      descriptionHtml
       media(first: 7) {
         nodes {
-          ...MediaFields
+          ...Media
         }
       }
       variants(first: 100) {

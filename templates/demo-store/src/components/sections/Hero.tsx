@@ -134,7 +134,7 @@ function SpreadMedia({
         data={data.image}
         loading={loading}
         width={width}
-        loaderOptions={{scale}}
+        loaderOptions={{scale, crop: 'center'}}
       />
     );
   }

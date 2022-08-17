@@ -1,0 +1,42 @@
+name: Changesets Snapshot
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: changeset-snapshot-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'shopify' && github.ref_name != 'latest'
+    name: Changelog Snapshot Release
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+        # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: Install the packages
+        run: yarn install --frozen-lockfile --ignore-engines
+
+      - name: Create Snapshot Release
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: yarn run version:snapshot --snapshot ${{ github.ref_name }}
+          publish: yarn changeset publish --no-git-tag --tag ${{ github.ref_name }}
+          commit: '[ci] release ${{ github.ref_name }}'
+          title: '${{ github.ref_name }} release'
+          createGithubReleases: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

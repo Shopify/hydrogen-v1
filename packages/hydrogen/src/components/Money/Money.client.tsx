@@ -1,6 +1,9 @@
 import React, {type ReactNode} from 'react';
-import {useMoney} from '../../hooks';
-import type {MoneyV2, UnitPriceMeasurement} from '../../storefront-api-types';
+import {useMoney} from '../../hooks/index.js';
+import type {
+  MoneyV2,
+  UnitPriceMeasurement,
+} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 interface CustomProps<ComponentGeneric extends React.ElementType> {
@@ -29,7 +32,7 @@ type MoneyProps<ComponentGeneric extends React.ElementType> =
 /**
  * The `Money` component renders a string of the Storefront API's
  * [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) according to the
- * `defaultLocale` in [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
+ * `locale` in [the `LocalizationProvider` component](https://shopify.dev/api/hydrogen/components/localization/localizationprovider).
  */
 export function Money<TTag extends React.ElementType>({
   data,

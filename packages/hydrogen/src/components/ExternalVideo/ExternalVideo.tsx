@@ -1,6 +1,6 @@
 import React from 'react';
-import {YouTube, Vimeo, useEmbeddedVideoUrl} from '../../utilities';
-import type {ExternalVideo as ExternalVideoType} from '../../storefront-api-types';
+import {YouTube, Vimeo, useEmbeddedVideoUrl} from '../../utilities/index.js';
+import type {ExternalVideo as ExternalVideoType} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 interface ExternalVideoProps {

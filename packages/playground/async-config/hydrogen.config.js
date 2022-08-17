@@ -10,7 +10,8 @@ export default defineConfig({
     const url = new URL(request.normalizedUrl);
 
     return {
-      defaultLocale: url.pathname.startsWith('/es') ? 'es-es' : 'en-us',
+      defaultCountryCode: url.pathname.startsWith('/es') ? 'es' : 'us',
+      defaultLanguageCode: url.pathname.startsWith('/es') ? 'es' : 'en',
       storeDomain: 'hydrogen-preview.myshopify.com',
       storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
       storefrontApiVersion: '2022-07',

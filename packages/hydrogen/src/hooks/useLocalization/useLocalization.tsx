@@ -1,11 +1,13 @@
-import {useMemo} from 'react';
-import {
-  LocalizationContext,
-  type LocalizationContextValue,
-} from '../../components/LocalizationProvider/LocalizationContext.client';
-import {useEnvContext} from '../../foundation/ssr-interop';
+import {LocalizationContext} from '../../foundation/ShopifyProvider/ShopifyProvider.client.js';
+import type {
+  Locale,
+  LocalizationContextValue,
+} from '../../foundation/ShopifyProvider/types.js';
+import {useEnvContext} from '../../foundation/ssr-interop.js';
 
-export function useLocalization(): LocalizationContextValue & {locale: string} {
+export function useLocalization(): LocalizationContextValue & {
+  locale: Locale;
+} {
   const localization = useEnvContext(
     (req) => req.ctx.localization,
     LocalizationContext
@@ -15,14 +17,5 @@ export function useLocalization(): LocalizationContextValue & {locale: string} {
     throw new Error('No Localization Context available');
   }
 
-  const localizationValue = useMemo(
-    () => ({
-      ...localization,
-      locale:
-        localization.language.isoCode + '-' + localization.country.isoCode,
-    }),
-    [localization]
-  );
-
-  return localizationValue;
+  return localization;
 }

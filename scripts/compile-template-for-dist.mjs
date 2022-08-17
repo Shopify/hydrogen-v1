@@ -9,6 +9,7 @@ import fs from 'fs-extra';
 
   await compileTemplate(template, {source, destination});
   copy(`${source}/${template}`, `${source}/${template}-ts`);
+  fs.removeSync(`${source}/${template}`);
 })();
 
 function copyDir(srcDir, destDir) {

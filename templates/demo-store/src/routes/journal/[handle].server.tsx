@@ -11,7 +11,7 @@ import type {Blog} from '@shopify/hydrogen/storefront-api-types';
 import {Suspense} from 'react';
 
 import {CustomFont, PageHeader, Section} from '~/components';
-import {Layout} from '~/components/index.server';
+import {Layout, NotFound} from '~/components/index.server';
 import {ATTR_LOADING_EAGER} from '~/lib/const';
 
 const BLOG_HANDLE = 'journal';
@@ -36,7 +36,7 @@ export default function Post({params, response}: HydrogenRouteProps) {
   });
 
   if (!data?.blog?.articleByHandle) {
-    return <div>Article not found</div>;
+    return <NotFound />;
   }
 
   const {title, publishedAt, contentHtml, author} = data.blog.articleByHandle;
@@ -68,9 +68,13 @@ export default function Post({params, response}: HydrogenRouteProps) {
             data={data.blog.articleByHandle.image}
             className="w-full mx-auto mt-8 md:mt-16 max-w-7xl"
             sizes="90vw"
-            widths={[800, 1600, 2400]}
-            width="100"
+            widths={[400, 800, 1200]}
+            width="100px"
             loading={ATTR_LOADING_EAGER}
+            loaderOptions={{
+              scale: 2,
+              crop: 'center',
+            }}
           />
         )}
         <div

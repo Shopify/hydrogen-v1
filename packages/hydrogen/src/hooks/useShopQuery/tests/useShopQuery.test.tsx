@@ -1,10 +1,10 @@
 import React, {Suspense} from 'react';
-import {useShopQuery} from '../hooks';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {ServerRequestProvider} from '../../../foundation/ServerRequestProvider';
-import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
-import {setCache} from '../../../foundation/runtime';
-import {InMemoryCache} from '../../../framework/cache/in-memory';
+import {useShopQuery} from '../index.js';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {ServerRequestProvider} from '../../../foundation/ServerRequestProvider/index.js';
+import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server.js';
+import {setCache} from '../../../foundation/runtime.js';
+import {InMemoryCache} from '../../../framework/cache/in-memory.js';
 
 jest.mock('../../../foundation/ssr-interop', () => {
   return {
@@ -12,6 +12,10 @@ jest.mock('../../../foundation/ssr-interop', () => {
     META_ENV_SSR: true,
   };
 });
+
+jest.mock('../../../foundation/useUrl/useUrl', () => ({
+  useUrl: () => new URL('https://store-name.com/'),
+}));
 
 let waitUntilPromises = [] as Array<Promise<any>>;
 

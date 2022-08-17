@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
-import {useLocalization} from '../useLocalization/useLocalization';
-import {CurrencyCode, MoneyV2} from '../../storefront-api-types';
+import {useLocalization} from '../useLocalization/useLocalization.js';
+import {CurrencyCode, MoneyV2} from '../../storefront-api-types.js';
 
 export type UseMoneyValue = {
   /**
@@ -29,7 +29,7 @@ export type UseMoneyValue = {
   parts: Intl.NumberFormatPart[];
   /**
    * A string returned by `new Intl.NumberFormat` for the amount and currency code,
-   * using the `defaultLocale` value in [`hydrogenConfig.shopify`](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
+   * using the `locale` value in the [`LocalizationProvider` component](https://shopify.dev/api/hydrogen/components/localization/localizationprovider).
    */
   localizedString: string;
   /**

@@ -1,5 +1,5 @@
 import React, {ReactNode, useEffect, useState} from 'react';
-import {useCart} from '../CartProvider';
+import {useCart} from '../CartProvider/index.js';
 
 type PropsWeControl = 'onClick';
 

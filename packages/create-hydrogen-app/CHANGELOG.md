@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.2.0
+
+## 1.1.0
+
+## 1.0.2
+
+## 1.0.1
+
+## 1.0.0
+
+## 0.27.0
+
+## 0.26.1
+
+### Patch Changes
+
+- [#1689](https://github.com/Shopify/hydrogen/pull/1689) [`88e2757d`](https://github.com/Shopify/hydrogen/commit/88e2757daa3092f9ef75e28908afecb9f67a21b2) Thanks [@blittle](https://github.com/blittle)! - Fix error handling on the account login pages
+
 ## 0.26.0
 
 ## 0.25.1

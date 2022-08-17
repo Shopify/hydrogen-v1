@@ -122,6 +122,13 @@ function ReactFlightVitePlugin() {
   return {
     name: 'vite-plugin-react-server-components',
     enforce: 'pre',
+    buildStart: function () {
+      // Let other plugins differentiate between pure SSR and RSC builds
+      if (config?.build?.ssr) process.env.VITE_RSC_BUILD = 'true';
+    },
+    buildEnd: function () {
+      if (config?.build?.ssr) delete process.env.VITE_RSC_BUILD;
+    },
     configureServer: function (_server) {
       server = _server;
       var seenModules = {};
@@ -293,6 +300,19 @@ function ReactFlightVitePlugin() {
 
         return findClientBoundariesForClientBuild(serverBuildEntries, optimizeBoundaries !== false).then(injectGlobs);
       }
+    },
+    handleHotUpdate: function (_ref2) {
+      var modules = _ref2.modules;
+
+      if (modules.some(function (mod) {
+        return mod.meta && mod.meta.isClientComponent;
+      })) {
+        return modules.filter(function (mod) {
+          return !mod.meta || !mod.meta.ssr;
+        });
+      }
+
+      return modules;
     }
   };
 }
@@ -462,9 +482,9 @@ function isDirectImportInServer(originalMod, currentMod, accModInfo) {
         exports: []
       };
       lastModImports.forEach(function (mod) {
-        mod.variables.forEach(function (_ref2) {
-          var name = _ref2[0],
-              alias = _ref2[1];
+        mod.variables.forEach(function (_ref3) {
+          var name = _ref3[0],
+              alias = _ref3[1];
 
           if (name === '*' && !alias) {
             var _accModInfo$exports;
@@ -497,8 +517,8 @@ function isDirectImportInServer(originalMod, currentMod, accModInfo) {
   // the original module before marking it as client boundary.
 
   return currentMod.meta.imports.some(function (imp) {
-    return imp.from === accModInfo.file && (imp.variables || []).some(function (_ref3) {
-      var name = _ref3[0];
+    return imp.from === accModInfo.file && (imp.variables || []).some(function (_ref4) {
+      var name = _ref4[0];
       return accModInfo.exports.includes(name);
     });
   });
@@ -536,12 +556,12 @@ function augmentModuleGraph(moduleGraph, id, code, root, resolveAlias) {
 
 
   var imports = [];
-  rawImports.forEach(function (_ref4) {
-    var startMod = _ref4.s,
-        endMod = _ref4.e,
-        dynamicImportIndex = _ref4.d,
-        startStatement = _ref4.ss,
-        endStatement = _ref4.se;
+  rawImports.forEach(function (_ref5) {
+    var startMod = _ref5.s,
+        endMod = _ref5.e,
+        dynamicImportIndex = _ref5.d,
+        startStatement = _ref5.ss,
+        endStatement = _ref5.se;
     if (dynamicImportIndex !== -1) return; // Skip dynamic imports for now
 
     var rawModPath = code.slice(startMod, endMod);
@@ -589,7 +609,8 @@ function augmentModuleGraph(moduleGraph, id, code, root, resolveAlias) {
   assign(currentModule.meta, {
     isFacade: isFacade,
     namedExports: namedExports,
-    imports: imports
+    imports: imports,
+    ssr: true
   });
 }
 

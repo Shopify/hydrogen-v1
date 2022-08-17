@@ -11,15 +11,12 @@ interface TableProps {
 
 export function Table({items}: TableProps) {
   const itemsMarkup = items.map(({key, value}) => (
-    <div key={key} style={{display: 'flex'}}>
-      <span
-        style={{width: '30%', fontFamily: 'monospace', paddingRight: '1em'}}
-      >
-        {key}
-      </span>
-      <span style={{width: '70%', fontFamily: 'monospace', fontWeight: 'bold'}}>
-        {value}
-      </span>
+    <div
+      key={key}
+      style={{display: 'flex', paddingBottom: '1em', flexDirection: 'column'}}
+    >
+      <span style={{fontWeight: 'bold'}}>{key}</span>
+      <span style={{width: '70%', fontFamily: 'monospace'}}>{value}</span>
     </div>
   ));
   return <ul>{itemsMarkup}</ul>;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Heading} from './Heading';
+import {Heading} from './Heading.js';
 
 interface Navigation {
   url: string;
@@ -53,7 +53,6 @@ const Item = ({label, value, unit}: PillProps) => {
       style={{
         fontFamily: 'monospace',
         padding: '0 2em 0 0',
-        fontSize: '0.75em',
       }}
     >
       {label && label.padEnd(10)}

@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   useShopQuery,
   gql,
@@ -8,14 +9,26 @@ import {
 } from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {PAGINATION_SIZE} from '~/lib/const';
 import {ProductGrid, PageHeader, Section} from '~/components';
 import {Layout} from '~/components/index.server';
 import type {Collection} from '@shopify/hydrogen/storefront-api-types';
-import {Suspense} from 'react';
-
-const pageBy = 12;
 
 export default function AllProducts() {
+  return (
+    <Layout>
+      <Seo type="page" data={{title: 'All Products'}} />
+      <PageHeader heading="All Products" variant="allCollections" />
+      <Section>
+        <Suspense>
+          <AllProductsGrid />
+        </Suspense>
+      </Section>
+    </Layout>
+  );
+}
+
+function AllProductsGrid() {
   const {
     language: {isoCode: languageCode},
     country: {isoCode: countryCode},
@@ -26,7 +39,7 @@ export default function AllProducts() {
     variables: {
       country: countryCode,
       language: languageCode,
-      pageBy,
+      pageBy: PAGINATION_SIZE,
     },
     preload: true,
   });
@@ -34,27 +47,16 @@ export default function AllProducts() {
   const products = data.products;
 
   return (
-    <Layout>
-      <Suspense>
-        <Seo
-          type="page"
-          data={{
-            title: 'All Products',
-          }}
-        />
-      </Suspense>
-      <PageHeader heading="All Products" variant="allCollections" />
-      <Section>
-        <ProductGrid
-          url={`/products?country=${countryCode}`}
-          collection={{products} as Collection}
-        />
-      </Section>
-    </Layout>
+    <ProductGrid
+      key="products"
+      url={`/products?country=${countryCode}`}
+      collection={{products} as Collection}
+    />
   );
 }
 
-// pagination api
+// API to paginate products
+// @see templates/demo-store/src/components/product/ProductGrid.client.tsx
 export async function api(
   request: HydrogenRequest,
   {params, queryShop}: HydrogenApiRouteOptions,
@@ -72,11 +74,11 @@ export async function api(
   const {handle} = params;
 
   return await queryShop({
-    query: PAGINATE_QUERY,
+    query: PAGINATE_ALL_PRODUCTS_QUERY,
     variables: {
       handle,
       cursor,
-      pageBy,
+      pageBy: PAGINATION_SIZE,
       country,
     },
   });
@@ -92,7 +94,7 @@ const ALL_PRODUCTS_QUERY = gql`
   ) @inContext(country: $country, language: $language) {
     products(first: $pageBy, after: $cursor) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
       pageInfo {
         hasNextPage
@@ -103,7 +105,7 @@ const ALL_PRODUCTS_QUERY = gql`
   }
 `;
 
-const PAGINATE_QUERY = gql`
+const PAGINATE_ALL_PRODUCTS_QUERY = gql`
   ${PRODUCT_CARD_FRAGMENT}
   query ProductsPage(
     $pageBy: Int!
@@ -113,7 +115,7 @@ const PAGINATE_QUERY = gql`
   ) @inContext(country: $country, language: $language) {
     products(first: $pageBy, after: $cursor) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
       pageInfo {
         hasNextPage

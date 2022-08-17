@@ -1,23 +1,20 @@
-import {parseJSON} from '../../../utilities/parse';
-import {suspendFunction, preloadFunction} from '../../../utilities/suspense';
-import type {FetchResponse} from '../types';
+import {suspendFunction, preloadFunction} from '../../../utilities/suspense.js';
+import {ResponseSync} from '../ResponseSync.js';
 
 /**
  * Fetch a URL for use in a client component Suspense boundary.
  */
-export function fetchSync(url: string, options?: RequestInit): FetchResponse {
-  const [text, response] = suspendFunction([url, options], async () => {
-    const response = await globalThis.fetch(url, options);
-    const text = await response.text();
+export function fetchSync(url: string, options?: RequestInit) {
+  const responseSyncInit = suspendFunction([url, options], async () => {
+    const response = await globalThis.fetch(
+      new URL(url, window.location.origin),
+      options
+    );
 
-    return [text, response] as [string, Response];
+    return ResponseSync.toSerializable(response);
   });
 
-  return {
-    response,
-    json: () => parseJSON(text),
-    text: () => text,
-  };
+  return new ResponseSync(responseSyncInit);
 }
 
 /**

@@ -30,18 +30,18 @@ export function MyComponent() {
 
 This hook returns an object with the following keys:
 
-| Key                    | Description                                                                                                                                                                         |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `localizedString`      | A string returned by `new Intl.NumberFormat` for the amount and currency code, using the `defaultLocale` value in [`hydrogenConfig.shopify`](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). |
-| `currencyCode`         | The currency code from the `MoneyV2` object.                                                                                                                                        |
-| `currencyName`         | The name for the currency code, returned by `Intl.NumberFormat`.                                                                                                                    |
-| `currencySymbol`       | The currency symbol returned by `Intl.NumberFormat`.                                                                                                                                |
-| `currencyNarrowSymbol` | The currency narrow symbol returned by `Intl.NumberFormat`.                                                                                                                         |
-| `amount`               | The localized amount, without any currency symbols or non-number types from the `Intl.NumberFormat.formatToParts` parts.                                                            |
-| `parts`                | All parts returned by `Intl.NumberFormat.formatToParts`.                                                                                                                            |
-| `original`             | The original `MoneyV2` object passed as an argument.                                                                                                                                |
-| `withoutTrailingZeros`             | A string with trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains. For example, `$640.00` turns into `$640`. `$640.42` turns into `$640.42`. |
-| `withoutTrailingZerosAndCurrency`             | A string without currency and without trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains. For example, `$640.00` turns into `640`. `$640.42` turns into `640.42`.  |
+| Key                               | Description                                                                                                                                                                                                                                    |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `localizedString`                 | A string returned by `new Intl.NumberFormat` for the amount and currency code, using the `locale` value from the [`ShopifyProvider`](https://shopify.dev/api/hydrogen/components/global/shopifyprovider) component.            |
+| `currencyCode`                    | The currency code from the `MoneyV2` object.                                                                                                                                                                                                   |
+| `currencyName`                    | The name for the currency code, returned by `Intl.NumberFormat`.                                                                                                                                                                               |
+| `currencySymbol`                  | The currency symbol returned by `Intl.NumberFormat`.                                                                                                                                                                                           |
+| `currencyNarrowSymbol`            | The currency narrow symbol returned by `Intl.NumberFormat`.                                                                                                                                                                                    |
+| `amount`                          | The localized amount, without any currency symbols or non-number types from the `Intl.NumberFormat.formatToParts` parts.                                                                                                                       |
+| `parts`                           | All parts returned by `Intl.NumberFormat.formatToParts`.                                                                                                                                                                                       |
+| `original`                        | The original `MoneyV2` object passed as an argument.                                                                                                                                                                                           |
+| `withoutTrailingZeros`            | A string with trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains. For example, `$640.00` turns into `$640`. `$640.42` turns into `$640.42`.                       |
+| `withoutTrailingZerosAndCurrency` | A string without currency and without trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains. For example, `$640.00` turns into `640`. `$640.42` turns into `640.42`. |
 
 ## Related components
 

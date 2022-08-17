@@ -1,8 +1,10 @@
 import React, {ReactNode} from 'react';
-import LocalizationClientProvider from './LocalizationClientProvider.client';
-import {useShop} from '../../foundation/useShop';
-import {useServerRequest} from '../../foundation/ServerRequestProvider';
-import {CountryCode} from '../../storefront-api-types';
+import LocalizationClientProvider from './LocalizationClientProvider.client.js';
+import {useShop} from '../../foundation/useShop/index.js';
+import {useServerRequest} from '../../foundation/ServerRequestProvider/index.js';
+import {log} from '../../utilities/log/index.js';
+import {CountryCode, LanguageCode} from '../../storefront-api-types.js';
+import {getLocalizationContextValue} from '../../foundation/ShopifyProvider/ShopifyProvider.server.js';
 
 export interface LocalizationProviderProps {
   /** A `ReactNode` element. */
@@ -11,12 +13,12 @@ export interface LocalizationProviderProps {
   /**
    * Override the `isoCode` to define the active country
    */
-  countryCode?: string;
+  countryCode?: CountryCode;
 
   /**
    * Override the `languageCode` to define the active language
    */
-  languageCode?: string;
+  languageCode?: LanguageCode;
 }
 
 /**
@@ -27,23 +29,22 @@ export interface LocalizationProviderProps {
  * Any descendents of this provider can use the `useLocalization` hook.
  */
 export function LocalizationProvider(props: LocalizationProviderProps) {
-  const {languageCode: defaultLanguageCode, locale} = useShop();
-  const defaultCountryCode = locale.split(/[-_]/)[1] || CountryCode.Us;
-
-  const languageCode = (
-    props.languageCode ?? defaultLanguageCode
-  ).toUpperCase();
-  const countryCode = (props.countryCode ?? defaultCountryCode).toUpperCase();
+  if (import.meta.env.DEV) {
+    log.warn(
+      '<LocalizationProvider> is no longer necessary. Pass localization props directly to `<ShopifyProvider>` instead.'
+    );
+  }
+  const {defaultLanguageCode, defaultCountryCode} = useShop();
 
   const request = useServerRequest();
-  const localization = {
-    country: {
-      isoCode: countryCode,
-    },
-    language: {
-      isoCode: languageCode,
-    },
-  };
+
+  const localization = getLocalizationContextValue(
+    defaultLanguageCode,
+    defaultCountryCode,
+    props.languageCode,
+    props.countryCode
+  );
+
   request.ctx.localization = localization;
 
   return (

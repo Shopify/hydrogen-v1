@@ -1,16 +1,21 @@
-export * from './components';
-export * from './hooks';
-export * from './foundation/useServerProps';
-export * from './foundation/useShop';
-export * from './foundation/ServerPropsProvider';
-export * from './foundation/useUrl';
-export {Head} from './foundation/Head';
-export * from './utilities';
-export {gql} from './utilities/graphql-tag';
-export {ClientAnalytics} from './foundation/Analytics';
-export {useRouteParams} from './foundation/useRouteParams/useRouteParams';
-export {useNavigate} from './foundation/useNavigate/useNavigate';
-export {fetchSync} from './foundation/fetchSync/client/fetchSync';
-export {suspendFunction, preloadFunction} from './utilities/suspense';
-export {PerformanceMetrics} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.client';
-export {PerformanceMetricsDebug} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetricsDebug.client';
+export * from './components/index.js';
+export * from './hooks/index.js';
+export {useServerProps} from './foundation/useServerProps/index.js';
+export {useShop} from './foundation/useShop/index.js';
+export {
+  ServerPropsProvider,
+  ServerPropsContext,
+  type ServerProps,
+  type ServerPropsContextValue,
+} from './foundation/ServerPropsProvider/index.js';
+export {useUrl} from './foundation/useUrl/index.js';
+export {Head} from './foundation/Head/index.js';
+export * from './utilities/index.js';
+export {gql} from './utilities/graphql-tag.js';
+export {ClientAnalytics} from './foundation/Analytics/index.js';
+export {useRouteParams} from './foundation/useRouteParams/useRouteParams.js';
+export {useNavigate} from './foundation/useNavigate/useNavigate.js';
+export {fetchSync} from './foundation/fetchSync/client/fetchSync.js';
+export {suspendFunction, preloadFunction} from './utilities/suspense.js';
+export {PerformanceMetrics} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.client.js';
+export {PerformanceMetricsDebug} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetricsDebug.client.js';

@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {useInstantCheckout} from '../CartProvider';
-import {BaseButton, BaseButtonProps} from '../BaseButton';
+import {useInstantCheckout} from '../CartProvider/index.js';
+import {BaseButton, BaseButtonProps} from '../BaseButton/index.js';
 
 interface BuyNowButtonProps {
   /** The item quantity. Defaults to 1. */
@@ -15,7 +15,9 @@ interface BuyNowButtonProps {
 }
 
 /** The `BuyNowButton` component renders a button that adds an item to the cart and redirects the customer to checkout. */
-export function BuyNowButton(props: BuyNowButtonProps & BaseButtonProps) {
+export function BuyNowButton<AsType extends React.ElementType = 'button'>(
+  props: BuyNowButtonProps & BaseButtonProps<AsType>
+) {
   const {createInstantCheckout, checkoutUrl} = useInstantCheckout();
   const [loading, setLoading] = useState<boolean>(false);
 

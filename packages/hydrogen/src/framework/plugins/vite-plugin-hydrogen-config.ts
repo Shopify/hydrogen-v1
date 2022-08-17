@@ -61,7 +61,7 @@ export default () => {
          * Tell Vite to bundle everything when we're building for Workers.
          * Otherwise, bundle RSC plugin as a workaround to apply the vendor alias above.
          */
-        noExternal: isWorker || [/react-server-dom-vite/],
+        noExternal: isWorker || [/react-server-dom-vite/, /@shopify\/hydrogen/],
         target: isWorker ? 'webworker' : 'node',
       },
 

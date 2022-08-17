@@ -1,13 +1,19 @@
 import React from 'react';
-import {DevTools as DevToolsClient} from './DevTools.client';
-import {useServerRequest} from '../ServerRequestProvider';
+import {DevTools as DevToolsClient} from './DevTools.client.js';
+import {useServerRequest} from '../ServerRequestProvider/index.js';
+import {getLocale} from '../../utilities/locale/index.js';
 
 export function DevTools() {
   const serverRequest = useServerRequest();
   const {shopifyConfig} = serverRequest.ctx;
-  const {locale, storeDomain, storefrontApiVersion} = shopifyConfig || {};
+  const {
+    defaultLanguageCode: languageCode,
+    defaultCountryCode: countryCode,
+    storeDomain,
+    storefrontApiVersion,
+  } = shopifyConfig || {};
   const settings = {
-    locale,
+    locale: getLocale(languageCode, countryCode),
     storeDomain,
     storefrontApiVersion,
   };

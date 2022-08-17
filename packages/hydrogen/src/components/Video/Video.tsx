@@ -1,6 +1,6 @@
-import React from 'react';
-import {shopifyImageLoader} from '../../utilities';
-import type {Video as VideoType} from '../../storefront-api-types';
+import React, {type HTMLAttributes} from 'react';
+import {shopifyImageLoader} from '../../utilities/index.js';
+import type {Video as VideoType} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 interface VideoProps {
@@ -8,6 +8,10 @@ interface VideoProps {
   data: PartialDeep<VideoType>;
   /** An object of image size options for the video's `previewImage`. Uses `shopifyImageLoader` to generate the `poster` URL. */
   previewImageOptions?: Parameters<typeof shopifyImageLoader>[0];
+  /** Props that will be passed to the `video` element's `source` children elements. */
+  sourceProps?: HTMLAttributes<HTMLSourceElement> & {
+    'data-testid'?: string;
+  };
 }
 
 /**
@@ -20,6 +24,7 @@ export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
     id = data.id,
     playsInline = true,
     controls = true,
+    sourceProps = {},
     ...passthroughProps
   } = props;
 
@@ -47,10 +52,11 @@ export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
         }
         return (
           <source
+            {...sourceProps}
             key={source.url}
             src={source.url}
             type={source.mimeType}
-          ></source>
+          />
         );
       })}
     </video>

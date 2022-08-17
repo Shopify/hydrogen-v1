@@ -30,6 +30,8 @@ export default defineConfig({
     /* The Storefront API version that your app uses */
     storefrontApiVersion: '2022-07',
   },
+  /* A path to a custom page to render when the server encounters an unhandled exception */
+  serverErrorPage: '/src/Error.jsx',
 });
 ```
 
@@ -73,7 +75,7 @@ export default defineConfig({
     files: '/path/to/routes',
     /* A path that's prepended to all file routes. You can modify `basePath`
      * if you want to prefix all file routes. For example, you can prefix all file routes with a locale.
-    */
+     */
     basePath: '/',
   },
 });
@@ -90,10 +92,10 @@ The `shopify` property contains all the information that your app needs to conne
 ```tsx
 export default defineConfig({
   shopify: {
-    /* The app's locale */
-    defaultLocale: 'EN-US',
-    /* The first two characters of the `locale` key */
-    languageCode: 'EN',
+    /* The app's default language */
+    defaultLanguage: 'EN',
+    /* The app's default country */
+    defaultCountry: 'US',
     /* The domain of your Shopify store */
     storeDomain: '{shop_domain}.myshopify.com',
     /* Your app's Storefront API access token */
@@ -181,18 +183,6 @@ export default defineConfig({
 
 The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics#send-analytics-data-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics).
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
-```tsx
-import {PerformanceMetricsServerAnalyticsConnector} from '@shopify/hydrogen/config';
-
-export default defineConfig({
-  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
-});
-```
-
-{% endcodeblock %}
-
 ### `logger`
 
 The default behavior of the [`log` utility](https://shopify.dev/api/hydrogen/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
@@ -220,16 +210,16 @@ export default defineConfig({
     /* Logs the cache control headers of the main document and its sub queries. */
     showCacheControlHeader: true,
     /* Logs the timeline of when queries are being requested, resolved, and rendered.
-    * This is an experimental feature. As a result, functionality is subject to change.
-    * You can provide feedback on this feature by submitting an issue in GitHub:
-    * https://github.com/Shopify/hydrogen/issues.*/
+     * This is an experimental feature. As a result, functionality is subject to change.
+     * You can provide feedback on this feature by submitting an issue in GitHub:
+     * https://github.com/Shopify/hydrogen/issues.*/
     showQueryTiming: true,
     /* Logs warnings in your app if you're over-fetching data from the Storefront API.
      * This is an experimental feature. As a result, functionality is subject to change.
      * You can provide feedback on this feature by submitting an issue in GitHub:
      * https://github.com/Shopify/hydrogen/issues. */
     showUnusedQueryProperties: true,
-  }
+  },
 });
 ```
 
@@ -267,6 +257,31 @@ export default defineConfig({
 ```
 
 {% endcodeblock %}
+
+### `serverErrorPage`
+
+If an unexpected error occurs while rendering a route, then Hydrogen responds with a 500 HTTP error and renders a default error page at `/src/Error.{jsx,tsx}`.
+
+You can define a custom error page with the `serverErrorPage` configuration property. The custom error page is passed an `Error` property. The following is an example:
+
+{% codeblock file, filename: '/src/Error.jsx' %}
+
+```tsx
+export default function Error({error}) {
+  return (
+    <div>
+      <h1>An unknown error occured!</h1>
+      <h2>{error.message}</h2>
+      <h3>{error.stack}</h3>
+    </div>
+  );
+}
+```
+
+{% endcodeblock %}
+
+> Note:
+> If Hydrogen fails to render the custom error page, then it falls back to the default built-in Error page.
 
 ## Changing the configuration file location
 

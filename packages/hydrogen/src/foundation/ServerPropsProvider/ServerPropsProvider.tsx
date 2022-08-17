@@ -3,7 +3,6 @@ import React, {
   ReactNode,
   useMemo,
   useCallback,
-  // @ts-ignore
   useTransition,
   useState,
 } from 'react';
@@ -56,6 +55,7 @@ export interface InternalServerPropsContextValue
   serverProps: ServerProps;
   locationServerProps: LocationServerProps;
   getProposedLocationServerProps: ProposedServerPropsSetter;
+  setRscResponseFromApiRoute: (response: any) => void;
 }
 
 export interface ServerPropsContextValue extends BaseServerPropsContextValue {
@@ -71,12 +71,14 @@ interface ServerPropsProviderProps {
   setServerPropsForRsc: React.Dispatch<
     React.SetStateAction<LocationServerProps>
   >;
+  setRscResponseFromApiRoute: (response: any) => void;
   children: ReactNode;
 }
 
 export function ServerPropsProvider({
   initialServerProps,
   setServerPropsForRsc,
+  setRscResponseFromApiRoute,
   children,
 }: ServerPropsProviderProps) {
   const [locationServerProps, setLocationServerProps] =
@@ -96,12 +98,12 @@ export function ServerPropsProvider({
   );
 
   const setLocationServerPropsCallback = useCallback<ServerPropsSetter>(
-    (input, propValue) => {
+    (input) => {
       // Flush the existing user server state when location changes, leaving only the persisted state
       startTransition(() => {
-        setServerPropsForRsc((prev) => getNewValue(prev, input, propValue));
+        setServerPropsForRsc(input as LocationServerProps);
         setServerProps({});
-        setLocationServerProps((prev) => getNewValue(prev, input, propValue));
+        setLocationServerProps(input as LocationServerProps);
       });
     },
     [setServerProps, setServerPropsForRsc, setLocationServerProps]
@@ -153,6 +155,7 @@ export function ServerPropsProvider({
       setServerProps: setServerPropsCallback,
       setLocationServerProps: setLocationServerPropsCallback,
       getProposedLocationServerProps: getProposedLocationServerPropsCallback,
+      setRscResponseFromApiRoute,
     }),
     [
       pending,
@@ -161,6 +164,7 @@ export function ServerPropsProvider({
       setServerPropsCallback,
       setLocationServerPropsCallback,
       getProposedLocationServerPropsCallback,
+      setRscResponseFromApiRoute,
     ]
   );
 

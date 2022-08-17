@@ -1,7 +1,7 @@
-import type {SessionStorageAdapter} from '../session/session';
-import {Cookie} from '../Cookie/Cookie';
+import type {SessionStorageAdapter} from '../session/session-types.js';
+import {Cookie} from '../Cookie/Cookie.js';
 import {v4 as uid} from 'uuid';
-import type {CookieOptions} from '../Cookie/Cookie';
+import type {CookieOptions} from '../Cookie/Cookie.js';
 
 /** The `MemorySessionStorage` component stores session data within Hydrogen runtime memory.
  */

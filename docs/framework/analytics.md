@@ -16,9 +16,9 @@ The following diagram describes how analytics data is processed on the server an
 
 1. On the server, the `useServerAnalytics` hook collects data in a single render request.
 
-2. On the client, the data is streamed as part of the `Suspense` component. This single render request waits for all queries to complete, outputs the collected data from the server-side, and triggers a `PAGE_VIEW` event.
+1. On the client, the data is streamed as part of the `Suspense` component. This single render request waits for all queries to complete, outputs the collected data from the server-side, and triggers a `PAGE_VIEW` event.
 
-3. Events can be published to external endpoints from the client or server-side:
+1. Events can be published to external endpoints from the client or server-side:
 
 - **Client**: The client can subscribe to events and publish them to external endpoints.
 - **Server**: Events are published to the `/__event` endpoint, a server analytics route. You can use server analytics connectors to publish the event to an external endpoint.
@@ -46,7 +46,7 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
 
 1. Create a new client component in the `/components` directory of your Hydrogen app. For example, `components/AnalyticsListener.client.jsx`.
 
-2. In your client component, add the following code to initialize the subscription to the `PAGE_VIEW` event:
+1. In your client component, add the following code to initialize the subscription to the `PAGE_VIEW` event:
 
     {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
@@ -79,7 +79,7 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
 
     {% endcodeblock %}
 
-3. Add your client component to your app's top-level React component (`App.server.jsx`):
+1. Add your client component to your app's top-level React component (`App.server.jsx`):
 
     {% codeblock file, filename: 'App.server.jsx' %}
 
@@ -96,63 +96,62 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
 
     {% endcodeblock %}
 
-
-4.  Test the event by refreshing the root page of your app. The `PAGE_VIEW` payload object details display in the browser’s console log.
-
+1. Test the event by refreshing the root page of your app. The `PAGE_VIEW` payload object details display in the browser’s console log.
 
 ## Configure a custom event
 
 Aside from the [default events](#default-events) that Hydrogen supports, you can also configure custom events. For example, you might want to configure a custom event that tracks the pages where a promotional banner is being clicked the most.
 
-
 1. Emit a custom event by using the publish method and specifying a custom event name:
 
-{% codeblock file, filename: 'components/Banner.client.jsx' %}
+    {% codeblock file, filename: 'components/Banner.client.jsx' %}
 
-```jsx
-<Banner onClick={(event) => {
-  ClientAnalytics.publish('select_promotion', {
-    creative_name: "Summer Banner",
-    creative_slot: "featured_app_1",
-    ...
-  })
-}}
-```
+    ```jsx
+    <Banner onClick={(event) => {
+      ClientAnalytics.publish('select_promotion', true, {
+        creative_name: "Summer Banner",
+        creative_slot: "featured_app_1",
+        ...
+      })
+    }}
+    ```
 
-{% endcodeblock %}
+    {% endcodeblock %}
 
-2. In `AnalyticsListener`, use the `ClientAnalytics` component to subscribe to your custom event by name:
+1. In `AnalyticsListener`, use the `ClientAnalytics` component to subscribe to your custom event by name:
 
-{% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
-```jsx
- import {ClientAnalytics} from '@shopify/hydrogen';
+    {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
- let init = false;
- export default function AnalyticsListener() {
-   useEffect(() => {
-     // Set up common page-specific data
-     ClientAnalytics.pushToPageAnalyticsData({
-       userLocale: navigator.language,
-     });
+    ```jsx
+    import {ClientAnalytics} from '@shopify/hydrogen';
 
-     if (!init) {
-       // One-time initialization
-       init = true;
-       ClientAnalytics.subscribe(
-       'select_promotion',
-         (payload) => {
-           console.log('select_promotion payload', payload);
-         }
-       );
-     }
-   });
+    let init = false;
+    export default function AnalyticsListener() {
+      useEffect(() => {
+        // Set up common page-specific data
+        ClientAnalytics.pushToPageAnalyticsData({
+          userLocale: navigator.language,
+        });
 
-   return null;
- }
-```
-{% endcodeblock %}
+        if (!init) {
+          // One-time initialization
+          init = true;
+          ClientAnalytics.subscribe(
+          'select_promotion',
+            (payload) => {
+              console.log('select_promotion payload', payload);
+            }
+          );
+        }
+      });
 
-> Note: 
+      return null;
+    }
+    ```
+
+    {% endcodeblock %}
+
+> Note:
 > You can test the custom event subscription by clicking the button with the analytics event attached. The  custom fields `creative_name` and `creative_slot` are added to the payload.
 
 ### Retrieving data from other parts of your Hydrogen storefront
@@ -186,7 +185,6 @@ useServerAnalytics({
 {% endcodeblock %}
 
 When you reload  the collection page you, a `PAGE_VIEW` event displays in the console that includes the new `collectionName` and `collectionId` fields.
-
 
 You can also capture events in client components. For example, when a customer makes a query, such as adding an item to their cart, or clicking on a promotional banner, you can capture the event in your client component:
 
@@ -295,29 +293,32 @@ To send analytics data from the server-side, complete the following steps:
 
     {% endcodeblock %}
 
-2. Create a server-side analytics connector and pass it into the `serverAnalyticsConnectors` configuration:
+1. Create a server-side analytics connector and pass it into the `serverAnalyticsConnectors` configuration:
 
     {% codeblock file, filename: 'MyServerAnalyticsConnector.jsx' %}
 
     ```jsx
-    export function request(requestUrl, requestHeader, data, contentType) {
-     // Send your analytics request to third-party analytics
-    }
+    export const MyServerAnalyticsConnector = {
+      request(requestUrl, requestHeader, data, contentType) {
+        // Send your analytics request to third-party analytics
+        // Make sure to return a promise, for example
+        //
+        // return fetch('your_analytic_endpoint')
+        return Promise.resolve();
+      },
+    };
     ```
 
     {% endcodeblock %}
 
-    {% codeblock file, filename: 'App.server.js' %}
+    {% codeblock file, filename: 'hydrogen.config.js' %}
 
     ```js
     import * as MyServerAnalyticsConnector from '/components/MyServerAnalyticsConnector.jsx'
 
-    ...
-
-    export default renderHydrogen(App, {
-     shopifyConfig,
-     routes,
-     serverAnalyticsConnectors: [MyServerAnalyticsConnector]
+    export default defineConfig({
+      ...
+      serverAnalyticsConnectors: [MyServerAnalyticsConnector]
     });
     ```
 
@@ -336,7 +337,7 @@ The following table describes the request function parameters for `ServerAnalyti
 
 ## Unsubscribe from an event
 
-You can unsubscribe from events that you no longer want your Hydrogen app to track. The following example shows how to unsubscribe from the `PAGE_VIEW` event:
+You can unsubscribe from events that you no longer want your Hydrogen app to track. The following example shows how to unsubscribe from the `accepts-marketing` event:
 
 {% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
 
@@ -366,11 +367,11 @@ Performance metrics provide insight into how fast pages are loading in your Hydr
 - **Largest Contentful Paint (LCP)**: The time it takes to render and interact with the largest content element on the page
 - **Duration**: The total amount of time it takes for a page to finish streaming
 
-You can opt in to receive performance metrics for page loads in your Hydrogen storefront by including `<PerformanceMetrics />` and `PerformanceMetricsDebug` in `App.server.js`.
+You can opt in to receive performance metrics for page loads in your Hydrogen storefront by including `<PerformanceMetrics />` in `App.server.js`.
 
-If you want to see performance debug metrics displayed in your browser console log, then include `<PerformanceMetricsDebug />` in your client component:
+If you want to see performance debug metrics displayed in your browser console log, then include `<PerformanceMetricsDebug />` in `App.server.js`:
 
-{% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
+{% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
 import {
@@ -390,13 +391,6 @@ function App({routes}) {
     </Suspense>
   );
 }
-
-...
-
-export default renderHydrogen(App, {
-  ...
-  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
-});
 ```
 
 {% endcodeblock %}
@@ -423,6 +417,10 @@ export function GoogleAnalytics() {
       // Load the gtag script
       loadScript(URL).catch(() => {});
 
+      function trackPageView(payload) {
+        gtag('event', 'page_view');
+      }
+
       // gtag initialization code
       window.dataLayer = window.dataLayer || [];
       function gtag() {
@@ -438,10 +436,11 @@ export function GoogleAnalytics() {
       // Listen for events from Hydrogen
       ClientAnalytics.subscribe(
         ClientAnalytics.eventNames.PAGE_VIEW,
-        (payload) => {
-          gtag('event', 'page_view');
-        }
+        trackPageView
       );
+
+      ClientAnalytics.hasSentFirstPageView() &&
+        trackPageView(ClientAnalytics.getPageAnalyticsData());
     }
   });
 
@@ -450,6 +449,9 @@ export function GoogleAnalytics() {
 ```
 
 {% endcodeblock %}
+
+> Note:
+> The code calls `loadScript` instead of [`useLoadScript`](https://shopify.dev/api/hydrogen/hooks/primitive/useloadscript). `useLoadScript` is a hook and can't be called inside `useEffect`.
 
 The following example shows an implementation of a client analytics connector using the [getanalytics.io Google Tag Manager package](https://getanalytics.io/plugins/google-tag-manager/):
 

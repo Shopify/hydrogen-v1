@@ -1,0 +1,9 @@
+{
+  "common": {
+    "switcher": "Idioma"
+  },
+  "welcome": {
+    "title": "Hola Mundo",
+    "description": "El hidrógeno se encuentra con i18n"
+  }
+}

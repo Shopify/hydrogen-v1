@@ -50,7 +50,6 @@ export function ProductForm() {
           );
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = useCallback(
@@ -106,6 +105,7 @@ export function ProductForm() {
           quantity={1}
           accessibleAddingToCartLabel="Adding item to your cart"
           disabled={isOutOfStock}
+          type="button"
         >
           <Button
             width="full"

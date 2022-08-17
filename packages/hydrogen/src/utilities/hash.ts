@@ -1,5 +1,5 @@
-import {STOREFRONT_API_BUYER_IP_HEADER} from '../constants';
-import type {QueryKey} from '../types';
+import {STOREFRONT_API_BUYER_IP_HEADER} from '../constants.js';
+import type {QueryKey} from '../types.js';
 
 export function hashKey(queryKey: QueryKey): string {
   const rawKeys = Array.isArray(queryKey) ? queryKey : [queryKey];

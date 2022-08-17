@@ -1,23 +1,30 @@
 import React, {useMemo} from 'react';
-import {ShopifyProviderClient} from './ShopifyProvider.client';
-import type {ShopifyProviderProps} from './types';
-import type {CountryCode, LanguageCode} from '../../storefront-api-types';
+import {ShopifyProviderClient} from './ShopifyProvider.client.js';
+import type {
+  ShopifyProviderProps,
+  LocalizationContextValue,
+  ShopifyContextValue,
+} from './types.js';
+import type {CountryCode, LanguageCode} from '../../storefront-api-types.js';
 
-import {DEFAULT_LOCALE} from '../constants';
-import type {ShopifyContextValue} from './types';
-import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types';
-import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
-import {getOxygenVariable} from '../../utilities/storefrontApi';
-import {SHOPIFY_STOREFRONT_ID_VARIABLE} from '../../constants';
+import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../constants.js';
+import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types.js';
+import {
+  useRequestCacheData,
+  useServerRequest,
+} from '../ServerRequestProvider/index.js';
+import {getOxygenVariable} from '../../utilities/storefrontApi.js';
+import {SHOPIFY_STOREFRONT_ID_VARIABLE} from '../../constants.js';
+import {getLocale} from '../../utilities/locale/index.js';
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
-  const locale = shopifyConfig.defaultLocale ?? DEFAULT_LOCALE;
-  const languageCode = locale.split(/[-_]/)[0];
+  const countryCode = shopifyConfig.defaultCountryCode ?? DEFAULT_COUNTRY;
+  const languageCode = shopifyConfig.defaultLanguageCode ?? DEFAULT_LANGUAGE;
   const storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
 
   return {
-    locale: locale.toUpperCase() as `${LanguageCode}-${CountryCode}`,
-    languageCode: languageCode.toUpperCase() as `${LanguageCode}`,
+    defaultCountryCode: countryCode.toUpperCase() as `${CountryCode}`,
+    defaultLanguageCode: languageCode.toUpperCase() as `${LanguageCode}`,
     storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
     storefrontToken: shopifyConfig.storefrontToken,
     storefrontApiVersion: shopifyConfig.storefrontApiVersion,
@@ -40,6 +47,11 @@ export function ShopifyProvider({
    * [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
    */
   shopifyConfig,
+
+  countryCode,
+
+  languageCode,
+
   /** Any `ReactNode` elements. */
   children,
 }: ShopifyProviderProps): JSX.Element {
@@ -82,11 +94,48 @@ export function ShopifyProvider({
     [actualShopifyConfig]
   );
 
+  const localization = getLocalizationContextValue(
+    shopifyProviderValue.defaultLanguageCode,
+    shopifyProviderValue.defaultCountryCode,
+    languageCode,
+    countryCode
+  );
+
+  request.ctx.localization = localization;
   request.ctx.shopifyConfig = shopifyProviderValue;
 
   return (
-    <ShopifyProviderClient shopifyConfig={shopifyProviderValue}>
+    <ShopifyProviderClient
+      shopifyConfig={shopifyProviderValue}
+      localization={localization}
+    >
       {children}
     </ShopifyProviderClient>
   );
+}
+
+export function getLocalizationContextValue(
+  defaultLanguageCode: `${LanguageCode}`,
+  defaultCountryCode: `${CountryCode}`,
+  languageCode?: `${LanguageCode}`,
+  countryCode?: `${CountryCode}`
+): LocalizationContextValue {
+  return useMemo(() => {
+    const runtimeLanguageCode = (
+      languageCode ?? defaultLanguageCode
+    ).toUpperCase() as `${LanguageCode}`;
+    const runtimeCountryCode = (
+      countryCode ?? defaultCountryCode
+    ).toUpperCase() as `${CountryCode}`;
+
+    return {
+      country: {
+        isoCode: runtimeCountryCode,
+      },
+      language: {
+        isoCode: runtimeLanguageCode,
+      },
+      locale: getLocale(runtimeLanguageCode, runtimeCountryCode),
+    };
+  }, [defaultLanguageCode, defaultCountryCode, countryCode, languageCode]);
 }

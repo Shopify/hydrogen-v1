@@ -1,6 +1,7 @@
 import {useRef} from 'react';
 import {useScroll} from 'react-use';
 import {
+  Link,
   useCart,
   CartLineProvider,
   CartShopPayButton,
@@ -21,12 +22,12 @@ export function CartDetails({
   const {y} = useScroll(scrollRef);
 
   if (lines.length === 0) {
-    return <CartEmpty onClose={onClose} />;
+    return <CartEmpty onClose={onClose} layout={layout} />;
   }
 
   const container = {
     drawer: 'grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto]',
-    page: 'pb-12 max-w-7xl mx-auto w-full flex flex-col md:flex-row md:items-start gap-4 md:gap-8 lg:gap-12',
+    page: 'pb-12 grid md:grid-cols-2 md:items-start gap-8 md:gap-8 lg:gap-12',
   };
 
   const content = {
@@ -36,7 +37,7 @@ export function CartDetails({
 
   const summary = {
     drawer: 'grid gap-6 p-6 border-t md:px-12',
-    page: 'sticky top-nav grid gap-6 p-4 md:px-6 md:translate-y-4 bg-primary/5 rounded w-full max-w-md',
+    page: 'sticky top-nav grid gap-6 p-4 md:px-6 md:translate-y-4 bg-primary/5 rounded w-full',
   };
 
   return (
@@ -44,7 +45,7 @@ export function CartDetails({
       <section
         ref={scrollRef}
         aria-labelledby="cart-contents"
-        className={`${content[layout]} ${y > 0 && 'border-t'}`}
+        className={`${content[layout]} ${y > 0 ? 'border-t' : ''}`}
       >
         <ul className="grid gap-6 md:gap-10">
           {lines.map((line) => {
@@ -72,9 +73,13 @@ function CartCheckoutActions() {
   return (
     <>
       <div className="grid gap-4">
-        <Button to={checkoutUrl} width="full">
-          Continue to Checkout
-        </Button>
+        {checkoutUrl ? (
+          <Link to={checkoutUrl} prefetch={false} target="_self">
+            <Button as="span" width="full">
+              Continue to Checkout
+            </Button>
+          </Link>
+        ) : null}
         <CartShopPayButton />
       </div>
     </>

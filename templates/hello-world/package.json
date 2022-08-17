@@ -4,20 +4,23 @@
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": ">=16.14.0"
+  },
   "scripts": {
     "dev": "shopify hydrogen dev",
     "build": "shopify hydrogen build",
     "preview": "shopify hydrogen preview"
   },
   "devDependencies": {
-    "@shopify/cli": "latest",
-    "@shopify/cli-hydrogen": "latest",
+    "@shopify/cli": "^3.3.3",
+    "@shopify/cli-hydrogen": "^3.3.3",
     "@types/react": "^18.0.9",
-    "typescript": "^4.6.4",
+    "typescript": "^4.7.2",
     "vite": "^2.9.0"
   },
   "dependencies": {
-    "@shopify/hydrogen": "^0.26.0",
+    "@shopify/hydrogen": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {useCart} from '../CartProvider';
-import {useProductOptions} from '../ProductOptionsProvider';
-import {BaseButton, BaseButtonProps} from '../BaseButton';
+import {useCart} from '../CartProvider/index.js';
+import {useProductOptions} from '../../hooks/useProductOptions/index.js';
+import {BaseButton, BaseButtonProps} from '../BaseButton/index.js';
 
 interface AddToCartButtonProps {
   /** An array of cart line attributes that belong to the item being added to the cart. */
@@ -15,18 +15,23 @@ interface AddToCartButtonProps {
   quantity?: number;
   /** The text that is announced by the screen reader when the item is being added to the cart. Used for accessibility purposes only and not displayed on the page. */
   accessibleAddingToCartLabel?: string;
+  /** The selling plan ID of the subscription variant */
+  sellingPlanId?: string;
 }
 
 /**
  * The `AddToCartButton` component renders a button that adds an item to the cart when pressed.
  * It must be a descendent of the `CartProvider` component.
  */
-export function AddToCartButton(props: AddToCartButtonProps & BaseButtonProps) {
+export function AddToCartButton<AsType extends React.ElementType = 'button'>(
+  props: AddToCartButtonProps & BaseButtonProps<AsType>
+) {
   const [addingItem, setAddingItem] = useState<boolean>(false);
   const {
     variantId: explicitVariantId,
     quantity = 1,
     attributes,
+    sellingPlanId,
     onClick,
     children,
     accessibleAddingToCartLabel,
@@ -55,9 +60,10 @@ export function AddToCartButton(props: AddToCartButtonProps & BaseButtonProps) {
         quantity,
         merchandiseId: variantId,
         attributes,
+        sellingPlanId,
       },
     ]);
-  }, [linesAdd, quantity, variantId, attributes]);
+  }, [linesAdd, quantity, variantId, attributes, sellingPlanId]);
 
   return (
     <>

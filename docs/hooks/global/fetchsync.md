@@ -78,13 +78,12 @@ The `requestInit` object augments the [`init` properties available in the Web Fe
 
 ### Return value
 
-The `fetchSync` function returns an object with the following keys:
+The `fetchSync` function returns a [Response object and its properties](https://developer.mozilla.org/en-US/docs/Web/API/Response). However, the following properties are adapted to work with React Suspense:
 
 | Key        | Description                                                                               |
 | ---------- | ----------------------------------------------------------------------------------------- |
-| `response` | The response returned by the fetch call. Useful for checking the status code and headers. |
-| `json()`   | A function to return a JavaScript object based on the JSON response body.                 |
-| `text()`   | A function to return a string version of the response body.                               |
+| `json()`   | A function to synchronously return a JavaScript object based on the JSON response body.   |
+| `text()`   | A function to synchronously return a string version of the response body.                 |
 
 ## `fetchSync` in client components
 
@@ -123,13 +122,12 @@ The `requestInit` object mirrors the [`init` properties available in the Web Fet
 
 ### Return value
 
-The `fetchSync` function returns an object with the following keys:
+The `fetchSync` function returns a [Response object and its properties](https://developer.mozilla.org/en-US/docs/Web/API/Response). However, the following properties are adapted to work with React Suspense:
 
 | Key        | Description                                                                             |
 | ---------- | --------------------------------------------------------------------------------------- |
-| `response` | The Response returned by the fetch call. Useful for checking status code, headers, etc. |
-| `json()`   | A function to return a JavaScript object based on the JSON response body.               |
-| `text()`   | A function to return a string version of the response body.                             |
+| `json()`   | A function to synchronously return a JavaScript object based on the JSON response body. |
+| `text()`   | A function to synchronously return a string version of the response body.               |
 
 ## Considerations
 

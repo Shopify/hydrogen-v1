@@ -1,8 +1,8 @@
 import {createBrowserHistory} from 'history';
 import {nextTick} from 'process';
 import React from 'react';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {Link} from '../Link.client';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {Link} from '../Link.client.js';
 
 describe('<Link />', () => {
   it('renders an anchor tag', () => {
@@ -14,6 +14,28 @@ describe('<Link />', () => {
 
     expect(component).toContainReactHtml(
       '<a target="_blank" href="/products/hydrogen">Link</a>'
+    );
+  });
+
+  it('renders default rel for external destinations', () => {
+    const component = mountWithProviders(
+      <Link to="https://something.com/products/hydrogen">Link</Link>
+    );
+
+    expect(component).toContainReactHtml(
+      '<a rel="noreferrer noopener" href="https://something.com/products/hydrogen">Link</a>'
+    );
+  });
+
+  it('overrides default rel for external destinations', () => {
+    const component = mountWithProviders(
+      <Link rel="bookmark" to="https://something.com/products/hydrogen">
+        Link
+      </Link>
+    );
+
+    expect(component).toContainReactHtml(
+      '<a rel="bookmark" href="https://something.com/products/hydrogen">Link</a>'
     );
   });
 
@@ -117,7 +139,7 @@ describe('<Link />', () => {
 
     setTimeout(() => {
       try {
-        expect(setServerProps.mock.calls[0][0]()).toStrictEqual({
+        expect(setServerProps.mock.calls[0][0]).toStrictEqual({
           pathname: '/products/hydrogen',
           search: '',
         });

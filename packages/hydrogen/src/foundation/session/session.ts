@@ -1,23 +1,8 @@
-import {Logger} from '../../utilities/log';
-import {wrapPromise} from '../../utilities/suspense';
-import type {HydrogenResponse} from '../HydrogenResponse/HydrogenResponse.server';
-import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
-
-export type SessionSyncApi = {
-  get: () => Record<string, string>;
-};
-
-export type SessionApi = {
-  get: () => Promise<Record<string, string>>;
-  set: (key: string, value: string) => Promise<void>;
-  destroy: () => Promise<void>;
-};
-
-export type SessionStorageAdapter = {
-  get: (request: Request) => Promise<Record<string, string>>;
-  set: (request: Request, value: Record<string, string>) => Promise<string>;
-  destroy: (request: Request) => Promise<string>;
-};
+import {Logger} from '../../utilities/log/index.js';
+import {wrapPromise} from '../../utilities/suspense.js';
+import type {HydrogenResponse} from '../HydrogenResponse/HydrogenResponse.server.js';
+import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server.js';
+import type {SessionStorageAdapter} from './session-types.js';
 
 export function getSyncSessionApi(
   request: HydrogenRequest,
@@ -39,12 +24,26 @@ export function getSyncSessionApi(
           }
           return sessionPromises.getPromise.read();
         },
+        set(data: Record<string, any>) {
+          if (!sessionPromises.setPromise) {
+            sessionPromises.setPromise = wrapPromise(
+              session.set(request, data)
+            );
+          }
+          const cookie = sessionPromises.setPromise.read();
+          componentResponse.headers.set('Set-Cookie', cookie);
+          return cookie;
+        },
       }
     : emptySyncSessionImplementation(log);
 }
 
 export const emptySessionImplementation = function (log: Logger) {
   return {
+    async getFlash(key: string) {
+      log.warn('No session adapter has been configured!');
+      return null;
+    },
     async get() {
       log.warn('No session adapter has been configured!');
       return {};
@@ -64,6 +63,10 @@ export const emptySyncSessionImplementation = function (log: Logger) {
     get() {
       log.warn('No session adapter has been configured!');
       return {};
+    },
+    set(data: Record<string, any>) {
+      log.warn('No session adapter has been configured!');
+      return null;
     },
   };
 };

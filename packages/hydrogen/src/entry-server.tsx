@@ -5,8 +5,10 @@ import {
   logCacheControlHeaders,
   logQueryTimings,
   getLoggerWithContext,
-} from './utilities/log';
-import {getErrorMarkup} from './utilities/error';
+  setLogger,
+  type RenderType,
+} from './utilities/log/index.js';
+import {getErrorMarkup} from './utilities/error.js';
 import type {
   AssembleHtmlParams,
   RunSsrParams,
@@ -14,49 +16,48 @@ import type {
   ResolvedHydrogenConfig,
   ResolvedHydrogenRoutes,
   RequestHandler,
-} from './types';
-import type {RequestHandlerOptions} from './shared-types';
-import {Html, applyHtmlHead} from './foundation/Html/Html';
-import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
-import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
+} from './types.js';
+import type {RequestHandlerOptions} from './shared-types.js';
+import {Html, applyHtmlHead} from './foundation/Html/Html.js';
+import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.js';
+import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.js';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
-} from './foundation/ServerRequestProvider';
+} from './foundation/ServerRequestProvider/index.js';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
   renderApiRoute,
   getApiRoutes,
-} from './utilities/apiRoutes';
-import {ServerPropsProvider} from './foundation/ServerPropsProvider';
-import {isBotUA} from './utilities/bot-ua';
-import {getCache, setCache} from './foundation/runtime';
+} from './utilities/apiRoutes.js';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider/index.js';
+import {isBotUA} from './utilities/bot-ua.js';
+import {getCache, setCache} from './foundation/runtime.js';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
   rscRenderToReadableStream,
   createFromReadableStream,
   bufferReadableStream,
-} from './streaming.server';
-import {RSC_PATHNAME} from './constants';
-import {stripScriptsFromTemplate} from './utilities/template';
-import {setLogger, RenderType} from './utilities/log/log';
-import {Analytics} from './foundation/Analytics/Analytics.server';
-import {DevTools} from './foundation/DevTools/DevTools.server';
-import {getSyncSessionApi} from './foundation/session/session';
-import {parseJSON} from './utilities/parse';
-import {htmlEncode} from './utilities';
+} from './streaming.server.js';
+import {stripScriptsFromTemplate} from './utilities/template.js';
+import {Analytics} from './foundation/Analytics/Analytics.server.js';
+import {DevTools} from './foundation/DevTools/DevTools.server.js';
+import {getSyncSessionApi} from './foundation/session/session.js';
+import {parseJSON} from './utilities/parse.js';
+import {htmlEncode} from './utilities/index.js';
 import {splitCookiesString} from 'set-cookie-parser';
 import {
   deleteItemFromCache,
   getItemFromCache,
   isStale,
   setItemInCache,
-} from './foundation/Cache/cache';
-import {CacheShort, NO_STORE} from './foundation/Cache/strategies';
-import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes';
+} from './foundation/Cache/cache.js';
+import {CacheShort, NO_STORE} from './foundation/Cache/strategies/index.js';
+import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes.js';
+import {FORM_REDIRECT_COOKIE} from './constants.js';
 
 declare global {
   // This is provided by a Vite plugin
@@ -71,20 +72,20 @@ const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
 export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
-    const {cache, context, buyerIpHeader} = options;
+    const {cache, context, buyerIpHeader, headers} = options;
 
     const request = new HydrogenRequest(rawRequest);
     const url = new URL(request.url);
 
+    let sessionApi = options.sessionApi;
+
     const {default: inlineHydrogenConfig} = await import(
       // @ts-ignore
-      // eslint-disable-next-line node/no-missing-import
       'virtual__hydrogen.config.ts'
     );
 
     const {default: hydrogenRoutes} = await import(
       // @ts-ignore
-      // eslint-disable-next-line node/no-missing-import
       'virtual__hydrogen-routes.server.jsx'
     );
 
@@ -99,16 +100,21 @@ export const renderHydrogen = (App: any) => {
     setLogger(hydrogenConfig.logger);
     const log = getLoggerWithContext(request);
 
-    const response = new HydrogenResponse();
+    const response = new HydrogenResponse(null, {
+      headers: headers || {},
+    });
+
+    if (request.cookies.get(FORM_REDIRECT_COOKIE)) {
+      response.headers.set('SET-COOKIE', `${FORM_REDIRECT_COOKIE}=`);
+      response.doNotStream();
+    }
 
     if (hydrogenConfig.poweredByHeader ?? true) {
-      // If not defined in the config, always show the header
+      // If undefined in the config, then always show the header
       response.headers.set('powered-by', 'Shopify-Hydrogen');
     }
 
-    const sessionApi = hydrogenConfig.session
-      ? hydrogenConfig.session(log)
-      : undefined;
+    sessionApi ??= hydrogenConfig.session?.(log);
 
     request.ctx.session = getSyncSessionApi(request, response, log, sessionApi);
 
@@ -137,7 +143,11 @@ export const renderHydrogen = (App: any) => {
       );
 
       return apiResponse instanceof Request
-        ? handleRequest(apiResponse, options)
+        ? handleRequest(apiResponse, {
+            ...options,
+            sessionApi,
+            headers: apiResponse.headers,
+          })
         : apiResponse;
     }
 
@@ -222,7 +232,7 @@ async function processRequest(
   const {dev, nonce, indexTemplate, streamableResponse: nodeResponse} = options;
 
   const log = getLoggerWithContext(request);
-  const isRSCRequest = url.pathname === RSC_PATHNAME;
+  const isRSCRequest = request.isRscRequest();
   const apiRoute = !isRSCRequest && getApiRoute(url, hydrogenConfig.routes);
 
   // The API Route might have a default export, making it also a server component
@@ -238,13 +248,20 @@ async function processRequest(
     );
 
     return apiResponse instanceof Request
-      ? handleRequest(apiResponse, options)
+      ? handleRequest(apiResponse, {
+          ...options,
+          sessionApi,
+          headers: apiResponse.headers,
+        })
       : apiResponse;
   }
 
   const state: Record<string, any> = isRSCRequest
-    ? parseJSON(url.searchParams.get('state') || '{}')
-    : {pathname: url.pathname, search: url.search};
+    ? parseJSON(decodeURIComponent(url.searchParams.get('state') || '{}'))
+    : {
+        pathname: decodeURIComponent(url.pathname),
+        search: decodeURIComponent(url.search),
+      };
 
   const rsc = runRSC({App, state, log, request, response});
 
@@ -254,7 +271,7 @@ async function processRequest(
     cacheResponse(response, request, [buffered], revalidate);
 
     return new Response(buffered, {
-      headers: {'cache-control': response.cacheControlHeader},
+      headers: response.headers,
     });
   }
 
@@ -354,6 +371,7 @@ async function runSSR({
         <ServerPropsProvider
           initialServerProps={state as any}
           setServerPropsForRsc={() => {}}
+          setRscResponseFromApiRoute={() => {}}
         >
           <Suspense fallback={null}>
             <RscConsumer />
@@ -423,16 +441,23 @@ async function runSSR({
     const prepareForStreaming = () => {
       Object.assign(responseOptions, getResponseOptions(response, didError()));
 
-      /**
-       * TODO: This assumes `response.cache()` has been called _before_ any
-       * queries which might be caught behind Suspense. Clarify this or add
-       * additional checks downstream?
-       */
-      /**
-       * TODO: Also add `Vary` headers for `accept-language` and any other keys
-       * we want to shard our full-page cache for all Hydrogen storefronts.
-       */
-      responseOptions.headers.set('cache-control', response.cacheControlHeader);
+      if (responseOptions.status >= 400) {
+        responseOptions.headers.set('cache-control', 'no-store');
+      } else {
+        /**
+         * TODO: This assumes `response.cache()` has been called _before_ any
+         * queries which might be caught behind Suspense. Clarify this or add
+         * additional checks downstream?
+         */
+        /**
+         * TODO: Also add `Vary` headers for `accept-language` and any other keys
+         * we want to shard our full-page cache for all Hydrogen storefronts.
+         */
+        responseOptions.headers.set(
+          'cache-control',
+          response.cacheControlHeader
+        );
+      }
 
       if (isRedirect(responseOptions)) {
         return false;
@@ -498,6 +523,7 @@ async function runSSR({
         setTimeout(() => {
           writable.close();
           postRequestTasks('str', responseOptions.status, request, response);
+          response.status = responseOptions.status;
           cacheResponse(response, request, savedChunks, revalidate);
         }, 0);
       });
@@ -520,6 +546,7 @@ async function runSSR({
     const savedChunks = tagOnWrite(nodeResponse);
 
     nodeResponse.on('finish', () => {
+      response.status = nodeResponse.statusCode;
       cacheResponse(response, request, savedChunks, revalidate);
     });
 
@@ -548,12 +575,12 @@ async function runSSR({
 
         setTimeout(() => {
           log.trace('node pipe response');
-          pipe(nodeResponse);
+          if (!nodeResponse.writableEnded) pipe(nodeResponse);
         }, 0);
 
         bufferReadableStream(rscReadable.getReader(), (chunk) => {
           log.trace('rsc chunk');
-          return nodeResponse.write(chunk);
+          if (!nodeResponse.writableEnded) nodeResponse.write(chunk);
         });
       },
       async onAllReady() {
@@ -595,8 +622,10 @@ async function runSSR({
             postRequestTasks('ssr', nodeResponse.statusCode, request, response);
           }
 
-          nodeResponse.write(html);
-          nodeResponse.end();
+          if (!nodeResponse.writableEnded) {
+            nodeResponse.write(html);
+            nodeResponse.end();
+          }
         });
 
         pipe(bufferedResponse);
@@ -613,9 +642,17 @@ async function runSSR({
         }
       },
       onError(error: any) {
+        if (error.message?.includes('stream closed early')) {
+          // This seems to happen when Fizz is still streaming
+          // but nodeResponse has been closed by the browser.
+          // This is common in tests and during development
+          // due to frequent page refresh.
+          return;
+        }
+
         ssrDidError = error;
 
-        if (dev && nodeResponse.headersSent) {
+        if (dev && nodeResponse.headersSent && !nodeResponse.writableEnded) {
           // Calling write would flush headers automatically.
           // Delay this error until headers are properly sent.
           nodeResponse.write(getErrorMarkup(error));
@@ -666,6 +703,8 @@ function startWritingToNodeResponse(
   nodeResponse: ServerResponse,
   error?: Error
 ) {
+  if (nodeResponse.writableEnded) return;
+
   if (!nodeResponse.headersSent) {
     nodeResponse.setHeader(CONTENT_TYPE, HTML_CONTENT_TYPE);
     nodeResponse.write(DOCTYPE);
@@ -708,16 +747,23 @@ function writeHeadToNodeResponse(
   if (nodeResponse.headersSent) return;
   log.trace('writeHeadToNodeResponse');
 
-  /**
-   * TODO: Also add `Vary` headers for `accept-language` and any other keys
-   * we want to shard our full-page cache for all Hydrogen storefronts.
-   */
-  nodeResponse.setHeader('cache-control', componentResponse.cacheControlHeader);
-
   const {headers, status, statusText} = getResponseOptions(
     componentResponse,
     error
   );
+
+  if (status >= 400) {
+    nodeResponse.setHeader('cache-control', 'no-store');
+  } else {
+    /**
+     * TODO: Also add `Vary` headers for `accept-language` and any other keys
+     * we want to shard our full-page cache for all Hydrogen storefronts.
+     */
+    nodeResponse.setHeader(
+      'cache-control',
+      componentResponse.cacheControlHeader
+    );
+  }
 
   nodeResponse.statusCode = status;
 
@@ -768,7 +814,7 @@ function handleFetchResponseInNode(
 ) {
   if (nodeResponse) {
     fetchResponsePromise.then((response) => {
-      if (!response) return;
+      if (!response || nodeResponse.writableEnded) return;
 
       setNodeHeaders(response.headers, nodeResponse);
 
@@ -836,13 +882,13 @@ async function cacheResponse(
   const cache = getCache();
 
   /**
-   * Only cache on cachable responses where response
+   * Only full page cache on cachable responses where response
    *
    * - have content to cache
    * - have status 200
    * - does not have no-store on cache-control header
    * - does not have set-cookie header
-   * - is not a POST request
+   * - is a GET request
    * - does not have a session or does not have an active customer access token
    */
   if (
@@ -851,7 +897,7 @@ async function cacheResponse(
     response.status === 200 &&
     response.cache().mode !== NO_STORE &&
     !response.headers.has('Set-Cookie') &&
-    !/post/i.test(request.method) &&
+    /get/i.test(request.method) &&
     !sessionHasCustomerAccessToken(request)
   ) {
     if (revalidate) {
@@ -886,11 +932,10 @@ async function saveCacheResponse(
 
   if (cache && chunks.length > 0) {
     const {headers, status, statusText} = getResponseOptions(response);
-    const url = new URL(request.url);
 
     headers.set('cache-control', response.cacheControlHeader);
     const currentHeader = headers.get('Content-Type');
-    if (!currentHeader && url.pathname !== RSC_PATHNAME) {
+    if (!currentHeader && !request.isRscRequest()) {
       headers.set('Content-Type', HTML_CONTENT_TYPE);
     }
 

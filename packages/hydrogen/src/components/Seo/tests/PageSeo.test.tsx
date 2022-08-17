@@ -2,10 +2,10 @@ import React from 'react';
 
 import {mount} from '@shopify/react-testing';
 
-import {PageSeo} from '../PageSeo.client';
-import {TitleSeo} from '../TitleSeo.client';
-import {DescriptionSeo} from '../DescriptionSeo.client';
-import {TwitterSeo} from '../TwitterSeo.client';
+import {PageSeo} from '../PageSeo.client.js';
+import {TitleSeo} from '../TitleSeo.client.js';
+import {DescriptionSeo} from '../DescriptionSeo.client.js';
+import {TwitterSeo} from '../TwitterSeo.client.js';
 
 jest.mock('../TitleSeo.client', () => ({
   TitleSeo() {

@@ -2,6 +2,11 @@ import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import {htmlEncode} from '../../../hydrogen/src/utilities';
 import fetch from 'node-fetch';
 import {resolve} from 'path';
+import type {Browser, Page} from 'playwright';
+
+declare global {
+  const browser: Browser;
+}
 
 import {edit, untilUpdated} from '../../utilities';
 
@@ -11,15 +16,20 @@ type TestOptions = {
   isBuild?: boolean;
 };
 
+const SHOPIFY_ANALYTICS_ENDPOINT =
+  'https://monorail-edge.shopifysvc.com/unstable/produce_batch';
+const SHOPIFY_PERFORMANCE_ENDPOINT =
+  'https://monorail-edge.shopifysvc.com/v1/produce';
+
 export default async function testCases({
   getServerUrl,
   isBuild,
   isWorker,
 }: TestOptions) {
-  let page;
+  let page: Page;
   beforeEach(async () => {
     page && (await page.close());
-    page = await global.browser.newPage();
+    page = await browser.newPage();
   });
 
   it('shows the homepage, navigates to about, and increases the count', async () => {
@@ -42,12 +52,21 @@ export default async function testCases({
     expect(await page.textContent('.count')).toBe('Count is 1');
   });
 
+  it('decodes non UTF-8 parameters', async () => {
+    await page.goto(getServerUrl() + '/encode-uri/送料無料対象商品');
+
+    expect(await page.textContent('h1')).toContain('Encode URI');
+    expect(await page.textContent('#encode-uri-content')).toMatch(
+      '送料無料対象商品'
+    );
+  });
+
   it('renders `<ShopifyProvider>` dynamically in RSC and on the client', async () => {
     // "someDynamicValue should get injected into the response config paylout"
     await page.goto(getServerUrl() + '/config/someDynamicValue');
 
     expect(await page.textContent('#root > div')).toContain(
-      '{"locale":"EN-US","languageCode":"EN","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
+      '{"defaultCountryCode":"US","defaultLanguageCode":"EN","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
     );
   });
 
@@ -94,19 +113,26 @@ export default async function testCases({
     );
 
     await page.click('#update-server-props');
-    await page.waitForSelector('#server-props-with-data', {timeout: 35000});
 
     expect(
       await page.textContent('#server-props-with-data')
     ).toMatchInlineSnapshot(`"props: {\\"hello\\":\\"world\\"}"`);
 
-    // Navigate events should clear the server props
+    // // Navigate events should clear the server props
+    page.on('request', (request) => {
+      try {
+        expect(request.url()).toContain(
+          '__rsc?state=%7B%22pathname%22%3A%22%2Ftest-server-props%22%2C%22search%22%3A%22%3Frefresh%22%7D'
+        );
+      } catch (e) {
+        fail(e);
+      }
+    });
     await Promise.all([page.click('#navigate'), page.waitForNavigation()]);
-    await page.waitForSelector('#server-props', {timeout: 35000});
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
       `"props: {}"`
     );
-  }, 35000);
+  });
 
   it('streams the SSR response and includes RSC payload', async () => {
     const response = await fetch(getServerUrl() + '/stream');
@@ -246,23 +272,6 @@ export default async function testCases({
     expect(await page.$$('[data-test=alias]')).toHaveLength(3);
   });
 
-  it('adds style tags for CSS modules', async () => {
-    await page.goto(getServerUrl() + '/css-modules');
-    expect(await page.textContent('h1')).toContain('CSS Modules');
-
-    // Same class for the same style
-    const className = await page.getAttribute('[data-test=server]', 'class');
-    expect(className).toMatch(/^_red_/);
-    expect(await page.getAttribute('[data-test=client]', 'class')).toEqual(
-      className
-    );
-
-    // Style tag is present in DOM
-    expect(await page.textContent('style')).toEqual(
-      `.${className} {\n  color: red;\n}\n`
-    );
-  });
-
   it('supports React.useId()', async () => {
     const response = await page.goto(getServerUrl() + '/useid');
 
@@ -278,6 +287,75 @@ export default async function testCases({
     expect(serverRenderedId).toEqual(clientRenderedId);
   });
 
+  it('can cache fetchSync responses', async () => {
+    const test = async () => {
+      expect(await page.textContent('h1')).toContain('Request Sync');
+      expect(await page.textContent('#response-body')).toMatch('OK');
+      expect(await page.textContent('#response-status')).toMatch('201');
+      expect(await page.textContent('#response-header-test')).toMatch('42');
+    };
+
+    // Make fetchSync request and store response data in cache
+    await page.goto(getServerUrl() + '/response-sync');
+    await test();
+
+    // Check that cached response data is reused properly.
+    // This requires `devCache: true` in `vite.config.js`.
+    await page.reload();
+    await test();
+  });
+
+  describe('CSS', () => {
+    const extractCssFromDOM = async () => {
+      if (isBuild) {
+        // Downloaded using a link tag
+        const linkTags = await page
+          .locator('link[rel=stylesheet]')
+          .elementHandles();
+
+        expect(linkTags).toHaveLength(1); // Styles aren't duplicated
+
+        const href = await linkTags[0].getAttribute('href');
+
+        return await (await fetch(getServerUrl() + href)).text();
+      } else {
+        // Inlined in the DOM using JS for HMR
+        return (await page.locator('style').allTextContents()).join('\n');
+      }
+    };
+
+    it('adds style tags for pure CSS', async () => {
+      await page.goto(getServerUrl() + '/css-pure');
+      expect(await page.textContent('h1')).toContain('CSS Pure');
+
+      // Same class for the same style
+      const className = await page.getAttribute('[data-test=server]', 'class');
+      expect(className).toEqual('green');
+
+      // Style is present in DOM
+      expect(await extractCssFromDOM()).toMatch(
+        /\.green\s*{\s*color:\s*green;?\s*/m
+      );
+    });
+
+    it('adds style tags for CSS modules', async () => {
+      await page.goto(getServerUrl() + '/css-modules');
+      expect(await page.textContent('h1')).toContain('CSS Modules');
+
+      // Same class for the same style
+      const className = await page.getAttribute('[data-test=server]', 'class');
+      expect(className).toMatch(/^_red_/);
+      expect(await page.getAttribute('[data-test=client]', 'class')).toEqual(
+        className
+      );
+
+      // Style is present in DOM
+      expect(await extractCssFromDOM()).toMatch(
+        new RegExp(`\\.${className}\\s*{\\s*color:\\s*red;?\\s*}`, 'm')
+      );
+    });
+  });
+
   describe('HMR', () => {
     if (isBuild) return;
 
@@ -290,6 +368,10 @@ export default async function testCases({
       const newButtonText = 'add';
 
       await page.goto(getServerUrl() + '/about');
+      expect(await page.textContent('h1')).toContain('About');
+
+      await page.click('.increase');
+      expect(await page.textContent('.count')).toBe('Count is 1');
 
       await edit(
         fullPath,
@@ -297,20 +379,30 @@ export default async function testCases({
         () => untilUpdated(() => page.textContent('button'), 'increase count'),
         () => untilUpdated(() => page.textContent('button'), newButtonText)
       );
+
+      // Only refreshes the client component without changing input state
+      expect(await page.textContent('.count')).toBe('Count is 1');
     });
 
     it('updates the contents when a server component file changes', async () => {
-      const fullPath = resolve(__dirname, '../', 'src/routes/index.server.jsx');
+      const fullPath = resolve(__dirname, '../', 'src/routes/about.server.jsx');
       const newheading = 'Snow Devil';
 
-      await page.goto(getServerUrl());
+      await page.goto(getServerUrl() + '/about');
+      expect(await page.textContent('h1')).toContain('About');
+
+      await page.click('.increase');
+      expect(await page.textContent('.count')).toBe('Count is 1');
 
       await edit(
         fullPath,
-        (code) => code.replace('<h1>Home', `<h1>${newheading}`),
-        () => untilUpdated(() => page.textContent('h1'), 'Home'),
+        (code) => code.replace('<h1>About', `<h1>${newheading}`),
+        () => untilUpdated(() => page.textContent('h1'), 'About'),
         () => untilUpdated(() => page.textContent('h1'), newheading)
       );
+
+      // Full page refresh
+      expect(await page.textContent('.count')).toBe('Count is 0');
     });
   });
 
@@ -481,6 +573,51 @@ export default async function testCases({
       await page.click('#increase');
       expect(await page.textContent('#counter')).toEqual('2');
     });
+
+    it('responds with RSC', async () => {
+      const response = await page.request.post(getServerUrl() + '/account', {
+        data: `username=alincoln%40example.com&password=somepass`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Hydrogen-Client': 'Form-Action',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(text.split('\n')[0]).toBe('S1:"react.suspense"');
+      expect(text).toContain('["Welcome ","alincoln@example.com","!"]');
+    });
+
+    it('responds with RSC pathname header', async () => {
+      const response = await page.request.post(getServerUrl() + '/account', {
+        data: `action=logout`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Hydrogen-Client': 'Form-Action',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(response.headers()['hydrogen-rsc-pathname']).toBe('/');
+      expect(text.split('\n')[0]).toBe('S1:"react.suspense"');
+      expect(text).toContain('Home');
+    });
+
+    it('responds with html content when submitted by a form', async () => {
+      const response = await page.request.post(getServerUrl() + '/account', {
+        data: `username=alincoln%40example.com&password=somepass`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
+      });
+      expect(response.status()).toBe(200);
+      const text = await response.text();
+
+      expect(text).toContain('<!DOCTYPE html>');
+      expect(text).toContain('alincoln@example.com');
+    });
   });
 
   describe('Custom Routing', () => {
@@ -586,6 +723,193 @@ export default async function testCases({
 
       expect(response.status).toBe(200);
       expect(text).toContain(`some value`);
+    });
+
+    it('clears flash session data after read', async () => {
+      const response = await fetch(getServerUrl() + '/sessions/flash', {
+        headers: {
+          cookie:
+            '__session=%7B%22someData%22%3A%22some%20value%22%7D' +
+            ';Hydrogen-Redirect=1',
+        },
+      });
+
+      const text = await response.text();
+
+      expect(response.status).toBe(200);
+      expect(response.headers.get('Set-Cookie')).toBe(
+        '__session=%7B%7D; Expires=Sun, 08 Jun 2025 00:39:38 GMT'
+      );
+      expect(text).toContain(`some value`);
+    });
+  });
+
+  describe('Shopify analytics', () => {
+    it('should emit page-view event', async () => {
+      const analyticFullPage = getServerUrl() + '/analytics/full';
+
+      const [request] = await Promise.all([
+        page.waitForRequest(SHOPIFY_ANALYTICS_ENDPOINT),
+        page.goto(analyticFullPage),
+      ]);
+
+      const shopifyEvents = request.postDataJSON();
+      expect(request.url()).toEqual(SHOPIFY_ANALYTICS_ENDPOINT);
+
+      const event = shopifyEvents.events[0];
+      const payload = event.payload;
+
+      expect(event.schema_id).toContain('trekkie_storefront_page_view');
+      expect(payload.url).toEqual(analyticFullPage);
+      expect(payload.shopId).not.toEqual(0);
+      expect(payload.pageType).toEqual('index');
+      expect(payload.isMerchantRequest).toEqual(true);
+    });
+
+    it('should emit page-view on sub load', async () => {
+      const analyticSubPage = '/analytics/sub';
+      // Full load
+      await Promise.all([
+        page.waitForRequest(SHOPIFY_ANALYTICS_ENDPOINT),
+        page.goto(getServerUrl() + '/analytics/full'),
+      ]);
+
+      // Sub load
+      const [request] = await Promise.all([
+        page.waitForRequest(SHOPIFY_ANALYTICS_ENDPOINT),
+        page.click(`a[href="${analyticSubPage}"]`),
+      ]);
+
+      const shopifyEvents = request.postDataJSON();
+      expect(request.url()).toEqual(SHOPIFY_ANALYTICS_ENDPOINT);
+
+      const event = shopifyEvents.events[0];
+      const payload = event.payload;
+
+      expect(event.schema_id).toContain('trekkie_storefront_page_view');
+      expect(payload.url).toEqual(getServerUrl() + analyticSubPage);
+      expect(payload.shopId).not.toEqual(0);
+      expect(payload.pageType).toEqual('page');
+      expect(payload.isMerchantRequest).toEqual(true);
+    });
+  });
+
+  describe('Performance metrics', () => {
+    it('should emit performance event', async () => {
+      const analyticFullPage = getServerUrl() + '/analytics/full';
+      const [request] = await Promise.all([
+        page.waitForRequest(SHOPIFY_PERFORMANCE_ENDPOINT),
+        page.goto(analyticFullPage),
+      ]);
+
+      const performanceEvent = request.postDataJSON().payload;
+      expect(request.url()).toEqual(SHOPIFY_PERFORMANCE_ENDPOINT);
+      expect(performanceEvent.page_load_type).toEqual('full');
+      expect(performanceEvent.url).toEqual(analyticFullPage);
+    });
+
+    it('should emit performance on sub load', async () => {
+      const analyticSubPage = '/analytics/sub';
+      // Full load
+      await Promise.all([
+        page.waitForRequest(SHOPIFY_PERFORMANCE_ENDPOINT),
+        page.goto(getServerUrl() + '/analytics/full'),
+      ]);
+
+      // Sub load
+      const [request] = await Promise.all([
+        page.waitForRequest(SHOPIFY_PERFORMANCE_ENDPOINT),
+        page.click(`a[href="${analyticSubPage}"]`),
+      ]);
+
+      const performanceEvent = request.postDataJSON().payload;
+      expect(request.url()).toEqual(SHOPIFY_PERFORMANCE_ENDPOINT);
+      expect(performanceEvent.page_load_type).toEqual('sub');
+      expect(performanceEvent.url).toEqual(getServerUrl() + analyticSubPage);
+    });
+  });
+
+  describe('Load 3rd-party scripts', () => {
+    it('should load script in the body', async () => {
+      await page.goto(getServerUrl() + '/loadscript/body', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'body > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-BODY"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script as module in the body', async () => {
+      await page.goto(getServerUrl() + '/loadscript/body-module', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'body > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-BODY-MODULE"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script in the head', async () => {
+      await page.goto(getServerUrl() + '/loadscript/head', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'head > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-HEAD"]'
+        )
+      ).toBeTruthy();
+    });
+
+    it('should load script as a module in the head', async () => {
+      await page.goto(getServerUrl() + '/loadscript/head-module', {
+        waitUntil: 'networkidle',
+      });
+
+      expect(
+        await page.$(
+          'head > script[src="https://www.googletagmanager.com/gtag/js?id=UA-IN-HEAD-MODULE"]'
+        )
+      ).toBeTruthy();
+    });
+  });
+
+  describe('Custom error apge', () => {
+    beforeEach(() => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('responds with a 500 and no cache headers', async () => {
+      const response = await fetch(getServerUrl() + '/error');
+      expect(response.status).toBe(500);
+      expect(response.headers.get('cache-control')).toBe('no-store');
+    });
+
+    it('responds with a 500 and no cache headers for bots', async () => {
+      const response = await fetch(getServerUrl() + '/error?_bot');
+      expect(response.status).toBe(500);
+      expect(response.headers.get('cache-control')).toBe('no-store');
+    });
+
+    it('responds with a 500 and no cache headers for bots on async pages', async () => {
+      const response = await fetch(getServerUrl() + '/error-async?_bot');
+      expect(response.status).toBe(500);
+      expect(response.headers.get('cache-control')).toBe('no-store');
+    });
+
+    it('loads a custom error page', async () => {
+      await page.goto(getServerUrl() + '/error');
+      expect(await page.textContent('h1')).toContain('Custom Error Page');
+      expect(await page.textContent('h2')).toContain('itBroke is not defined');
     });
   });
 }

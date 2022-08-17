@@ -5,7 +5,10 @@ const path = require('path');
  * @type {import('vite').UserConfig}
  */
 module.exports = {
-  plugins: [hydrogen({})],
+  plugins: [
+    // devCache is used in /request-sync test
+    hydrogen({devCache: true, experimental: {css: 'global'}}),
+  ],
   resolve: {
     alias: [
       {find: /^~\/(.*)/, replacement: '/src/$1'},

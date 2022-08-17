@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
-import {loadScript} from '../../../../utilities/load_script';
-import {ClientAnalytics} from '../../ClientAnalytics';
-import {useShop} from '../../../useShop';
+import {loadScript} from '../../../../utilities/load_script.js';
+import {ClientAnalytics} from '../../ClientAnalytics.js';
+import {useShop} from '../../../useShop/index.js';
 
 declare global {
   interface Window {
@@ -29,17 +29,34 @@ export function PerformanceMetrics() {
         // Executes only on first mount
         window.BOOMR = window.BOOMR || {};
         window.BOOMR.hydrogenPerformanceEvent = (data: any) => {
+          const initTime = new Date().getTime();
           ClientAnalytics.publish(
             ClientAnalytics.eventNames.PERFORMANCE,
             true,
             data
           );
-          ClientAnalytics.pushToServer(
-            {
-              body: JSON.stringify(data),
+          const pageData = ClientAnalytics.getPageAnalyticsData();
+          const shopId = pageData.shopify?.shopId;
+
+          fetch('https://monorail-edge.shopifysvc.com/v1/produce', {
+            method: 'post',
+            headers: {
+              'content-type': 'text/plain',
             },
-            ClientAnalytics.eventNames.PERFORMANCE
-          );
+            body: JSON.stringify({
+              schema_id: 'hydrogen_buyer_performance/2.0',
+              payload: {
+                ...data,
+                shop_id: shopId
+                  ? shopId.substring(shopId.lastIndexOf('/') + 1)
+                  : '',
+              },
+              metadata: {
+                event_created_at_ms: initTime,
+                event_sent_at_ms: new Date().getTime(),
+              },
+            }),
+          });
         };
         window.BOOMR.storeDomain = storeDomain;
 

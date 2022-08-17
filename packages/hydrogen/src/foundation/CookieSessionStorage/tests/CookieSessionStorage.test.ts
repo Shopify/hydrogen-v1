@@ -1,4 +1,4 @@
-import {CookieSessionStorage} from '../CookieSessionStorage';
+import {CookieSessionStorage} from '../CookieSessionStorage.js';
 
 const options = {
   httponly: true,

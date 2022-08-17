@@ -1,4 +1,4 @@
-import {findQueryName} from './utils';
+import {findQueryName} from './utils.js';
 import {gray} from 'kolorist';
 import {log} from '.';
 

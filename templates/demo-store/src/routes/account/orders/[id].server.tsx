@@ -127,13 +127,16 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
                           to={`/products/${lineItem.variant!.product!.handle}`}
                         >
                           {lineItem?.variant?.image && (
-                            <div className="w-24 card-image">
+                            <div className="w-24 card-image aspect-square">
                               <Image
-                                className="aspect-square"
                                 src={lineItem.variant.image.src!}
                                 width={lineItem.variant.image.width!}
                                 height={lineItem.variant.image.height!}
                                 alt={lineItem.variant.image.altText!}
+                                loaderOptions={{
+                                  scale: 2,
+                                  crop: 'center',
+                                }}
                               />
                             </div>
                           )}

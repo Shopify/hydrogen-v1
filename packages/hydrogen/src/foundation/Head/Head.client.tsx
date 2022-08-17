@@ -4,7 +4,7 @@ import {
   Helmet,
   HelmetData as HeadData,
 } from 'react-helmet-async';
-import {useEnvContext} from '../ssr-interop';
+import {useEnvContext} from '../ssr-interop.js';
 
 const clientHeadData = new HeadData({});
 

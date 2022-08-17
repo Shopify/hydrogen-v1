@@ -1,1 +1,1 @@
-export {useServerProps} from './use-server-props';
+export {useServerProps} from './use-server-props.js';

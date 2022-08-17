@@ -1,5 +1,267 @@
 # Changelog
 
+## 1.2.0
+
+### Minor Changes
+
+- Add a new experimental Forms and mutations feature. Read more https://shopify.dev/custom-storefronts/hydrogen/framework/forms ([#1552](https://github.com/Shopify/hydrogen/pull/1552)) by [@blittle](https://github.com/blittle)
+
+* `CartLineQuantityAdjustButton`, `BuyNowButton`, and `AddToCartButton` now have an `as` property. The types for these components have also been improved. ([#1827](https://github.com/Shopify/hydrogen/pull/1827)) by [@blittle](https://github.com/blittle)
+
+- Added a new experimental CSS approach to support importing styles directly in React Server Components. This feature must be enabled manually. ([#1843](https://github.com/Shopify/hydrogen/pull/1843)) by [@frandiox](https://github.com/frandiox)
+
+  Until now, we had experimental support for CSS Modules with some minor restrictions and drawbacks:
+
+  - Only server components that were the default export had access to the CSS Module automatically (i.e. it required extra work for named exports).
+  - CSS Module was duplicated when used in multiple components.
+  - RSC responses had all the CSS inlined, making them much larger.
+
+  The new CSS approach adds full support for CSS Modules without the previous restrictions and drawbacks.
+
+  Aside from that, it also adds support for pure CSS and enables a way to integrate with tools that provide CSS-in-JS at build time. All the CSS imported in both client and server components will be extracted in a CSS file at build time and downloaded with a `<link rel="stylesheet">` tag. During development, styles will be inlined in the DOM to better support HMR.
+
+  To activate this new experimental feature, pass the `experimental.css: 'global'` option to Hydrogen's Vite plugin:
+
+  ```js
+  // vite.config.js
+  export default {
+    plugins: [hydrogen({experimental: {css: 'global'}})],
+  };
+  ```
+
+  Examples:
+
+  ```jsx
+  // App.server.jsx using pure CSS with global classes
+  import './my-red-style.css';
+
+  function App() {
+    return <div className="red">...</div>;
+  }
+  ```
+
+  ```jsx
+  // App.server.jsx using CSS Modules with scoped classes
+  import {red} from './my-red.module.css';
+
+  function App() {
+    return <div className={red}>...</div>;
+  }
+  ```
+
+* `loadScript` and `useLoadScript` can now inject in the <head /> ([#1870](https://github.com/Shopify/hydrogen/pull/1870)) by [@juanpprieto](https://github.com/juanpprieto)
+
+- Add support for custom 500 error pages. If an unexpected error occurs while rendering a route, Hydrogen will respond with a 500 HTTP error and render a default error page. Define a custom error page with the `serverErrorPage` configuration property: ([#1867](https://github.com/Shopify/hydrogen/pull/1867)) by [@blittle](https://github.com/blittle)
+
+  ```tsx
+  import {defineConfig} from '@shopify/hydrogen/config';
+
+  export default defineConfig({
+    ...
+    serverErrorPage: '/src/Error.jsx',
+  });
+  ```
+
+  The `serverErrorPage` property defaults to `/src/Error.{jsx,tsx}`. The custom error page is passed an `Error` property:
+
+  ```tsx
+  export default function Error({error}) {
+    return (
+      <div>
+        <h1>An unknown error occured!</h1>
+        <h2>{error.message}</h2>
+        <h3>{error.stack}</h3>
+      </div>
+    );
+  }
+  ```
+
+### Patch Changes
+
+- Log detailed error message for Storefront API root errors ([#1822](https://github.com/Shopify/hydrogen/pull/1822)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+* `locale` calculation logic and docs have been updated to support Shopify languages with extended language subtags. ([#1836](https://github.com/Shopify/hydrogen/pull/1836)) by [@lordofthecactus](https://github.com/lordofthecactus)
+
+  The following is how we calculate `locale`:
+  If the Shopify `language` includes a region, then this value is used to calculate the `locale` and `countryCode` is disregarded. For example, if `language` is `PT_BR` (Brazilian Portuguese), then `locale` is calculated as `PT-BR`.
+  If the Shopify `language` doesn't include a region, then this value is merged with the `countryCode` to calculate the `locale`. For example, if `language` is `EN` (English) and `countryCode` is `US` (United States), then `locale` is calculated as `EN-US`.
+
+- Added optional sellingPlanId prop to AddToCartButton.client.tsx ([#1821](https://github.com/Shopify/hydrogen/pull/1821)) by [@ChrisKG32](https://github.com/ChrisKG32)
+
+* Fix: Hydrogen no longer caches error responses. Any 400 or 500 level response will not have a cache control-header, nor will Hydrogen cache it internally. ([#1873](https://github.com/Shopify/hydrogen/pull/1873)) by [@blittle](https://github.com/blittle)
+
+- Allow `sourceProps` to be passed to `<Video/>`'s underlying `<source>` elements. ([#1847](https://github.com/Shopify/hydrogen/pull/1847)) by [@frehner](https://github.com/frehner)
+
+### Special Thanks
+
+- Thanks to [@mrkldshv](https://github.com/mrkldshv) for help in migrating tests from Jest to Vitest.
+- Thanks to [@davidhousedev](https://github.com/davidhousedev) for constant feedback and discussions.
+
+## 1.1.0
+
+### Migration for Stores based on the "Demo Store" template
+
+If your Store is based on the "Demo Store" tempate, and you are using the `test:ci` NPM script, then you need to replace the contents of your `/tests/utils.js` or `/tests/utils.ts` file with the following:
+
+- For Typescript projects, replace `/tests/utils.ts` with the content found [here](https://github.com/Shopify/hydrogen/blob/e2a14cb3eb0f8f171603c597dfe572df4d11cc7a/templates/demo-store/tests/utils.ts)
+- For Javascript projects, replace `/tests/utils.js` with the content found [here](https://gist.github.com/frehner/2b2ba6639d5cc13c39f5eeea707413c4)
+
+### Minor Changes
+
+- Replace graphiql with graphql/graphql-playground in local development at '/graphql` route. ([#1710](https://github.com/Shopify/hydrogen/pull/1710)) by [@cartogram](https://github.com/cartogram)
+
+* Expose utilities for integrating Hydrogen with 3rd party platforms in `@shopify/hydrogen/platforms`. These utilities can resolve the project build path automatically and also find the client build assets. ([#1772](https://github.com/Shopify/hydrogen/pull/1772)) by [@frandiox](https://github.com/frandiox)
+
+  ```js
+  import {
+    handleRequest, // Instead of './src/App.server'
+    indexTemplate, // Instead of './dist/client/index.html?raw'
+    isAsset, // Access a list of files in './dist/client/**/*'
+  } from '@shopify/hydrogen/platforms';
+
+  // Platform entry handler
+  export default function (request) {
+    if (isAsset(new URL(request.url).pathname)) {
+      return platformAssetHandler(request);
+    }
+
+    return handleRequest(request, {indexTemplate});
+  }
+  ```
+
+  Note that user apps don't need to be changed.
+
+### Patch Changes
+
+- Fix server props to properly reset on page navigation. Fixes https://github.com/Shopify/hydrogen/issues/1817 ([#1830](https://github.com/Shopify/hydrogen/pull/1830)) by [@blittle](https://github.com/blittle)
+
+* Serve assets in `public` directory from the same origin when deploying to Oxygen. ([#1815](https://github.com/Shopify/hydrogen/pull/1815)) by [@frandiox](https://github.com/frandiox)
+
+  Normally, public assets are served from a CDN domain that is different from the storefront URL. This creates issues in some situations where the assets need to be served from the same origin, such as when using service workers in PWA or tools like Partytown. This change adds a proxy so that the browser can download assets from the same origin.
+
+  Note that, for performance reasons, it is still recommended placing assets in `/src/assets` instead of `/public` whenever possible.
+
+- The payload returned by `fetchSync` was supposed to mimic `react-fetch` but it wrongly moved the Response data to a sub-property `response`. This has been fixed to have the Response at the top level. Also, cached responses are now correctly serialized and retrieved to avoid issues on cache hit. ([#1760](https://github.com/Shopify/hydrogen/pull/1760)) by [@frandiox](https://github.com/frandiox)
+
+  ```diff
+  const response = fetchSync('...');
+  -response.response.headers.get('...');
+  +response.headers.get('...');
+  const jsonData = response.json();
+  ```
+
+  Note that the sub-property `response` is still available but marked as deprecated.
+
+* Improve error messaging when there is an error in the Storefront API's GraphQL response. ([#1837](https://github.com/Shopify/hydrogen/pull/1837)) by [@frehner](https://github.com/frehner)
+
+- `null` shopId fix on the `PerformanceMetrics` component ([#1722](https://github.com/Shopify/hydrogen/pull/1722)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+* Make sure full page caching only caches on GET request ([#1839](https://github.com/Shopify/hydrogen/pull/1839)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+- Fix server props when using non UTF-8 characters in URL. ([#1780](https://github.com/Shopify/hydrogen/pull/1780)) by [@frandiox](https://github.com/frandiox)
+
+* Fix HMR in client components. It should now update only the modified client component in the browser instead of refreshing the entire page. ([#1818](https://github.com/Shopify/hydrogen/pull/1818)) by [@frandiox](https://github.com/frandiox)
+
+## 1.0.2
+
+### Patch Changes
+
+- `<Image/>` component has improved handling for `width` as a string. It also corrects an issue with the `scale` prop and its usage with the Shopify CDN. The generated `srcset` is also updated and improved. ([#1723](https://github.com/Shopify/hydrogen/pull/1723)) by [@frehner](https://github.com/frehner)
+
+* We've decided to deprecate the `<LocalizationProvider>`, and instead put all its functionality into `<ShopifyProvider>`. The justification is that both providers are required by many components and hooks, and we think it's easier to have a single required `<ShopifyProvider>` instead of two. The same props available to the `<LocalizationProvider>` are now available on the `<ShopifyProvider>`. ([#1735](https://github.com/Shopify/hydrogen/pull/1735)) by [@blittle](https://github.com/blittle)
+
+  ```diff
+  // App.server.tsx
+  function App({routes, request}: HydrogenRouteProps) {
+    ...
+    return (
+      <Suspense fallback={<HeaderFallback isHome={isHome} />}>
+  +     <ShopifyProvider countryCode={countryCode as CountryCode}>
+  -     <ShopifyProvider>
+  -     <LocalizationProvider countryCode={countryCode as CountryCode}>
+          <CartProvider countryCode={countryCode as CountryCode}>
+              ...
+          </CartProvider>
+          <PerformanceMetrics />
+          {import.meta.env.DEV && <PerformanceMetricsDebug />}
+          <ShopifyAnalytics />
+  -     </LocalizationProvider>
+        </ShopifyProvider>
+      </Suspense>
+    );
+  }
+  ```
+
+  Note: this is not a breaking change. `<LocalizationProvider>` will still be available, but all documentation will now point to `<ShopifyProvider>`.
+
+- Remove `formData` polyfill in worker environments. ([#1740](https://github.com/Shopify/hydrogen/pull/1740)) by [@frandiox](https://github.com/frandiox)
+
+* Fix `useProductOptions` export to avoid errors at build time. ([#1738](https://github.com/Shopify/hydrogen/pull/1738)) by [@frandiox](https://github.com/frandiox)
+
+## 1.0.1
+
+### Patch Changes
+
+- [#1716](https://github.com/Shopify/hydrogen/pull/1716) [`4e6356e6`](https://github.com/Shopify/hydrogen/commit/4e6356e67bf92ff621573eac36fe34f37a1c326c) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Fix add to cart Shopify session tracking
+
+* [#1713](https://github.com/Shopify/hydrogen/pull/1713) [`ea47ab68`](https://github.com/Shopify/hydrogen/commit/ea47ab68b112c0c1c5b28020c8a2fa91a54f0b78) Thanks [@frandiox](https://github.com/frandiox)! - Fix `fetchSync` when called with relative URLs.
+
+## 1.0.0
+
+### Major Changes
+
+- [#1700](https://github.com/Shopify/hydrogen/pull/1700) [`9b6c564e`](https://github.com/Shopify/hydrogen/commit/9b6c564eb20ca75d9995e3eed581339960e222c1) Thanks [@jplhomer](https://github.com/jplhomer)! - Hydrogen is now out of developer preview. Thank you for all of your feedback and contributions the past eight months!
+
+## 0.27.0
+
+### Minor Changes
+
+- [#1697](https://github.com/Shopify/hydrogen/pull/1697) [`85aab092`](https://github.com/Shopify/hydrogen/commit/85aab092b2f47d77bb917659918a011783cd8c34) Thanks [@blittle](https://github.com/blittle)! - Remove `defaultLocale` from the Hydrogen Config and instead add `defaultCountryCode` and `defaultLanguageCode`. Both of which are also now available by the `useShop()` hook:
+
+  ```diff
+  export default defineConfig({
+    shopify: {
+  -    defaultLocale: 'EN-US',
+  +    defaultCountryCode: 'US',
+  +    defaultLanguageCode: 'EN',
+      storeDomain: 'hydrogen-preview.myshopify.com',
+      storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
+      storefrontApiVersion: '2022-07',
+    },
+  }
+  ```
+
+* [#1662](https://github.com/Shopify/hydrogen/pull/1662) [`4262b319`](https://github.com/Shopify/hydrogen/commit/4262b3196afb96415d3b0f8f874f351030e6a734) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Fix server analytics route
+
+  - Fix ServerAnalyticsRoute so that it does complete all async work
+  - Move Performance and Shopify analytic reporting to client side
+  - Make sure `ShopifyAnalytics` make its own query for shop id and currency
+  - Remove query for shop id and currency from `DefaultSeo` component
+  - Make Performance and Shopify server analytics connector do nothing
+
+  ### Deprecated components
+
+  Remove the following components from `hydrogen.config.js`
+
+  - `PerformanceMetricsServerAnalyticsConnector`
+  - `ShopifyServerAnalyticsConnector`
+
+## 0.26.1
+
+### Patch Changes
+
+- [#1663](https://github.com/Shopify/hydrogen/pull/1663) [`66200d6b`](https://github.com/Shopify/hydrogen/commit/66200d6b7d8e54b0746a048e950f067d4b8e0609) Thanks [@jplhomer](https://github.com/jplhomer)! - Default to 'US' CountryCode if locale cannot be parsed correctly
+
+* [#1690](https://github.com/Shopify/hydrogen/pull/1690) [`afde8989`](https://github.com/Shopify/hydrogen/commit/afde8989ae03e842de65ac698ab86033e56e7ee2) Thanks [@frehner](https://github.com/frehner)! - Add scale to the filename part of the url in `shopifyImageLoader()`
+
+- [#1676](https://github.com/Shopify/hydrogen/pull/1676) [`0149cbf6`](https://github.com/Shopify/hydrogen/commit/0149cbf60b331461ae0c97bb3e18d3f27e143d0a) Thanks [@frandiox](https://github.com/frandiox)! - Avoid writing to Node response if it has been closed early.
+
+* [#1674](https://github.com/Shopify/hydrogen/pull/1674) [`8068d3ce`](https://github.com/Shopify/hydrogen/commit/8068d3ce14f44ea83bde8f3729ae2a8cbbf8a52e) Thanks [@frandiox](https://github.com/frandiox)! - Throw error when `<Link>` component is used outside of `<Router>` component.
+
+- [#1680](https://github.com/Shopify/hydrogen/pull/1680) [`acf5223f`](https://github.com/Shopify/hydrogen/commit/acf5223fe34cfdd483ae9b0e714445c8cbf11a9d) Thanks [@blittle](https://github.com/blittle)! - Fix basepath to not apply to external URLs in the `<Link` component. Also default the attribute `rel="noreferrer noopener` for external URLs.
+
+* [#1670](https://github.com/Shopify/hydrogen/pull/1670) [`8b26f7a6`](https://github.com/Shopify/hydrogen/commit/8b26f7a6f034eaa36bb11974ff3dc5d992e2e97b) Thanks [@frandiox](https://github.com/frandiox)! - Optimize client boundaries only during build by default.
+
 ## 0.26.0
 
 ### Minor Changes
@@ -282,7 +544,7 @@
   - Fix server analytics connector erroring out after more than 1 server analytics connectors are attached
   - Shopify analytics components
 
-  # Updates to server analytics connectors
+  #### Updates to server analytics connectors
 
   The server analytics connector interface has updated to
 
@@ -297,7 +559,7 @@
   }
   ```
 
-  # Introducing Shopify analytics
+  #### Introducing Shopify analytics
 
   Optional analytics components that allows you to send ecommerce related analytics to
   Shopify. Adding the Shopify analytics components will allow the Shopify admin - Analytics
@@ -1525,11 +1787,11 @@
 
   `queryShop` accepts a single argument object with the following properties:
 
-  | Property    | Type                                   | Required |
-  | ----------- | -------------------------------------- | -------- |
-  | `query`     | `string \| ASTNode`                    | Yes      |
-  | `variables` | `Record<string, any>`                  | No       |
-  | `locale`    | `string` (defaults to `defaultLocale`) | No       |
+  | Property    | Type                                                                                                                                                             | Required |
+  | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+  | `query`     | `string \| ASTNode`                                                                                                                                              | Yes      |
+  | `variables` | `Record<string, any>`                                                                                                                                            | No       |
+  | `locale`    | `string`. Defaults to the locale value from the [LocalizationProvider](https://shopify.dev/api/hydrogen/components/localization/localizationprovider) component. | No       |
 
   **Important**: In order to use `queryShop`, you should pass `shopifyConfig` to `renderHydrogen` inside `App.server.jsx`:
 

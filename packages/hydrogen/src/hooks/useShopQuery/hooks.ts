@@ -1,14 +1,14 @@
-import {useShop} from '../../foundation/useShop';
-import {getLoggerWithContext} from '../../utilities/log';
-import type {CachingStrategy, PreloadOptions} from '../../types';
-import {graphqlRequestBody} from '../../utilities';
-import {useServerRequest} from '../../foundation/ServerRequestProvider';
-import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
-import {sendMessageToClient} from '../../utilities/devtools';
-import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';
-import {META_ENV_SSR} from '../../foundation/ssr-interop';
-import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi';
-import {parseJSON} from '../../utilities/parse';
+import {useShop} from '../../foundation/useShop/index.js';
+import {getLoggerWithContext} from '../../utilities/log/index.js';
+import type {CachingStrategy, PreloadOptions} from '../../types.js';
+import {graphqlRequestBody} from '../../utilities/index.js';
+import {useServerRequest} from '../../foundation/ServerRequestProvider/index.js';
+import {injectGraphQLTracker} from '../../utilities/graphql-tracker.js';
+import {sendMessageToClient} from '../../utilities/devtools.js';
+import {fetchSync} from '../../foundation/fetchSync/server/fetchSync.js';
+import {META_ENV_SSR} from '../../foundation/ssr-interop.js';
+import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
+import {parseJSON} from '../../utilities/parse.js';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -77,19 +77,34 @@ export function useShopQuery<T>({
   let text: string;
   let data: any;
   let useQueryError: any;
+  let response: ReturnType<typeof fetchSync> | null = null;
 
   try {
-    text = fetchSync(url, {
+    response = fetchSync(url, {
       ...requestInit,
       cache,
       preload,
       shouldCacheResponse,
-    }).text();
+    });
+
+    text = response.text();
 
     try {
-      data = JSON.parse(text);
+      data = response.json();
     } catch (error: any) {
-      useQueryError = new Error('Unable to parse response:\n' + text);
+      if (response.headers.get('content-length')) {
+        useQueryError = new Error(
+          `Unable to parse response (x-request-id: ${response.headers.get(
+            'x-request-id'
+          )}):\n${text}`
+        );
+      } else {
+        useQueryError = new Error(
+          `${response.status} ${
+            response.statusText
+          } (x-request-id: ${response.headers.get('x-request-id')})`
+        );
+      }
     }
   } catch (error: any) {
     // Pass-through thrown promise for Suspense functionality
@@ -125,15 +140,22 @@ export function useShopQuery<T>({
    */
   if (data?.errors) {
     const errors = Array.isArray(data.errors) ? data.errors : [data.errors];
-
+    const requestId = response?.headers?.get('x-request-id') ?? '';
     for (const error of errors) {
       if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {
-        throw new Error(error.message);
+        throw new Error(
+          `Storefront API GraphQL Error: ${error.message}.\nRequest id: ${requestId}`
+        );
       } else {
-        log.error('GraphQL Error', error);
+        log.error(
+          'Storefront API GraphQL Error',
+          error,
+          'Storefront API GraphQL request id',
+          requestId
+        );
       }
     }
-    log.error(`GraphQL errors: ${errors.length}`);
+    log.error(`Storefront API GraphQL error count: ${errors.length}`);
   }
 
   if (

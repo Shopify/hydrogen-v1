@@ -88,7 +88,7 @@ export default function Product({country = {isoCode: 'US'}}) {
   );
 }
 function ProductFallback() {
-  // This should shape the same as what <ProductDetails /> will output
+  // This should have the same dimensions as the output of <ProductDetails />
   return (
     <div class="product-wrapper">
       <div class="product-image-placeholder"></div>

@@ -1,7 +1,7 @@
-import type {CachingStrategy} from '../../types';
-import {getCache} from '../runtime';
-import {CacheShort, generateCacheControlHeader} from './strategies';
-import {logCacheApiStatus} from '../../utilities/log';
+import type {CachingStrategy} from '../../types.js';
+import {getCache} from '../runtime.js';
+import {CacheShort, generateCacheControlHeader} from './strategies/index.js';
+import {logCacheApiStatus} from '../../utilities/log/index.js';
 
 function getCacheControlSetting(
   userCacheOptions?: CachingStrategy,
@@ -118,7 +118,6 @@ export async function setItemInCache(
 
   // CF will override cache-control, so we need to keep a
   // non-modified real-cache-control
-  response.headers.set('cache-control', cacheControlString);
   response.headers.set('real-cache-control', cacheControlString);
   response.headers.set('cache-put-date', new Date().toUTCString());
 

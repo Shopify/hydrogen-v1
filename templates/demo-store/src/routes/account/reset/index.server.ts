@@ -51,7 +51,7 @@ export async function api(
     cache: CacheNone(),
   });
 
-  if (data?.customerReset?.customerAccessToken?.accessToken !== null) {
+  if (data?.customerReset?.customerAccessToken?.accessToken) {
     await session.set(
       'customerAccessToken',
       data.customerReset.customerAccessToken.accessToken,

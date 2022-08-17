@@ -1,4 +1,4 @@
-import {META_ENV_SSR, useEnvContext} from '../ssr-interop';
+import {META_ENV_SSR, useEnvContext} from '../ssr-interop.js';
 
 type ScopedContext = Record<string, any>;
 

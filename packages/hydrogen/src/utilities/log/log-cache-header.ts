@@ -1,12 +1,10 @@
-import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server';
-import {HydrogenResponse} from '../../foundation/HydrogenResponse/HydrogenResponse.server';
-import {QueryKey} from '../../types';
-import {hashKey} from '../hash';
-import {findQueryName, parseUrl} from './utils';
+import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.js';
+import {HydrogenResponse} from '../../foundation/HydrogenResponse/HydrogenResponse.server.js';
+import {QueryKey} from '../../types.js';
+import {hashKey} from '../hash.js';
+import {findQueryName, parseUrl} from './utils.js';
 import {gray} from 'kolorist';
-import {getLoggerWithContext} from './log';
-
-import type {RenderType} from './log';
+import {getLoggerWithContext, type RenderType} from './log.js';
 
 const color = gray;
 

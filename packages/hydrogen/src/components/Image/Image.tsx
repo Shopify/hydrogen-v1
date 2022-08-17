@@ -3,8 +3,9 @@ import {
   getShopifyImageDimensions,
   shopifyImageLoader,
   addImageSizeParametersToUrl,
-} from '../../utilities';
-import type {Image as ImageType} from '../../storefront-api-types';
+  IMG_SRC_SET_SIZES,
+} from '../../utilities/index.js';
+import type {Image as ImageType} from '../../storefront-api-types.js';
 import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
 
 type HtmlImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
@@ -107,16 +108,17 @@ function ShopifyImage({
     );
   }
 
-  const {width: finalWidth, height: finalHeight} = getShopifyImageDimensions({
-    data,
-    loaderOptions,
-    elementProps: {
-      width,
-      height,
-    },
-  });
+  const {width: imgElementWidth, height: imgElementHeight} =
+    getShopifyImageDimensions({
+      data,
+      loaderOptions,
+      elementProps: {
+        width,
+        height,
+      },
+    });
 
-  if (__HYDROGEN_DEV__ && (!finalWidth || !finalHeight)) {
+  if (__HYDROGEN_DEV__ && (!imgElementWidth || !imgElementHeight)) {
     console.warn(
       `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. ${`Image: ${
         data.id ?? data.url
@@ -130,8 +132,8 @@ function ShopifyImage({
     finalSrc = loader({
       ...loaderOptions,
       src: data.url,
-      width: finalWidth,
-      height: finalHeight,
+      width: imgElementWidth,
+      height: imgElementHeight,
     });
     if (typeof finalSrc !== 'string' || !finalSrc) {
       throw new Error(
@@ -145,7 +147,9 @@ function ShopifyImage({
   // determining what the intended width of the image is. For example, if the width is specified and lower than the image width, then that is the maximum image width
   // to prevent generating a srcset with widths bigger than needed or to generate images that would distort because of being larger than original
   const maxWidth =
-    width && finalWidth && width < finalWidth ? width : finalWidth;
+    width && imgElementWidth && width < imgElementWidth
+      ? width
+      : imgElementWidth;
   const finalSrcset =
     rest.srcSet ??
     internalImageSrcSet({
@@ -153,6 +157,7 @@ function ShopifyImage({
       widths,
       src: data.url,
       width: maxWidth,
+      height: imgElementHeight,
       loader,
     });
 
@@ -164,8 +169,8 @@ function ShopifyImage({
       loading={loading ?? 'lazy'}
       {...rest}
       src={finalSrc}
-      width={finalWidth ?? undefined}
-      height={finalHeight ?? undefined}
+      width={imgElementWidth ?? undefined}
+      height={imgElementHeight ?? undefined}
       srcSet={finalSrcset}
     />
   );
@@ -196,7 +201,7 @@ type LoaderProps<GenericLoaderOpts> = {
    */
   loaderOptions?: GenericLoaderOpts;
 };
-type ExternalImageProps<GenericLoaderOpts> = SetRequired<
+export type ExternalImageProps<GenericLoaderOpts> = SetRequired<
   HtmlImageProps,
   'src' | 'width' | 'height' | 'alt'
 > & {
@@ -307,9 +312,6 @@ type InternalShopifySrcSetGeneratorsParams = Simplify<
     loader?: (params: ShopifyLoaderParams) => string;
   }
 >;
-// based on the default width sizes used by the Shopify liquid HTML tag img_tag plus a 2560 width to account for 2k resolutions
-// reference: https://shopify.dev/api/liquid/filters/html-filters#image_tag
-const IMG_SRC_SET_SIZES = [352, 832, 1200, 1920, 2560];
 function internalImageSrcSet({
   src,
   width,
@@ -317,18 +319,26 @@ function internalImageSrcSet({
   scale,
   widths,
   loader,
+  height,
 }: InternalShopifySrcSetGeneratorsParams) {
   const hasCustomWidths = widths && Array.isArray(widths);
-  if (hasCustomWidths && widths.some((size) => isNaN(size as number)))
+  if (hasCustomWidths && widths.some((size) => isNaN(size as number))) {
     throw new Error(`<Image/>: the 'widths' must be an array of numbers`);
+  }
+
+  let aspectRatio = 1;
+  if (width && height) {
+    aspectRatio = Number(height) / Number(width);
+  }
 
   let setSizes = hasCustomWidths ? widths : IMG_SRC_SET_SIZES;
   if (
     !hasCustomWidths &&
     width &&
     width < IMG_SRC_SET_SIZES[IMG_SRC_SET_SIZES.length - 1]
-  )
+  ) {
     setSizes = IMG_SRC_SET_SIZES.filter((size) => size <= width);
+  }
   const srcGenerator = loader ? loader : addImageSizeParametersToUrl;
   return setSizes
     .map(
@@ -336,6 +346,9 @@ function internalImageSrcSet({
         `${srcGenerator({
           src,
           width: size,
+          // height is not applied if there is no crop
+          // if there is crop, then height is applied as a ratio of the original width + height aspect ratio * size
+          height: crop ? Number(size) * aspectRatio : undefined,
           crop,
           scale,
         })} ${size}w`

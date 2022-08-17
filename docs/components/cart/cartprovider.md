@@ -12,6 +12,13 @@ then the callback will be called when a new line item is successfully added to t
 The `CartProvider` component must be a descendent of the `ShopifyProvider` component.
 You must use this component if you want to use the `useCart` hook or related hooks, or if you would like to use the `AddToCartButton` component.
 
+## Required access scopes
+
+The `CartProvider` component requires the following [Storefront API access scopes](https://shopify.dev/api/usage/access-scopes#unauthenticated-access-scopes):
+
+- `unauthenticated_read_customers`
+- `unauthenticated_write_customers`
+
 ## Example code
 
 ```tsx
@@ -75,12 +82,12 @@ fragment CartFragment on Cart {
           key
           value
         }
-        estimatedCost {
+        cost {
           totalAmount {
             amount
             currencyCode
           }
-          compareAtAmount {
+          compareAtAmountPerQuantity {
             amount
             currencyCode
           }
@@ -113,7 +120,7 @@ fragment CartFragment on Cart {
       }
     }
   }
-  estimatedCost {
+  cost {
     subtotalAmount {
       ...MoneyFragment
     }

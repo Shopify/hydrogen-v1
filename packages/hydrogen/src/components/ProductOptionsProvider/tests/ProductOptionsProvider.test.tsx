@@ -1,13 +1,13 @@
 import React from 'react';
-import {ProductOptionsProvider} from '../ProductOptionsProvider.client';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {getProduct} from '../../../utilities/tests/product';
-import {useProductOptions} from '../../../hooks/useProductOptions';
+import {ProductOptionsProvider} from '../ProductOptionsProvider.client.js';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {getProduct} from '../../../utilities/tests/product.js';
+import {useProductOptions} from '../../../hooks/useProductOptions/index.js';
 import {
   VARIANTS,
   VARIANTS_WITH_SELLING_PLANS,
   SELLING_PLAN_GROUPS_CONNECTION,
-} from './fixtures';
+} from './fixtures.js';
 
 describe('<ProductOptionsProvider />', () => {
   it('renders its children', () => {

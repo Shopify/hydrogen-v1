@@ -1,9 +1,9 @@
 import React from 'react';
-import {Heading} from './Heading';
-import {Table} from './Table';
+import {Locale} from '../../ShopifyProvider/types.js';
+import {Table} from './Table.js';
 
 interface Props {
-  locale: string;
+  locale: Locale;
   storeDomain: string;
   storefrontApiVersion: string;
 }
@@ -23,10 +23,5 @@ export function Settings(props: Props) {
     };
   });
 
-  return (
-    <>
-      <Heading>Config</Heading>
-      <Table items={items} />
-    </>
-  );
+  return <Table items={items} />;
 }

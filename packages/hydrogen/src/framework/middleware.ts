@@ -1,8 +1,8 @@
-import type {RequestHandler, ShopifyConfig} from '../shared-types';
+import type {RequestHandler, ShopifyConfig} from '../shared-types.js';
 import type {IncomingMessage, NextFunction} from 'connect';
 import type {ServerResponse} from 'http';
 import type {ViteDevServer} from 'vite';
-import {graphiqlHtml} from './graphiql';
+import {graphiqlHtml} from './graphiql.js';
 
 type HydrogenMiddlewareArgs = {
   dev?: boolean;
@@ -60,7 +60,7 @@ export function hydrogenMiddleware({
    */
   const webPolyfills =
     !globalThis.fetch || !globalThis.ReadableStream
-      ? import('../utilities/web-api-polyfill')
+      ? import('../utilities/web-api-polyfill.js')
       : undefined;
 
   return async function (

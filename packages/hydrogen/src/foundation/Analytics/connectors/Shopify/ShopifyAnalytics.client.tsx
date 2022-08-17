@@ -1,8 +1,8 @@
 import {useEffect} from 'react';
 import {parse, stringify} from 'worktop/cookie';
-import {ClientAnalytics} from '../../ClientAnalytics';
-import {buildUUID, addDataIf} from './utils';
-import {SHOPIFY_S, SHOPIFY_Y} from './const';
+import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
+import {ClientAnalytics} from '../../ClientAnalytics.js';
+import {buildUUID, addDataIf} from './utils.js';
 
 const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry
 const shortTermLength = 60 * 30; // 30 mins
@@ -68,7 +68,7 @@ function updateCookie(
   const cookieString = stringify(cookieName, value, {
     maxage,
     domain: getCookieDomain(cookieDomain),
-    secure: process.env.NODE_ENV === 'production',
+    secure: import.meta.env.PROD,
     samesite: 'Lax',
     path: '/',
   });
@@ -215,18 +215,8 @@ function sendToServer(data: any) {
     batchedData = [];
     batchedTimeout = null;
 
-    // Send to server
+    // Send to Shopify
     try {
-      fetch('/__event?shopify', {
-        method: 'post',
-        headers: {
-          'cache-control': 'no-cache',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(batchedDataToBeSent),
-      });
-    } catch (error) {
-      // Fallback to client-side
       fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
         method: 'post',
         headers: {
@@ -234,6 +224,8 @@ function sendToServer(data: any) {
         },
         body: JSON.stringify(batchedDataToBeSent),
       });
+    } catch (error) {
+      // Do nothing
     }
   }, BATCH_SENT_TIMEOUT);
 }

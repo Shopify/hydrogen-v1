@@ -2,7 +2,7 @@ import type {
   Scalars,
   Shop as ShopType,
   Seo as SeoType,
-} from '../../storefront-api-types';
+} from '../../storefront-api-types.js';
 
 export interface Twitter {
   site: string;

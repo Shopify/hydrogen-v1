@@ -1,14 +1,18 @@
-import type {ShopifyContextValue} from './types';
+import type {ShopifyContextValue, LocalizationContextValue} from './types.js';
 import React, {createContext, ReactNode} from 'react';
 
 export const ShopifyContext = createContext<ShopifyContextValue | null>(null);
+export const LocalizationContext =
+  createContext<LocalizationContextValue | null>(null);
 
 export function ShopifyProviderClient({
   children,
   shopifyConfig,
+  localization,
 }: {
   children: ReactNode;
   shopifyConfig: ShopifyContextValue;
+  localization: LocalizationContextValue;
 }): JSX.Element {
   if (!shopifyConfig) {
     throw new Error(
@@ -18,7 +22,9 @@ export function ShopifyProviderClient({
 
   return (
     <ShopifyContext.Provider value={shopifyConfig}>
-      {children}
+      <LocalizationContext.Provider value={localization}>
+        {children}
+      </LocalizationContext.Provider>
     </ShopifyContext.Provider>
   );
 }

@@ -1,8 +1,8 @@
 // @ts-ignore
 import reactServerDomVite from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin.js';
-import {HydrogenVitePluginOptions} from '../types';
-import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
-import {VIRTUAL_PROXY_HYDROGEN_ROUTES_ID} from './vite-plugin-hydrogen-virtual-files';
+import {HydrogenVitePluginOptions} from '../types.js';
+import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware.js';
+import {VIRTUAL_PROXY_HYDROGEN_ROUTES_ID} from './vite-plugin-hydrogen-virtual-files.js';
 
 export default function (options?: HydrogenVitePluginOptions) {
   return reactServerDomVite({
