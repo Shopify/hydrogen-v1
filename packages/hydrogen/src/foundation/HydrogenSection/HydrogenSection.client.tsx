@@ -12,7 +12,7 @@ import {
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
 import {RSC_PATHNAME} from '../../constants';
 
-type RSCSubRouteClientProps = {
+type HydrogenSectionClientProps = {
   section: string;
   /** The state of this RSC route */
   state: any;
@@ -23,13 +23,13 @@ type RSCSubRouteClientProps = {
 const DEFAULT_MAX_AGE = 500;
 const cache = new Map();
 
-export function RSCSubRouteClient({
+export function HydrogenSectionClient({
   section,
   state,
   isRSC,
   children,
-}: RSCSubRouteClientProps) {
-  console.log('RSCSubRouteClient', section);
+}: HydrogenSectionClientProps) {
+  console.log('HydrogenSectionClient', section);
   const [_, startTransition] = useTransition();
   const [response, setResponse] = useState(<Suspense>{children}</Suspense>);
   const [expiry, setExpiry] = useState(Date.now() + DEFAULT_MAX_AGE);

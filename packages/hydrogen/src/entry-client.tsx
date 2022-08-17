@@ -239,6 +239,7 @@ function useServerResponse(
   }
 
   if (rscReader) {
+    console.log('SSR flight chunks', flightChunks.join(''));
     // The flight response was inlined during SSR, use it directly.
     response = createFromReadableStream(rscReader);
     rscReader = null;

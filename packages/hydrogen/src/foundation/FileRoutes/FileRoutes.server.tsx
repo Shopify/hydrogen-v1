@@ -49,8 +49,6 @@ export function FileRoutes({
   );
   const appSections = useMemo(() => createSections(sections!), [sections]);
 
-  console.log('sections', appSections);
-
   let foundRoute, foundRouteDetails;
 
   for (let i = 0; i < pageRoutes.length; i++) {
@@ -62,22 +60,17 @@ export function FileRoutes({
     }
   }
 
-  console.log('Found route', foundRoute, foundRouteDetails);
-
   if (foundRoute) {
     request.ctx.router.routeRendered = true;
     request.ctx.router.routeParams = foundRouteDetails.params;
 
     let withProps: any;
     if (serverProps.section) {
-      console.log('Found section:', serverProps.section);
       const FoundSection = appSections[
         serverProps.section
       ] as keyof JSX.IntrinsicElements;
-      console.log(FoundSection);
-      withProps = (
-        <FoundSection params={foundRouteDetails.params} {...serverProps} />
-      );
+
+      withProps = <FoundSection {...serverProps} />;
     } else {
       withProps = (
         <foundRoute.component

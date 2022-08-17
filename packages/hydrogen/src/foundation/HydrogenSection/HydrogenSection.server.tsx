@@ -3,9 +3,9 @@ import {CachingStrategy} from '../../types';
 import {CacheShort} from '../Cache/strategies';
 // import {ErrorBoundary} from 'react-error-boundary';
 import {useServerRequest} from '../ServerRequestProvider';
-import {RSCSubRouteClient} from './RSCSubRoute.client';
+import {HydrogenSectionClient} from './HydrogenSection.client';
 
-export type RSCSubRouteProps = {
+export type HydrogenSectionProps = {
   section: string;
   /** The server props of this RSC route */
   serverProps: any;
@@ -16,29 +16,31 @@ export type RSCSubRouteProps = {
   fallback?: ReactElement;
 };
 
-export function RSCSubRoute({
+export function HydrogenSection({
   section,
   serverProps,
   state,
   component,
   fallback,
-}: RSCSubRouteProps) {
-  // console.log('RSCSubRoute', state, component);
+}: HydrogenSectionProps) {
+  // console.log('HydrogenSection', state, component);
   const request = useServerRequest();
   const isRSC = request.isRscRequest();
 
   if (serverProps.section && component) {
-    console.log('RSCSub - RSC', serverProps.section);
+    console.log('HydrogenSection - RSC', section);
     return component ? component(state) : null;
   } else if (isRSC) {
-    console.log('RSCSub - nested RSC');
-    return <RSCSubRouteClient section={section} state={state} isRSC={isRSC} />;
-  } else {
-    console.log('RSCSub - SSR');
+    console.log('HydrogenSection - nested RSC', section);
     return (
-      <RSCSubRouteClient section={section} state={state} isRSC={isRSC}>
+      <HydrogenSectionClient section={section} state={state} isRSC={isRSC} />
+    );
+  } else {
+    console.log('HydrogenSection - SSR', section);
+    return (
+      <HydrogenSectionClient section={section} state={state} isRSC={isRSC}>
         {component(serverProps)}
-      </RSCSubRouteClient>
+      </HydrogenSectionClient>
     );
   }
 }
@@ -58,7 +60,7 @@ export function defineSection({
 }) {
   return (serverProps: any) => {
     // serverProps only exist when rendering RSC
-    console.log('defineSection', serverProps.section, component);
+    console.log('defineSection', section, component);
 
     const dependencyState = dependency.reduce(function (obj: any, key) {
       if (key in serverProps) obj[key] = serverProps[key];
@@ -70,14 +72,14 @@ export function defineSection({
     return (
       <>
         {/* @ts-ignore */}
-        <RSCSubRoute
+        <HydrogenSection
           section={section}
           serverProps={serverProps}
           state={{
             ...dependencyState,
             pathname: serverProps.pathname,
             search: serverProps.search,
-            section: serverProps.section,
+            section,
           }}
           component={component}
           fallback={fallback}
