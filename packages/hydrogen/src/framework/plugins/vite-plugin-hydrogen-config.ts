@@ -1,7 +1,9 @@
 import {Plugin} from 'vite';
 import type {BuildOptions} from 'vite';
+import type {HydrogenVitePluginOptions} from '../types.js';
+import Crypto from 'crypto';
 
-export default () => {
+export default (pluginOptions: HydrogenVitePluginOptions) => {
   const rollupOptions: BuildOptions['rollupOptions'] = {
     output: {},
   };
@@ -31,7 +33,7 @@ export default () => {
   }
 
   return {
-    name: 'vite-plugin-hydrogen-config',
+    name: 'hydrogen:config',
     config: async (config, env) => ({
       resolve: {
         alias: {
@@ -110,6 +112,9 @@ export default () => {
         __HYDROGEN_DEV__: env.mode !== 'production',
         __HYDROGEN_WORKER__: isWorker,
         __HYDROGEN_TEST__: false, // Used in unit tests
+        __HYDROGEN_CACHE_ID__: pluginOptions.purgeQueryCacheOnBuild
+          ? `"${Crypto.randomBytes(8).toString('hex').slice(0, 8)}"`
+          : '"__QUERY_CACHE_ID__"',
       },
 
       envPrefix: ['VITE_', 'PUBLIC_'],
