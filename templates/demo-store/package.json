@@ -39,7 +39,7 @@
   "dependencies": {
     "@headlessui/react": "^1.6.4",
     "@heroicons/react": "^1.0.6",
-    "@shopify/hydrogen": "^1.2.0",
+    "@shopify/hydrogen": "^0.0.0-unstable-20220818164252",
     "clsx": "^1.1.1",
     "graphql-tag": "^2.12.6",
     "react": "^18.2.0",
