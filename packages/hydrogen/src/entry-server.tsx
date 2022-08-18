@@ -271,9 +271,9 @@ async function processRequest(
   if (isRSCRequest) {
     const buffered = await bufferReadableStream(rsc.readable.getReader());
     postRequestTasks('rsc', 200, request, response);
-    cacheResponse(response, request, [buffered], revalidate);
 
     response.headers.set('cache-control', response.cacheControlHeader);
+    cacheResponse(response, request, [buffered], revalidate);
 
     return new Response(buffered, {
       headers: response.headers,
