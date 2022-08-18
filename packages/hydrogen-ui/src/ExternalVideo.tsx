@@ -27,7 +27,6 @@ export type ExternalVideoProps = Omit<
  * API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
  */
 export function ExternalVideo(props: ExternalVideoProps) {
-  return <div>hi video</div>;
   const {
     data,
     options,
@@ -42,7 +41,6 @@ export function ExternalVideo(props: ExternalVideoProps) {
     throw new Error(`<ExternalVideo/> requires the 'embedUrl' property`);
   }
 
-  // @ts-expect-error test
   const url = useEmbeddedVideoUrl(data.embedUrl, options);
 
   return (
