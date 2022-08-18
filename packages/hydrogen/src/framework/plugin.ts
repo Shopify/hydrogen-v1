@@ -7,7 +7,6 @@ import hydrogenVirtualFiles from './plugins/vite-plugin-hydrogen-virtual-files.j
 import platformEntry from './plugins/vite-plugin-platform-entry.js';
 import rsc from './plugins/vite-plugin-hydrogen-rsc.js';
 import ssrInterop from './plugins/vite-plugin-ssr-interop.js';
-import purgeQueryCache from './plugins/vite-plugin-purge-query-cache.js';
 import hydrationAutoImport from './plugins/vite-plugin-hydration-auto-import.js';
 import inspect from 'vite-plugin-inspect';
 import react from '@vitejs/plugin-react';
@@ -20,7 +19,7 @@ import assetsVersion from './plugins/vite-plugin-assets-version.js';
 const hydrogenPlugin = (pluginOptions: HydrogenVitePluginOptions = {}) => {
   return [
     process.env.VITE_INSPECT && inspect(),
-    hydrogenConfig(),
+    hydrogenConfig(pluginOptions),
     hydrogenClientMiddleware(),
     clientImports(),
     hydrogenMiddleware(pluginOptions),
@@ -34,7 +33,6 @@ const hydrogenPlugin = (pluginOptions: HydrogenVitePluginOptions = {}) => {
     suppressWarnings(),
     pluginOptions.assetHashVersion &&
       assetsVersion(pluginOptions.assetHashVersion),
-    pluginOptions.purgeQueryCacheOnBuild && purgeQueryCache(),
   ] as Plugin[];
 };
 

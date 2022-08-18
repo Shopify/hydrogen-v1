@@ -33,6 +33,11 @@ export interface HydrogenUseQueryOptions {
   shouldCacheResponse?: (body: any) => boolean;
 }
 
+declare global {
+  // eslint-disable-next-line no-var
+  var __HYDROGEN_CACHE_ID__: string;
+}
+
 /**
  * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
  * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this
@@ -51,7 +56,7 @@ export function useQuery<T>(
 ) {
   const request = useServerRequest();
   const withCacheIdKey = [
-    '__QUERY_CACHE_ID__',
+    __HYDROGEN_CACHE_ID__,
     ...(typeof key === 'string' ? [key] : key),
   ];
   const fetcher = cachedQueryFnBuilder<T>(
