@@ -273,6 +273,8 @@ async function processRequest(
     postRequestTasks('rsc', 200, request, response);
     cacheResponse(response, request, [buffered], revalidate);
 
+    response.headers.set('cache-control', response.cacheControlHeader);
+
     return new Response(buffered, {
       headers: response.headers,
     });
