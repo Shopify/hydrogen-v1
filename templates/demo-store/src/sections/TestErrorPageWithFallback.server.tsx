@@ -1,3 +1,4 @@
+import React from 'react';
 import {defineSection, CacheShort} from '@shopify/hydrogen';
 
 const ErrorWithFallback = (

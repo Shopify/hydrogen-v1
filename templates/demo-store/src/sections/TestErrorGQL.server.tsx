@@ -1,3 +1,4 @@
+import React from 'react';
 import {defineSection, gql, useShopQuery, CacheShort} from '@shopify/hydrogen';
 
 const ErrorWithGQL = () => {
