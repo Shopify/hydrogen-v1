@@ -5,7 +5,7 @@ import {PartialDeep} from 'type-fest';
 import type {
   ExternalVideo as ExternalVideoType,
   Image,
-} from '../storefront-api-types.js';
+} from './storefront-api-types.js';
 import {faker} from '@faker-js/faker';
 
 const Template: Story<ExternalVideoProps> = (props) => (

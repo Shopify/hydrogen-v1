@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import type {ExternalVideo as ExternalVideoType} from '../storefront-api-types.js';
+import type {ExternalVideo as ExternalVideoType} from './storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 interface BaseProps {

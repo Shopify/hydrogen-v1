@@ -1,5 +1,5 @@
-import {ImageSizeOptions, useImageUrl} from '../Image/image_size.js';
-import type {Video as VideoType} from '../storefront-api-types.js';
+import {ImageSizeOptions, useImageUrl} from './image_size.js';
+import type {Video as VideoType} from './storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 interface VideoProps {
