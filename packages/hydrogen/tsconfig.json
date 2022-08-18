@@ -12,6 +12,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,
-    "preserveWatchOutput": true
+    "preserveWatchOutput": true,
+    "emitDeclarationOnly": true
   }
 }

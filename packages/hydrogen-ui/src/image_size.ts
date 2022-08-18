@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type {Image as ImageType} from '../storefront-api-types.js';
+import type {Image as ImageType} from './storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 export type Width = string | 'original';
