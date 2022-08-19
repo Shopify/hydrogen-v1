@@ -15,10 +15,22 @@ const ErrorWithGQL = () => {
   return <p>Working GQL {names}</p>;
 };
 
+const ErrorWithFallback = () => {
+  if (__HYDROGEN_DEV__) {
+    return (
+      <div className="border border-notice p-6">
+        <p>DEV only fallback</p>
+      </div>
+    );
+  }
+  return <></>;
+};
+
 export const TestErrorGQL = defineSection({
   section: 'TestErrorGQL',
   component: ErrorWithGQL,
   cache: CacheShort(),
+  fallback: ErrorWithFallback,
 });
 
 const SHOP_QUERY = gql`

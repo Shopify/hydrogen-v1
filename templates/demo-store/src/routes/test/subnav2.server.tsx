@@ -6,7 +6,7 @@ export default function Subnav2() {
     <div className="border border-primary p-6">
       <TestMenu />
       <div className="border border-primary p-6">
-        <p>Default error message when a section fails</p>
+        <p>Shows nothing when a section fails without fallback defined</p>
         <TestErrorWithPage />
       </div>
     </div>

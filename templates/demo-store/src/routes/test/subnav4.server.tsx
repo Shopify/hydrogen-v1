@@ -9,9 +9,18 @@ export default function Subnav3() {
       <TestMenu />
       <div className="border border-primary p-6">
         <p>All sections with error in a route</p>
-        <TestErrorGQL />
-        <TestErrorWithPage />
-        <TestErrorWithPageWithFallback />
+        <div className="border border-primary p-6">
+          <p>Developer defined error message that only show up in DEV mode</p>
+          <TestErrorGQL />
+        </div>
+        <div className="border border-primary p-6">
+          <p>Shows nothing when a section fails without fallback defined</p>
+          <TestErrorWithPage />
+        </div>
+        <div className="border border-primary p-6">
+          <p>Fallback error message when a section fails</p>
+          <TestErrorWithPageWithFallback />
+        </div>
       </div>
     </div>
   );

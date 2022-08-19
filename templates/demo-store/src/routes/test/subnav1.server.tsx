@@ -6,7 +6,7 @@ export default function Subnav1() {
     <div className="border border-primary p-6">
       <TestMenu />
       <div className="border border-primary p-6">
-        <p>Default error message when a query in a section fails</p>
+        <p>Developer defined error message that only show up in DEV mode</p>
         <TestErrorGQL />
       </div>
     </div>
