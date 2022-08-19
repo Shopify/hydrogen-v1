@@ -8,18 +8,16 @@ const ShopifyContext = createContext<ShopifyContextValue>({
   storefrontToken: 'abc123',
   storefrontApiVersion: SFAPI_VERSION,
   country: {
-    defaultIsoCode: 'CA',
     isoCode: 'CA',
   },
   language: {
-    defaultIsoCode: 'EN',
     isoCode: 'EN',
   },
   locale: 'en-CA',
 });
 
 /**
- * The `<ShopifyProvider/>` component should wrap your app and enables use of the `useShop()` and `useLocalization()` hooks.
+ * The `<ShopifyProvider/>` component should wrap your app and enables use of the `useShop()` hook.
  */
 export function ShopifyProvider({
   children,
