@@ -55,15 +55,7 @@ export function HydrogenSectionClient({
   }, [isRSC, expiry]);
 
   return (
-    <ErrorBoundary
-      fallback={
-        fallback || (
-          <div className="text-notice border border-notice p-6">
-            {section} section had an error
-          </div>
-        )
-      }
-    >
+    <ErrorBoundary fallback={fallback || <></>}>
       {/* @ts-ignore */}
       {response && response.readRoot ? response.readRoot() : response}
     </ErrorBoundary>
