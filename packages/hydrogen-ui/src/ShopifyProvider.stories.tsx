@@ -17,11 +17,9 @@ const Template: Story<{
     storefrontApiVersion: version,
     country: {
       isoCode: 'CA',
-      defaultIsoCode: 'CA',
     },
     language: {
       isoCode: 'EN',
-      defaultIsoCode: 'EN',
     },
     locale: 'en-CA',
   };

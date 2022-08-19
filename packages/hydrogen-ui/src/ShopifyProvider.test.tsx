@@ -12,11 +12,9 @@ const SHOPIFY_CONFIG: ShopifyContextValue = {
   storefrontApiVersion: '2022-07',
   country: {
     isoCode: 'CA',
-    defaultIsoCode: 'CA',
   },
   language: {
     isoCode: 'EN',
-    defaultIsoCode: 'EN',
   },
   locale: 'en-CA',
 };
