@@ -1,7 +1,7 @@
 import React from 'react';
 import {defineSection, CacheShort} from '@shopify/hydrogen';
 
-const ErrorWithFallback = (
+const ErrorWithFallback = () => (
   <div className="border border-notice p-6">
     <p>Oopsie! Try again later!</p>
   </div>

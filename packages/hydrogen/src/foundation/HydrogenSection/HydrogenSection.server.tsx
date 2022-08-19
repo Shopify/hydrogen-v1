@@ -12,7 +12,7 @@ export type HydrogenSectionProps = {
   state: any;
   /** A reference to a React Server Component that's rendered when the route is active. */
   component: ({...componentProps}: any) => JSX.Element | undefined;
-  fallback?: JSX.Element;
+  fallback?: () => JSX.Element;
 };
 
 export function HydrogenSection({
@@ -36,7 +36,7 @@ export function HydrogenSection({
         section={section}
         state={state}
         isRSC={isRSC}
-        fallback={fallback}
+        fallback={fallback ? fallback() : undefined}
       />
     );
   } else {
@@ -47,7 +47,7 @@ export function HydrogenSection({
         section={section}
         state={state}
         isRSC={isRSC}
-        fallback={fallback}
+        fallback={fallback ? fallback() : undefined}
       >
         {component(serverProps)}
       </HydrogenSectionClient>
@@ -66,7 +66,7 @@ export function defineSection({
   component: ({...componentProps}: any) => JSX.Element;
   dependency?: string[];
   cache?: CachingStrategy;
-  fallback?: JSX.Element;
+  fallback?: () => JSX.Element;
 }) {
   return (serverProps: any) => {
     // serverProps only exist when rendering RSC
