@@ -46,7 +46,9 @@ describe('<ShopifyProvider/>', () => {
       </ShopifyProvider>
     );
 
-    expect(screen.queryByText('https://notashop.myshopify.com')).toBeNull();
+    expect(
+      screen.queryByText('https://notashop.myshopify.com')
+    ).not.toBeInTheDocument();
     expect(screen.getByText('notashop.myshopify.com')).toBeInTheDocument();
   });
 });
