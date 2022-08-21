@@ -170,7 +170,7 @@ export default defineConfig({
     /* Whether to secure the cookie so that the browser only sends the cookie over HTTPS.  */
     secure: process.env.NODE_ENV === 'production',
     /* Declares that the cookie should be restricted to a first-party or same-site context.  */
-    sameSite: 'strict',
+    sameSite: 'Strict',
     /* The number of seconds until the cookie expires. */
     maxAge: 60 * 60 * 24 * 30,
   }),
