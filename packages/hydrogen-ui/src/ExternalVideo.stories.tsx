@@ -1,6 +1,6 @@
+import * as React from 'react';
 import type {Story} from '@ladle/react';
 import {ExternalVideo, type ExternalVideoProps} from './ExternalVideo.js';
-
 import {PartialDeep} from 'type-fest';
 import type {
   ExternalVideo as ExternalVideoType,
