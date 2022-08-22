@@ -64,6 +64,12 @@ Depending on the bundler or runtime you're using, it may automatically choose th
 
 The production bundle is used by default if your bundler / runtime doesn't understand the export conditions.
 
+## Hydrogen-UI in the Browser
+
+There is also a `umd` build of Hydrogen-UI, meant to be used directly by `<script src=""></script>` tags in HTML, or by `AMD`-compatible loaders. There is also a production and development build version of the `umd` bundle.
+
+If you're using Hydrogen-UI as a global (through the `<script>` tag), then the components can be accessed through the `hydrogenui` global variable.
+
 ## Working on Hydrogen-UI
 
 There are two ways you can develop Hydrogen-UI components:

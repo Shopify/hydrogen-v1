@@ -15,6 +15,17 @@
   "type": "module",
   "exports": {
     ".": {
+      "script": {
+        "development": "./dist/umd/hydrogen-ui.dev.umd.js",
+        "production": "./dist/umd/hydrogen-ui.prod.umd.js",
+        "default": "./dist/umd/hydrogen-ui.prod.umd.js"
+      },
+      "module": {
+        "types": "./dist/types/index.d.ts",
+        "development": "./dist/dev/index.js",
+        "production": "./dist/prod/index.js",
+        "default": "./dist/prod/index.js"
+      },
       "import": {
         "types": "./dist/types/index.d.ts",
         "development": "./dist/dev/index.js",
@@ -30,7 +41,8 @@
       "default": "./dist/prod/index.js"
     },
     "./storefront-api-types": "./dist/types/storefront-api-types.d.ts",
-    "./storefront.schema.json": "./storefront.schema.json"
+    "./storefront.schema.json": "./storefront.schema.json",
+    "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {
@@ -52,6 +64,8 @@
     "build": "npm-run-all --parallel build:vite:* build:tsc:es --parallel build:tsc:cjs copy-storefront-types",
     "build:vite:dev": "vite build --mode devbuild",
     "build:vite:prod": "vite build",
+    "build:vite:umddev": "vite build --mode umdbuilddev",
+    "build:vite:umdprod": "vite build --mode umdbuild",
     "build:tsc:cjs": "cpy ./dist/types/index.d.ts ./dist/types/ --rename='index.d.cts' --flat",
     "build:tsc:es": "tsc --emitDeclarationOnly",
     "copy-storefront-types": "cpy ./src/storefront-api-types.d.ts ./dist/types/ --flat",
