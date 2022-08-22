@@ -131,6 +131,12 @@ fragment CartFragment on Cart {
       node {
         id
         quantity
+        discountAllocations {
+          discountedAmount {
+            amount
+            currencyCode
+          }
+        }
         attributes {
           key
           value
