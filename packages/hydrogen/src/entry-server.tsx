@@ -14,7 +14,6 @@ import type {
   RunSsrParams,
   RunRscParams,
   ResolvedHydrogenConfig,
-  ResolvedHydrogenRoutes,
   RequestHandler,
 } from './types.js';
 import type {RequestHandlerOptions} from './shared-types.js';
@@ -27,11 +26,7 @@ import {
 } from './foundation/ServerRequestProvider/index.js';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType} from 'stream';
-import {
-  getApiRouteFromURL,
-  renderApiRoute,
-  getApiRoutes,
-} from './utilities/apiRoutes.js';
+import {getApiRouteFromURL, renderApiRoute} from './utilities/apiRoutes.js';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider/index.js';
 import {isBotUA} from './utilities/bot-ua.js';
 import {getCache, setCache} from './foundation/runtime.js';
@@ -58,6 +53,7 @@ import {
 import {CacheShort, NO_STORE} from './foundation/Cache/strategies/index.js';
 import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes.js';
 import {FORM_REDIRECT_COOKIE} from './constants.js';
+import {findRouteMatches, createRoutes} from './utilities/routes.js';
 
 declare global {
   // This is provided by a Vite plugin
@@ -94,7 +90,7 @@ export const renderHydrogen = (App: any) => {
 
     const hydrogenConfig: ResolvedHydrogenConfig = {
       ...inlineHydrogenConfig,
-      routes: hydrogenRoutes,
+      routes: createRoutes(hydrogenRoutes),
     };
 
     request.ctx.hydrogenConfig = hydrogenConfig;
@@ -136,7 +132,6 @@ export const renderHydrogen = (App: any) => {
         {
           resource: builtInRouteResource,
           params: {},
-          hasServerComponent: false,
         },
         hydrogenConfig,
         {
@@ -236,18 +231,28 @@ async function processRequest(
 
   const log = getLoggerWithContext(request);
   const isRSCRequest = request.isRscRequest();
-  const apiRoute = !isRSCRequest && getApiRoute(url, hydrogenConfig.routes);
+  const decodedPathname = decodeURIComponent(
+    new URL(request.normalizedUrl).pathname
+  );
+  const matchedRoutes = findRouteMatches(
+    hydrogenConfig.routes,
+    decodedPathname
+  );
+
+  // These matched routes are used later in <FileRoutes> component
+  request.ctx.matchedRoutes = matchedRoutes;
+
+  const apiRoute =
+    !isRSCRequest && getApiRouteFromURL(matchedRoutes, request.method);
 
   // The API Route might have a default export, making it also a server component
   // If it does, only render the API route if the request method is GET
-  if (apiRoute && (!apiRoute.hasServerComponent || request.method !== 'GET')) {
+  if (apiRoute) {
     const apiResponse = await renderApiRoute(
       request,
       apiRoute,
       hydrogenConfig,
-      {
-        session: sessionApi,
-      }
+      {session: sessionApi}
     );
 
     return apiResponse instanceof Request
@@ -262,7 +267,7 @@ async function processRequest(
   const state: Record<string, any> = isRSCRequest
     ? parseJSON(decodeURIComponent(url.searchParams.get('state') || '{}'))
     : {
-        pathname: decodeURIComponent(url.pathname),
+        pathname: decodedPathname,
         search: decodeURIComponent(url.search),
       };
 
@@ -314,11 +319,6 @@ async function getTemplate(
   }
 
   return template;
-}
-
-function getApiRoute(url: URL, routes: ResolvedHydrogenRoutes) {
-  const apiRoutes = getApiRoutes(routes);
-  return getApiRouteFromURL(url, apiRoutes);
 }
 
 function assembleHtml({
