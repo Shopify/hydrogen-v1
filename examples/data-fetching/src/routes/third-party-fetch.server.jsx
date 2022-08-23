@@ -1,4 +1,4 @@
-import {fetchSync, CacheHours} from '@shopify/hydrogen';
+import {fetchSync, CacheLong} from '@shopify/hydrogen';
 
 export default function FetchSyncExample() {
   /* 
@@ -7,7 +7,7 @@ export default function FetchSyncExample() {
   */
 
   const {results} = fetchSync('https://randomuser.me/api/', {
-    cache: CacheHours(), // https://shopify.dev/custom-storefronts/hydrogen/framework/cache
+    cache: CacheLong(), // https://shopify.dev/custom-storefronts/hydrogen/framework/cache
     preload: true, // Defaults to true. https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries
   }).json();
 
