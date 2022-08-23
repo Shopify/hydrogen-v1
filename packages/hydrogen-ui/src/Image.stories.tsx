@@ -1,6 +1,7 @@
 import * as React from 'react';
 import type {Story} from '@ladle/react';
 import {Image, type ShopifyImageProps} from './Image.js';
+import {IMG_SRC_SET_SIZES} from './image-size.js';
 
 const Template: Story<{
   'data.url': ShopifyImageProps['data']['url'];
@@ -8,15 +9,19 @@ const Template: Story<{
   'data.height': ShopifyImageProps['data']['height'];
   width: ShopifyImageProps['width'];
   height: ShopifyImageProps['height'];
+  widths: ShopifyImageProps['widths'];
+  loaderOptions: ShopifyImageProps['loaderOptions'];
 }> = (props) => {
   const finalProps: ShopifyImageProps = {
     data: {
-      url: props['data.url'] ?? 'test.com',
+      url: props['data.url'],
       width: props['data.width'],
       height: props['data.height'],
     },
     width: props.width,
     height: props.height,
+    widths: props.widths,
+    loaderOptions: props.loaderOptions,
   };
   return <Image {...finalProps} />;
 };
@@ -29,4 +34,11 @@ Default.args = {
   'data.height': 100,
   width: 500,
   height: 500,
+  widths: IMG_SRC_SET_SIZES,
+  loaderOptions: {
+    crop: 'center',
+    scale: 2,
+    width: 500,
+    height: 500,
+  },
 };
