@@ -16,9 +16,9 @@
   "exports": {
     ".": {
       "script": {
-        "development": "./dist/umd/hydrogen-ui.dev.umd.js",
-        "production": "./dist/umd/hydrogen-ui.prod.umd.js",
-        "default": "./dist/umd/hydrogen-ui.prod.umd.js"
+        "development": "./dist/umd/hydrogen-ui.dev.js",
+        "production": "./dist/umd/hydrogen-ui.prod.js",
+        "default": "./dist/umd/hydrogen-ui.prod.js"
       },
       "module": {
         "types": "./dist/types/index.d.ts",
@@ -44,6 +44,10 @@
     "./storefront.schema.json": "./storefront.schema.json",
     "./package.json": "./package.json"
   },
+  "main": "./dist/prod/index.cjs",
+  "module": "./dist/prod/index.js",
+  "browser": "./dist/umd/hydrogen-ui.prod.js",
+  "types": "./dist/types/index.d.ts",
   "typesVersions": {
     "*": {
       "/index.js": [
