@@ -12,7 +12,7 @@ export default defineConfig(({mode}) => {
           entry: resolve(__dirname, 'src/index.ts'),
           name: 'hydrogenui',
           fileName: () =>
-            `hydrogen-ui.${mode === 'umdbuilddev' ? 'dev' : 'prod'}.umd.js`,
+            `hydrogen-ui.${mode === 'umdbuilddev' ? 'dev' : 'prod'}.js`,
           formats: ['umd'],
         },
         sourcemap: true,
