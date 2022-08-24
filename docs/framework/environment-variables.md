@@ -6,6 +6,9 @@ description: Learn how to store sensitive information in your Hydrogen project.
 
 Environment variables, also known as secrets, allow you to load different values in your app depending on the running environment. This guide describes how to store environment variables in your Hydrogen project.
 
+> Note:
+> In the following examples, environment variables are stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
+
 ## How environment variables work
 
 You can [store secrets and private variables in `.env` files](https://vitejs.dev/guide/env-and-mode.html#env-files) in your Hydrogen project:
@@ -71,7 +74,6 @@ export default defineConfig({
     Oxygen?.env?.PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN,
 });
 ```
-
 {% endcodeblock %}
 
 ### Private variables in production

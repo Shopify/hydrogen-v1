@@ -3,8 +3,6 @@ gid: 044c475e-f28g-444b-a984-26e7ebb8bec4
 title: Analytics
 description: Learn about the analytics support built into Hydrogen.
 ---
-> Caution:
-> Include the `storefrontId` prop in the Hydrogen config to avoid breaking the analytics dashboard in the Shopify admin. Learn more about [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
 
 Hydrogen includes support for analytics that give you insight into how customers are interacting with a custom storefront.
 
@@ -321,6 +319,20 @@ To send analytics data from the server-side, complete the following steps:
     export default defineConfig({
       ...
       serverAnalyticsConnectors: [MyServerAnalyticsConnector]
+    });
+    ```
+
+    {% endcodeblock %}
+
+1. Include the `storefrontId` prop in the Hydrogen config and set its value to the storefront ID's public environment variable.
+
+    This step is required to avoid breaking the analytics dashboard in the Shopify admin. Learn more about [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). In this example, the environment variable is stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
+
+    {% codeblock file, filename: 'hydrogen.config.ts' %}
+
+    ```tsx
+    export default defineConfig({
+      storefrontId: Oxygen?.env?.PUBLIC_SHOPIFY_STOREFRONT_ID
     });
     ```
 

@@ -347,6 +347,9 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 
 If you're deploying to a non-Oxygen runtime, this is a necessary step to avoid rate-limiting in production. Learn [more](/https://shopify.dev/custom-storefronts/hydrogen/framework/environment-variables#use-storefront-api-server-tokens).
 
+> Note:
+> In this example, environment variables are stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
+
 1. Create a [delegate access token](https://shopify.dev/apps/auth/oauth/delegate-access-tokens) for the Storefront API.
 
 1. [Store the token](https://vitejs.dev/guide/env-and-mode.html#env-files) in a private environment variable called `PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN`.

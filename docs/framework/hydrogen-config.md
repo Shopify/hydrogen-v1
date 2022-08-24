@@ -10,6 +10,9 @@ This guide describes Hydrogen's configuration properties and how to change the l
 
 ## Example configuration
 
+> Note:
+> In the following example, environment variables are stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
+
 The Hydrogen configuration file contains information that's needed at runtime for routing, connecting to the Storefront API, and many other options. The following example shows a basic Hydrogen configuration file:
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
