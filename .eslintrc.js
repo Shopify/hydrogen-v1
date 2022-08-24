@@ -21,6 +21,7 @@ module.exports = {
     'jest/no-disabled-tests': 'off',
     'jest/no-export': 'off',
     'jsx-a11y/iframe-has-title': 'off',
+    'jest/no-standalone-expect': 'off',
     'no-console': 'off',
     'no-constant-condition': 'off',
     'jest/no-done-callback': 'off',
