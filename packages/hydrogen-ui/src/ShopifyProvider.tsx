@@ -8,12 +8,12 @@ const ShopifyContext = createContext<ShopifyContextValue>({
   storefrontToken: 'abc123',
   storefrontApiVersion: SFAPI_VERSION,
   country: {
-    isoCode: 'CA',
+    isoCode: 'US',
   },
   language: {
     isoCode: 'EN',
   },
-  locale: 'en-CA',
+  locale: 'en-US',
 });
 
 /**

@@ -1,18 +1,16 @@
-import {createMountableHook} from '../../../utilities/tests/createMountableHook.js';
-import {CurrencyCode} from '../../../storefront-api-types.js';
-import {useMoney} from '../index.js';
+import {renderHook} from '@testing-library/react';
+import {useMoney} from './useMoney.js';
 
-const mountUseMoney = createMountableHook(useMoney);
-
-// this has already been migrated to Vitest in hydrogen-ui; no need to migrate it here as well
 describe(`useMoney`, () => {
-  it('returns an object with all of the details about the money', async () => {
-    const money = await mountUseMoney({
-      amount: '19.99',
-      currencyCode: CurrencyCode.Usd,
-    });
+  it('returns an object with all of the details about the money', () => {
+    const {result} = renderHook(() =>
+      useMoney({
+        amount: '19.99',
+        currencyCode: 'USD',
+      })
+    );
 
-    expect(money).toEqual({
+    expect(result.current).toEqual({
       amount: '19.99',
       currencyCode: 'USD',
       currencyName: 'US dollars',
@@ -21,7 +19,7 @@ describe(`useMoney`, () => {
       localizedString: '$19.99',
       original: {
         amount: '19.99',
-        currencyCode: CurrencyCode.Usd,
+        currencyCode: 'USD',
       },
       parts: [
         {type: 'currency', value: '$'},
@@ -34,13 +32,15 @@ describe(`useMoney`, () => {
     });
   });
 
-  it(`removes trailing zeros when necessary`, async () => {
-    const money = await mountUseMoney({
-      amount: '19.00',
-      currencyCode: CurrencyCode.Usd,
-    });
+  it(`removes trailing zeros when necessary`, () => {
+    const {result} = renderHook(() =>
+      useMoney({
+        amount: '19.00',
+        currencyCode: 'USD',
+      })
+    );
 
-    expect(money).toEqual({
+    expect(result.current).toEqual({
       amount: '19.00',
       currencyCode: 'USD',
       currencyName: 'US dollars',
@@ -49,7 +49,7 @@ describe(`useMoney`, () => {
       localizedString: '$19.00',
       original: {
         amount: '19.00',
-        currencyCode: CurrencyCode.Usd,
+        currencyCode: 'USD',
       },
       parts: [
         {type: 'currency', value: '$'},
