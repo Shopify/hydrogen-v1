@@ -13,11 +13,11 @@ const ShopifyContext = createContext<ShopifyContextValue>({
   language: {
     isoCode: 'EN',
   },
-  locale: 'en-US',
+  locale: 'EN-US',
 });
 
 /**
- * The `<ShopifyProvider/>` component should wrap your app and enables use of the `useShop()` hook.
+ * The `<ShopifyProvider/>` component enables use of the `useShop()` hook. The component should wrap your app.
  */
 export function ShopifyProvider({
   children,
@@ -34,7 +34,7 @@ export function ShopifyProvider({
 
   if (shopifyConfig.storefrontApiVersion !== SFAPI_VERSION) {
     console.warn(
-      `This version of Hydrogen-UI is built for Shopify's Storefront API version ${SFAPI_VERSION}, but it appears you're using version ${shopifyConfig.storefrontApiVersion}. There may be issues or bugs if you use a mismatched version of Hydrogen-UI and the Storefront API.`
+      `This version of Hydrogen-UI is built for Shopify's Storefront API version ${SFAPI_VERSION}, but it looks like you're using version ${shopifyConfig.storefrontApiVersion}. There may be issues or bugs if you use a mismatched version of Hydrogen-UI and the Storefront API.`
     );
   }
 
@@ -70,11 +70,11 @@ export function useShop() {
 export type ShopifyContextValue = {
   /** The globally-unique identifier for the Shop */
   storefrontId?: Shop['id'];
-  /** The host name of the domain (eg: `store.myshopify.com`). If a URL with a scheme (for example `https://`) is passed in, the scheme will be removed. */
+  /** The host name of the domain (eg: `{shop}.myshopify.com`). If a URL with a scheme (for example `https://`) is passed in, then the scheme is removed. */
   storeDomain: Shop['primaryDomain']['host'];
-  /** The Storefront API access token. See [Authentication](https://shopify.dev/api/storefront#authentication) documentation for more details. */
+  /** The Storefront API access token. Refer to the [authentication](https://shopify.dev/api/storefront#authentication) documentation for more details. */
   storefrontToken: string;
-  /** The Storefront API version. This should almost always be the same as the version Hydrogen-UI was built for. See [Shopify API Versioning](https://shopify.dev/api/usage/versioning) for more details.  */
+  /** The Storefront API version. This should almost always be the same as the version Hydrogen-UI was built for. Learn more about Shopify [API versioning](https://shopify.dev/api/usage/versioning) for more details.  */
   storefrontApiVersion: string;
   country: {
     /**
@@ -88,5 +88,8 @@ export type ShopifyContextValue = {
      */
     isoCode: LanguageCode;
   };
+  /**
+   * The locale string based on `country` and `language`.
+   */
   locale: string;
 };
