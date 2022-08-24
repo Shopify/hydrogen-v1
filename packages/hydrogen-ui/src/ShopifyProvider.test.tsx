@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {render, screen} from '@testing-library/react';
+import {render, screen, renderHook} from '@testing-library/react';
 import {
   ShopifyProvider,
   useShop,
   type ShopifyContextValue,
 } from './ShopifyProvider.js';
+import type {PartialDeep} from 'type-fest';
 
 const SHOPIFY_CONFIG: ShopifyContextValue = {
   storeDomain: 'notashop.myshopify.com',
@@ -31,24 +32,36 @@ describe('<ShopifyProvider/>', () => {
   });
 
   it(`contains 'storeDomain' without https:// prefix`, () => {
-    function OutputDomain() {
-      const {storeDomain} = useShop();
-      return <div>{storeDomain}</div>;
-    }
-    render(
-      <ShopifyProvider
-        shopifyConfig={{
-          ...SHOPIFY_CONFIG,
-          storeDomain: 'https://notashop.myshopify.com',
-        }}
-      >
-        <OutputDomain />
-      </ShopifyProvider>
-    );
+    const {result} = renderHook(() => useShop(), {
+      wrapper: ({children}) => (
+        <ShopifyProvider
+          shopifyConfig={{
+            ...SHOPIFY_CONFIG,
+            storeDomain: 'https://notashop.myshopify.com',
+          }}
+        >
+          {children}
+        </ShopifyProvider>
+      ),
+    });
 
-    expect(
-      screen.queryByText('https://notashop.myshopify.com')
-    ).not.toBeInTheDocument();
-    expect(screen.getByText('notashop.myshopify.com')).toBeInTheDocument();
+    expect(result.current.storeDomain).toBe('notashop.myshopify.com');
   });
 });
+
+export function getShopifyConfig(
+  config: PartialDeep<ShopifyContextValue> = {}
+) {
+  return {
+    country: {
+      isoCode: config.country?.isoCode ?? 'US',
+    },
+    language: {
+      isoCode: config.language?.isoCode ?? 'EN',
+    },
+    locale: config.locale ?? 'en-US',
+    storeDomain: config.storeDomain ?? 'notashop.myshopify.io',
+    storefrontToken: config.storefrontToken ?? 'abc123',
+    storefrontApiVersion: config.storefrontApiVersion ?? '2022-07',
+  };
+}
