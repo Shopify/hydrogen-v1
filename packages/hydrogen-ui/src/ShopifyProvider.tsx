@@ -72,7 +72,7 @@ export type ShopifyContextValue = {
   storefrontId?: Shop['id'];
   /** The host name of the domain (eg: `{shop}.myshopify.com`). If a URL with a scheme (for example `https://`) is passed in, then the scheme is removed. */
   storeDomain: Shop['primaryDomain']['host'];
-  /** The Storefront API access token. Refer to [Authentication](https://shopify.dev/api/storefront#authentication) documentation for more details. */
+  /** The Storefront API access token. Refer to the [authentication](https://shopify.dev/api/storefront#authentication) documentation for more details. */
   storefrontToken: string;
   /** The Storefront API version. This should almost always be the same as the version Hydrogen-UI was built for. Learn more about Shopify [API versioning](https://shopify.dev/api/usage/versioning) for more details.  */
   storefrontApiVersion: string;
