@@ -367,7 +367,9 @@ If you're deploying to a non-Oxygen runtime, this is a necessary step to avoid r
 
     {% endcodeblock %}
 
-1. In the Hydrogen configuration file, set the `storefrontId` using the variable `PUBLIC_SHOPIFY_STOREFRONT_ID`.
+1. If you're deploying to a non-Oxygen runtime, include the `storefrontId` prop in the Hydrogen config and set its value to the storefront ID's public environment variable.
+
+    This step is required to avoid breaking the analytics dashboard in the Shopify admin. Learn more about [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). In this example, the environment variable is stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
 
     {% codeblock file, filename: 'hydrogen.config.ts' %}
 

@@ -32,7 +32,9 @@ export default defineConfig({
     storefrontToken: Oxygen?.env?.PUBLIC_SHOPIFY_STOREFRONT_API_TOKEN,
     /* Your app's private Storefront API server (delegate access) token. Authenticates server requests. */
     privateStorefrontToken: Oxygen?.env?.PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN,
-    /* The unique ID for the storefront. This prop is required, to avoid breaking the analytics dashboard in the Shopify admin. */
+    /* The unique ID for the storefront. This prop is required on non-Oxygen runtimes to avoid breaking the analytics dashboard in the Shopify admin.
+       In this example, the environment variable is stored in `Oxygen.env`.
+       If you're not deploying to Oxygen, then you can choose a different storage location. */
     storefrontId: Oxygen?.env?.PUBLIC_SHOPIFY_STOREFRONT_ID,
     /* The Storefront API version that your app uses */
     storefrontApiVersion: '2022-07',
