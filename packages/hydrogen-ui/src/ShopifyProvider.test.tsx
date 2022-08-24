@@ -59,7 +59,7 @@ export function getShopifyConfig(
     language: {
       isoCode: config.language?.isoCode ?? 'EN',
     },
-    locale: config.locale ?? 'en-US',
+    locale: config.locale ?? 'EN-US',
     storeDomain: config.storeDomain ?? 'notashop.myshopify.io',
     storefrontToken: config.storefrontToken ?? 'abc123',
     storefrontApiVersion: config.storefrontApiVersion ?? '2022-07',
