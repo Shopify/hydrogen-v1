@@ -9,12 +9,14 @@ import {ExternalVideo} from './ExternalVideo.js';
 import {faker} from '@faker-js/faker';
 import {vi} from 'vitest';
 
+const testId = 'video-iframe';
+
 describe('<ExternalVideo />', () => {
   it('renders an iframe element with sensible defaults', () => {
     const video = getExternalVideoData();
-    render(<ExternalVideo data={video} />);
+    render(<ExternalVideo data={video} data-testid={testId} />);
 
-    const videoEl = screen.getByTestId('video-iframe');
+    const videoEl = screen.getByTestId(testId);
 
     expect(videoEl).toBeInTheDocument();
 
@@ -31,6 +33,7 @@ describe('<ExternalVideo />', () => {
   it('allows defaults to be overridden', () => {
     render(
       <ExternalVideo
+        data-testid={testId}
         data={getExternalVideoData()}
         id="hello"
         allow="autoplay"
@@ -39,7 +42,7 @@ describe('<ExternalVideo />', () => {
       />
     );
 
-    const videoEl = screen.getByTestId('video-iframe');
+    const videoEl = screen.getByTestId(testId);
 
     expect(videoEl).toHaveAttribute('id', 'hello');
     expect(videoEl).toHaveAttribute('allow', 'autoplay');
@@ -54,6 +57,7 @@ describe('<ExternalVideo />', () => {
     };
     render(
       <ExternalVideo
+        data-testid={testId}
         data={getExternalVideoData({
           embedUrl: 'https://www.youtube.com/embed/a2YSgfwXc9c',
         })}
@@ -61,7 +65,7 @@ describe('<ExternalVideo />', () => {
       />
     );
 
-    const videoEl = screen.getByTestId('video-iframe');
+    const videoEl = screen.getByTestId(testId);
 
     expect(videoEl).toHaveAttribute(
       'src',
@@ -70,9 +74,15 @@ describe('<ExternalVideo />', () => {
   });
 
   it('allows passthrough props', () => {
-    render(<ExternalVideo data={getExternalVideoData()} className="fancy" />);
+    render(
+      <ExternalVideo
+        data={getExternalVideoData()}
+        className="fancy"
+        data-testid={testId}
+      />
+    );
 
-    const videoEl = screen.getByTestId('video-iframe');
+    const videoEl = screen.getByTestId(testId);
 
     expect(videoEl).toHaveAttribute('class', 'fancy');
   });
@@ -80,10 +90,9 @@ describe('<ExternalVideo />', () => {
   it(`throws when 'data.embedUrl' isn't passed`, () => {
     // to silence the test runner's console.error from being called
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => render(<ExternalVideo data={{id: 'hi'}} />)).toThrow();
     expect(console.error).toHaveBeenCalled();
-    consoleSpy.mockRestore();
   });
 });
 

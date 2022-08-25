@@ -34,6 +34,7 @@ export function ExternalVideo(props: ExternalVideoProps) {
     frameBorder = '0',
     allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
     allowFullScreen = true,
+    loading = 'lazy',
     ...passthroughProps
   } = props;
 
@@ -51,7 +52,7 @@ export function ExternalVideo(props: ExternalVideoProps) {
       allow={allow}
       allowFullScreen={allowFullScreen}
       src={url}
-      data-testid="video-iframe"
+      loading={loading}
     ></iframe>
   );
 }
