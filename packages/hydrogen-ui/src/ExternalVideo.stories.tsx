@@ -19,6 +19,13 @@ Youtube.args = {
     host: 'YOUTUBE',
   }),
 };
+Youtube.argTypes = {
+  loading: {
+    options: ['lazy', 'eager'],
+    control: {type: 'radio'},
+    defaultValue: 'lazy',
+  },
+};
 
 export const Vimeo = Template.bind({});
 Vimeo.args = {
@@ -26,6 +33,13 @@ Vimeo.args = {
     embedUrl: 'https://player.vimeo.com/video/375468729?h=d063a6fe74',
     host: 'VIMEO',
   }),
+};
+Vimeo.argTypes = {
+  loading: {
+    options: ['lazy', 'eager'],
+    control: {type: 'radio'},
+    defaultValue: 'lazy',
+  },
 };
 
 function getExternalVideoData(
