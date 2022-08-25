@@ -10,7 +10,7 @@ You can deploy a Hydrogen storefront to most [Worker and Node.js runtimes](https
 
 - You're using the [most recent version of Hydrogen](https://github.com/Shopify/hydrogen/releases). The latest release gives you the benefits of performance enhancements, new components, and other best practices.
 
-- If you're deploying to a non-Oxygen runtime, you've retrieved a [delegate access token for server requests](#avoid-rate-limiting-in-production) and stored it in a private variable.
+- If you're deploying to a non-Oxygen runtime, then you've retrieved a [delegate access token for server requests](#avoid-rate-limiting-in-production) and stored it in a private variable.
 
 ## Deploy to Oxygen
 
@@ -345,10 +345,10 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 
 ## Avoid rate limiting in production
 
-If you're deploying to a non-Oxygen runtime, this is a necessary step to avoid rate-limiting in production. [Learn more](https://shopify.dev/custom-storefronts/hydrogen/framework/environment-variables#use-storefront-api-server-tokens) about why it's required.
+If you're deploying to a non-Oxygen runtime, then this is a necessary step to avoid rate-limiting in production. [Learn more](https://shopify.dev/custom-storefronts/hydrogen/framework/environment-variables#use-storefront-api-server-tokens) about why it's required.
 
 > Note:
-> In this example, environment variables are stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
+> In the following example, environment variables are stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
 
 1. Create a [delegate access token](https://shopify.dev/apps/auth/oauth/delegate-access-tokens) for the Storefront API.
 
@@ -383,5 +383,5 @@ If you're deploying to a non-Oxygen runtime, this is a necessary step to avoid r
 
     {% endcodeblock %}
 
-    > Note:
+    > Caution:
     > This step is required to avoid breaking the analytics dashboard in the Shopify admin on non-Oxygen runtimes.

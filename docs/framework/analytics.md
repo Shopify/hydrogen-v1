@@ -324,7 +324,7 @@ To send analytics data from the server-side, complete the following steps:
 
     {% endcodeblock %}
 
-1. If you're deploying to a non-Oxygen runtime, include the `storefrontId` prop in the [Hydrogen config](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and set its value to the storefront ID's public environment variable.
+1. If you're deploying to a non-Oxygen runtime, then include the `storefrontId` prop in the [Hydrogen config](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and set its value to the storefront ID's public environment variable.
 
     {% codeblock file, filename: 'hydrogen.config.ts' %}
 
@@ -338,7 +338,7 @@ To send analytics data from the server-side, complete the following steps:
 
     {% endcodeblock %}
 
-    > Note:
+    > Caution:
     > This step is required to avoid breaking the analytics dashboard in the Shopify admin on non-Oxygen runtimes.
 
 ### Parameters

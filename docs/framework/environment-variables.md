@@ -60,7 +60,7 @@ export default Component() {
 
 ## Private variables
 
-In Hydrogen, variables that are prefixed with `PRIVATE` in the `.env` file are treated as a server runtime variable in non-production environments.
+In Hydrogen, variables that are prefixed with `PRIVATE` in the `.env` file are treated as server runtime variables in non-production environments.
 
 Private variables are only available in components that run exclusively in the server or in utilities that are imported by those components.
 
