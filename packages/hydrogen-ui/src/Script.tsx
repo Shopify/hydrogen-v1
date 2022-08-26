@@ -136,13 +136,15 @@ export function initScriptLoader(scriptLoaderItems: HydrogenScriptProps[]) {
 
 
 const HydrogenScript = memo((props: HydrogenScriptProps) => {
-    const { id,
+    const {
+        id,
         src = '',
         onLoad = () => { },
         onReady = null,
         strategy = 'afterHydrate',
         onError,
-        ...restProps } = props;
+        ...restProps
+    } = props;
 
     useEffect(() => {
         const cacheKeyHydro = id || src
