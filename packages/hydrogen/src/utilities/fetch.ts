@@ -21,10 +21,17 @@ export function fetchBuilder<T>(url: string, options: FetchInit = {}) {
     const response = await fetch(url, requestInit);
 
     if (!response.ok) {
+      if (response.status === 403 || response.status === 401) {
+        throw new Error(
+          `Request to the Storefront API failed! You may have a bad value in 'hydrogen.config.js'. Response status: ${
+            response.status
+          }, Request ID: ${response.headers.get('x-request-id')}`
+        );
+      }
       throw new Error(
-        `Request to the Storefront API failed! Request ID: ${response.headers.get(
-          'x-request-id'
-        )}`
+        `Request to the Storefront API failed! Response status: ${
+          response.status
+        }, Request ID: ${response.headers.get('x-request-id')}`
       );
     }
 
