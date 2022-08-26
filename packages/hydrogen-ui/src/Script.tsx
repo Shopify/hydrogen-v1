@@ -164,3 +164,5 @@ const HydrogenScript = memo((props: HydrogenScriptProps) => {
         <></>
     )
 })
+
+export default HydrogenScript;
