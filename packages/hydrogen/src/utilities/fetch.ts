@@ -21,7 +21,11 @@ export function fetchBuilder<T>(url: string, options: FetchInit = {}) {
     const response = await fetch(url, requestInit);
 
     if (!response.ok) {
-      throw response;
+      throw new Error(
+        `Request to the Storefront API failed! Request ID: ${response.headers.get(
+          'x-request-id'
+        )}`
+      );
     }
 
     const data = await response.json();
