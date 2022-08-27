@@ -1,13 +1,13 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {useLocation} from '../../foundation/Router/BrowserRouter.client.js';
-import {createPath} from 'history';
+import React, { useCallback, useEffect, useState, memo } from 'react';
+import { useLocation } from '../../foundation/Router/BrowserRouter.client.js';
+import { createPath } from 'history';
 import {
   buildPath,
   useNavigate,
 } from '../../foundation/useNavigate/useNavigate.js';
-import {RSC_PATHNAME} from '../../constants.js';
-import {useInternalServerProps} from '../../foundation/useServerProps/use-server-props.js';
-import {useBasePath} from '../../foundation/useRouteParams/RouteParamsProvider.client.js';
+import { RSC_PATHNAME } from '../../constants.js';
+import { useInternalServerProps } from '../../foundation/useServerProps/use-server-props.js';
+import { useBasePath } from '../../foundation/useRouteParams/RouteParamsProvider.client.js';
 
 export interface LinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
@@ -70,7 +70,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
           // If the URL hasn't changed, the regular <a> will do a replace
           const replace =
-            !!_replace || createPath(location) === createPath({pathname: to});
+            !!_replace || createPath(location) === createPath({ pathname: to });
 
           navigate(to, {
             replace,
@@ -93,7 +93,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       ]
     );
 
-    const signalPrefetchIntent = () => {
+    const signalPrefetchIntent = useCallback(() => {
       /**
        * startTransition to yield to more important updates
        */
@@ -102,9 +102,9 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           setMaybePrefetch(true);
         }
       });
-    };
+    }, [prefetch, to]);
 
-    const cancelPrefetchIntent = () => {
+    const cancelPrefetchIntent = useCallback(() => {
       /**
        * startTransition to yield to more important updates
        */
@@ -113,7 +113,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           setMaybePrefetch(false);
         }
       });
-    };
+    }, [prefetch]);
 
     /**
      * Wrapping `maybePrefetch` inside useEffect allows the user to quickly graze over
@@ -180,11 +180,11 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   }
 );
 
-function Prefetch({pathname}: {pathname: string}) {
-  const {getProposedLocationServerProps} = useInternalServerProps();
+const Prefetch = memo(({ pathname }: { pathname: string }) => {
+  const { getProposedLocationServerProps } = useInternalServerProps();
   const location = useLocation();
 
-  const newPath = createPath({pathname});
+  const newPath = createPath({ pathname });
 
   if (pathname.startsWith('http') || newPath === createPath(location)) {
     return null;
@@ -200,7 +200,7 @@ function Prefetch({pathname}: {pathname: string}) {
     encodeURIComponent(JSON.stringify(proposedServerState));
 
   return <link rel="prefetch" as="fetch" href={href} />;
-}
+})
 
 /**
  * Credit: Remix's <Link> component.
