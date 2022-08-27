@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, startTransition as startTransitionHydro } from 'react';
 import { useLocation } from '../../foundation/Router/BrowserRouter.client.js';
 import { createPath } from 'history';
 import {
@@ -76,7 +76,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
             !!_replace || createPath(location) === createPath({ pathname: to });
 
           if (transitionable) {
-            startTransition(() => {
+            startTransitionHydro?.(() => {
               navigate(to, {
                 replace,
                 scroll,
