@@ -41,8 +41,14 @@ const defaultLogger: Logger = {
   warn(context, ...args) {
     console.warn(yellow('WARN: '), ...args);
   },
-  error(context, ...args) {
-    console.error(red('ERROR: '), ...args);
+  error(context, error, ...extra) {
+    const url = context ? ` ${context.url}` : '';
+
+    if (error instanceof Error) {
+      console.error(red(`Error processing route:${url}\n${error.stack}`));
+    } else {
+      console.error(red(`Error:${url} ${error}`));
+    }
   },
   fatal(context, ...args) {
     console.error(red('FATAL: '), ...args);
