@@ -89,9 +89,9 @@
     "@graphql-codegen/typescript-operations": "2.3.2",
     "@graphql-typed-document-node/core": "^3.1.0",
     "@rollup/plugin-graphql": "^1.0.0",
-    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^14.3.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/body-parser": "^1.19.2",
     "@types/connect": "^3.4.34",
     "@types/graphql": "^14.5.0",
@@ -111,7 +111,7 @@
     "postcss": "^8",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
-    "vitest": "^0.22.0"
+    "vitest": "^0.22.1"
   },
   "peerDependencies": {
     "body-parser": "^1.20.0",

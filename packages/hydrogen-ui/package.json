@@ -15,6 +15,17 @@
   "type": "module",
   "exports": {
     ".": {
+      "script": {
+        "development": "./dist/umd/hydrogen-ui.dev.js",
+        "production": "./dist/umd/hydrogen-ui.prod.js",
+        "default": "./dist/umd/hydrogen-ui.prod.js"
+      },
+      "module": {
+        "types": "./dist/types/index.d.ts",
+        "development": "./dist/dev/index.js",
+        "production": "./dist/prod/index.js",
+        "default": "./dist/prod/index.js"
+      },
       "import": {
         "types": "./dist/types/index.d.ts",
         "development": "./dist/dev/index.js",
@@ -30,8 +41,13 @@
       "default": "./dist/prod/index.js"
     },
     "./storefront-api-types": "./dist/types/storefront-api-types.d.ts",
-    "./storefront.schema.json": "./storefront.schema.json"
+    "./storefront.schema.json": "./storefront.schema.json",
+    "./package.json": "./package.json"
   },
+  "main": "./dist/prod/index.cjs",
+  "module": "./dist/prod/index.js",
+  "browser": "./dist/umd/hydrogen-ui.prod.js",
+  "types": "./dist/types/index.d.ts",
   "typesVersions": {
     "*": {
       "/index.js": [
@@ -52,6 +68,8 @@
     "build": "npm-run-all --parallel build:vite:* build:tsc:es --parallel build:tsc:cjs copy-storefront-types",
     "build:vite:dev": "vite build --mode devbuild",
     "build:vite:prod": "vite build",
+    "build:vite:umddev": "vite build --mode umdbuilddev",
+    "build:vite:umdprod": "vite build --mode umdbuild",
     "build:tsc:cjs": "cpy ./dist/types/index.d.ts ./dist/types/ --rename='index.d.cts' --flat",
     "build:tsc:es": "tsc --emitDeclarationOnly",
     "copy-storefront-types": "cpy ./src/storefront-api-types.d.ts ./dist/types/ --flat",
@@ -62,28 +80,28 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.3.0",
-    "@graphql-codegen/cli": "^2.11.2",
-    "@graphql-codegen/typescript": "^2.7.2",
-    "@ladle/react": "^2.1.1",
-    "@testing-library/jest-dom": "^5.16.4",
+    "@faker-js/faker": "^7.4.0",
+    "@graphql-codegen/cli": "^2.11.6",
+    "@graphql-codegen/typescript": "^2.7.3",
+    "@ladle/react": "^2.1.2",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^14.3.0",
-    "@vitejs/plugin-react": "^2.0.0",
-    "@vitest/coverage-c8": "^0.22.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@vitejs/plugin-react": "^2.0.1",
+    "@vitest/coverage-c8": "^0.22.1",
     "c8": "^7.12.0",
-    "cpy-cli": "^4.1.0",
-    "graphql": "^16.3.0",
+    "cpy-cli": "^4.2.0",
+    "graphql": "^16.6.0",
     "happy-dom": "^6.0.4",
     "prettier": "^2.7.1",
-    "vite": "^3.0.7",
-    "vitest": "^0.22.0"
+    "vite": "^3.0.9",
+    "vitest": "^0.22.1"
   },
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "type-fest": "^2.17.0"
+    "type-fest": "^2.19.0"
   }
 }
