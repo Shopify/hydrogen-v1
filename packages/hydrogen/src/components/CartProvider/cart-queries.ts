@@ -171,6 +171,56 @@ fragment CartFragment on Cart {
             }
           }
         }
+
+        sellingPlanAllocation {
+          priceAdjustments {
+            compareAtPrice {
+              currencyCode
+              amount
+            }
+            perDeliveryPrice {
+              currencyCode
+              amount
+            }
+            price {
+              currencyCode
+              amount
+            }
+            unitPrice {
+              currencyCode
+              amount
+            }
+          }
+          sellingPlan {
+            id
+            description
+            name
+            options {
+              name
+              value
+            }
+            priceAdjustments {
+              orderCount
+              adjustmentValue {
+                ... on SellingPlanFixedAmountPriceAdjustment {
+                  adjustmentAmount {
+                    currencyCode
+                    amount
+                  }
+                }
+                ... on SellingPlanFixedPriceAdjustment {
+                  price {
+                    currencyCode
+                    amount
+                  }
+                }
+                ... on SellingPlanPercentagePriceAdjustment {
+                  adjustmentPercentage
+                }
+              }
+            }
+            recurringDeliveries
+        }
       }
     }
   }
