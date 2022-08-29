@@ -1,5 +1,11 @@
 # Hydrogen-UI
 
+## NOTICE
+
+⚠️ This is an alpha version of Hydrogen-UI. The name, components, and utilties are all likely to change as we get closer to release. DO NOT USE IN PRODUCTION, THERE WILL BE BREAKING CHANGES. This release is meant for testing. ⚠️
+
+If you still want to test this package, be sure to use the name `@shopify/hydrogen-ui-alpha` instead of `@shopify/hydrogen-ui` in the documentation below.
+
 ## Getting started
 
 npm:

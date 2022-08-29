@@ -10,7 +10,7 @@ export const NoQuantity = Template.bind({});
 NoQuantity.args = {
   variantIds: ['123', '456'],
   className: '',
-  width: '100',
+  width: '',
 };
 
 export const Quantities = Template.bind({});
