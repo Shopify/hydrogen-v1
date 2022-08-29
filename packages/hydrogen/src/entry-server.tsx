@@ -193,7 +193,7 @@ export const renderHydrogen = (App: any) => {
           });
 
           // Asynchronously wait for it in workers
-          request.ctx.runtime?.waitUntil(staleWhileRevalidatePromise);
+          request.ctx.runtime?.waitUntil?.(staleWhileRevalidatePromise);
         }
 
         return cachedResponse;
@@ -271,6 +271,8 @@ async function processRequest(
   if (isRSCRequest) {
     const buffered = await bufferReadableStream(rsc.readable.getReader());
     postRequestTasks('rsc', 200, request, response);
+
+    response.headers.set('cache-control', response.cacheControlHeader);
     cacheResponse(response, request, [buffered], revalidate);
 
     return new Response(buffered, {
@@ -909,7 +911,7 @@ async function cacheResponse(
       const cachePutPromise = Promise.resolve(true).then(() =>
         saveCacheResponse(response, request, chunks)
       );
-      request.ctx.runtime?.waitUntil(cachePutPromise);
+      request.ctx.runtime?.waitUntil?.(cachePutPromise);
     }
   }
 }

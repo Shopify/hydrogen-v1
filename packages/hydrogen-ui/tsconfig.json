@@ -19,5 +19,5 @@
     "typeRoots": ["globals.d.ts"]
   },
   "include": ["src/**/*", "globals.d.ts"],
-  "exclude": ["src/**/*.test.tsx"]
+  "exclude": ["src/**/*.test.tsx", "src/**/*.stories.tsx"]
 }

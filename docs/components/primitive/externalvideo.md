@@ -54,6 +54,10 @@ export default function MyProductVideo() {
 | -------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | data     | <code>PartialDeep&#60;ExternalVideoType&#62;</code> | An object with fields that correspond to the Storefront API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).                                                                        |
 | options? | <code>YouTube &#124; Vimeo</code>                   | An object containing the options available for either [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters). |
+| frameBorder | Refer to the [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-frameborder) for more information.| Defaults to `'0'`. |
+| allow | Refer to the [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-allow) for more information. | Defaults to `'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'`. |
+| allowFullScreen |Refer to the [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-allowfullscreen) for more information. | Defaults to `'true'`. |
+| loading |Refer to the [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-loading) for more information.| Defaults to `'lazy'`.  |
 
 ## Required fields
 

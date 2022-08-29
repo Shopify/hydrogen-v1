@@ -1,8 +1,8 @@
 import {useMemo} from 'react';
-import type {ExternalVideo as ExternalVideoType} from '../storefront-api-types.js';
+import type {ExternalVideo as ExternalVideoType} from './storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
-interface ExternalVideoProps {
+interface BaseProps {
   /**
    * An object with fields that correspond to the Storefront API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
    */
@@ -16,14 +16,17 @@ interface ExternalVideoProps {
 
 type PropsWeControl = 'src';
 
+export type ExternalVideoProps = Omit<
+  JSX.IntrinsicElements['iframe'],
+  PropsWeControl
+> &
+  BaseProps;
+
 /**
  * The `ExternalVideo` component renders an embedded video for the Storefront
  * API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
  */
-export function ExternalVideo(
-  props: Omit<JSX.IntrinsicElements['iframe'], PropsWeControl> &
-    ExternalVideoProps
-) {
+export function ExternalVideo(props: ExternalVideoProps) {
   const {
     data,
     options,
@@ -31,6 +34,7 @@ export function ExternalVideo(
     frameBorder = '0',
     allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
     allowFullScreen = true,
+    loading = 'lazy',
     ...passthroughProps
   } = props;
 
@@ -48,7 +52,7 @@ export function ExternalVideo(
       allow={allow}
       allowFullScreen={allowFullScreen}
       src={url}
-      data-testid="video-iframe"
+      loading={loading}
     ></iframe>
   );
 }
