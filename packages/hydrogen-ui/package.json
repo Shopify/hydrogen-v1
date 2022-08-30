@@ -1,5 +1,5 @@
 {
-  "name": "@shopify/hydrogen-ui",
+  "name": "@shopify/hydrogen-ui-alpha",
   "version": "2022.07.0",
   "description": "Components for modern custom Shopify storefronts",
   "homepage": "https://github.com/Shopify/hydrogen#readme",
@@ -75,6 +75,7 @@
     "copy-storefront-types": "cpy ./src/storefront-api-types.d.ts ./dist/types/ --flat",
     "format": "prettier --write \"src/**/*\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
+    "prepack": "yarn build",
     "test": "vitest",
     "test:ci": "vitest run --coverage",
     "typecheck": "tsc --noEmit"
