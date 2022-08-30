@@ -12,7 +12,6 @@
     "hello-world",
     "test-server-components",
     "test-async-config",
-    "hydrogen-playground",
-    "@shopify/hydrogen-ui-alpha"
+    "hydrogen-playground"
   ]
 }
