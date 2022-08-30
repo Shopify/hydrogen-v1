@@ -41,6 +41,9 @@ jobs:
       - name: Install the packages
         run: yarn install --frozen-lockfile --ignore-engines
 
+      - name: Format release with Prettier
+        run: yarn format
+
       - name: Create Release Pull Request or Publish (for latest release)
         if: steps.flags.outputs.latest == 'true'
         id: changesets
@@ -66,9 +69,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Format release with Prettier
-        run: yarn format
 
   compile:
     needs: changelog
