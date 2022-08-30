@@ -16,7 +16,7 @@ let cookie = new Cookie('__session', {
   path: '/',
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'strict',
+  sameSite: 'Strict',
   maxAge: 60 * 60 * 24 * 30,
 });
 cookie.parse(request.headers.get('cookie'));
@@ -36,7 +36,7 @@ The following table describes the options for how the cookie is persisted within
 | maxAge   | <code>number</code>                              | The [number of seconds until the cookie expires](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#max-agenumber). `maxAge` takes precedence over `expires` if both are defined.       |
 | secure   | <code>boolean</code>                             | Whether to secure the cookie so that the browser only sends the cookie over HTTPS. Some browsers [don't work with secure cookies on localhost](https://owasp.org/www-community/controls/SecureCookieAttribute).                                                                                   |
 | httpOnly | <code>boolean</code>                             | Whether to secure the cookie so that [client-side JavaScript can't read the cookie](https://owasp.org/www-community/HttpOnly).   |
-| sameSite | <code>"lax" &#124; "strict" &#124; "none"</code> | Declares that the cookie should be restricted to a first-party or [same-site](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) context.                                     |
+| sameSite | <code>"Lax" &#124; "Strict" &#124; "None"</code> | Declares that the cookie should be restricted to a first-party or [same-site](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) context.                                     |
 | path     | <code>string</code>                              | Tells the browser that the cookie should only be sent to the server if it's within the [defined path](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#path_attribute).                          |
 | domain   | <code>string</code>                              | Secures the cookie so that it's only used on [specific domains](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#domain_attribute).                                                              |
 
