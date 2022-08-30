@@ -28,7 +28,7 @@ export class ResponseSync extends Response {
         throw new Error(
           `Request to ${this.url} failed with ${this.status} and the response body is not parseable.\nMake sure to handle the error state when using fetchSync.`
         );
-      }
+      } else throw e;
     }
   }
 
