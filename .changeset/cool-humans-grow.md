@@ -2,7 +2,7 @@
 '@shopify/hydrogen': patch
 ---
 
-Whenever using `fetchSync`, make sure to handle the error state. Though we've made changes to the error thrown by the JSON parser to also tell you that the request failed:
+Whenever using `fetchSync`, make sure to handle the error state. Though we've made changes to the error thrown by the JSON parser to also tell you that the request was unsuccessful:
 
 ```ts
 function MyComponent() {
