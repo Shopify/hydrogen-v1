@@ -4,7 +4,6 @@
   "description": "Components for modern custom Shopify storefronts",
   "homepage": "https://github.com/Shopify/hydrogen#readme",
   "license": "MIT",
-  "private": true,
   "engines": {
     "node": ">=14"
   },
