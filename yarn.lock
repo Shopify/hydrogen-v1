@@ -16299,20 +16299,15 @@ underscore@~1.6.0:
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.6.0.tgz#8b38b10cacdef63337b8b24e4ff86d45aea529a8"
   integrity sha1-izixDKze9jM3uLJOT/htRa6lKag=
 
-undici@5.5.1, undici@^5.5.1:
+undici@5.5.1:
   version "5.5.1"
   resolved "https://registry.yarnpkg.com/undici/-/undici-5.5.1.tgz#baaf25844a99eaa0b22e1ef8d205bffe587c8f43"
   integrity sha512-MEvryPLf18HvlCbLSzCW0U00IMftKGI5udnjrQbC5D4P0Hodwffhv+iGfWuJwg16Y/TK11ZFK8i+BPVW2z/eAw==
 
-undici@^5.1.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-5.3.0.tgz#869d47bafa7f72ccaf8738258f0283bf3dd179ca"
-  integrity sha512-8LxC/xmR2GCE4q1heE1sJxVnnf5S6yQ2dObvMFBBWkB8aQlaqNuWovgRFWRMB7KUdLPGZfOTTmUeeLEJYX56iQ==
-
-undici@^5.8.0:
-  version "5.8.0"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-5.8.0.tgz#dec9a8ccd90e5a1d81d43c0eab6503146d649a4f"
-  integrity sha512-1F7Vtcez5w/LwH2G2tGnFIihuWUlc58YidwLiCv+jR2Z50x0tNXpRRw7eOIJ+GvqCqIkg9SB7NWAJ/T9TLfv8Q==
+undici@^5.1.0, undici@^5.5.1, undici@^5.8.0, undici@^5.8.2:
+  version "5.8.2"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-5.8.2.tgz#071fc8a6a5d24db0ad510ad442f607d9b09d5eec"
+  integrity sha512-3KLq3pXMS0Y4IELV045fTxqz04Nk9Ms7yfBBHum3yxsTR4XNn+ZCaUbf/mWitgYDAhsplQ0B1G4S5D345lMO3A==
 
 unherit@^1.0.4:
   version "1.1.3"
