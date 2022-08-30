@@ -67,6 +67,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Format release with Prettier
+        run: yarn format
+
   compile:
     needs: changelog
     # Only compile templates if a release was published, and we're on the "latest" release branch
