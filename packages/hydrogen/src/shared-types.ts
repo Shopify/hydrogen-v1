@@ -37,3 +37,10 @@ export type ShopifyConfig = {
   storefrontApiVersion: string;
   multipassSecret?: string;
 };
+
+export type InlineHydrogenRoutes =
+  | string
+  | {
+      files: string;
+      basePath?: string;
+    };

@@ -16,6 +16,7 @@ import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants.js';
 import type {SessionSyncApi} from '../session/session-types.js';
 import {parseJSON} from '../../utilities/parse.js';
+import type {RouteMatches} from '../../utilities/routes.js';
 
 export type PreloadQueryEntry = {
   key: QueryKey;
@@ -81,6 +82,7 @@ export class HydrogenRequest extends Request {
     runtime?: RuntimeContext;
     scopes: Map<string, Record<string, any>>;
     localization?: LocalizationContextValue;
+    matchedRoutes?: RouteMatches;
     [key: string]: any;
   };
 
