@@ -127,7 +127,7 @@ export function CartProviderV2({
     cartFragment,
   });
 
-  const [state, send, service] = useMachine(cartMachine, {
+  const [state, send] = useMachine(cartMachine, {
     actions: {
       fetchCart: (_, event) => {
         if (event.type !== 'FETCH_CART') return;
@@ -180,26 +180,25 @@ export function CartProviderV2({
           });
         });
       },
-
       removeCartLine: (context, event) => {
-        if (event.type !== 'UPDATE_CARTLINE' || !context?.cart?.id) return;
+        if (event.type !== 'REMOVE_CARTLINE' || !context?.cart?.id) return;
         cartLineRemove(context.cart.id, event.payload.lines).then((res) => {
-          if (res?.errors || !res.data?.cartLinesUpdate?.cart) {
+          if (res?.errors || !res.data?.cartLinesRemove?.cart) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
           }
           send({
             type: 'RESOLVE',
-            payload: {cart: cartFromGraphQL(res.data?.cartLinesUpdate.cart)},
+            payload: {cart: cartFromGraphQL(res.data?.cartLinesRemove.cart)},
           });
         });
       },
     },
   });
 
-  useEffect(() => {
-    const subscription = service.subscribe((state) => console.log(state));
-    return subscription.unsubscribe;
-  }, [service]);
+  // useEffect(() => {
+  //   const subscription = service.subscribe((state) => console.log(state));
+  //   return subscription.unsubscribe;
+  // }, [service]);
 
   function tempTransposeStatus(
     status: CartMachineTypeState['value']

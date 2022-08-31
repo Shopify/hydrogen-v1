@@ -8,6 +8,7 @@ import {
 import {
   CartCreate,
   CartLineAdd,
+  CartLineRemove,
   CartLineUpdate,
   CartQuery,
 } from './cart-queries.js';
@@ -19,6 +20,10 @@ import {
   CartLineAddMutation,
   CartLineAddMutationVariables,
 } from './graphql/CartLineAddMutation.js';
+import {
+  CartLineRemoveMutation,
+  CartLineRemoveMutationVariables,
+} from './graphql/CartLineRemoveMutation.js';
 import {
   CartLineUpdateMutation,
   CartLineUpdateMutationVariables,
@@ -97,18 +102,19 @@ export function useCartActions({
   );
 
   const cartLineRemove = useCallback(
-    async (cartId: string, lines: CartLineUpdateInput[]) => {
-      return fetchCart<CartLineUpdateMutationVariables, CartLineUpdateMutation>(
-        {
-          query: CartLineUpdate(cartFragment),
-          variables: {
-            cartId,
-            lines,
-            numCartLines,
-            country: CountryCode.Us,
-          },
-        }
-      );
+    async (cartId: string, lines: string[]) => {
+      return await fetchCart<
+        CartLineRemoveMutationVariables,
+        CartLineRemoveMutation
+      >({
+        query: CartLineRemove(cartFragment),
+        variables: {
+          cartId,
+          lines,
+          numCartLines,
+          country: CountryCode.Us,
+        },
+      });
     },
     [cartFragment, fetchCart, numCartLines]
   );
@@ -122,7 +128,14 @@ export function useCartActions({
       cartLineRemove,
       cartFragment,
     }),
-    [cartFetch, cartCreate, cartLineAdd, cartLineUpdate, cartFragment]
+    [
+      cartFetch,
+      cartCreate,
+      cartLineAdd,
+      cartLineUpdate,
+      cartLineRemove,
+      cartFragment,
+    ]
   );
 }
 
