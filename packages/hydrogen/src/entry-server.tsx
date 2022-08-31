@@ -87,10 +87,13 @@ export const renderHydrogen = (App: any) => {
 
     let sessionApi = options.sessionApi;
 
-    const {default: inlineHydrogenConfig} = await import(
+    const {default: importedConfig} = await import(
       // @ts-ignore
       'virtual__hydrogen.config.ts'
     );
+
+    const inlineHydrogenConfig =
+      typeof importedConfig === 'function' ? importedConfig() : importedConfig;
 
     const {default: hydrogenRoutes} = await import(
       // @ts-ignore
@@ -198,7 +201,7 @@ export const renderHydrogen = (App: any) => {
           });
 
           // Asynchronously wait for it in workers
-          request.ctx.runtime?.waitUntil(staleWhileRevalidatePromise);
+          request.ctx.runtime?.waitUntil?.(staleWhileRevalidatePromise);
         }
 
         return cachedResponse;
@@ -276,6 +279,8 @@ async function processRequest(
   if (isRSCRequest) {
     const buffered = await bufferReadableStream(rsc.readable.getReader());
     postRequestTasks('rsc', 200, request, response);
+
+    response.headers.set('cache-control', response.cacheControlHeader);
     cacheResponse(response, request, [buffered], revalidate);
 
     return new Response(buffered, {
@@ -904,7 +909,7 @@ async function cacheResponse(
       const cachePutPromise = Promise.resolve(true).then(() =>
         saveCacheResponse(response, request, chunks)
       );
-      request.ctx.runtime?.waitUntil(cachePutPromise);
+      request.ctx.runtime?.waitUntil?.(cachePutPromise);
     }
   }
 }

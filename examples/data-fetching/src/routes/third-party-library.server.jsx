@@ -1,4 +1,4 @@
-import {useQuery, CacheHours} from '@shopify/hydrogen';
+import {useQuery, CacheLong} from '@shopify/hydrogen';
 import randomUser from '../lib/random-user';
 
 export default function UseQueryExample() {
@@ -20,7 +20,7 @@ export default function UseQueryExample() {
       return await randomUser.get(); // Example 3P SDK
     },
     {
-      cache: CacheHours(), // https://shopify.dev/custom-storefronts/hydrogen/framework/cache
+      cache: CacheLong(), // https://shopify.dev/custom-storefronts/hydrogen/framework/cache
       preload: true, // Defaults to true. https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries
     }
   );

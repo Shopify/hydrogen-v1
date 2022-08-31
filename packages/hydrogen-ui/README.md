@@ -1,5 +1,11 @@
 # Hydrogen-UI
 
+## NOTICE
+
+⚠️ This is an alpha version of Hydrogen-UI. The name, components, and utilties are all likely to change as we get closer to release. DO NOT USE IN PRODUCTION, THERE WILL BE BREAKING CHANGES. This release is meant for testing. ⚠️
+
+If you still want to test this package, be sure to use the name `@shopify/hydrogen-ui-alpha` instead of `@shopify/hydrogen-ui` in the documentation below.
+
 ## Getting started
 
 npm:
@@ -63,6 +69,24 @@ Hydrogen-UI has a development and production bundle; the development bundle has 
 Depending on the bundler or runtime you're using, it may automatically choose the correct bundle by following the `package.json#exports` of Hydrogen-UI. If it's not automatic, then you may need to configure your bundler / runtime to use the `development` and `production` conditions to enable this feature.
 
 The production bundle is used by default if your bundler / runtime doesn't understand the export conditions.
+
+## Hydrogen-UI in the Browser
+
+There are two `umd` builds (development and production) of Hydrogen-UI, meant to be used directly by `<script src=""></script>` tags in HTML, or by `AMD`-compatible loaders.
+
+If you're using Hydrogen-UI as a global through the `<script>` tag, then the components can be accessed through the `hydrogenui` global variable.
+
+## Working on Hydrogen-UI
+
+There are two ways you can develop Hydrogen-UI components:
+
+- Develop components in the demo store:
+  1. Add `"@shopify/hydrogen-ui": "2022.07.0"` to the demo-store's `package.json`
+  2. Run `yarn` then `yarn dev` in the demo-store directory,
+  3. Run `yarn dev:demo` in the hydrogen-ui directory
+- Develop components in isolation:
+  1. Run `yarn dev` (or `yarn dev:story`) in the hydrogen-ui directory to spin up an instance of [Ladle](https://ladle.dev/)
+  2. Edit the component or the component's story `[ComponentName].stories.tsx`
 
 ## Common Problems
 

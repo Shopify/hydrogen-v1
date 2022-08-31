@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.1
+
+## 1.3.0
+
+### Patch Changes
+
+- Update links to Stackblitz for starter templates ([#1966](https://github.com/Shopify/hydrogen/pull/1966)) by [@blittle](https://github.com/blittle)
+
+* Update templates to use the latest CLI and have a minimum node version ([#1911](https://github.com/Shopify/hydrogen/pull/1911)) by [@blittle](https://github.com/blittle)
+
 ## 1.2.0
 
 ## 1.1.0
