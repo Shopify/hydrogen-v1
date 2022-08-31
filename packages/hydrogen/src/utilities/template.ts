@@ -26,3 +26,26 @@ export function stripScriptsFromTemplate(template: string) {
 
   return {noScriptTemplate: template, bootstrapScripts, bootstrapModules};
 }
+
+export async function getTemplate(
+  indexTemplate:
+    | string
+    | ((url: string) => Promise<string | {default: string}>),
+  url: URL
+) {
+  let raw =
+    typeof indexTemplate === 'function'
+      ? await indexTemplate(url.toString())
+      : indexTemplate;
+
+  if (raw && typeof raw !== 'string') {
+    raw = raw.default;
+  }
+
+  return {
+    raw,
+    ...stripScriptsFromTemplate(raw),
+  };
+}
+
+export type TemplateParts = Awaited<ReturnType<typeof getTemplate>>;
