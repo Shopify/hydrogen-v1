@@ -90,7 +90,7 @@ describe('getTemplate', () => {
     expect(bootstrapModules[0]).toBe('/module.js');
   });
 
-  it('finds the stylesheets in a document', async () => {
+  it('finds and encodes the stylesheets in a document', async () => {
     const template = `<html><head>
       <link rel="stylesheet" href="/assets/1.css">
       <link rel="stylesheet" wrong="/assets/2.css">
@@ -98,13 +98,18 @@ describe('getTemplate', () => {
       <link rel="preconnect" href="/assets/3.css">
       <script></script>
       <link rel="stylesheet" href="https://example.com/assets/4.css">
+      <link rel="stylesheet" href="/assets/苗条.css">
     </head></html>`;
 
     const {stylesheets} = await getTemplate(template);
 
-    expect(stylesheets).toHaveLength(2);
+    expect(stylesheets).toHaveLength(3);
     expect(stylesheets).toEqual(
-      expect.arrayContaining(['/assets/1.css', '//example.com/assets/4.css'])
+      expect.arrayContaining([
+        '/assets/1.css',
+        '//example.com/assets/4.css',
+        '/assets/%E8%8B%97%E6%9D%A1.css',
+      ])
     );
   });
 

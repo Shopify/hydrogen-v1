@@ -46,7 +46,7 @@ export async function getTemplate(
   for (const linkTag of raw.match(/\s*<link[^<>]+?>/gim) || []) {
     if (linkTag.includes('rel="stylesheet"')) {
       const href = linkTag.match(/href="([^"]+)"/)?.[1];
-      if (href) stylesheets.push(href.replace(/^https?:/i, ''));
+      if (href) stylesheets.push(encodeURI(href.replace(/^https?:/i, '')));
     }
   }
 
