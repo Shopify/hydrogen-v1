@@ -4,6 +4,7 @@ import MagicString from 'magic-string';
 import path from 'path';
 import fs from 'fs';
 import fastGlob from 'fast-glob';
+import {isVite3} from '../../utilities/vite.js';
 
 const SSR_BUNDLE_NAME = 'index.js';
 
@@ -23,7 +24,7 @@ export default () => {
 
       if (config.build.ssr) {
         const {output = {}} = config.build.rollupOptions || {};
-        const {format = ''} =
+        const {format = isVite3 ? 'es' : ''} =
           (Array.isArray(output) ? output[0] : output) || {};
 
         isESM = Boolean(process.env.WORKER) || ['es', 'esm'].includes(format);
