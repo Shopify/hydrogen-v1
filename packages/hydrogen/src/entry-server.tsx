@@ -342,7 +342,7 @@ async function runSSR({
     noScriptTemplate,
     bootstrapModules,
     bootstrapScripts,
-    stylesheets,
+    linkHeader,
   },
 }: RunSsrParams) {
   let ssrDidError: Error | undefined;
@@ -371,15 +371,11 @@ async function runSSR({
     </Html>
   );
 
-  const newLinkHeader = stylesheets
-    .map((resource) => `<${resource}>; rel=preload; as=style`)
-    .join(', ');
-
-  if (newLinkHeader) {
+  if (linkHeader) {
     const existingLinkHeader = response.headers.get('Link');
     response.headers.set(
       'Link',
-      (existingLinkHeader ? existingLinkHeader + ', ' : '') + newLinkHeader
+      existingLinkHeader ? existingLinkHeader + ', ' + linkHeader : linkHeader
     );
   }
 

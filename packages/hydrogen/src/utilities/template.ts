@@ -27,6 +27,15 @@ function stripScriptsFromTemplate(template: string) {
   return {noScriptTemplate: template, bootstrapScripts, bootstrapModules};
 }
 
+function extractAttributes(string: string) {
+  const attributes = {} as Record<string, string>;
+  for (const [, attr, value] of string.matchAll(/\s([\w-]+)="([^"]*?)"/gm)) {
+    attributes[attr] = value;
+  }
+
+  return attributes;
+}
+
 export async function getTemplate(
   indexTemplate:
     | string
@@ -42,19 +51,38 @@ export async function getTemplate(
     raw = raw.default;
   }
 
-  const stylesheets = [];
-  for (const linkTag of raw.match(/\s*<link[^<>]+?>/gim) || []) {
-    if (linkTag.includes('rel="stylesheet"')) {
-      const href = linkTag.match(/href="([^"]+)"/)?.[1];
-      if (href) stylesheets.push(encodeURI(href.replace(/^https?:/i, '')));
-    }
-  }
-
   return {
     raw,
-    stylesheets,
+    linkHeader: createLinkHeader(raw),
     ...stripScriptsFromTemplate(raw),
   };
 }
 
 export type TemplateParts = Awaited<ReturnType<typeof getTemplate>>;
+
+const ALLOWED_REL_ATTRS = ['stylesheet', 'preconnect', 'preload'];
+
+function createLinkHeader(template: string) {
+  const assets = (template.match(/\s*<link[^<>]+?>/gim) || []).map(
+    extractAttributes
+  );
+
+  const links = [];
+
+  for (const {href, rel = '', ...attrs} of assets) {
+    if (href && ALLOWED_REL_ATTRS.includes(rel)) {
+      const isStyle = rel === 'stylesheet';
+      if (isStyle && !attrs.as) attrs.as = 'style';
+
+      links.push(
+        [
+          `<${encodeURI(href.replace(/^https?:/i, ''))}>`,
+          `rel=${isStyle ? 'preload' : rel}`,
+          ...Object.entries(attrs).map((entry) => entry.join('=')),
+        ].join('; ')
+      );
+    }
+  }
+
+  return links.join(', ');
+}

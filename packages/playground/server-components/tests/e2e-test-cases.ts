@@ -367,11 +367,11 @@ export default async function testCases({
           /<\/assets\/style.[\w\d]+.css>; rel=preload; as=style/
         );
 
-        const stylesheets = (html.match(/<link[^<>]+?>/gim) || [])
+        const assets = (html.match(/<link[^<>]+?>/gim) || [])
           .filter((linkTag) => linkTag.includes('rel="stylesheet"'))
           .map((linkTag) => linkTag.match(/href="([^"]+)"/)?.[1] || '');
 
-        for (const asset of stylesheets) {
+        for (const asset of assets) {
           expect(link).toMatch(asset);
         }
       });
