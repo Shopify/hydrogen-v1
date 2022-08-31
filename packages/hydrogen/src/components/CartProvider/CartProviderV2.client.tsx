@@ -19,7 +19,6 @@ import {
 } from './types.js';
 import {flattenConnection} from '../../utilities/flattenConnection/index.js';
 import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.js';
-import {CartDiscountCodesUpdateMutationVariables} from './graphql/CartDiscountCodesUpdateMutation.js';
 import {useCartActions} from './CartActions.client.js';
 
 function invokeCart(
@@ -81,6 +80,15 @@ const cartMachine = createMachine<
         NOTE_UPDATE: {
           target: 'noteUpdating',
         },
+        BUYER_IDENTITY_UPDATE: {
+          target: 'buyerIdentityUpdating',
+        },
+        CART_ATTRIBUTES_UPDATE: {
+          target: 'cartAttributesUpdating',
+        },
+        DISCOUNT_CODES_UPDATE: {
+          target: 'discountCodesUpdating',
+        },
       },
     },
     error: {
@@ -97,6 +105,15 @@ const cartMachine = createMachine<
         NOTE_UPDATE: {
           target: 'noteUpdating',
         },
+        BUYER_IDENTITY_UPDATE: {
+          target: 'buyerIdentityUpdating',
+        },
+        CART_ATTRIBUTES_UPDATE: {
+          target: 'cartAttributesUpdating',
+        },
+        DISCOUNT_CODES_UPDATE: {
+          target: 'discountCodesUpdating',
+        },
       },
     },
     cartFetching: invokeCart(['xCartFetch']),
@@ -105,6 +122,9 @@ const cartMachine = createMachine<
     cartLineUpdating: invokeCart(['xCartLineUpdate']),
     cartLineAdding: invokeCart(['xCartLineAdd']),
     noteUpdating: invokeCart(['xNoteUpdate']),
+    buyerIdentityUpdating: invokeCart(['xBuyerIdentityUpdate']),
+    cartAttributesUpdating: invokeCart(['xCartAttributesUpdate']),
+    discountCodesUpdating: invokeCart(['xDiscountCodesUpdate']),
   },
 });
 
@@ -129,6 +149,9 @@ export function CartProviderV2({
     cartLineUpdate,
     cartLineRemove,
     noteUpdate,
+    buyerIdentityUpdate,
+    cartAttributesUpdate,
+    discountCodesUpdate,
     cartFragment: usedCartFragment,
   } = useCartActions({
     numCartLines,
@@ -212,6 +235,57 @@ export function CartProviderV2({
           });
         });
       },
+      xBuyerIdentityUpdate: (context, event) => {
+        if (event.type !== 'BUYER_IDENTITY_UPDATE' || !context?.cart?.id)
+          return;
+        buyerIdentityUpdate(context.cart.id, event.payload.buyerIdentity).then(
+          (res) => {
+            if (res?.errors || !res.data?.cartBuyerIdentityUpdate?.cart) {
+              return send({type: 'ERROR', payload: {errors: res?.errors}});
+            }
+            send({
+              type: 'RESOLVE',
+              payload: {
+                cart: cartFromGraphQL(res.data?.cartBuyerIdentityUpdate.cart),
+              },
+            });
+          }
+        );
+      },
+      xCartAttributesUpdate: (context, event) => {
+        if (event.type !== 'CART_ATTRIBUTES_UPDATE' || !context?.cart?.id)
+          return;
+        cartAttributesUpdate(context.cart.id, event.payload.attributes).then(
+          (res) => {
+            if (res?.errors || !res.data?.cartAttributesUpdate?.cart) {
+              return send({type: 'ERROR', payload: {errors: res?.errors}});
+            }
+            send({
+              type: 'RESOLVE',
+              payload: {
+                cart: cartFromGraphQL(res.data?.cartAttributesUpdate.cart),
+              },
+            });
+          }
+        );
+      },
+      xDiscountCodesUpdate: (context, event) => {
+        if (event.type !== 'DISCOUNT_CODES_UPDATE' || !context?.cart?.id)
+          return;
+        discountCodesUpdate(context.cart.id, event.payload.discountCodes).then(
+          (res) => {
+            if (res?.errors || !res.data?.cartDiscountCodesUpdate?.cart) {
+              return send({type: 'ERROR', payload: {errors: res?.errors}});
+            }
+            send({
+              type: 'RESOLVE',
+              payload: {
+                cart: cartFromGraphQL(res.data?.cartDiscountCodesUpdate.cart),
+              },
+            });
+          }
+        );
+      },
     },
   });
 
@@ -236,8 +310,10 @@ export function CartProviderV2({
       case 'cartLineAdding':
       case 'cartLineRemoving':
       case 'cartLineUpdating':
-        return 'updating';
       case 'noteUpdating':
+      case 'buyerIdentityUpdating':
+      case 'cartAttributesUpdating':
+      case 'discountCodesUpdating':
         return 'updating';
     }
   }
@@ -285,15 +361,28 @@ export function CartProviderV2({
         });
       },
       buyerIdentityUpdate(buyerIdentity: CartBuyerIdentityInput) {
-        // buyerIdentityUpdate(buyerIdentity, state);
+        send({
+          type: 'BUYER_IDENTITY_UPDATE',
+          payload: {
+            buyerIdentity,
+          },
+        });
       },
       cartAttributesUpdate(attributes: AttributeInput[]) {
-        // cartAttributesUpdateattributes, state);
+        send({
+          type: 'CART_ATTRIBUTES_UPDATE',
+          payload: {
+            attributes,
+          },
+        });
       },
-      discountCodesUpdate(
-        discountCodes: CartDiscountCodesUpdateMutationVariables['discountCodes']
-      ) {
-        // discountCodesUpdate(discountCodes, state);
+      discountCodesUpdate(discountCodes: string[]) {
+        send({
+          type: 'DISCOUNT_CODES_UPDATE',
+          payload: {
+            discountCodes,
+          },
+        });
       },
       cartFragment: usedCartFragment,
     };
