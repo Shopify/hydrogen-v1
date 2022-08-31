@@ -1,12 +1,17 @@
 import {useCallback, useMemo} from 'react';
 import {
+  AttributeInput,
+  CartBuyerIdentityInput,
   CartInput,
   CartLineInput,
   CartLineUpdateInput,
   CountryCode,
 } from '../../storefront-api-types.js';
 import {
+  CartAttributesUpdate,
+  CartBuyerIdentityUpdate,
   CartCreate,
+  CartDiscountCodesUpdate,
   CartLineAdd,
   CartLineRemove,
   CartLineUpdate,
@@ -14,9 +19,21 @@ import {
   CartQuery,
 } from './cart-queries.js';
 import {
+  CartAttributesUpdateMutation,
+  CartAttributesUpdateMutationVariables,
+} from './graphql/CartAttributesUpdateMutation.js';
+import {
+  CartBuyerIdentityUpdateMutation,
+  CartBuyerIdentityUpdateMutationVariables,
+} from './graphql/CartBuyerIdentityUpdateMutation.js';
+import {
   CartCreateMutation,
   CartCreateMutationVariables,
 } from './graphql/CartCreateMutation.js';
+import {
+  CartDiscountCodesUpdateMutation,
+  CartDiscountCodesUpdateMutationVariables,
+} from './graphql/CartDiscountCodesUpdateMutation.js';
 import {
   CartLineAddMutation,
   CartLineAddMutationVariables,
@@ -142,6 +159,63 @@ export function useCartActions({
     [fetchCart, cartFragment, numCartLines]
   );
 
+  const buyerIdentityUpdate = useCallback(
+    async (cartId: string, buyerIdentity: CartBuyerIdentityInput) => {
+      return await fetchCart<
+        CartBuyerIdentityUpdateMutationVariables,
+        CartBuyerIdentityUpdateMutation
+      >({
+        query: CartBuyerIdentityUpdate(cartFragment),
+        variables: {
+          cartId,
+          buyerIdentity,
+          numCartLines,
+          country: CountryCode.Us,
+        },
+      });
+    },
+    [cartFragment, fetchCart, numCartLines]
+  );
+
+  const cartAttributesUpdate = useCallback(
+    async (cartId: string, attributes: AttributeInput[]) => {
+      return await fetchCart<
+        CartAttributesUpdateMutationVariables,
+        CartAttributesUpdateMutation
+      >({
+        query: CartAttributesUpdate(cartFragment),
+        variables: {
+          cartId,
+          attributes,
+          numCartLines,
+          country: CountryCode.Us,
+        },
+      });
+    },
+    [cartFragment, fetchCart, numCartLines]
+  );
+
+  const discountCodesUpdate = useCallback(
+    async (
+      cartId: string,
+      discountCodes: CartDiscountCodesUpdateMutationVariables['discountCodes']
+    ) => {
+      return await fetchCart<
+        CartDiscountCodesUpdateMutationVariables,
+        CartDiscountCodesUpdateMutation
+      >({
+        query: CartDiscountCodesUpdate(cartFragment),
+        variables: {
+          cartId,
+          discountCodes,
+          numCartLines,
+          country: CountryCode.Us,
+        },
+      });
+    },
+    [cartFragment, fetchCart, numCartLines]
+  );
+
   return useMemo(
     () => ({
       cartFetch,
@@ -150,6 +224,9 @@ export function useCartActions({
       cartLineUpdate,
       cartLineRemove,
       noteUpdate,
+      buyerIdentityUpdate,
+      cartAttributesUpdate,
+      discountCodesUpdate,
       cartFragment,
     }),
     [
@@ -159,6 +236,9 @@ export function useCartActions({
       cartLineUpdate,
       cartLineRemove,
       noteUpdate,
+      buyerIdentityUpdate,
+      cartAttributesUpdate,
+      discountCodesUpdate,
       cartFragment,
     ]
   );

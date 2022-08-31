@@ -132,6 +132,27 @@ export type NoteUpdateEvent = {
   };
 };
 
+export type BuyerIdentityUpdateEvent = {
+  type: 'BUYER_IDENTITY_UPDATE';
+  payload: {
+    buyerIdentity: CartBuyerIdentityInput;
+  };
+};
+
+export type CartAttributesUpdateEvent = {
+  type: 'CART_ATTRIBUTES_UPDATE';
+  payload: {
+    attributes: MutationCartAttributesUpdateArgs['attributes'];
+  };
+};
+
+export type DiscountCodesUpdateEvent = {
+  type: 'DISCOUNT_CODES_UPDATE';
+  payload: {
+    discountCodes: string[];
+  };
+};
+
 export type CartMachineEvent =
   | CartFetchEvent
   | CartCreateEvent
@@ -139,6 +160,9 @@ export type CartMachineEvent =
   | CartLineRemoveEvent
   | CartLineUpdateEvent
   | NoteUpdateEvent
+  | BuyerIdentityUpdateEvent
+  | CartAttributesUpdateEvent
+  | DiscountCodesUpdateEvent
   | {type: 'RESOLVE'; payload: {cart: Cart}}
   | {type: 'ERROR'; payload: {errors: any}};
 
@@ -169,4 +193,7 @@ export type CartMachineTypeState =
   | {value: 'cartLineRemoving'; context: CartMachineContext}
   | {value: 'cartLineUpdating'; context: CartMachineContext}
   | {value: 'cartLineAdding'; context: CartMachineContext}
-  | {value: 'noteUpdating'; context: CartMachineContext};
+  | {value: 'noteUpdating'; context: CartMachineContext}
+  | {value: 'buyerIdentityUpdating'; context: CartMachineContext}
+  | {value: 'cartAttributesUpdating'; context: CartMachineContext}
+  | {value: 'discountCodesUpdating'; context: CartMachineContext};
