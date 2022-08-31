@@ -92,45 +92,53 @@ export type CartMachineContext = {
   errors?: any;
 };
 
-export type FetchCartEvent = {
-  type: 'FETCH_CART';
+export type CartFetchEvent = {
+  type: 'CART_FETCH';
   payload: {
     cartId: string;
   };
 };
 
-export type CreateCartEvent = {
-  type: 'CREATE_CART';
+export type CartCreateEvent = {
+  type: 'CART_CREATE';
   payload: CartInput;
 };
 
-export type AddCartLineEvent = {
-  type: 'ADD_CARTLINE';
+export type CartLineAddEvent = {
+  type: 'CARTLINE_ADD';
   payload: {
     lines: CartLineInput[];
   };
 };
 
-export type RemoveCartLineEvent = {
-  type: 'REMOVE_CARTLINE';
+export type CartLineRemoveEvent = {
+  type: 'CARTLINE_REMOVE';
   payload: {
     lines: string[];
   };
 };
 
-export type UpdateCartLineEvent = {
-  type: 'UPDATE_CARTLINE';
+export type CartLineUpdateEvent = {
+  type: 'CARTLINE_UPDATE';
   payload: {
     lines: CartLineUpdateInput[];
   };
 };
 
+export type NoteUpdateEvent = {
+  type: 'NOTE_UPDATE';
+  payload: {
+    note: MutationCartNoteUpdateArgs['note'];
+  };
+};
+
 export type CartMachineEvent =
-  | FetchCartEvent
-  | CreateCartEvent
-  | AddCartLineEvent
-  | RemoveCartLineEvent
-  | UpdateCartLineEvent
+  | CartFetchEvent
+  | CartCreateEvent
+  | CartLineAddEvent
+  | CartLineRemoveEvent
+  | CartLineUpdateEvent
+  | NoteUpdateEvent
   | {type: 'RESOLVE'; payload: {cart: Cart}}
   | {type: 'ERROR'; payload: {errors: any}};
 
@@ -156,8 +164,9 @@ export type CartMachineTypeState =
         errors: any;
       };
     }
-  | {value: 'Fetching'; context: CartMachineContext}
-  | {value: 'CreatingCart'; context: CartMachineContext}
-  | {value: 'RemovingCartLine'; context: CartMachineContext}
-  | {value: 'UpdatingCartLine'; context: CartMachineContext}
-  | {value: 'AddingCartLine'; context: CartMachineContext};
+  | {value: 'cartFetching'; context: CartMachineContext}
+  | {value: 'cartCreating'; context: CartMachineContext}
+  | {value: 'cartLineRemoving'; context: CartMachineContext}
+  | {value: 'cartLineUpdating'; context: CartMachineContext}
+  | {value: 'cartLineAdding'; context: CartMachineContext}
+  | {value: 'noteUpdating'; context: CartMachineContext};
