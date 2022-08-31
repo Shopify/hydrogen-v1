@@ -2,7 +2,7 @@
  * Strip out script `src` values from <script> tags in a given HTML template.
  * Returns two lists of scripts, split based on whether they are `type="module"`.
  */
-export function stripScriptsFromTemplate(template: string) {
+function stripScriptsFromTemplate(template: string) {
   const bootstrapScripts = [] as string[];
   const bootstrapModules = [] as string[];
 
@@ -31,19 +31,28 @@ export async function getTemplate(
   indexTemplate:
     | string
     | ((url: string) => Promise<string | {default: string}>),
-  url: URL
+  url?: URL
 ) {
   let raw =
     typeof indexTemplate === 'function'
-      ? await indexTemplate(url.toString())
+      ? await indexTemplate(url?.toString() || '')
       : indexTemplate;
 
   if (raw && typeof raw !== 'string') {
     raw = raw.default;
   }
 
+  const stylesheets = [];
+  for (const linkTag of raw.match(/\s*<link[^<>]+?>/gim) || []) {
+    if (linkTag.includes('rel="stylesheet"')) {
+      const href = linkTag.match(/href="([^"]+)"/)?.[1];
+      if (href) stylesheets.push(href.replace(/^https?:/i, ''));
+    }
+  }
+
   return {
     raw,
+    stylesheets,
     ...stripScriptsFromTemplate(raw),
   };
 }
