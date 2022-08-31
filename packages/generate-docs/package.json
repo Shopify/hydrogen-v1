@@ -1,0 +1,50 @@
+{
+  "name": "@shopify/generate-docs",
+  "version": "0.11.1",
+  "description": "Command line interface for generating docs from code comments",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=14"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "yarn build --preserveWatchOutput -w",
+    "build": "tsc -p .",
+    "prepack": "yarn build"
+  },
+  "bin": {
+    "generate-docs": "./bin/generate-docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/hydrogen.git",
+    "directory": "packages/cli"
+  },
+  "dependencies": {
+    "@babel/node": "^7.16.8",
+    "@babel/parser": "^7.17.3",
+    "@babel/types": "^7.17.0",
+    "@microsoft/tsdoc": "^0.12.20",
+    "@shopify/docs-tools": "^0.0.23",
+    "@shopify/prettier-config": "^1.1.2",
+    "fs-extra": "^10.0.0",
+    "markdown-table": "^2.0.0",
+    "prettier": "^2.4.1",
+    "remark": "^13.0.0",
+    "resolve": "^1.17.0",
+    "strip-markdown": "^4.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.12",
+    "@types/markdown-table": "^2.0.0",
+    "@types/resolve": "^1.17.1",
+    "@types/uuid": "^8.3.1"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ]
+}

@@ -29,6 +29,9 @@
     "version:snapshot": "changeset version",
     "version": "changeset version && node -p \"'export const LIB_VERSION = \\'' + require('./packages/hydrogen/package.json').version + '\\';'\" > packages/hydrogen/src/version.ts",
     "generate-docs": "node ./scripts/generate-docs.mjs",
+    "LEGACY_update-docs-on-version": "ts-node --project ./tsconfig.json ./scripts/update-docs-on-version.ts",
+    "LEGACY_generate-docs": "ts-node --project ./tsconfig.json ./scripts/generate-docs.ts",
+    "LEGACY_generate-docs:debug": "node --inspect-brk ./node_modules/.bin/ts-node --project ./tsconfig.json ./scripts/generate-docs.ts",
     "graphql-types": "run-s graphql-types:hydrogen lint:schema",
     "graphql-types:hydrogen": "yarn workspace @shopify/hydrogen graphql-types"
   },
