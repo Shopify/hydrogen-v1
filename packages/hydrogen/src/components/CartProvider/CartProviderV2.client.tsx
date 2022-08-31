@@ -56,48 +56,55 @@ const cartMachine = createMachine<
   states: {
     uninitialized: {
       on: {
-        FETCH_CART: {
-          target: 'Fetching',
+        CART_FETCH: {
+          target: 'cartFetching',
         },
-        CREATE_CART: {
-          target: 'CreatingCart',
+        CART_CREATE: {
+          target: 'cartCreating',
         },
-        ADD_CARTLINE: {
-          target: 'CreatingCart',
+        CARTLINE_ADD: {
+          target: 'cartCreating',
         },
       },
     },
     idle: {
       on: {
-        REMOVE_CARTLINE: {
-          target: 'RemovingCartLine',
+        CARTLINE_ADD: {
+          target: 'cartLineAdding',
         },
-        ADD_CARTLINE: {
-          target: 'AddingCartLine',
+        CARTLINE_UPDATE: {
+          target: 'cartLineUpdating',
         },
-        UPDATE_CARTLINE: {
-          target: 'UpdatingCartLine',
+        CARTLINE_REMOVE: {
+          target: 'cartLineRemoving',
+        },
+        NOTE_UPDATE: {
+          target: 'noteUpdating',
         },
       },
     },
     error: {
       on: {
-        REMOVE_CARTLINE: {
-          target: 'RemovingCartLine',
+        CARTLINE_ADD: {
+          target: 'cartLineAdding',
         },
-        ADD_CARTLINE: {
-          target: 'AddingCartLine',
+        CARTLINE_UPDATE: {
+          target: 'cartLineUpdating',
         },
-        UPDATE_CARTLINE: {
-          target: 'UpdatingCartLine',
+        CARTLINE_REMOVE: {
+          target: 'cartLineRemoving',
+        },
+        NOTE_UPDATE: {
+          target: 'noteUpdating',
         },
       },
     },
-    Fetching: invokeCart(['fetchCart']),
-    CreatingCart: invokeCart(['createCart']),
-    RemovingCartLine: invokeCart(['removeCartLine']),
-    UpdatingCartLine: invokeCart(['updateCartLine']),
-    AddingCartLine: invokeCart(['addCartLine']),
+    cartFetching: invokeCart(['xCartFetch']),
+    cartCreating: invokeCart(['xCartCreate']),
+    cartLineRemoving: invokeCart(['xCartLineRemove']),
+    cartLineUpdating: invokeCart(['xCartLineUpdate']),
+    cartLineAdding: invokeCart(['xCartLineAdd']),
+    noteUpdating: invokeCart(['xNoteUpdate']),
   },
 });
 
@@ -121,16 +128,17 @@ export function CartProviderV2({
     cartLineAdd,
     cartLineUpdate,
     cartLineRemove,
+    noteUpdate,
     cartFragment: usedCartFragment,
   } = useCartActions({
     numCartLines,
     cartFragment,
   });
 
-  const [state, send] = useMachine(cartMachine, {
+  const [state, send, service] = useMachine(cartMachine, {
     actions: {
-      fetchCart: (_, event) => {
-        if (event.type !== 'FETCH_CART') return;
+      xCartFetch: (_, event) => {
+        if (event.type !== 'CART_FETCH') return;
         cartFetch(event?.payload?.cartId).then((res) => {
           if (res?.errors || !res?.data?.cart) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
@@ -141,8 +149,8 @@ export function CartProviderV2({
           });
         });
       },
-      createCart: (_, event) => {
-        if (event.type !== 'CREATE_CART' && event.type !== 'ADD_CARTLINE')
+      xCartCreate: (_, event) => {
+        if (event.type !== 'CART_CREATE' && event.type !== 'CARTLINE_ADD')
           return;
 
         cartCreate(event?.payload).then((res) => {
@@ -155,8 +163,8 @@ export function CartProviderV2({
           });
         });
       },
-      addCartLine: (context, event) => {
-        if (event.type !== 'ADD_CARTLINE' || !context?.cart?.id) return;
+      xCartLineAdd: (context, event) => {
+        if (event.type !== 'CARTLINE_ADD' || !context?.cart?.id) return;
 
         cartLineAdd(context.cart.id, event.payload.lines).then((res) => {
           if (res?.errors || !res.data?.cartLinesAdd?.cart) {
@@ -168,8 +176,8 @@ export function CartProviderV2({
           });
         });
       },
-      updateCartLine: (context, event) => {
-        if (event.type !== 'UPDATE_CARTLINE' || !context?.cart?.id) return;
+      xCartLineUpdate: (context, event) => {
+        if (event.type !== 'CARTLINE_UPDATE' || !context?.cart?.id) return;
         cartLineUpdate(context.cart.id, event.payload.lines).then((res) => {
           if (res?.errors || !res.data?.cartLinesUpdate?.cart) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
@@ -180,8 +188,8 @@ export function CartProviderV2({
           });
         });
       },
-      removeCartLine: (context, event) => {
-        if (event.type !== 'REMOVE_CARTLINE' || !context?.cart?.id) return;
+      xCartLineRemove: (context, event) => {
+        if (event.type !== 'CARTLINE_REMOVE' || !context?.cart?.id) return;
         cartLineRemove(context.cart.id, event.payload.lines).then((res) => {
           if (res?.errors || !res.data?.cartLinesRemove?.cart) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
@@ -192,13 +200,25 @@ export function CartProviderV2({
           });
         });
       },
+      xNoteUpdate: (context, event) => {
+        if (event.type !== 'NOTE_UPDATE' || !context?.cart?.id) return;
+        noteUpdate(context.cart.id, event.payload.note).then((res) => {
+          if (res?.errors || !res.data?.cartNoteUpdate?.cart) {
+            return send({type: 'ERROR', payload: {errors: res?.errors}});
+          }
+          send({
+            type: 'RESOLVE',
+            payload: {cart: cartFromGraphQL(res.data?.cartNoteUpdate.cart)},
+          });
+        });
+      },
     },
   });
 
-  // useEffect(() => {
-  //   const subscription = service.subscribe((state) => console.log(state));
-  //   return subscription.unsubscribe;
-  // }, [service]);
+  useEffect(() => {
+    const subscription = service.subscribe((state) => console.log(state));
+    return subscription.unsubscribe;
+  }, [service]);
 
   function tempTransposeStatus(
     status: CartMachineTypeState['value']
@@ -209,13 +229,15 @@ export function CartProviderV2({
       case 'idle':
       case 'error':
         return 'idle';
-      case 'Fetching':
+      case 'cartFetching':
         return 'fetching';
-      case 'CreatingCart':
+      case 'cartCreating':
         return 'creating';
-      case 'AddingCartLine':
-      case 'RemovingCartLine':
-      case 'UpdatingCartLine':
+      case 'cartLineAdding':
+      case 'cartLineRemoving':
+      case 'cartLineUpdating':
+        return 'updating';
+      case 'noteUpdating':
         return 'updating';
     }
   }
@@ -228,19 +250,19 @@ export function CartProviderV2({
       totalQuantity: state?.context?.cart?.totalQuantity ?? 0,
       cartCreate(cartInput: CartInput) {
         send({
-          type: 'CREATE_CART',
+          type: 'CART_CREATE',
           payload: cartInput,
         });
       },
       linesAdd(lines: CartLineInput[]) {
         send({
-          type: 'ADD_CARTLINE',
+          type: 'CARTLINE_ADD',
           payload: {lines},
         });
       },
       linesRemove(lines: string[]) {
         send({
-          type: 'REMOVE_CARTLINE',
+          type: 'CARTLINE_REMOVE',
           payload: {
             lines,
           },
@@ -248,14 +270,19 @@ export function CartProviderV2({
       },
       linesUpdate(lines: CartLineUpdateInput[]) {
         send({
-          type: 'UPDATE_CARTLINE',
+          type: 'CARTLINE_UPDATE',
           payload: {
             lines,
           },
         });
       },
       noteUpdate(note: CartNoteUpdateMutationVariables['note']) {
-        // noteUpdate(note, state);
+        send({
+          type: 'NOTE_UPDATE',
+          payload: {
+            note,
+          },
+        });
       },
       buyerIdentityUpdate(buyerIdentity: CartBuyerIdentityInput) {
         // buyerIdentityUpdate(buyerIdentity, state);
