@@ -8,17 +8,24 @@ import React from 'react';
 
 export class HydrogenResponse extends Response {
   private wait = false;
+  private sent = false;
   private cacheOptions: CachingStrategy = CacheShort();
 
   public status = 200;
   public statusText = '';
+
+  markAsSent() {
+    this.sent = true;
+  }
 
   /**
    * Buffer the current response until all queries have resolved,
    * and prevent it from streaming back early.
    */
   doNotStream() {
-    this.wait = true;
+    if (!this.sent) {
+      this.wait = true;
+    }
   }
 
   canStream() {
