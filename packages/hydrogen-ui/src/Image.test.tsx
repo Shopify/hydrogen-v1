@@ -341,7 +341,7 @@ describe('<Image />', () => {
   });
 });
 
-function getPreviewImage(image: Partial<ImageType> = {}) {
+export function getPreviewImage(image: Partial<ImageType> = {}) {
   return {
     id: image.id ?? faker.random.words(),
     altText: image.altText ?? faker.random.words(),
