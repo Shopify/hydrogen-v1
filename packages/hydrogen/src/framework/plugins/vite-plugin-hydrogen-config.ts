@@ -3,6 +3,11 @@ import type {BuildOptions} from 'vite';
 import type {HydrogenVitePluginOptions} from '../types.js';
 import Crypto from 'crypto';
 
+/* -- Plugin notes:
+ * Provide configuration options to Vite to ensure Hydrogen is built correctly
+ * for worker environments, using latest ES syntax, and some other requirements.
+ */
+
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   const rollupOptions: BuildOptions['rollupOptions'] = {
     output: {},

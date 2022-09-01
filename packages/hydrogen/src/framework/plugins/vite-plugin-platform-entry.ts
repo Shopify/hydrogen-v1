@@ -12,6 +12,19 @@ const SSR_BUNDLE_NAME = 'index.js';
 // across client <> server builds.
 let clientBuildPath: string;
 
+/* -- Plugin notes:
+ * This plugin simplifies the way a platform entry file imports user files. This is
+ * needed to write generic integrations with different platform providers.
+ *
+ * Instead of using relative paths:
+ * `import handleRequest from '../../<arbitrary_path>/src/App.server';`
+ * `import indexTemplate from '../../<arbitrary_path>/dist/client/index.html?raw';`
+ *
+ *  It allows importing from a known static path which dynamically resolves the user files:
+ * `import {handleRequest, indexTemplate} from '@shopify/hydrogen/platforms';`
+ *
+ */
+
 export default () => {
   let config: ResolvedConfig;
   let isESM: boolean;

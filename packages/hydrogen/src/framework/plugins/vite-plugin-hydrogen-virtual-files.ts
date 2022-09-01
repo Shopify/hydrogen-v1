@@ -6,6 +6,14 @@ import {viteception} from '../viteception.js';
 import MagicString from 'magic-string';
 import {isVite3} from '../../utilities/vite.js';
 
+/* -- Plugin notes:
+ * The Hydrogen framework needs to import certain files from the user app, such as
+ * routes and config. A priori, we can't import these files from the framework
+ * because we don't know the user path to write it in an `import * from '...'` statement.
+ * Instead, we import "virtual files" that are resolved by Vite in this plugin.
+ * These virtual files can include the user path and re-export the in-app files.
+ */
+
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
