@@ -71,3 +71,8 @@ jobs:
         working-directory: ./templates/demo-store
         env:
           CI: true
+
+      - name: Run the Vitest E2E tests
+        run: yarn test-e2e-new
+        env:
+          CI: true
