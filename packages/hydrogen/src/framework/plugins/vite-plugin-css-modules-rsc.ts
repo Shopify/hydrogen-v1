@@ -3,6 +3,10 @@ import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware.j
 import MagicString from 'magic-string';
 import path from 'path';
 
+/* -- Plugin notes:
+ * Old approach to inlining CSS inside server components. This is deprecated.
+ */
+
 const cssModuleRE = /\.module\.(s?css|sass|less|stylus)/;
 
 export default function cssModulesRsc() {

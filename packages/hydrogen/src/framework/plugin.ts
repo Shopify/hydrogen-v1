@@ -2,7 +2,7 @@ import type {HydrogenVitePluginOptions} from './types.js';
 import hydrogenConfig from './plugins/vite-plugin-hydrogen-config.js';
 import type {Plugin} from 'vite';
 import hydrogenMiddleware from './plugins/vite-plugin-hydrogen-middleware.js';
-import hydrogenClientMiddleware from './plugins/vite-plugin-hydrogen-client-middleware.js';
+import hydrogenClientComponentsCache from './plugins/vite-plugin-hydrogen-client-components-cache.js';
 import hydrogenVirtualFiles from './plugins/vite-plugin-hydrogen-virtual-files.js';
 import platformEntry from './plugins/vite-plugin-platform-entry.js';
 import rsc from './plugins/vite-plugin-hydrogen-rsc.js';
@@ -20,7 +20,7 @@ const hydrogenPlugin = (pluginOptions: HydrogenVitePluginOptions = {}) => {
   return [
     process.env.VITE_INSPECT && inspect(),
     hydrogenConfig(pluginOptions),
-    hydrogenClientMiddleware(),
+    hydrogenClientComponentsCache(),
     clientImports(),
     hydrogenMiddleware(pluginOptions),
     hydrogenVirtualFiles(pluginOptions),
