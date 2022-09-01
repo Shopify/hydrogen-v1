@@ -10,15 +10,17 @@ import {VIRTUAL_PROXY_HYDROGEN_CONFIG_ID} from './vite-plugin-hydrogen-virtual-f
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
+/* -- Plugin notes:
+ * By adding a middleware to the Vite dev server, we can handle SSR without needing
+ * a custom node script. It works by handling any requests for `text/html` documents,
+ * loading them in an SSR context, rendering them using the `entry-server` endpoint in the
+ * user's project, and injecting the static HTML into the template.
+ */
+
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   return {
     name: 'hydrogen:middleware',
-    /**
-     * By adding a middleware to the Vite dev server, we can handle SSR without needing
-     * a custom node script. It works by handling any requests for `text/html` documents,
-     * loading them in an SSR context, rendering them using the `entry-server` endpoint in the
-     * user's project, and injecting the static HTML into the template.
-     */
+
     async configureServer(server) {
       const resolve = (p: string) => path.resolve(server.config.root, p);
       async function getIndexTemplate(url: string) {

@@ -4,12 +4,26 @@ import MagicString from 'magic-string';
 import path from 'path';
 import fs from 'fs';
 import fastGlob from 'fast-glob';
+import {isVite3} from '../../utilities/vite.js';
 
 const SSR_BUNDLE_NAME = 'index.js';
 
 // Keep this in the outer scope to share it
 // across client <> server builds.
 let clientBuildPath: string;
+
+/* -- Plugin notes:
+ * This plugin simplifies the way a platform entry file imports user files. This is
+ * needed to write generic integrations with different platform providers.
+ *
+ * Instead of using relative paths:
+ * `import handleRequest from '../../<arbitrary_path>/src/App.server';`
+ * `import indexTemplate from '../../<arbitrary_path>/dist/client/index.html?raw';`
+ *
+ *  It allows importing from a known static path which dynamically resolves the user files:
+ * `import {handleRequest, indexTemplate} from '@shopify/hydrogen/platforms';`
+ *
+ */
 
 export default () => {
   let config: ResolvedConfig;
@@ -23,7 +37,7 @@ export default () => {
 
       if (config.build.ssr) {
         const {output = {}} = config.build.rollupOptions || {};
-        const {format = ''} =
+        const {format = isVite3 ? 'es' : ''} =
           (Array.isArray(output) ? output[0] : output) || {};
 
         isESM = Boolean(process.env.WORKER) || ['es', 'esm'].includes(format);

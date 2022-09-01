@@ -1,5 +1,39 @@
 # Changelog
 
+## 1.3.1
+
+### Patch Changes
+
+- `<ExternalVideo/>` now has a default prop of `loading="lazy"` to improve performance of the rendered `<iframe>`. ([#2044](https://github.com/Shopify/hydrogen/pull/2044)) by [@frehner](https://github.com/frehner)
+
+  If you're using `<ExternalVideo/>` above the fold, then we recommend setting this prop to `eager`.
+
+* Improve error handling: ([#2049](https://github.com/Shopify/hydrogen/pull/2049)) by [@blittle](https://github.com/blittle)
+
+  1. Improve how errors are default presented in the logs.
+  1. Make sure that when useShopQuery fails, that an Error object is propagated.
+
+  If you have implemented your own logging handler, it is recommended that you only print strings, as printing objects (including Error objects) will result in unhelpful logs in many runtimes (Oxygen included):
+
+  ```js
+  // Example custom logging for errors
+  export default defineConfig({
+    logger: {
+      error: (context, error) => {
+        const url = context ? ` ${context.url}` : '';
+
+        if (error instanceof Error) {
+          // Do NOT directly just print the error, instead
+          // print the error.messag or error.stack
+          console.error(`Error:${url}\n${error.stack}`);
+        } else {
+          console.error(`Error:${url} ${error}`);
+        }
+      },
+    },
+  });
+  ```
+
 ## 1.3.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 import type {Plugin} from 'vite';
 
+/* -- Plugin notes:
+ * This plugin allows to import always from '@shopify/hydrogen' path, instead of
+ * using '@shopify/hydrogen/client' in browser files. It does this by redirecting
+ * the server path to the browser path if the importer file is a client component.
+ */
+
 export default function clientImports(): Plugin {
   return {
     name: 'hydrogen:client-imports',
@@ -19,9 +25,7 @@ export default function clientImports(): Plugin {
       const resolution = await this.resolve(
         '@shopify/hydrogen/client',
         importer,
-        {
-          skipSelf: true,
-        }
+        {skipSelf: true}
       );
 
       if (resolution) {

@@ -4,6 +4,15 @@ import {promises as fs} from 'fs';
 import type {HydrogenVitePluginOptions} from '../types.js';
 import {viteception} from '../viteception.js';
 import MagicString from 'magic-string';
+import {isVite3} from '../../utilities/vite.js';
+
+/* -- Plugin notes:
+ * The Hydrogen framework needs to import certain files from the user app, such as
+ * routes and config. A priori, we can't import these files from the framework
+ * because we don't know the user path to write it in an `import * from '...'` statement.
+ * Instead, we import "virtual files" that are resolved by Vite in this plugin.
+ * These virtual files can include the user path and re-export the in-app files.
+ */
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
@@ -24,6 +33,8 @@ const HYDROGEN_ROUTES_ID = 'hydrogen-routes.server.jsx';
 const VIRTUAL_HYDROGEN_ROUTES_ID = VIRTUAL_PREFIX + HYDROGEN_ROUTES_ID;
 export const VIRTUAL_PROXY_HYDROGEN_ROUTES_ID =
   VIRTUAL_PREFIX + PROXY_PREFIX + HYDROGEN_ROUTES_ID;
+
+const VIRTUAL_STREAM_ID = 'virtual__stream';
 
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
@@ -57,6 +68,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           VIRTUAL_PROXY_HYDROGEN_ROUTES_ID,
           VIRTUAL_HYDROGEN_ROUTES_ID,
           VIRTUAL_ERROR_FILE,
+          VIRTUAL_STREAM_ID,
         ].includes(source)
       ) {
         // Virtual modules convention
@@ -66,6 +78,14 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       }
     },
     load(id) {
+      if (id === '\0' + VIRTUAL_STREAM_ID) {
+        return {
+          code: process.env.WORKER
+            ? `export default {};`
+            : `export {default} from 'stream';`,
+        };
+      }
+
       // Likely due to a bug in Vite, but virtual modules cannot be loaded
       // directly using ssrLoadModule from a Vite plugin. It needs to be proxied as follows:
       if (id === '\0' + VIRTUAL_PROXY_HYDROGEN_CONFIG_ID) {
@@ -95,9 +115,13 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
 
           const [dirPrefix] = routesPath.split('/*');
 
+          const importGlob = isVite3
+            ? `import.meta.glob('${routesPath}', {eager: true})`
+            : `import.meta.globEager('${routesPath}')`;
+
           let code = `export default {\n  dirPrefix: '${dirPrefix}',\n  basePath: '${
             hc.routes?.basePath ?? ''
-          }',\n  files: import.meta.globEager('${routesPath}')\n};`;
+          }',\n  files: ${importGlob}\n};`;
 
           if (config.command === 'serve') {
             // Add dependency on Hydrogen config for HMR

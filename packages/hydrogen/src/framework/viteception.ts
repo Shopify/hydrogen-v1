@@ -1,4 +1,5 @@
 import {createServer, InlineConfig} from 'vite';
+import {isVite3} from '../utilities/vite.js';
 
 export async function viteception(paths: string[], options?: InlineConfig) {
   const isWorker = process.env.WORKER;
@@ -6,7 +7,12 @@ export async function viteception(paths: string[], options?: InlineConfig) {
 
   const server = await createServer({
     clearScreen: false,
-    server: {middlewareMode: 'ssr'},
+    server: {
+      middlewareMode: isVite3 ? true : 'ssr',
+      hmr: false,
+    },
+    // @ts-ignore
+    appType: 'custom',
     ...options,
   });
 
