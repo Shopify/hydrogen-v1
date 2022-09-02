@@ -86,6 +86,8 @@ export type CartAction =
   | {type: 'reject'; errors: any}
   | {type: 'resetCart'};
 
+// CartProvider V2
+
 // State Machine types
 export type CartMachineContext = {
   cart?: Cart;
@@ -172,6 +174,13 @@ export type CartMachineTypeState =
       context: CartMachineContext & {
         cart: undefined;
         errors?: any;
+      };
+    }
+  | {
+      value: 'initializationError';
+      context: CartMachineContext & {
+        cart: undefined;
+        errors: any;
       };
     }
   | {
