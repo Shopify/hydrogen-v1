@@ -34,7 +34,7 @@ export class HydrogenResponse extends Response {
       this.wait = true;
     } else {
       log.warn(
-        `response.doNotStream() failed, the stream has already started on: ${this.url}`
+        `response.doNotStream() failed, the stream has already started on: ${this.url}\nDisabling streaming should always be the first thing in your route server component.`
       );
     }
   }
