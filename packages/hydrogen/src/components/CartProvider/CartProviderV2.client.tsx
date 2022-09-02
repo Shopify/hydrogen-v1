@@ -22,21 +22,23 @@ import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.
 import {useCartActions} from './CartActions.client.js';
 
 function invokeCart(
-  actions: [string]
+  actions: [string],
+  options?: {resolveTarget?: string; errorTarget?: string}
 ): StateMachine.Config<CartMachineContext, CartMachineEvent>['states']['on'] {
   return {
     entry: actions,
     on: {
       RESOLVE: {
-        target: 'idle',
+        target: options?.resolveTarget || 'idle',
         actions: [
           assign({
             cart: (_, event) => event?.payload?.cart,
+            errors: (_, event) => undefined,
           }),
         ],
       },
       ERROR: {
-        target: 'error',
+        target: options?.errorTarget || 'error',
         actions: assign({
           errors: (_, event) => event?.payload?.errors,
         }),
@@ -54,6 +56,19 @@ const cartMachine = createMachine<
   initial: 'uninitialized',
   states: {
     uninitialized: {
+      on: {
+        CART_FETCH: {
+          target: 'cartFetching',
+        },
+        CART_CREATE: {
+          target: 'cartCreating',
+        },
+        CARTLINE_ADD: {
+          target: 'cartCreating',
+        },
+      },
+    },
+    initializationError: {
       on: {
         CART_FETCH: {
           target: 'cartFetching',
@@ -116,8 +131,12 @@ const cartMachine = createMachine<
         },
       },
     },
-    cartFetching: invokeCart(['xCartFetch']),
-    cartCreating: invokeCart(['xCartCreate']),
+    cartFetching: invokeCart(['xCartFetch'], {
+      errorTarget: 'initializationError',
+    }),
+    cartCreating: invokeCart(['xCartCreate'], {
+      errorTarget: 'initializationError',
+    }),
     cartLineRemoving: invokeCart(['xCartLineRemove']),
     cartLineUpdating: invokeCart(['xCartLineUpdate']),
     cartLineAdding: invokeCart(['xCartLineAdd']),
@@ -290,7 +309,9 @@ export function CartProviderV2({
   });
 
   useEffect(() => {
-    const subscription = service.subscribe((state) => console.log(state));
+    const subscription = service.subscribe((state) =>
+      console.log('>>>', state.value)
+    );
     return subscription.unsubscribe;
   }, [service]);
 
@@ -302,6 +323,7 @@ export function CartProviderV2({
         return 'uninitialized';
       case 'idle':
       case 'error':
+      case 'initializationError':
         return 'idle';
       case 'cartFetching':
         return 'fetching';
@@ -395,7 +417,7 @@ export function CartProviderV2({
   );
 }
 
-function cartFromGraphQL(cart: CartFragmentFragment): Cart {
+export function cartFromGraphQL(cart: CartFragmentFragment): Cart {
   return {
     ...cart,
     // @ts-expect-error While the cart still uses fragments, there will be a TS error here until we remove those fragments and get the type in-line
