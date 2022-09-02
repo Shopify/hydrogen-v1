@@ -14,12 +14,15 @@ import {Video} from './Video.js';
 import {flattenConnection} from './flatten-connection.js';
 import type {PartialDeep, JsonValue} from 'type-fest';
 
-export interface MetafieldProps<ComponentGeneric extends ElementType> {
+interface BaseProps<ComponentGeneric extends ElementType> {
   /** An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). */
   data: PartialDeep<MetafieldType> | null;
   /** An HTML tag or React component to be rendered as the base element wrapper. The default value varies depending on [metafield.type](https://shopify.dev/apps/metafields/types). */
   as?: ComponentGeneric;
 }
+
+export type MetafieldProps<ComponentGeneric extends ElementType> =
+  ComponentPropsWithoutRef<ComponentGeneric> & BaseProps<ComponentGeneric>;
 
 /**
  * The `Metafield` component renders the value of a Storefront
@@ -29,8 +32,7 @@ export interface MetafieldProps<ComponentGeneric extends ElementType> {
  * Renders a smart default of the Metafield's `value`. For more information, refer to the [Default output](#default-output) section.
  */
 export function Metafield<ComponentGeneric extends ElementType>(
-  props: ComponentPropsWithoutRef<ComponentGeneric> &
-    MetafieldProps<ComponentGeneric>
+  props: MetafieldProps<ComponentGeneric>
 ) {
   const {data, as, ...passthroughProps} = props;
   const {locale} = useShop();
@@ -144,7 +146,6 @@ export function Metafield<ComponentGeneric extends ElementType>(
     }
     case 'list.single_line_text_field': {
       const Wrapper = as ?? 'ul';
-      // @deprecated
       // @ts-expect-error references currently only exists on 'unstable' SFAPI, but as soon as it does exist we can remove this ts-expect-error because I believe 'list.single_line_text_field' will also only be availabe in the same setting and we also handle if it doesn't exist
       const refArray = parsedMetafield.references
         ? // @ts-expect-error references currently only exists on 'unstable' SFAPI, but as soon as it does exist we can remove this ts-expect-error
@@ -180,12 +181,6 @@ export function Metafield<ComponentGeneric extends ElementType>(
     }
   }
 
-  if (__HYDROGEN_DEV__) {
-    console.info(
-      `<Metafield/>: the 'type' of your metafield does not yet have a custom renderer. Your 'value' will be rendered as '.toString()'`
-    );
-  }
-
   const Wrapper = as ?? 'span';
   return (
     <Wrapper {...passthroughProps}>{parsedMetafield.value?.toString()}</Wrapper>
@@ -202,6 +197,11 @@ export function parseMetafield(
   metafield: PartialDeep<MetafieldType> | null
 ): PartialDeep<ParsedMetafield> | null {
   if (!metafield) {
+    if (__HYDROGEN_DEV__) {
+      console.warn(
+        `'parseMetafield' was not passed any value for the 'metafield' argument`
+      );
+    }
     return null;
   }
   if (
@@ -319,27 +319,6 @@ export function getMeasurementAsString(
     unit: measure.unit,
     style: 'unit',
   }).format(measure.value);
-}
-
-export function getMeasurementAsParts(
-  measurement: Measurement,
-  locale = 'en-us',
-  options: Intl.NumberFormatOptions = {}
-) {
-  let measure: {value: number; unit: string} = {
-    value: measurement.value,
-    unit: UNIT_MAPPING[measurement.unit],
-  };
-
-  if (measure.unit == null) {
-    measure = convertToSupportedUnit(measurement.value, measurement.unit);
-  }
-
-  return new Intl.NumberFormat(locale, {
-    ...options,
-    unit: measure.unit,
-    style: 'unit',
-  }).formatToParts(measure.value);
 }
 
 function convertToSupportedUnit(value: number, unit: string) {
