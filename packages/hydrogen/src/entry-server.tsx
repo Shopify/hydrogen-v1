@@ -111,7 +111,7 @@ export const renderHydrogen = (App: any) => {
     setLogger(hydrogenConfig.logger);
     const log = getLoggerWithContext(request);
 
-    const response = new HydrogenResponse(null, {
+    const response = new HydrogenResponse(request.url, null, {
       headers: headers || {},
     });
 

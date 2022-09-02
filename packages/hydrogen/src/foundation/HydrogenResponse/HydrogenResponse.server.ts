@@ -5,6 +5,7 @@ import {
 import type {CachingStrategy} from '../../types.js';
 import Redirect from '../Redirect/Redirect.client.js';
 import React from 'react';
+import {log} from '../../utilities/log/log.js';
 
 export class HydrogenResponse extends Response {
   private wait = false;
@@ -13,6 +14,12 @@ export class HydrogenResponse extends Response {
 
   public status = 200;
   public statusText = '';
+  public url;
+
+  constructor(url: string, body: any, init: any) {
+    super(body, init);
+    this.url = url;
+  }
 
   markAsSent() {
     this.sent = true;
@@ -25,6 +32,10 @@ export class HydrogenResponse extends Response {
   doNotStream() {
     if (!this.sent) {
       this.wait = true;
+    } else {
+      log.warn(
+        `response.doNotStream() failed, the stream has already started on: ${this.url}`
+      );
     }
   }
 
