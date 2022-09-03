@@ -7,7 +7,7 @@
   "engines": {
     "node": ">=14"
   },
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
@@ -119,7 +119,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "serve-static": "^1.14.1",
-    "vite": "^2.9.0"
+    "vite": "^2.9.0 || ^3.0.0"
   },
   "peerDependenciesMeta": {
     "body-parser": {
@@ -151,7 +151,7 @@
     "react-helmet-async": "^1.3.0",
     "serve-static": "^1.15.0",
     "set-cookie-parser": "^2.5.0",
-    "undici": "^5.5.1",
+    "undici": "^5.8.2",
     "uuid": "^8.3.2",
     "vite-plugin-inspect": "^0.3.6",
     "web-streams-polyfill": "^3.2.0",

@@ -1,8 +1,13 @@
 import type {Plugin} from 'vite';
 
+/* -- Plugin notes:
+ * This plugin makes sure we don't leak server logic to the browser when importing
+ * the `useEnvContext` utility.
+ */
+
 export default () => {
   return {
-    name: 'vite-plugin-ssr-interop',
+    name: 'hydrogen:ssr-interop',
     enforce: 'pre',
     transform(code, id, options = {}) {
       if (options.ssr && id.includes('foundation/ssr-interop')) {

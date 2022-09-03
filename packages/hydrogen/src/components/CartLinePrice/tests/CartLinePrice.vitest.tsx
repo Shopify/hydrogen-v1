@@ -1,10 +1,10 @@
 import React from 'react';
+import {render, screen} from '@testing-library/react';
 import {CartLineProvider} from '../../CartLineProvider/index.js';
 import {CartLinePrice} from '../CartLinePrice.client.js';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
-import {Money} from '../../Money/index.js';
 import {CurrencyCode} from '../../../storefront-api-types.js';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {ShopifyTestProviders} from '../../../utilities/tests/provider-helpers.js';
 
 describe('<CartLinePrice />', () => {
   it('renders <Money /> with the regular price by default', () => {
@@ -19,15 +19,14 @@ describe('<CartLinePrice />', () => {
       },
     };
 
-    const wrapper = mountWithProviders(
+    render(
       <CartLineProvider line={line}>
         <CartLinePrice />
-      </CartLineProvider>
+      </CartLineProvider>,
+      {wrapper: ShopifyTestProviders}
     );
 
-    expect(wrapper).toContainReactComponent(Money, {
-      data: {amount: '50', currencyCode: CurrencyCode.Usd},
-    });
+    expect(screen.getByText('50', {exact: false})).toBeInTheDocument();
   });
 
   it('renders <Money /> with the compareAt price when `priceType` is `compareAt`', () => {
@@ -42,37 +41,38 @@ describe('<CartLinePrice />', () => {
       },
     };
 
-    const wrapper = mountWithProviders(
+    render(
       <CartLineProvider line={line}>
         <CartLinePrice priceType="compareAt" />
-      </CartLineProvider>
+      </CartLineProvider>,
+      {wrapper: ShopifyTestProviders}
     );
 
-    expect(wrapper).toContainReactComponent(Money, {
-      data: {amount: '60', currencyCode: CurrencyCode.Usd},
-    });
+    expect(screen.getByText('60', {exact: false})).toBeInTheDocument();
   });
 
   it('allows passthrough props', () => {
     const line = {
       ...CART_LINE,
-      merchandise: {
-        ...CART_LINE.merchandise,
-        priceV2: {
+      cost: {
+        ...CART_LINE.cost,
+        totalAmount: {
           amount: '50',
           currencyCode: CurrencyCode.Usd,
         },
       },
     };
 
-    const wrapper = mountWithProviders(
+    render(
       <CartLineProvider line={line}>
         <CartLinePrice className="underline" />
-      </CartLineProvider>
+      </CartLineProvider>,
+      {wrapper: ShopifyTestProviders}
     );
 
-    expect(wrapper).toContainReactComponent(Money, {
-      className: 'underline',
-    });
+    const money = screen.getByText('50', {exact: false});
+
+    expect(money).toBeInTheDocument();
+    expect(money).toHaveClass('underline');
   });
 });

@@ -25,7 +25,7 @@
     "test-e2e": "jest --config jest-e2e.config.ts --runInBand",
     "test:vite-ci": "cross-env FORCE_COLOR=true jest && jest --config jest-e2e.config.ts",
     "test:hydrogen:vite": "yarn workspace @shopify/hydrogen test:vitest:ci",
-    "test:hydrogen-ui": "yarn workspace @shopify/hydrogen-ui test:ci",
+    "test:hydrogen-ui": "yarn workspace @shopify/hydrogen-ui-alpha test:ci",
     "version:snapshot": "changeset version",
     "version": "changeset version && node -p \"'export const LIB_VERSION = \\'' + require('./packages/hydrogen/package.json').version + '\\';'\" > packages/hydrogen/src/version.ts",
     "generate-docs": "node ./scripts/generate-docs.mjs",
