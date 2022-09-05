@@ -111,7 +111,7 @@ export const renderHydrogen = (App: any) => {
     setLogger(hydrogenConfig.logger);
     const log = getLoggerWithContext(request);
 
-    const response = new HydrogenResponse(null, {
+    const response = new HydrogenResponse(request.url, null, {
       headers: headers || {},
     });
 
@@ -195,6 +195,8 @@ export const renderHydrogen = (App: any) => {
                 hydrogenConfig,
                 true
               );
+
+              response.markAsSent();
             } catch (e: any) {
               log.error('Cache revalidate error', e);
             }
@@ -208,7 +210,7 @@ export const renderHydrogen = (App: any) => {
       }
     }
 
-    return processRequest(
+    const result = await processRequest(
       handleRequest,
       App,
       url,
@@ -218,6 +220,9 @@ export const renderHydrogen = (App: any) => {
       response,
       hydrogenConfig
     );
+
+    response.markAsSent();
+    return result;
   };
 
   if (__HYDROGEN_WORKER__) return handleRequest;

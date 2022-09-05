@@ -16,6 +16,7 @@ export default defineConfig({
   logger: {
     trace() {},
     debug() {},
+    warn() {},
   },
   serverErrorPage: '/src/500Error.tsx',
 });
