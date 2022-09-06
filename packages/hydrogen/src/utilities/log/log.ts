@@ -63,9 +63,23 @@ function doLog(
   request: Partial<HydrogenRequest>,
   ...args: any[]
 ) {
-  const maybePromise = currentLogger[method](request, ...args);
-  if (maybePromise instanceof Promise) {
-    request?.ctx?.runtime?.waitUntil?.(maybePromise);
+  try {
+    const maybePromise = currentLogger[method](request, ...args);
+    if (maybePromise instanceof Promise) {
+      request?.ctx?.runtime?.waitUntil?.(
+        maybePromise.catch((e) => {
+          const message = e instanceof Error ? e.stack : e;
+          defaultLogger.error(
+            `Promise error from the custom logging implementation for logger.${method} failed:\n${message}`
+          );
+        })
+      );
+    }
+  } catch (e) {
+    const message = e instanceof Error ? e.stack : e;
+    defaultLogger.error(
+      `The custom logging implementation for logger.${method} failed:\n${message}`
+    );
   }
 }
 
