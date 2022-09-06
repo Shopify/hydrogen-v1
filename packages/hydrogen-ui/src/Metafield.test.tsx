@@ -23,7 +23,7 @@ describe('<Metafield />', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
-  it('renders nothing when the metafield is null', () => {
+  it(`throws an error in devmode when data is 'null'`, () => {
     expect(() =>
       render(<Metafield data={null} />, {
         wrapper: ({children}) => (
@@ -35,7 +35,7 @@ describe('<Metafield />', () => {
     ).toThrowError();
   });
 
-  it('renders nothing when the metafield value is undefined', () => {
+  it(`throws an error in devmode when data is 'undefined'`, () => {
     expect(() =>
       render(<Metafield data={{type: 'color', value: undefined}} />, {
         wrapper: ({children}) => (
@@ -48,6 +48,7 @@ describe('<Metafield />', () => {
   });
 
   it.todo(`validates props when a component is passed to the 'as' prop`, () => {
+    // Need to get a component that doesn't require the `data` prop to enable this test
     // render(
     //   <Metafield
     //     data={getRawMetafield({type: 'number_integer'})}
@@ -152,7 +153,7 @@ describe('<Metafield />', () => {
         type: 'weight',
         value: JSON.stringify({value: 10, unit: 'kg'}),
       });
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -161,6 +162,7 @@ describe('<Metafield />', () => {
       });
 
       expect(screen.getByText('10 kg')).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe('10 kg');
     });
 
     it('renders the weight as a string in the element specified by the `as` prop', () => {
@@ -197,7 +199,7 @@ describe('<Metafield />', () => {
         type: 'volume',
         value: JSON.stringify({value: 10, unit: 'l'}),
       });
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -206,6 +208,7 @@ describe('<Metafield />', () => {
       });
 
       expect(screen.getByText('10 L')).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe('10 L');
     });
 
     it('renders the volume as a string in the element specified by the `as` prop', () => {
@@ -242,7 +245,7 @@ describe('<Metafield />', () => {
         type: 'dimension',
         value: JSON.stringify({value: 5, unit: 'cm'}),
       });
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -251,6 +254,7 @@ describe('<Metafield />', () => {
       });
 
       expect(screen.getByText('5 cm')).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe('5 cm');
     });
 
     it('renders the dimension as a string in the element specified by the `as` prop', () => {
@@ -287,7 +291,7 @@ describe('<Metafield />', () => {
         type: 'single_line_text_field',
         value: 'hello world',
       });
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -296,6 +300,9 @@ describe('<Metafield />', () => {
       });
 
       expect(screen.getByText(metafield.value as string)).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe(
+        metafield.value
+      );
     });
 
     it('allows passthrough props', () => {
@@ -397,7 +404,7 @@ describe('<Metafield />', () => {
   describe('with `json` type metafield', () => {
     it('renders the json as a string in a `span` by default', () => {
       const metafield = getRawMetafield({type: 'json'});
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -408,6 +415,9 @@ describe('<Metafield />', () => {
       expect(
         screen.getByText(metafield.value?.toString() ?? '')
       ).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe(
+        metafield.value?.toString()
+      );
     });
 
     it('renders the json as a string in the element specified by the `as` prop', () => {
@@ -440,7 +450,7 @@ describe('<Metafield />', () => {
   describe('with `color` type metafield', () => {
     it('renders the color as a string in a `span` by default', () => {
       const metafield = getRawMetafield({type: 'color'});
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -451,6 +461,9 @@ describe('<Metafield />', () => {
       expect(
         screen.getByText(metafield.value?.toString() ?? '')
       ).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe(
+        metafield.value?.toString()
+      );
     });
 
     it('renders the color as a string in the element specified by the `as` prop', () => {
@@ -486,7 +499,7 @@ describe('<Metafield />', () => {
         type: 'product_reference',
         reference: {title: 'MyProduct'},
       });
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -497,6 +510,9 @@ describe('<Metafield />', () => {
       expect(
         screen.getByText((metafield?.reference as Product)?.title ?? '')
       ).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe(
+        (metafield?.reference as Product)?.title
+      );
     });
 
     it('renders the product reference as a string in the element specified by the `as` prop', () => {
@@ -538,7 +554,7 @@ describe('<Metafield />', () => {
         type: 'page_reference',
         reference: {title: 'MyPage'},
       });
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -549,6 +565,9 @@ describe('<Metafield />', () => {
       expect(
         screen.getByText((metafield?.reference as Page)?.title ?? '')
       ).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe(
+        (metafield?.reference as Page)?.title
+      );
     });
 
     it('renders the page reference as a string in the element specified by the `as` prop', () => {
@@ -587,7 +606,7 @@ describe('<Metafield />', () => {
         type: 'variant_reference',
         reference: {title: 'MyVariant'},
       });
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -598,6 +617,9 @@ describe('<Metafield />', () => {
       expect(
         screen.getByText((metafield?.reference as ProductVariant)?.title ?? '')
       ).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe(
+        (metafield?.reference as ProductVariant)?.title
+      );
     });
 
     it('renders the variant reference as a string in the element specified by the `as` prop', () => {
@@ -675,7 +697,7 @@ describe('<Metafield />', () => {
     describe('when the reference type is not a MediaImage', () => {
       it('renders the file reference as a string in a `span` by default', () => {
         const metafield = getRawMetafield({type: 'file_reference'});
-        render(<Metafield data={metafield} />, {
+        const {container} = render(<Metafield data={metafield} />, {
           wrapper: ({children}) => (
             <ShopifyProvider shopifyConfig={getShopifyConfig()}>
               {children}
@@ -686,6 +708,9 @@ describe('<Metafield />', () => {
         expect(
           screen.getByText(metafield.value?.toString() ?? '')
         ).toBeInTheDocument();
+        expect(container.querySelector('span')?.textContent).toBe(
+          metafield.value?.toString()
+        );
       });
 
       it('renders the file reference as a string in the element specified by the `as` prop', () => {
@@ -719,7 +744,7 @@ describe('<Metafield />', () => {
   describe('with `boolean` type metafield', () => {
     it('renders the boolean value as a string in a `span` by default', () => {
       const metafield = getRawMetafield({type: 'boolean'});
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -730,6 +755,9 @@ describe('<Metafield />', () => {
       expect(
         screen.getByText((metafield.value === 'true').toString() ?? '')
       ).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe(
+        (metafield.value === 'true').toString()
+      );
     });
 
     it('renders the boolean as a string in the element specified by the `as` prop', () => {
@@ -762,7 +790,7 @@ describe('<Metafield />', () => {
   describe('with `number_integer` type metafield', () => {
     it('renders the integer value as a string in a `span` by default', () => {
       const metafield = getRawMetafield({type: 'number_integer'});
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -773,6 +801,9 @@ describe('<Metafield />', () => {
       expect(
         screen.getByText(Number(metafield.value).toString() ?? '')
       ).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe(
+        Number(metafield.value).toString()
+      );
     });
 
     it('renders the boolean as a string in the element specified by the `as` prop', () => {
@@ -805,7 +836,7 @@ describe('<Metafield />', () => {
   describe('with `number_decimal` type metafield', () => {
     it('renders the number as a string in a `span` by default', () => {
       const metafield = getRawMetafield({type: 'number_decimal'});
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -816,6 +847,9 @@ describe('<Metafield />', () => {
       expect(
         screen.getByText(Number(metafield.value).toString() ?? '')
       ).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe(
+        Number(metafield.value).toString()
+      );
     });
 
     it('renders the number as a string in the element specified by the `as` prop', () => {
@@ -848,7 +882,7 @@ describe('<Metafield />', () => {
   describe('with `rating` type metafield', () => {
     it(`renders a 'span' with the rating inside`, () => {
       const metafield = getRawMetafield({type: 'rating'});
-      render(<Metafield data={metafield} />, {
+      const {container} = render(<Metafield data={metafield} />, {
         wrapper: ({children}) => (
           <ShopifyProvider shopifyConfig={getShopifyConfig()}>
             {children}
@@ -861,6 +895,9 @@ describe('<Metafield />', () => {
           (JSON.parse(metafield?.value ?? '') as Rating)?.value ?? ''
         )
       ).toBeInTheDocument();
+      expect(container.querySelector('span')?.textContent).toBe(
+        ((JSON.parse(metafield?.value ?? '') as Rating)?.value ?? '').toString()
+      );
     });
 
     it('allows passthrough props', () => {
