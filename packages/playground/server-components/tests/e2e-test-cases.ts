@@ -369,6 +369,28 @@ export default async function testCases({
         new RegExp(`\\.${className}\\s*{\\s*color:\\s*red;?\\s*}`, 'm')
       );
     });
+
+    if (isBuild) {
+      it('preloads stylesheets', async () => {
+        const response = await page.request.get(
+          getServerUrl() + '/css-modules'
+        );
+        const html = await response.text();
+        const {link} = response.headers();
+
+        expect(link).toMatch(
+          /<\/assets\/style.[\w\d]+.css>; rel=preload; as=style/
+        );
+
+        const assets = (html.match(/<link[^<>]+?>/gim) || [])
+          .filter((linkTag) => linkTag.includes('rel="stylesheet"'))
+          .map((linkTag) => linkTag.match(/href="([^"]+)"/)?.[1] || '');
+
+        for (const asset of assets) {
+          expect(link).toMatch(asset);
+        }
+      });
+    }
   });
 
   describe('HMR', () => {

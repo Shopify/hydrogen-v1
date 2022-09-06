@@ -41,7 +41,7 @@ import {
   createFromReadableStream,
   bufferReadableStream,
 } from './streaming.server.js';
-import {stripScriptsFromTemplate} from './utilities/template.js';
+import {getTemplate} from './utilities/template.js';
 import {Analytics} from './foundation/Analytics/Analytics.server.js';
 import {DevTools} from './foundation/DevTools/DevTools.server.js';
 import {getSyncSessionApi} from './foundation/session/session.js';
@@ -306,27 +306,9 @@ async function processRequest(
     request,
     response,
     nodeResponse,
-    template: await getTemplate(indexTemplate, url),
     revalidate,
+    template: await getTemplate(indexTemplate, url),
   });
-}
-
-async function getTemplate(
-  indexTemplate:
-    | string
-    | ((url: string) => Promise<string | {default: string}>),
-  url: URL
-) {
-  let template =
-    typeof indexTemplate === 'function'
-      ? await indexTemplate(url.toString())
-      : indexTemplate;
-
-  if (template && typeof template !== 'string') {
-    template = template.default;
-  }
-
-  return template;
 }
 
 function getApiRoute(url: URL, routes: ResolvedHydrogenRoutes) {
@@ -364,11 +346,17 @@ async function runSSR({
   request,
   response,
   nodeResponse,
-  template,
   nonce,
   dev,
   log,
   revalidate,
+  template: {
+    raw: template,
+    noScriptTemplate,
+    bootstrapModules,
+    bootstrapScripts,
+    linkHeader,
+  },
 }: RunSsrParams) {
   let ssrDidError: Error | undefined;
   const didError = () => rsc.didError() ?? ssrDidError;
@@ -376,9 +364,6 @@ async function runSSR({
   const [rscReadableForFizz, rscReadableForFlight] = rsc.readable.tee();
   const rscResponse = createFromReadableStream(rscReadableForFizz);
   const RscConsumer = () => rscResponse.readRoot();
-
-  const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
-    stripScriptsFromTemplate(template);
 
   const AppSSR = (
     <Html
@@ -398,6 +383,14 @@ async function runSSR({
       </ServerRequestProvider>
     </Html>
   );
+
+  if (linkHeader) {
+    const existingLinkHeader = response.headers.get('Link');
+    response.headers.set(
+      'Link',
+      existingLinkHeader ? existingLinkHeader + ', ' + linkHeader : linkHeader
+    );
+  }
 
   log.trace('start ssr');
 
