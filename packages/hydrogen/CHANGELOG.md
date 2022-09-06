@@ -278,7 +278,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function(request) {
+  export default function (request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }
