@@ -1,5 +1,50 @@
 # Changelog
 
+## 1.3.2
+
+### Patch Changes
+
+- Whenever using `fetchSync`, make sure to handle the error state. Though we've made changes to the error thrown by the JSON parser to also tell you that the request was unsuccessful: ([#2070](https://github.com/Shopify/hydrogen/pull/2070)) by [@blittle](https://github.com/blittle)
+
+  ```ts
+  function MyComponent() {
+    const response = fetchSync('/api');
+
+    // Make sure the error state is handled!
+    if (!response.ok) {
+      console.error(
+        `Unable to load ${response.url} returned ${response.status}`,
+      );
+      return <div>Error. Please try again</div>;
+    }
+
+    // Check `response.ok` before parsing the response
+    const json = response.json();
+
+    return ...
+  ```
+
+* Update undici to the latest ([#2015](https://github.com/Shopify/hydrogen/pull/2015)) by [@dependabot](https://github.com/apps/dependabot)
+
+- Added experimental support for Vite 3. By default, Hydrogen will still use Vite 2. However, it is possible to upgrade apps to Vite 3 by changing `devDependencies` in the app `package.json`. Beware that this is experimental and it might break. ([#1992](https://github.com/Shopify/hydrogen/pull/1992)) by [@frandiox](https://github.com/frandiox)
+
+* Hydrogen responses now contain a `Link` header to preload stylesheets. ([#2075](https://github.com/Shopify/hydrogen/pull/2075)) by [@frandiox](https://github.com/frandiox)
+
+- Improvements and fixes to hydrogen logging: ([#2084](https://github.com/Shopify/hydrogen/pull/2084)) by [@blittle](https://github.com/blittle)
+
+  1. API Routes are now passed a reference to the logger bound to the current request:
+
+  ```ts
+  export async function api(request, {log}) {
+    log.warn("Here's a warning!");
+    return new Request('Hello World');
+  }
+  ```
+
+  2. If you define a custom logging implementation within your Hydrogen config, we'll now warn you when your logging implementation itself errors.
+
+* When a route is rendering, if Hydrogen has already started streaming, it is invalid to call `response.doNotStream()`. Disabling streaming should always happen before any async operation in your route server component. This change fixes Hydrogen to warn if you try to disable streaming after the stream has already begun. ([#2081](https://github.com/Shopify/hydrogen/pull/2081)) by [@frandiox](https://github.com/frandiox)
+
 ## 1.3.1
 
 ### Patch Changes
@@ -233,7 +278,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }
