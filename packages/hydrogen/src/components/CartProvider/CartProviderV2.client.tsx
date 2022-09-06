@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {useMachine} from '@xstate/react/fsm';
 import {createMachine, assign, StateMachine} from '@xstate/fsm';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
@@ -131,19 +131,19 @@ const cartMachine = createMachine<
         },
       },
     },
-    cartFetching: invokeCart(['xCartFetch'], {
+    cartFetching: invokeCart(['cartFetchAction'], {
       errorTarget: 'initializationError',
     }),
-    cartCreating: invokeCart(['xCartCreate'], {
+    cartCreating: invokeCart(['cartCreateAction'], {
       errorTarget: 'initializationError',
     }),
-    cartLineRemoving: invokeCart(['xCartLineRemove']),
-    cartLineUpdating: invokeCart(['xCartLineUpdate']),
-    cartLineAdding: invokeCart(['xCartLineAdd']),
-    noteUpdating: invokeCart(['xNoteUpdate']),
-    buyerIdentityUpdating: invokeCart(['xBuyerIdentityUpdate']),
-    cartAttributesUpdating: invokeCart(['xCartAttributesUpdate']),
-    discountCodesUpdating: invokeCart(['xDiscountCodesUpdate']),
+    cartLineRemoving: invokeCart(['cartLineRemoveAction']),
+    cartLineUpdating: invokeCart(['cartLineUpdateAction']),
+    cartLineAdding: invokeCart(['cartLineAddAction']),
+    noteUpdating: invokeCart(['noteUpdateAction']),
+    buyerIdentityUpdating: invokeCart(['buyerIdentityUpdateAction']),
+    cartAttributesUpdating: invokeCart(['cartAttributesUpdateAction']),
+    discountCodesUpdating: invokeCart(['discountCodesUpdateAction']),
   },
 });
 
@@ -155,6 +155,7 @@ export function CartProviderV2({
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
+  /**  Maximum number of cart lines to fetch. Defaults to 250 cart lines. */
   numCartLines?: number;
   /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
@@ -177,9 +178,9 @@ export function CartProviderV2({
     cartFragment,
   });
 
-  const [state, send, service] = useMachine(cartMachine, {
+  const [state, send] = useMachine(cartMachine, {
     actions: {
-      xCartFetch: (_, event) => {
+      cartFetchAction: (_, event) => {
         if (event.type !== 'CART_FETCH') return;
         cartFetch(event?.payload?.cartId).then((res) => {
           if (res?.errors || !res?.data?.cart) {
@@ -191,7 +192,7 @@ export function CartProviderV2({
           });
         });
       },
-      xCartCreate: (_, event) => {
+      cartCreateAction: (_, event) => {
         if (event.type !== 'CART_CREATE' && event.type !== 'CARTLINE_ADD')
           return;
 
@@ -205,7 +206,7 @@ export function CartProviderV2({
           });
         });
       },
-      xCartLineAdd: (context, event) => {
+      cartLineAddAction: (context, event) => {
         if (event.type !== 'CARTLINE_ADD' || !context?.cart?.id) return;
 
         cartLineAdd(context.cart.id, event.payload.lines).then((res) => {
@@ -218,7 +219,7 @@ export function CartProviderV2({
           });
         });
       },
-      xCartLineUpdate: (context, event) => {
+      cartLineUpdateAction: (context, event) => {
         if (event.type !== 'CARTLINE_UPDATE' || !context?.cart?.id) return;
         cartLineUpdate(context.cart.id, event.payload.lines).then((res) => {
           if (res?.errors || !res.data?.cartLinesUpdate?.cart) {
@@ -230,7 +231,7 @@ export function CartProviderV2({
           });
         });
       },
-      xCartLineRemove: (context, event) => {
+      cartLineRemoveAction: (context, event) => {
         if (event.type !== 'CARTLINE_REMOVE' || !context?.cart?.id) return;
         cartLineRemove(context.cart.id, event.payload.lines).then((res) => {
           if (res?.errors || !res.data?.cartLinesRemove?.cart) {
@@ -242,7 +243,7 @@ export function CartProviderV2({
           });
         });
       },
-      xNoteUpdate: (context, event) => {
+      noteUpdateAction: (context, event) => {
         if (event.type !== 'NOTE_UPDATE' || !context?.cart?.id) return;
         noteUpdate(context.cart.id, event.payload.note).then((res) => {
           if (res?.errors || !res.data?.cartNoteUpdate?.cart) {
@@ -254,7 +255,7 @@ export function CartProviderV2({
           });
         });
       },
-      xBuyerIdentityUpdate: (context, event) => {
+      buyerIdentityUpdateAction: (context, event) => {
         if (event.type !== 'BUYER_IDENTITY_UPDATE' || !context?.cart?.id)
           return;
         buyerIdentityUpdate(context.cart.id, event.payload.buyerIdentity).then(
@@ -271,7 +272,7 @@ export function CartProviderV2({
           }
         );
       },
-      xCartAttributesUpdate: (context, event) => {
+      cartAttributesUpdateAction: (context, event) => {
         if (event.type !== 'CART_ATTRIBUTES_UPDATE' || !context?.cart?.id)
           return;
         cartAttributesUpdate(context.cart.id, event.payload.attributes).then(
@@ -288,7 +289,7 @@ export function CartProviderV2({
           }
         );
       },
-      xDiscountCodesUpdate: (context, event) => {
+      discountCodesUpdateAction: (context, event) => {
         if (event.type !== 'DISCOUNT_CODES_UPDATE' || !context?.cart?.id)
           return;
         discountCodesUpdate(context.cart.id, event.payload.discountCodes).then(
@@ -308,43 +309,11 @@ export function CartProviderV2({
     },
   });
 
-  useEffect(() => {
-    const subscription = service.subscribe((state) =>
-      console.log('>>>', state.value)
-    );
-    return subscription.unsubscribe;
-  }, [service]);
-
-  function tempTransposeStatus(
-    status: CartMachineTypeState['value']
-  ): CartWithActions['status'] {
-    switch (status) {
-      case 'uninitialized':
-        return 'uninitialized';
-      case 'idle':
-      case 'error':
-      case 'initializationError':
-        return 'idle';
-      case 'cartFetching':
-        return 'fetching';
-      case 'cartCreating':
-        return 'creating';
-      case 'cartLineAdding':
-      case 'cartLineRemoving':
-      case 'cartLineUpdating':
-      case 'noteUpdating':
-      case 'buyerIdentityUpdating':
-      case 'cartAttributesUpdating':
-      case 'discountCodesUpdating':
-        return 'updating';
-    }
-  }
-
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
       ...(state?.context?.cart ?? {lines: [], attributes: []}),
       status: tempTransposeStatus(state.value),
-      error: state?.context?.errors ? state.context.errors : undefined,
+      error: state?.context?.errors,
       totalQuantity: state?.context?.cart?.totalQuantity ?? 0,
       cartCreate(cartInput: CartInput) {
         send({
@@ -415,6 +384,31 @@ export function CartProviderV2({
       {children}
     </CartContext.Provider>
   );
+}
+
+function tempTransposeStatus(
+  status: CartMachineTypeState['value']
+): CartWithActions['status'] {
+  switch (status) {
+    case 'uninitialized':
+      return 'uninitialized';
+    case 'idle':
+    case 'error':
+    case 'initializationError':
+      return 'idle';
+    case 'cartFetching':
+      return 'fetching';
+    case 'cartCreating':
+      return 'creating';
+    case 'cartLineAdding':
+    case 'cartLineRemoving':
+    case 'cartLineUpdating':
+    case 'noteUpdating':
+    case 'buyerIdentityUpdating':
+    case 'cartAttributesUpdating':
+    case 'discountCodesUpdating':
+      return 'updating';
+  }
 }
 
 export function cartFromGraphQL(cart: CartFragmentFragment): Cart {

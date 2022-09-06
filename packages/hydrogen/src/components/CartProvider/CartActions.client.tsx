@@ -53,10 +53,16 @@ import {
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery.js';
 import {useCartFetch} from './hooks.client.js';
 
+/**
+ * The `useCartActions` hook returns helper graphql functions for Storefront Cart API
+ *
+ * See [cart API graphql mutations](https://shopify.dev/api/storefront/2022-07/objects/Cart)
+ */
 export function useCartActions({
   numCartLines,
   cartFragment = defaultCartFragment,
 }: {
+  /**  Maximum number of cart lines to fetch. Defaults to 250 cart lines. */
   numCartLines?: number;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
   cartFragment?: string;
@@ -64,7 +70,7 @@ export function useCartActions({
   const fetchCart = useCartFetch();
 
   const cartFetch = useCallback(
-    async (cartId: string) => {
+    (cartId: string) => {
       return fetchCart<CartQueryQueryVariables, CartQueryQuery>({
         query: CartQuery(cartFragment),
         variables: {
@@ -78,7 +84,7 @@ export function useCartActions({
   );
 
   const cartCreate = useCallback(
-    async (cart: CartInput) => {
+    (cart: CartInput) => {
       return fetchCart<CartCreateMutationVariables, CartCreateMutation>({
         query: CartCreate(cartFragment),
         variables: {
@@ -92,7 +98,7 @@ export function useCartActions({
   );
 
   const cartLineAdd = useCallback(
-    async (cartId: string, lines: CartLineInput[]) => {
+    (cartId: string, lines: CartLineInput[]) => {
       return fetchCart<CartLineAddMutationVariables, CartLineAddMutation>({
         query: CartLineAdd(cartFragment),
         variables: {
@@ -107,7 +113,7 @@ export function useCartActions({
   );
 
   const cartLineUpdate = useCallback(
-    async (cartId: string, lines: CartLineUpdateInput[]) => {
+    (cartId: string, lines: CartLineUpdateInput[]) => {
       return fetchCart<CartLineUpdateMutationVariables, CartLineUpdateMutation>(
         {
           query: CartLineUpdate(cartFragment),
@@ -124,44 +130,42 @@ export function useCartActions({
   );
 
   const cartLineRemove = useCallback(
-    async (cartId: string, lines: string[]) => {
-      return await fetchCart<
-        CartLineRemoveMutationVariables,
-        CartLineRemoveMutation
-      >({
-        query: CartLineRemove(cartFragment),
-        variables: {
-          cartId,
-          lines,
-          numCartLines,
-          country: CountryCode.Us,
-        },
-      });
+    (cartId: string, lines: string[]) => {
+      return fetchCart<CartLineRemoveMutationVariables, CartLineRemoveMutation>(
+        {
+          query: CartLineRemove(cartFragment),
+          variables: {
+            cartId,
+            lines,
+            numCartLines,
+            country: CountryCode.Us,
+          },
+        }
+      );
     },
     [cartFragment, fetchCart, numCartLines]
   );
 
   const noteUpdate = useCallback(
-    async (cartId: string, note: CartNoteUpdateMutationVariables['note']) => {
-      return await fetchCart<
-        CartNoteUpdateMutationVariables,
-        CartNoteUpdateMutation
-      >({
-        query: CartNoteUpdate(cartFragment),
-        variables: {
-          cartId,
-          note,
-          numCartLines,
-          country: CountryCode.Us,
-        },
-      });
+    (cartId: string, note: CartNoteUpdateMutationVariables['note']) => {
+      return fetchCart<CartNoteUpdateMutationVariables, CartNoteUpdateMutation>(
+        {
+          query: CartNoteUpdate(cartFragment),
+          variables: {
+            cartId,
+            note,
+            numCartLines,
+            country: CountryCode.Us,
+          },
+        }
+      );
     },
     [fetchCart, cartFragment, numCartLines]
   );
 
   const buyerIdentityUpdate = useCallback(
-    async (cartId: string, buyerIdentity: CartBuyerIdentityInput) => {
-      return await fetchCart<
+    (cartId: string, buyerIdentity: CartBuyerIdentityInput) => {
+      return fetchCart<
         CartBuyerIdentityUpdateMutationVariables,
         CartBuyerIdentityUpdateMutation
       >({
@@ -178,8 +182,8 @@ export function useCartActions({
   );
 
   const cartAttributesUpdate = useCallback(
-    async (cartId: string, attributes: AttributeInput[]) => {
-      return await fetchCart<
+    (cartId: string, attributes: AttributeInput[]) => {
+      return fetchCart<
         CartAttributesUpdateMutationVariables,
         CartAttributesUpdateMutation
       >({
@@ -196,11 +200,11 @@ export function useCartActions({
   );
 
   const discountCodesUpdate = useCallback(
-    async (
+    (
       cartId: string,
       discountCodes: CartDiscountCodesUpdateMutationVariables['discountCodes']
     ) => {
-      return await fetchCart<
+      return fetchCart<
         CartDiscountCodesUpdateMutationVariables,
         CartDiscountCodesUpdateMutation
       >({

@@ -544,7 +544,7 @@ describe('<CartProviderV2 />', () => {
 
       await act(async () => {});
 
-      // @TODO: should be an error
+      // @TODO: show idle state for now instead of an error state
       expect(result.current.status).toEqual('idle');
     });
   });
