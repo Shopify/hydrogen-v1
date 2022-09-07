@@ -91,7 +91,7 @@ export type CartAction =
 // State Machine types
 export type CartMachineContext = {
   cart?: Cart;
-  errors?: any;
+  errors?: string;
 };
 
 export type CartFetchEvent = {
@@ -166,35 +166,35 @@ export type CartMachineEvent =
   | CartAttributesUpdateEvent
   | DiscountCodesUpdateEvent
   | {type: 'RESOLVE'; payload: {cart: Cart}}
-  | {type: 'ERROR'; payload: {errors: any}};
+  | {type: 'ERROR'; payload: {errors: string}};
 
 export type CartMachineTypeState =
   | {
       value: 'uninitialized';
       context: CartMachineContext & {
         cart: undefined;
-        errors?: any;
+        errors?: string;
       };
     }
   | {
       value: 'initializationError';
       context: CartMachineContext & {
         cart: undefined;
-        errors: any;
+        errors: string;
       };
     }
   | {
       value: 'idle';
       context: CartMachineContext & {
         cart: Cart;
-        errors?: any;
+        errors?: string;
       };
     }
   | {
       value: 'error';
       context: CartMachineContext & {
         cart?: Cart;
-        errors: any;
+        errors: string;
       };
     }
   | {value: 'cartFetching'; context: CartMachineContext}

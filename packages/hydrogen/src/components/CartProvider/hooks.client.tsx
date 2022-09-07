@@ -29,7 +29,7 @@ export function useCartFetch() {
     }: {
       query: string;
       variables: T;
-    }): Promise<{data: K | undefined; errors: any}> => {
+    }): Promise<{data: K | undefined; errors: string}> => {
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'X-SDK-Variant': 'hydrogen',
@@ -61,6 +61,9 @@ export function useCartFetch() {
       )
         .then((res) => res.json())
         .catch((error) => {
+          if (!(error instanceof Error)) {
+            throw error;
+          }
           return {
             data: undefined,
             error: error.toString(),
