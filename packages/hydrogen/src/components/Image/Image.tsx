@@ -173,6 +173,7 @@ function ShopifyImage({
       width={imgElementWidth ?? undefined}
       height={imgElementHeight ?? undefined}
       srcSet={finalSrcset}
+      decoding={decoding}
     />
   );
   /* eslint-enable hydrogen/prefer-image-component */
