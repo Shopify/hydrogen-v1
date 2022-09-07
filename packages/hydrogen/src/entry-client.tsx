@@ -152,15 +152,15 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   requestIdleCallbackHydrogen(() => {
     startTransition(() => {
         hydrateRoot(root, <RootComponent>
-        <ServerRequestProviderMock />
-        <ErrorBoundary FallbackComponent={CustomErrorPage
-                ? ({ error }) => (<CustomErrorWrapper error={error} errorPage={CustomErrorPage}/>)
-                : DefaultError}>
-          <Suspense fallback={null}>
-            <Content clientWrapper={ClientWrapper}/>
-          </Suspense>
-        </ErrorBoundary>
-      </RootComponent>);
+          <ServerRequestProviderMock />
+          <ErrorBoundary FallbackComponent={CustomErrorPage
+            ? ({ error }) => (<CustomErrorWrapper error={error} errorPage={CustomErrorPage} />)
+            : DefaultError}>
+            <Suspense fallback={null}>
+              <Content clientWrapper={ClientWrapper} />
+            </Suspense>
+          </ErrorBoundary>
+        </RootComponent>);
     });
 });
 };
