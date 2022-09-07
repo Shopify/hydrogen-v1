@@ -25,6 +25,8 @@ export interface LinkProps
   scroll?: boolean;
   /** Override the `basePath` inherited from the Route */
   basePath?: string;
+  /** Make the route change concurrental */
+  transitionable?: boolean;
 }
 
 /**
@@ -53,6 +55,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       clientState,
       prefetch = true,
       scroll = true,
+      transitionable = true,
     } = props;
 
     const to = buildPath(props.basePath ?? routeBasePath, props.to);
@@ -72,12 +75,23 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           const replace =
             !!_replace || createPath(location) === createPath({pathname: to});
 
-          navigate(to, {
-            replace,
-            scroll,
-            clientState,
-            basePath: '/', // path was already resolved with the base
-          });
+          if (transitionable) {
+            startTransition(() => {
+              navigate(to, {
+                replace,
+                scroll,
+                clientState,
+                basePath: "/", // path was already resolved with the base
+              });
+            });
+          } else {
+            navigate(to, {
+              replace,
+              scroll,
+              clientState,
+              basePath: "/", // path was already resolved with the base
+            });
+          }
         }
       },
       [
@@ -90,6 +104,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         navigate,
         clientState,
         scroll,
+        transitionable,
       ]
     );
 
