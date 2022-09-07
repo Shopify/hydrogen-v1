@@ -11,7 +11,8 @@ vi.mock('../CartActions.client.js', () => ({
   useCartActions: mockUseCartActions,
 }));
 
-import {cartFromGraphQL, CartProviderV2} from '../CartProviderV2.client.js';
+import {CartProviderV2} from '../CartProviderV2.client.js';
+import {cartFromGraphQL} from '../useCartAPIStateMachine.client.js';
 import {CountryCode} from '../../../storefront-api-types.js';
 
 function ShopifyCartProvider({children}) {
@@ -25,9 +26,92 @@ function ShopifyCartProvider({children}) {
 describe('<CartProviderV2 />', () => {
   beforeEach(() => {
     mockUseCartActions.mockClear();
+    vi.spyOn(window.localStorage, 'getItem').mockReturnValue('');
   });
 
-  describe('uninitialized', () => {
+  describe('attempt initializing cart from local storage', () => {
+    it('fetches cart from cart id in local storage', async () => {
+      const cartFetchSpy = vi.fn(async () => ({
+        data: {cart: CART},
+      }));
+      vi.spyOn(window.localStorage, 'getItem').mockReturnValue('cart-id');
+
+      mockUseCartActions.mockReturnValue({
+        cartFetch: cartFetchSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider,
+      });
+
+      expect(result.current.status).toBe('fetching');
+
+      await act(async () => {});
+
+      expect(cartFetchSpy).toBeCalledWith('cart-id');
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(CART),
+      });
+    });
+
+    it('does not fetch cart if cart id is not in local storage', async () => {
+      const cartFetchSpy = vi.fn(async () => ({
+        data: {cart: CART},
+      }));
+      vi.spyOn(window.localStorage, 'getItem').mockReturnValue('');
+
+      mockUseCartActions.mockReturnValue({
+        cartFetch: cartFetchSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider,
+      });
+
+      expect(result.current.status).not.toBe('fetching');
+
+      await act(async () => {});
+
+      expect(cartFetchSpy).not.toBeCalled();
+      expect(result.current).toMatchObject({
+        status: 'uninitialized',
+        lines: expect.arrayContaining([]),
+      });
+    });
+  });
+
+  describe('uninitialized cart after local storage initialization', () => {
+    it('creates a cart when creating a cart line', async () => {
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: CART}},
+      }));
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider,
+      });
+
+      expect(result.current.status).toBe('uninitialized');
+
+      act(() => {
+        result.current.cartCreate({});
+      });
+
+      expect(result.current.status).toBe('creating');
+
+      await act(async () => {});
+
+      expect(cartCreateSpy).toBeCalledTimes(1);
+
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(CART),
+      });
+    });
+
     it('creates a cart when adding a cart line', async () => {
       const cartCreateSpy = vi.fn(async () => ({
         data: {cartCreate: {cart: CART}},
@@ -140,13 +224,9 @@ describe('<CartProviderV2 />', () => {
         data: {cartCreate: {cart: CART}},
       }));
 
-      mockUseCartActions
-        .mockReturnValueOnce({
-          cartCreate: cartCreateSpy,
-        })
-        .mockReturnValue({
-          cartCreate: cartCreateResolveSpy,
-        });
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+      });
 
       const {result} = renderHook(() => useCart(), {
         wrapper: ShopifyCartProvider,
@@ -161,8 +241,19 @@ describe('<CartProviderV2 />', () => {
         ]);
       });
 
-      // Wait till initializationError status
+      mockUseCartActions.mockClear();
+
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateResolveSpy,
+      });
+
+      // Wait for initialization error
       await act(async () => {});
+
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        error: expect.arrayContaining([]),
+      });
 
       // Create cart should work now
       act(() => {
@@ -503,10 +594,6 @@ describe('<CartProviderV2 />', () => {
       const errorMock = new Error('Error creating cart');
       const cartLineAddErrorSpy = vi.fn(async () => ({
         errors: errorMock,
-      }));
-
-      const cartLineAddResolveSpy = vi.fn(async () => ({
-        data: {cartLineAdd: {cart: CART}},
       }));
 
       const cartCreateResolveSpy = vi.fn(async () => ({
