@@ -319,10 +319,7 @@ describe('<Image />', () => {
   });
 
   it(`throws an error if you don't have data.url`, () => {
-    render(<Image data={{url: ''}} />);
-
-    expect(screen.queryByRole('img')).not.toBeInTheDocument();
-    expect(console.error).toBeCalled();
+    expect(() => render(<Image data={{url: ''}} />)).toThrowError();
   });
 
   // eslint-disable-next-line jest/expect-expect
@@ -344,7 +341,7 @@ describe('<Image />', () => {
   });
 });
 
-function getPreviewImage(image: Partial<ImageType> = {}) {
+export function getPreviewImage(image: Partial<ImageType> = {}) {
   return {
     id: image.id ?? faker.random.words(),
     altText: image.altText ?? faker.random.words(),

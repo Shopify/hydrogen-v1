@@ -1,5 +1,11 @@
 # @shopify/hydrogen-ui-alpha
 
+## 2022.7.3
+
+### Patch Changes
+
+- Update Image to better handle no data sources in production builds ([#2069](https://github.com/Shopify/hydrogen/pull/2069)) by [@frehner](https://github.com/frehner)
+
 ## 2022.7.2
 
 ### Patch Changes

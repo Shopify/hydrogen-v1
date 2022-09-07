@@ -64,8 +64,8 @@ export default defineConfig(({mode}) => {
       },
     },
     define: {
-      __HYDROGEN_DEV__: mode === 'devbuild',
-      __HYDROGEN_TEST__: false,
+      __HYDROGEN_DEV__: mode === 'devbuild' || mode === 'test',
+      __HYDROGEN_TEST__: mode === 'test',
     },
     plugins: [react()],
     test: {
@@ -73,10 +73,6 @@ export default defineConfig(({mode}) => {
       environment: 'happy-dom',
       setupFiles: './vitest.setup.ts',
       restoreMocks: true,
-      define: {
-        __HYDROGEN_DEV__: true,
-        __HYDROGEN_TEST__: true,
-      },
     },
   };
 });
