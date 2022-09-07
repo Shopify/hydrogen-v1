@@ -9,6 +9,7 @@ import {useShopQuery} from '../../../../hooks/useShopQuery/index.js';
 import {CacheLong} from '../../../Cache/strategies/index.js';
 import {gql} from '../../../../utilities/graphql-tag.js';
 import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
+import type {Shop} from '../../../../storefront-api-types.js';
 
 export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
   const {storeDomain} = useShop();
@@ -23,7 +24,7 @@ export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
         paymentSettings: {currencyCode},
       },
     },
-  } = useShopQuery({
+  } = useShopQuery<{shop: Shop}>({
     query: SHOP_QUERY,
     cache: CacheLong(),
     preload: '*',
