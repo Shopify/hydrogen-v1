@@ -85,3 +85,124 @@ export type CartAction =
   | {type: 'resolve'; cart: Cart}
   | {type: 'reject'; errors: any}
   | {type: 'resetCart'};
+
+// CartProvider V2
+
+// State Machine types
+export type CartMachineContext = {
+  cart?: Cart;
+  errors?: any;
+};
+
+export type CartFetchEvent = {
+  type: 'CART_FETCH';
+  payload: {
+    cartId: string;
+  };
+};
+
+export type CartCreateEvent = {
+  type: 'CART_CREATE';
+  payload: CartInput;
+};
+
+export type CartLineAddEvent = {
+  type: 'CARTLINE_ADD';
+  payload: {
+    lines: CartLineInput[];
+  };
+};
+
+export type CartLineRemoveEvent = {
+  type: 'CARTLINE_REMOVE';
+  payload: {
+    lines: string[];
+  };
+};
+
+export type CartLineUpdateEvent = {
+  type: 'CARTLINE_UPDATE';
+  payload: {
+    lines: CartLineUpdateInput[];
+  };
+};
+
+export type NoteUpdateEvent = {
+  type: 'NOTE_UPDATE';
+  payload: {
+    note: MutationCartNoteUpdateArgs['note'];
+  };
+};
+
+export type BuyerIdentityUpdateEvent = {
+  type: 'BUYER_IDENTITY_UPDATE';
+  payload: {
+    buyerIdentity: CartBuyerIdentityInput;
+  };
+};
+
+export type CartAttributesUpdateEvent = {
+  type: 'CART_ATTRIBUTES_UPDATE';
+  payload: {
+    attributes: MutationCartAttributesUpdateArgs['attributes'];
+  };
+};
+
+export type DiscountCodesUpdateEvent = {
+  type: 'DISCOUNT_CODES_UPDATE';
+  payload: {
+    discountCodes: string[];
+  };
+};
+
+export type CartMachineEvent =
+  | CartFetchEvent
+  | CartCreateEvent
+  | CartLineAddEvent
+  | CartLineRemoveEvent
+  | CartLineUpdateEvent
+  | NoteUpdateEvent
+  | BuyerIdentityUpdateEvent
+  | CartAttributesUpdateEvent
+  | DiscountCodesUpdateEvent
+  | {type: 'RESOLVE'; payload: {cart: Cart}}
+  | {type: 'ERROR'; payload: {errors: any}};
+
+export type CartMachineTypeState =
+  | {
+      value: 'uninitialized';
+      context: CartMachineContext & {
+        cart: undefined;
+        errors?: any;
+      };
+    }
+  | {
+      value: 'initializationError';
+      context: CartMachineContext & {
+        cart: undefined;
+        errors: any;
+      };
+    }
+  | {
+      value: 'idle';
+      context: CartMachineContext & {
+        cart: Cart;
+        errors?: any;
+      };
+    }
+  | {
+      value: 'error';
+      context: CartMachineContext & {
+        cart?: Cart;
+        errors: any;
+      };
+    }
+  | {value: 'cartFetching'; context: CartMachineContext}
+  | {value: 'cartCreating'; context: CartMachineContext}
+  | {value: 'cartLineRemoving'; context: CartMachineContext}
+  | {value: 'cartLineUpdating'; context: CartMachineContext}
+  | {value: 'cartLineAdding'; context: CartMachineContext}
+  | {value: 'noteUpdating'; context: CartMachineContext}
+  | {value: 'buyerIdentityUpdating'; context: CartMachineContext}
+  | {value: 'cartAttributesUpdating'; context: CartMachineContext}
+  | {value: 'discountCodesUpdating'; context: CartMachineContext};
