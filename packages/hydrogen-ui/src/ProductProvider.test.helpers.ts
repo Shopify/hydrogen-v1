@@ -12,7 +12,7 @@ import type {PartialDeep} from 'type-fest';
 import {faker} from '@faker-js/faker';
 import {getRawMetafield} from './Metafield.test.helpers.js';
 import {getUnitPriceMeasurement, getPrice} from './Money.test.helpers.js';
-import {getVideoData} from './Video.test.js';
+import {getVideoData} from './Video.test.helpers.js';
 import {getExternalVideoData} from './ExternalVideo.test.helpers.js';
 import {getPreviewImage} from './Image.test.helpers.js';
 

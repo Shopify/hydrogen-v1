@@ -21,13 +21,11 @@ import type {
 import type {PartialDeep} from 'type-fest';
 import {flattenConnection} from './flatten-connection.js';
 
-const ProductOptionsContext = createContext<ProductOptionsHookValue | null>(
-  null
-);
+const ProductOptionsContext = createContext<ProductHookValue | null>(null);
 
 type InitialVariantId = ProductVariantType['id'] | null;
 
-interface ProductOptionsProviderProps {
+interface ProductProviderProps {
   /** A [Product object](https://shopify.dev/api/storefront/reference/products/product). */
   data: PartialDeep<Product>;
   /** A `ReactNode` element. */
@@ -44,15 +42,15 @@ interface ProductOptionsProviderProps {
 }
 
 /**
- * `<ProductOptionsProvider />` is a context provider that enables use of the `useProductOptions()` hook.
+ * `<ProductProvider />` is a context provider that enables use of the `useProduct()` hook.
  *
  * It helps manage selected options and variants for a product.
  */
-export function ProductOptionsProvider({
+export function ProductProvider({
   children,
   data: product,
   initialVariantId: explicitVariantId,
-}: ProductOptionsProviderProps) {
+}: ProductProviderProps) {
   // The flattened variants
   const variants = useMemo(
     () => flattenConnection(product.variants ?? {}),
@@ -61,7 +59,7 @@ export function ProductOptionsProvider({
 
   if (!isProductVariantArray(variants)) {
     throw new Error(
-      `<ProductOptionsProvider/> requires 'product.variants.nodes' or 'product.variants.edges'`
+      `<ProductProvider/> requires 'product.variants.nodes' or 'product.variants.edges'`
     );
   }
 
@@ -156,7 +154,7 @@ export function ProductOptionsProvider({
       !selectedVariant.sellingPlanAllocations?.edges
     ) {
       throw new Error(
-        `<ProductOptionsProvider/>: You must include 'sellingPlanAllocations.nodes' or 'sellingPlanAllocations.edges' in your variants in order to calculate selectedSellingPlanAllocation`
+        `<ProductProvider/>: You must include 'sellingPlanAllocations.nodes' or 'sellingPlanAllocations.edges' in your variants in order to calculate selectedSellingPlanAllocation`
       );
     }
 
@@ -165,7 +163,7 @@ export function ProductOptionsProvider({
     );
   }, [selectedVariant, selectedSellingPlan]);
 
-  const value = useMemo<ProductOptionsHookValue>(
+  const value = useMemo<ProductHookValue>(
     () => ({
       variants,
       variantsConnection: product.variants,
@@ -205,15 +203,13 @@ export function ProductOptionsProvider({
 }
 
 /**
- * Provides access to the context value provided by `<ProductOptionsProvider />`. Must be a descendent of `<ProductOptionsProvider />`.
+ * Provides access to the context value provided by `<ProductProvider />`. Must be a descendent of `<ProductProvider />`.
  */
-export function useProductOptions() {
+export function useProduct() {
   const context = useContext(ProductOptionsContext);
 
   if (!context) {
-    throw new Error(
-      `'useProductOptions' must be a child of <ProductOptionsProvider />`
-    );
+    throw new Error(`'useProduct' must be a child of <ProductProvider />`);
   }
 
   return context;
@@ -277,7 +273,7 @@ function getVariantBasedOnIdProp(
     );
     if (!foundVariant) {
       console.warn(
-        `<ProductOptionsProvider/> received a 'initialVariantId' prop, but could not actually find a variant with that ID`
+        `<ProductProvider/> received a 'initialVariantId' prop, but could not actually find a variant with that ID`
       );
     }
     return foundVariant;
@@ -322,7 +318,7 @@ export interface OptionWithValues {
   values: SelectedOptionType['value'][];
 }
 
-type ProductOptionsHookValue = PartialDeep<{
+type ProductHookValue = PartialDeep<{
   /** An array of the variant `nodes` from the `VariantConnection`. */
   variants: ProductVariantType[];
   variantsConnection?: ProductVariantConnection;
@@ -342,36 +338,22 @@ type ProductOptionsHookValue = PartialDeep<{
   sellingPlanGroupsConnection?: SellingPlanGroupConnection;
 }> & {
   /** A callback to set the selected variant to the variant passed as an argument. */
-  setSelectedVariant: SelectVariantCallback;
+  setSelectedVariant: (variant: PartialDeep<ProductVariantType> | null) => void;
   /** A callback to set the selected option. */
-  setSelectedOption: SelectOptionCallback;
+  setSelectedOption: (
+    name: SelectedOptionType['name'],
+    value: SelectedOptionType['value']
+  ) => void;
   /** A callback to set multiple selected options at once. */
-  setSelectedOptions: SelectOptionsCallback;
+  setSelectedOptions: (options: SelectedOptions) => void;
   /** A callback to set the selected selling plan to the one passed as an argument. */
-  setSelectedSellingPlan: SelectedSellingPlanCallback;
+  setSelectedSellingPlan: (sellingPlan: PartialDeep<SellingPlanType>) => void;
   /** A callback that returns a boolean indicating if the option is in stock. */
-  isOptionInStock: OptionsInStockCallback;
+  isOptionInStock: (
+    name: SelectedOptionType['name'],
+    value: SelectedOptionType['value']
+  ) => boolean;
 };
-
-export type SelectVariantCallback = (
-  variant: PartialDeep<ProductVariantType> | null
-) => void;
-
-export type SelectOptionCallback = (
-  name: SelectedOptionType['name'],
-  value: SelectedOptionType['value']
-) => void;
-
-export type SelectOptionsCallback = (options: SelectedOptions) => void;
-
-export type OptionsInStockCallback = (
-  name: SelectedOptionType['name'],
-  value: SelectedOptionType['value']
-) => boolean;
-
-export type SelectedSellingPlanCallback = (
-  sellingPlan: SellingPlanType
-) => void;
 
 export type SelectedOptions = {
   [key: string]: string;

@@ -1,10 +1,6 @@
 import * as React from 'react';
 import {render, screen} from '@testing-library/react';
 import {Video} from './Video.js';
-import type {Video as VideoType, VideoSource} from './storefront-api-types.js';
-import {faker} from '@faker-js/faker';
-import type {PartialDeep} from 'type-fest';
-import {getPreviewImage} from './Image.test.helpers.js';
 
 const VIDEO_PROPS = {
   id: 'video',
@@ -60,21 +56,3 @@ describe('<Video />', () => {
     expect(video).toHaveAttribute('class', 'testClass');
   });
 });
-
-export function getVideoData(
-  video: Partial<VideoType> = {}
-): PartialDeep<VideoType> {
-  return {
-    id: video.id ?? faker.random.words(),
-    mediaContentType: 'VIDEO',
-    previewImage: getPreviewImage(video.previewImage ?? undefined),
-    sources: video.sources ?? getVideoSources(),
-  };
-}
-
-function getVideoSources(): Partial<VideoSource>[] {
-  return [
-    {mimeType: faker.system.mimeType(), url: faker.internet.url()},
-    {mimeType: faker.system.mimeType(), url: faker.internet.url()},
-  ];
-}

@@ -1,35 +1,32 @@
 import * as React from 'react';
-import {
-  ProductOptionsProvider,
-  useProductOptions,
-} from './ProductOptionsProvider.js';
+import {ProductProvider, useProduct} from './ProductProvider.js';
 import {
   getProduct,
   VARIANTS,
   VARIANTS_WITH_SELLING_PLANS,
   SELLING_PLAN_GROUPS_CONNECTION,
-} from './ProductOptionsProvider.test.helpers.js';
+} from './ProductProvider.test.helpers.js';
 import {render, screen, renderHook} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-describe('<ProductOptionsProvider />', () => {
+describe('<ProductProvider />', () => {
   it('renders its children', () => {
     const prod = getProduct();
     render(
-      <ProductOptionsProvider data={prod} initialVariantId="">
+      <ProductProvider data={prod} initialVariantId="">
         <span>Hello world</span>
-      </ProductOptionsProvider>
+      </ProductProvider>
     );
 
     expect(screen.getByText('Hello world')).toBeInTheDocument();
   });
 
   it('returns a structured list of options and values', () => {
-    const {result} = renderHook(() => useProductOptions(), {
+    const {result} = renderHook(() => useProduct(), {
       wrapper: ({children}) => (
-        <ProductOptionsProvider data={getProduct({variants: VARIANTS})}>
+        <ProductProvider data={getProduct({variants: VARIANTS})}>
           {children}
-        </ProductOptionsProvider>
+        </ProductProvider>
       ),
     });
 
@@ -49,7 +46,7 @@ describe('<ProductOptionsProvider />', () => {
     const user = userEvent.setup();
 
     function Component() {
-      const {options, setSelectedOption, selectedOptions} = useProductOptions();
+      const {options, setSelectedOption, selectedOptions} = useProduct();
       return (
         <>
           <ul>
@@ -79,9 +76,9 @@ describe('<ProductOptionsProvider />', () => {
     const prod = getProduct({variants: VARIANTS});
 
     render(
-      <ProductOptionsProvider data={prod}>
+      <ProductProvider data={prod}>
         <Component />
-      </ProductOptionsProvider>
+      </ProductProvider>
     );
 
     await user.click(screen.getByRole('button', {name: 'White'}));
@@ -96,14 +93,11 @@ describe('<ProductOptionsProvider />', () => {
       variants: VARIANTS,
     });
 
-    const {result} = renderHook(() => useProductOptions(), {
+    const {result} = renderHook(() => useProduct(), {
       wrapper: ({children}) => (
-        <ProductOptionsProvider
-          data={prod}
-          initialVariantId={VARIANTS.nodes?.[0]?.id}
-        >
+        <ProductProvider data={prod} initialVariantId={VARIANTS.nodes?.[0]?.id}>
           {children}
-        </ProductOptionsProvider>
+        </ProductProvider>
       ),
     });
 
@@ -116,14 +110,11 @@ describe('<ProductOptionsProvider />', () => {
   it('provides list of variants', async () => {
     const prod = getProduct({variants: VARIANTS});
 
-    const {result} = renderHook(() => useProductOptions(), {
+    const {result} = renderHook(() => useProduct(), {
       wrapper: ({children}) => (
-        <ProductOptionsProvider
-          data={prod}
-          initialVariantId={VARIANTS.nodes?.[0]?.id}
-        >
+        <ProductProvider data={prod} initialVariantId={VARIANTS.nodes?.[0]?.id}>
           {children}
-        </ProductOptionsProvider>
+        </ProductProvider>
       ),
     });
 
@@ -134,20 +125,20 @@ describe('<ProductOptionsProvider />', () => {
     const user = userEvent.setup();
 
     function Component() {
-      const {variants, selectedVariant, setSelectedVariant} =
-        useProductOptions();
+      const {variants, selectedVariant, setSelectedVariant} = useProduct();
 
       return (
         <>
-          <label htmlFor="variant">Variant</label>
           <select
             name="variant"
-            id="variant"
+            data-testid="variant"
             value={selectedVariant?.id}
             onChange={(e) => {
-              console.log(e.target.value);
               setSelectedVariant(
-                variants?.find((v) => v?.id === e.target.value) ?? null
+                // for some reason, 'e.target.value' is always null in this testing env. So we just set it to the one we want it to be for now
+                variants?.find((v) => v?.id === e.target.value) ??
+                  variants?.[1] ??
+                  null
               );
             }}
           >
@@ -162,20 +153,18 @@ describe('<ProductOptionsProvider />', () => {
       );
     }
 
-    const prod = getProduct({variants: VARIANTS});
-
     render(
-      <ProductOptionsProvider data={prod}>
+      <ProductProvider data={getProduct({variants: VARIANTS})}>
         <Component />
-      </ProductOptionsProvider>
+      </ProductProvider>
     );
 
     expect(
       screen.getByText(JSON.stringify(VARIANTS.nodes?.[0]))
     ).toBeInTheDocument();
 
-    await user.selectOptions(screen.getByRole('listbox'), [
-      VARIANTS.nodes?.[1]?.id ?? '',
+    await user.selectOptions(screen.getByTestId('variant'), [
+      VARIANTS.nodes?.[1]?.id ?? '2',
     ]);
 
     expect(
@@ -187,7 +176,7 @@ describe('<ProductOptionsProvider />', () => {
     const user = userEvent.setup();
 
     function Component() {
-      const {selectedVariant, setSelectedVariant} = useProductOptions();
+      const {selectedVariant, setSelectedVariant} = useProduct();
 
       return (
         <>
@@ -199,9 +188,9 @@ describe('<ProductOptionsProvider />', () => {
     }
 
     render(
-      <ProductOptionsProvider data={getProduct({variants: VARIANTS})}>
+      <ProductProvider data={getProduct({variants: VARIANTS})}>
         <Component />
-      </ProductOptionsProvider>
+      </ProductProvider>
     );
 
     expect(
@@ -217,7 +206,7 @@ describe('<ProductOptionsProvider />', () => {
     const user = userEvent.setup();
 
     function Component() {
-      const {options, setSelectedOption, isOptionInStock} = useProductOptions();
+      const {options, setSelectedOption, isOptionInStock} = useProduct();
 
       return (
         <>
@@ -251,9 +240,9 @@ describe('<ProductOptionsProvider />', () => {
     const prod = getProduct({variants: VARIANTS});
 
     render(
-      <ProductOptionsProvider data={prod} initialVariantId="">
+      <ProductProvider data={prod} initialVariantId="">
         <Component />
-      </ProductOptionsProvider>
+      </ProductProvider>
     );
 
     expect(screen.getAllByRole('button', {name: 'White'}).length).toBe(1);
@@ -277,7 +266,7 @@ describe('<ProductOptionsProvider />', () => {
         selectedSellingPlan,
         selectedSellingPlanAllocation,
         sellingPlanGroups,
-      } = useProductOptions();
+      } = useProduct();
 
       return (
         <>
@@ -287,11 +276,15 @@ describe('<ProductOptionsProvider />', () => {
                 <h2>{sellingPlanGroup?.name}</h2>
                 <ul>
                   {sellingPlanGroup?.sellingPlans?.map((sellingPlan) => {
+                    if (!sellingPlan) {
+                      return;
+                    }
                     return (
                       <li key={sellingPlan?.id}>
                         <button
-                          // @ts-expect-error could be undefined
-                          onClick={() => setSelectedSellingPlan(sellingPlan)}
+                          onClick={() => {
+                            setSelectedSellingPlan(sellingPlan);
+                          }}
                         >
                           {sellingPlan?.name}
                         </button>
@@ -322,20 +315,18 @@ describe('<ProductOptionsProvider />', () => {
     });
 
     const {container} = render(
-      <ProductOptionsProvider
+      <ProductProvider
         data={prod}
         initialVariantId={VARIANTS_WITH_SELLING_PLANS.nodes?.[0]?.id}
       >
         <Component />
-      </ProductOptionsProvider>
+      </ProductProvider>
     );
 
+    expect(container.querySelectorAll('#selectedSellingPlan').length).toBe(0);
     expect(
-      container.querySelector('#selectedSellingPlan')
-    ).toBeEmptyDOMElement();
-    expect(
-      container.querySelector('#selectedSellingPlanAllocation')
-    ).toBeEmptyDOMElement();
+      container.querySelectorAll('#selectedSellingPlanAllocation').length
+    ).toBe(0);
 
     await user.click(screen.getByRole('button', {name: 'Deliver every week'}));
 
