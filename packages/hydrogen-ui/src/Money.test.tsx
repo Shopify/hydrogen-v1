@@ -2,13 +2,8 @@ import React from 'react';
 import {render, screen} from '@testing-library/react';
 import {Money} from './Money.js';
 import {ShopifyProvider} from './ShopifyProvider.js';
-import {
-  MoneyV2,
-  UnitPriceMeasurement,
-  UnitPriceMeasurementMeasuredUnit,
-} from './storefront-api-types.js';
-import {faker} from '@faker-js/faker';
 import {getShopifyConfig} from './ShopifyProvider.test.js';
+import {getPrice, getUnitPriceMeasurement} from './Money.test.helpers.js';
 
 describe('<Money />', () => {
   it('renders a formatted money string', () => {
@@ -167,7 +162,7 @@ describe('<Money />', () => {
 
     expect(container.querySelector('br')).toBeInTheDocument();
     expect(
-      screen.getByText(measurement.referenceUnit, {exact: false})
+      screen.getByText(measurement.referenceUnit ?? '', {exact: false})
     ).toBeInTheDocument();
   });
 
@@ -202,44 +197,3 @@ describe('<Money />', () => {
     ).toBeInTheDocument();
   });
 });
-
-export function getPrice(price: Partial<MoneyV2> = {}) {
-  return {
-    currencyCode: price.currencyCode ?? 'CAD',
-    amount: price.amount ?? faker.finance.amount(),
-  };
-}
-
-export function getUnitPriceMeasurement(
-  unitPriceMeasurement: Partial<UnitPriceMeasurement> = {}
-) {
-  const measuredTypeToUnitMap: {
-    WEIGHT: UnitPriceMeasurementMeasuredUnit[];
-    VOLUME: UnitPriceMeasurementMeasuredUnit[];
-    LENGTH: UnitPriceMeasurementMeasuredUnit[];
-    AREA: UnitPriceMeasurementMeasuredUnit[];
-  } = {
-    WEIGHT: ['MG', 'G', 'KG'],
-    VOLUME: ['ML', 'CL', 'L', 'M3'],
-    LENGTH: ['MM', 'CM', 'M'],
-    AREA: ['M2'],
-  };
-  const measuredType = faker.helpers.arrayElement<
-    keyof typeof measuredTypeToUnitMap
-  >(['WEIGHT', 'VOLUME', 'AREA', 'LENGTH']);
-  const quantityUnit = faker.helpers.arrayElement(
-    measuredTypeToUnitMap[measuredType]
-  );
-  const referenceUnit = faker.helpers.arrayElement(
-    measuredTypeToUnitMap[measuredType]
-  );
-
-  return {
-    measuredType: unitPriceMeasurement.measuredType ?? measuredType,
-    quantityUnit: unitPriceMeasurement.quantityUnit ?? quantityUnit,
-    quantityValue: unitPriceMeasurement.quantityValue ?? faker.datatype.float(),
-    referenceUnit: unitPriceMeasurement.referenceUnit ?? referenceUnit,
-    referenceValue:
-      unitPriceMeasurement.referenceValue ?? faker.datatype.number(),
-  };
-}
