@@ -1,7 +1,7 @@
 type Descriptor = Parameters<typeof Object.defineProperty>[2];
 
 // Create objects with null prototypes for faster access
-export function createObject<T = object>(
+export function createObject<T extends {} = object>(
   properties: T,
   {
     prototype = null,
