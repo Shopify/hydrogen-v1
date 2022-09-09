@@ -4,7 +4,7 @@ title: useRouteParams
 description: The useRouteParams hook retrieves the parameters of an active route.
 ---
 
-The `useRouteParams` hook retrieves the parameters of an active route. The hook is available in both server and client components.
+The `useRouteParams` hook retrieves the parameters of an active route. The hook is available in both server and client components. For example, if your file route has the name `[handle].server.jsx`, then `useRouteParams` returns an object with a key `handle` inside it.
 
 ## Example code
 
