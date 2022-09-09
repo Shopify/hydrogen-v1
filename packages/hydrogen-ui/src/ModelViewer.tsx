@@ -10,13 +10,13 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      'model-viewer': ModelViewerElement;
+      'model-viewer': PartialDeep<ModelViewerElement>;
     }
   }
 }
 
 type ModelViewerProps = Omit<
-  JSX.IntrinsicElements['model-viewer'],
+  PartialDeep<JSX.IntrinsicElements['model-viewer']>,
   PropsWeControl
 > & {
   /** An object with fields that correspond to the Storefront API's [Model3D object](https://shopify.dev/api/storefront/latest/objects/model3d). */
@@ -221,7 +221,7 @@ export function ModelViewer(props: ModelViewerProps) {
       ref={callbackRef}
       {...passthroughProps}
       className={className}
-      id={passthroughProps.id ?? data.id ?? null}
+      id={passthroughProps.id ?? data.id}
       src={data.sources[0].url}
       alt={data.alt ?? null}
       camera-controls={passthroughProps.cameraControls ?? true}

@@ -1,8 +1,6 @@
 import type {
   ProductVariant,
   Product as ProductType,
-  MediaImage,
-  Model3d,
   SellingPlanAllocationConnection,
   ProductVariantConnection,
   MoneyV2,
@@ -12,9 +10,8 @@ import type {PartialDeep} from 'type-fest';
 import {faker} from '@faker-js/faker';
 import {getRawMetafield} from './Metafield.test.helpers.js';
 import {getUnitPriceMeasurement, getPrice} from './Money.test.helpers.js';
-import {getVideoData} from './Video.test.helpers.js';
-import {getExternalVideoData} from './ExternalVideo.test.helpers.js';
 import {getPreviewImage} from './Image.test.helpers.js';
+import {getMedia} from './MediaFile.test.helpers.js';
 
 export function getProduct(
   product: PartialDeep<ProductType> = {}
@@ -34,13 +31,7 @@ export function getProduct(
       minVariantPrice: getPrice(product.compareAtPriceRange?.minVariantPrice),
     },
     media: product.media ?? {
-      nodes: [
-        getAnyMedia(),
-        getAnyMedia(),
-        getAnyMedia(),
-        getAnyMedia(),
-        getAnyMedia(),
-      ],
+      nodes: [getMedia(), getMedia(), getMedia(), getMedia(), getMedia()],
     },
     variants: product.variants ?? {
       nodes: [
@@ -87,49 +78,6 @@ export function getVariant(
       getRawMetafield(),
     ],
   };
-}
-
-export function getMediaImage(
-  image: PartialDeep<MediaImage> = {}
-): PartialDeep<MediaImage> {
-  return {
-    id: image.id ?? faker.random.words(),
-    mediaContentType: 'IMAGE',
-    image: getPreviewImage(image.previewImage ?? undefined),
-  };
-}
-
-// TODO: remove when model3d gets migrated
-export function getModel3d(model: Partial<Model3d> = {}): PartialDeep<Model3d> {
-  return {
-    id: model.id ?? faker.random.words(),
-    mediaContentType: 'MODEL_3D',
-    alt: model.alt ?? faker.random.words(),
-    previewImage: getPreviewImage(model.previewImage ?? undefined),
-    sources: model.sources ?? [
-      {url: faker.internet.url()},
-      {url: faker.internet.url()},
-    ],
-  };
-}
-
-export function getAnyMedia() {
-  const number = faker.datatype.number({max: 4, min: 1});
-
-  switch (number) {
-    case 1: {
-      return getMediaImage();
-    }
-    case 2: {
-      return getVideoData();
-    }
-    case 3: {
-      return getExternalVideoData();
-    }
-    case 4: {
-      return getModel3d();
-    }
-  }
 }
 
 const priceV2: MoneyV2 = {
