@@ -8,12 +8,12 @@ import type {
   ProductVariant,
 } from './storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
-import {getPreviewImage} from './Image.test.js';
+import {getPreviewImage} from './Image.test.helpers.js';
 import {vi} from 'vitest';
 import {render, screen} from '@testing-library/react';
 import {ShopifyProvider} from './ShopifyProvider.js';
 import {getShopifyConfig} from './ShopifyProvider.test.js';
-import {getRawMetafield} from './metafield-test-helpers.js';
+import {getRawMetafield} from './Metafield.test.helpers.js';
 
 const TEST_ID = 'metafields_test_id';
 
