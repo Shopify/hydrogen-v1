@@ -11,8 +11,10 @@ vi.mock('../CartActions.client.js', () => ({
   useCartActions: mockUseCartActions,
 }));
 
-import {cartFromGraphQL, CartProviderV2} from '../CartProviderV2.client.js';
+import {CartProviderV2} from '../CartProviderV2.client.js';
+import {cartFromGraphQL} from '../useCartAPIStateMachine.client.js';
 import {CountryCode} from '../../../storefront-api-types.js';
+import {CART_ID_STORAGE_KEY} from '../constants.js';
 
 function ShopifyCartProvider({children}) {
   return (
@@ -25,9 +27,128 @@ function ShopifyCartProvider({children}) {
 describe('<CartProviderV2 />', () => {
   beforeEach(() => {
     mockUseCartActions.mockClear();
+    vi.spyOn(window.localStorage, 'getItem').mockReturnValue('');
   });
 
-  describe('uninitialized', () => {
+  describe('local storage', () => {
+    it('fetches the cart with the cart id in local storage when initializing the app', async () => {
+      const cartFetchSpy = vi.fn(async () => ({
+        data: {cart: CART},
+      }));
+      vi.spyOn(window.localStorage, 'getItem').mockReturnValue('cart-id');
+
+      mockUseCartActions.mockReturnValue({
+        cartFetch: cartFetchSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider,
+      });
+
+      expect(result.current.status).toBe('fetching');
+
+      await act(async () => {});
+
+      expect(cartFetchSpy).toBeCalledWith('cart-id');
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(CART),
+      });
+    });
+
+    it('does not fetch cart if cart id is not in local storage', async () => {
+      const cartFetchSpy = vi.fn(async () => ({
+        data: {cart: CART},
+      }));
+      vi.spyOn(window.localStorage, 'getItem').mockReturnValue('');
+
+      mockUseCartActions.mockReturnValue({
+        cartFetch: cartFetchSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider,
+      });
+
+      expect(result.current.status).not.toBe('fetching');
+
+      await act(async () => {});
+
+      expect(cartFetchSpy).not.toBeCalled();
+      expect(result.current).toMatchObject({
+        status: 'uninitialized',
+        lines: expect.arrayContaining([]),
+      });
+    });
+
+    it('saves cart id on cart creation', async () => {
+      vi.spyOn(window.localStorage, 'getItem').mockReturnValue('');
+      const spy = vi.spyOn(window.localStorage, 'setItem');
+
+      const result = await useCartWithInitializedCart();
+
+      expect(spy).toBeCalledWith(CART_ID_STORAGE_KEY, result.current.id);
+    });
+
+    it('deletes cart id on cart completion', async () => {
+      const cartFetchSpy = vi.fn(async () => ({
+        data: {cart: null},
+      }));
+      vi.spyOn(window.localStorage, 'getItem').mockReturnValue('cart-id');
+
+      const spy = vi.spyOn(window.localStorage, 'removeItem');
+
+      mockUseCartActions.mockReturnValue({
+        cartFetch: cartFetchSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider,
+      });
+
+      await act(async () => {});
+
+      expect(cartFetchSpy).toBeCalledWith('cart-id');
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        lines: [],
+      });
+
+      expect(spy).toBeCalledWith(CART_ID_STORAGE_KEY);
+    });
+  });
+
+  describe('uninitialized cart after local storage init', () => {
+    it('creates a cart when creating a cart', async () => {
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: CART}},
+      }));
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider,
+      });
+
+      expect(result.current.status).toBe('uninitialized');
+
+      act(() => {
+        result.current.cartCreate({});
+      });
+
+      expect(result.current.status).toBe('creating');
+
+      await act(async () => {});
+
+      expect(cartCreateSpy).toBeCalledTimes(1);
+
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(CART),
+      });
+    });
+
     it('creates a cart when adding a cart line', async () => {
       const cartCreateSpy = vi.fn(async () => ({
         data: {cartCreate: {cart: CART}},
@@ -58,40 +179,6 @@ describe('<CartProviderV2 />', () => {
         status: 'idle',
         ...cartFromGraphQL(CART),
       });
-    });
-
-    it('creates a cart when creating a cart line', async () => {
-      const cartCreateSpy = vi.fn(async () => ({
-        data: {cartCreate: {cart: CART}},
-      }));
-      mockUseCartActions.mockReturnValue({
-        cartCreate: cartCreateSpy,
-      });
-
-      const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
-      });
-
-      expect(result.current.status).toBe('uninitialized');
-
-      act(() => {
-        result.current.cartCreate({});
-      });
-
-      expect(result.current.status).toBe('creating');
-
-      await act(async () => {});
-
-      expect(cartCreateSpy).toBeCalledTimes(1);
-
-      expect(result.current).toMatchObject({
-        status: 'idle',
-        ...cartFromGraphQL(CART),
-      });
-    });
-
-    it.skip('fetches a cart when fetching a cart', async () => {
-      // @TODO: new useCart
     });
 
     it('shows inializationError status when an error happens', async () => {
@@ -140,13 +227,9 @@ describe('<CartProviderV2 />', () => {
         data: {cartCreate: {cart: CART}},
       }));
 
-      mockUseCartActions
-        .mockReturnValueOnce({
-          cartCreate: cartCreateSpy,
-        })
-        .mockReturnValue({
-          cartCreate: cartCreateResolveSpy,
-        });
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+      });
 
       const {result} = renderHook(() => useCart(), {
         wrapper: ShopifyCartProvider,
@@ -161,8 +244,19 @@ describe('<CartProviderV2 />', () => {
         ]);
       });
 
-      // Wait till initializationError status
+      mockUseCartActions.mockClear();
+
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateResolveSpy,
+      });
+
+      // Wait for initialization error
       await act(async () => {});
+
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        error: expect.arrayContaining([]),
+      });
 
       // Create cart should work now
       act(() => {
@@ -186,314 +280,353 @@ describe('<CartProviderV2 />', () => {
   });
 
   describe('idle', () => {
-    it('adds cartline', async () => {
-      const cartLineAddSpy = vi.fn(async () => ({
-        data: {cartLineAdd: {cart: {}}},
-      }));
+    describe('adds cart line', async () => {
+      it('resolves', async () => {
+        const cartLineAddSpy = vi.fn(async () => ({
+          data: {cartLinesAdd: {cart: CART}},
+        }));
 
-      const cartCreateSpy = vi.fn(async () => ({
-        data: {cartCreate: {cart: CART}},
-      }));
+        const result = await useCartWithInitializedCart({
+          cartLineAdd: cartLineAddSpy,
+        });
 
-      mockUseCartActions.mockReturnValue({
-        cartLineAdd: cartLineAddSpy,
-        cartCreate: cartCreateSpy,
+        act(() => {
+          result.current.linesAdd([
+            {
+              merchandiseId: '123',
+            },
+          ]);
+        });
+
+        expect(result.current.status).toEqual('updating');
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(cartLineAddSpy).toBeCalledTimes(1);
+        expect(result.current).toMatchObject({
+          status: 'idle',
+          ...cartFromGraphQL(CART),
+        });
       });
 
-      const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
-      });
+      it('deletes local storage on complete', async () => {
+        const cartLineAddSpy = vi.fn(async () => ({
+          data: {cartLinesAdd: {cart: null}},
+        }));
 
-      // creates a cart and wait till idle
-      await act(async () => {
-        result.current.linesAdd([
-          {
-            merchandiseId: '123',
-          },
-        ]);
-      });
+        const spy = vi.spyOn(window.localStorage, 'removeItem');
 
-      // add cart line
-      act(() => {
-        result.current.linesAdd([
-          {
-            merchandiseId: '123',
-          },
-        ]);
-      });
+        const result = await useCartWithInitializedCart({
+          cartLineAdd: cartLineAddSpy,
+        });
 
-      expect(result.current.status).toEqual('updating');
+        act(() => {
+          result.current.linesAdd([
+            {
+              merchandiseId: '123',
+            },
+          ]);
+        });
 
-      // wait till idle
-      await act(async () => {});
+        // wait till idle
+        await act(async () => {});
 
-      expect(cartLineAddSpy).toBeCalledTimes(1);
-      expect(result.current).toMatchObject({
-        status: 'idle',
-        ...cartFromGraphQL(CART),
-      });
-    });
-
-    it('updates cartline', async () => {
-      const cartLineUpdateSpy = vi.fn(async () => ({
-        data: {cartLineUpdate: {cart: CART}},
-      }));
-
-      const cartCreateSpy = vi.fn(async () => ({
-        data: {cartCreate: {cart: CART}},
-      }));
-
-      mockUseCartActions.mockReturnValue({
-        cartLineUpdate: cartLineUpdateSpy,
-        cartCreate: cartCreateSpy,
-      });
-
-      const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
-      });
-
-      // creates a cart and wait till idle
-      await act(async () => {
-        result.current.linesAdd([
-          {
-            merchandiseId: '123',
-          },
-        ]);
-      });
-
-      act(() => {
-        result.current.linesUpdate([
-          {
-            id: '123',
-            merchandiseId: '123',
-          },
-        ]);
-      });
-
-      expect(result.current.status).toEqual('updating');
-
-      // wait till idle
-      await act(async () => {});
-
-      expect(cartLineUpdateSpy).toBeCalledTimes(1);
-      expect(result.current).toMatchObject({
-        status: 'idle',
-        ...cartFromGraphQL(CART),
+        expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
       });
     });
 
-    it('removes cartline', async () => {
-      const cartLineRemoveSpy = vi.fn(async () => ({
-        data: {cartLineRemove: {cart: CART}},
-      }));
+    describe('updates cartline', async () => {
+      it('resolves', async () => {
+        const cartLineUpdateSpy = vi.fn(async () => ({
+          data: {cartLinesUpdate: {cart: CART}},
+        }));
 
-      const cartCreateSpy = vi.fn(async () => ({
-        data: {cartCreate: {cart: CART}},
-      }));
+        const result = await useCartWithInitializedCart({
+          cartLineUpdate: cartLineUpdateSpy,
+        });
 
-      mockUseCartActions.mockReturnValue({
-        cartLineRemove: cartLineRemoveSpy,
-        cartCreate: cartCreateSpy,
+        act(() => {
+          result.current.linesUpdate([
+            {
+              id: '123',
+              merchandiseId: '123',
+            },
+          ]);
+        });
+
+        expect(result.current.status).toEqual('updating');
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(cartLineUpdateSpy).toBeCalledTimes(1);
+        expect(result.current).toMatchObject({
+          status: 'idle',
+          ...cartFromGraphQL(CART),
+        });
       });
 
-      const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
-      });
+      it('deletes local storage on complete', async () => {
+        const cartLineUpdateSpy = vi.fn(async () => ({
+          data: {cartLinesUpdate: {cart: null}},
+        }));
 
-      // creates a cart and wait till idle
-      await act(async () => {
-        result.current.linesAdd([
-          {
-            merchandiseId: '123',
-          },
-        ]);
-      });
+        const spy = vi.spyOn(window.localStorage, 'removeItem');
 
-      act(() => {
-        result.current.linesRemove(['123']);
-      });
+        const result = await useCartWithInitializedCart({
+          cartLineUpdate: cartLineUpdateSpy,
+        });
 
-      expect(result.current.status).toEqual('updating');
+        act(() => {
+          result.current.linesUpdate([
+            {
+              id: '123',
+              merchandiseId: '123',
+            },
+          ]);
+        });
 
-      // wait till idle
-      await act(async () => {});
+        // wait till idle
+        await act(async () => {});
 
-      expect(cartLineRemoveSpy).toBeCalledTimes(1);
-      expect(result.current).toMatchObject({
-        status: 'idle',
-        ...cartFromGraphQL(CART),
-      });
-    });
-
-    it('note update', async () => {
-      const noteUpdateSpy = vi.fn(async () => ({
-        data: {noteUpdate: {cart: CART}},
-      }));
-
-      const cartCreateSpy = vi.fn(async () => ({
-        data: {cartCreate: {cart: CART}},
-      }));
-
-      mockUseCartActions.mockReturnValue({
-        noteUpdate: noteUpdateSpy,
-        cartCreate: cartCreateSpy,
-      });
-
-      const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
-      });
-
-      // creates a cart and wait till idle
-      await act(async () => {
-        result.current.linesAdd([
-          {
-            merchandiseId: '123',
-          },
-        ]);
-      });
-
-      act(() => {
-        result.current.noteUpdate('test note');
-      });
-
-      expect(result.current.status).toEqual('updating');
-
-      // wait till idle
-      await act(async () => {});
-
-      expect(noteUpdateSpy).toBeCalledTimes(1);
-      expect(result.current).toMatchObject({
-        status: 'idle',
-        ...cartFromGraphQL(CART),
+        expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
       });
     });
 
-    it('buyer identity update', async () => {
-      const buyerIdentityUpdateSpy = vi.fn(async () => ({
-        data: {buyerIdentityUpdate: {cart: CART}},
-      }));
+    describe('removes cartline', async () => {
+      it('resolves', async () => {
+        const cartLineRemoveSpy = vi.fn(async () => ({
+          data: {cartLinesRemove: {cart: CART}},
+        }));
 
-      const cartCreateSpy = vi.fn(async () => ({
-        data: {cartCreate: {cart: CART}},
-      }));
+        const result = await useCartWithInitializedCart({
+          cartLineRemove: cartLineRemoveSpy,
+        });
 
-      mockUseCartActions.mockReturnValue({
-        buyerIdentityUpdate: buyerIdentityUpdateSpy,
-        cartCreate: cartCreateSpy,
+        act(() => {
+          result.current.linesRemove(['123']);
+        });
+
+        expect(result.current.status).toEqual('updating');
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(cartLineRemoveSpy).toBeCalledTimes(1);
+        expect(result.current).toMatchObject({
+          status: 'idle',
+          ...cartFromGraphQL(CART),
+        });
       });
 
-      const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
-      });
+      it('deletes local storage on complete', async () => {
+        const cartLineRemoveSpy = vi.fn(async () => ({
+          data: {cartLinesRemove: {cart: null}},
+        }));
 
-      // creates a cart and wait till idle
-      await act(async () => {
-        result.current.linesAdd([
-          {
-            merchandiseId: '123',
-          },
-        ]);
-      });
+        const spy = vi.spyOn(window.localStorage, 'removeItem');
 
-      act(() => {
-        result.current.buyerIdentityUpdate({countryCode: CountryCode.Us});
-      });
+        const result = await useCartWithInitializedCart({
+          cartLineRemove: cartLineRemoveSpy,
+        });
 
-      expect(result.current.status).toEqual('updating');
+        act(() => {
+          result.current.linesRemove(['123']);
+        });
 
-      // wait till idle
-      await act(async () => {});
-
-      expect(buyerIdentityUpdateSpy).toBeCalledTimes(1);
-      expect(result.current).toMatchObject({
-        status: 'idle',
-        ...cartFromGraphQL(CART),
-      });
-    });
-
-    it('cart attributes update', async () => {
-      const cartAttributesUpdateSpy = vi.fn(async () => ({
-        data: {cartAttributesUpdate: {cart: CART}},
-      }));
-
-      const cartCreateSpy = vi.fn(async () => ({
-        data: {cartCreate: {cart: CART}},
-      }));
-
-      mockUseCartActions.mockReturnValue({
-        cartAttributesUpdate: cartAttributesUpdateSpy,
-        cartCreate: cartCreateSpy,
-      });
-
-      const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
-      });
-
-      // creates a cart and wait till idle
-      await act(async () => {
-        result.current.linesAdd([
-          {
-            merchandiseId: '123',
-          },
-        ]);
-      });
-
-      act(() => {
-        result.current.cartAttributesUpdate([{key: 'key', value: 'value'}]);
-      });
-
-      expect(result.current.status).toEqual('updating');
-
-      // wait till idle
-      await act(async () => {});
-
-      expect(cartAttributesUpdateSpy).toBeCalledTimes(1);
-      expect(result.current).toMatchObject({
-        status: 'idle',
-        ...cartFromGraphQL(CART),
+        // wait till idle
+        await act(async () => {});
+        expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
       });
     });
 
-    it('discount update', async () => {
-      const discountCodesUpdateSpy = vi.fn(async () => ({
-        data: {discountCodesUpdate: {cart: CART}},
-      }));
+    describe('note update', async () => {
+      it('resolves', async () => {
+        const noteUpdateSpy = vi.fn(async () => ({
+          data: {cartNoteUpdate: {cart: CART}},
+        }));
 
-      const cartCreateSpy = vi.fn(async () => ({
-        data: {cartCreate: {cart: CART}},
-      }));
+        const result = await useCartWithInitializedCart({
+          noteUpdate: noteUpdateSpy,
+        });
 
-      mockUseCartActions.mockReturnValue({
-        discountCodesUpdate: discountCodesUpdateSpy,
-        cartCreate: cartCreateSpy,
+        act(() => {
+          result.current.noteUpdate('test note');
+        });
+
+        expect(result.current.status).toEqual('updating');
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(noteUpdateSpy).toBeCalledTimes(1);
+        expect(result.current).toMatchObject({
+          status: 'idle',
+          ...cartFromGraphQL(CART),
+        });
       });
 
-      const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
+      it('deletes local storage on complete', async () => {
+        const noteUpdateSpy = vi.fn(async () => ({
+          data: {cartNoteUpdate: {cart: null}},
+        }));
+
+        const spy = vi.spyOn(window.localStorage, 'removeItem');
+
+        const result = await useCartWithInitializedCart({
+          noteUpdate: noteUpdateSpy,
+        });
+
+        act(() => {
+          result.current.noteUpdate('test note');
+        });
+
+        // wait till idle
+        await act(async () => {});
+        expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
+      });
+    });
+
+    describe('buyer identity update', async () => {
+      it('resolves', async () => {
+        const buyerIdentityUpdateSpy = vi.fn(async () => ({
+          data: {cartBuyerIdentityUpdate: {cart: CART}},
+        }));
+
+        const result = await useCartWithInitializedCart({
+          buyerIdentityUpdate: buyerIdentityUpdateSpy,
+        });
+
+        act(() => {
+          result.current.buyerIdentityUpdate({countryCode: CountryCode.Us});
+        });
+
+        expect(result.current.status).toEqual('updating');
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(buyerIdentityUpdateSpy).toBeCalledTimes(1);
+        expect(result.current).toMatchObject({
+          status: 'idle',
+          ...cartFromGraphQL(CART),
+        });
       });
 
-      // creates a cart and wait till idle
-      await act(async () => {
-        result.current.linesAdd([
-          {
-            merchandiseId: '123',
-          },
-        ]);
+      it('deletes local storage on complete', async () => {
+        const spy = vi.spyOn(window.localStorage, 'removeItem');
+
+        const buyerIdentityUpdateSpy = vi.fn(async () => ({
+          data: {cartBuyerIdentityUpdate: {cart: null}},
+        }));
+
+        const result = await useCartWithInitializedCart({
+          buyerIdentityUpdate: buyerIdentityUpdateSpy,
+        });
+
+        act(() => {
+          result.current.buyerIdentityUpdate({countryCode: CountryCode.Us});
+        });
+
+        // wait till idle
+        await act(async () => {});
+        expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
+      });
+    });
+
+    describe('cart attributes update', async () => {
+      it('resolves', async () => {
+        const cartAttributesUpdateSpy = vi.fn(async () => ({
+          data: {cartAttributesUpdate: {cart: CART}},
+        }));
+
+        const result = await useCartWithInitializedCart({
+          cartAttributesUpdate: cartAttributesUpdateSpy,
+        });
+
+        act(() => {
+          result.current.cartAttributesUpdate([{key: 'key', value: 'value'}]);
+        });
+
+        expect(result.current.status).toEqual('updating');
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(cartAttributesUpdateSpy).toBeCalledTimes(1);
+        expect(result.current).toMatchObject({
+          status: 'idle',
+          ...cartFromGraphQL(CART),
+        });
       });
 
-      act(() => {
-        result.current.discountCodesUpdate(['DiscountCode']);
+      it('deletes local storage on complete', async () => {
+        const spy = vi.spyOn(window.localStorage, 'removeItem');
+
+        const cartAttributesUpdateSpy = vi.fn(async () => ({
+          data: {cartAttributesUpdate: {cart: null}},
+        }));
+
+        const result = await useCartWithInitializedCart({
+          cartAttributesUpdate: cartAttributesUpdateSpy,
+        });
+
+        act(() => {
+          result.current.cartAttributesUpdate([{key: 'key', value: 'value'}]);
+        });
+
+        // wait till idle
+        await act(async () => {});
+        expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
+      });
+    });
+
+    describe('discount update', async () => {
+      it('resolves', async () => {
+        const discountCodesUpdateSpy = vi.fn(async () => ({
+          data: {cartDiscountCodesUpdate: {cart: CART}},
+        }));
+
+        const result = await useCartWithInitializedCart({
+          discountCodesUpdate: discountCodesUpdateSpy,
+        });
+
+        act(() => {
+          result.current.discountCodesUpdate(['DiscountCode']);
+        });
+
+        expect(result.current.status).toEqual('updating');
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(discountCodesUpdateSpy).toBeCalledTimes(1);
+        expect(result.current).toMatchObject({
+          status: 'idle',
+          ...cartFromGraphQL(CART),
+        });
       });
 
-      expect(result.current.status).toEqual('updating');
+      it('deletes local storage on complete', async () => {
+        const spy = vi.spyOn(window.localStorage, 'removeItem');
 
-      // wait till idle
-      await act(async () => {});
+        const discountCodesUpdateSpy = vi.fn(async () => ({
+          data: {cartDiscountCodesUpdate: {cart: null}},
+        }));
 
-      expect(discountCodesUpdateSpy).toBeCalledTimes(1);
-      expect(result.current).toMatchObject({
-        status: 'idle',
-        ...cartFromGraphQL(CART),
+        const result = await useCartWithInitializedCart({
+          discountCodesUpdate: discountCodesUpdateSpy,
+        });
+
+        act(() => {
+          result.current.discountCodesUpdate(['DiscountCode']);
+        });
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
       });
     });
   });
@@ -503,10 +636,6 @@ describe('<CartProviderV2 />', () => {
       const errorMock = new Error('Error creating cart');
       const cartLineAddErrorSpy = vi.fn(async () => ({
         errors: errorMock,
-      }));
-
-      const cartLineAddResolveSpy = vi.fn(async () => ({
-        data: {cartLineAdd: {cart: CART}},
       }));
 
       const cartCreateResolveSpy = vi.fn(async () => ({
@@ -549,3 +678,30 @@ describe('<CartProviderV2 />', () => {
     });
   });
 });
+
+async function useCartWithInitializedCart(cartActionsMocks = {}) {
+  const cartCreateSpy = vi.fn(async () => ({
+    data: {cartCreate: {cart: CART}},
+  }));
+
+  mockUseCartActions.mockReturnValue({
+    cartCreate: cartCreateSpy,
+    ...cartActionsMocks,
+  });
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const {result} = renderHook(() => useCart(), {
+    wrapper: ShopifyCartProvider,
+  });
+
+  // creates a cart and wait till idle
+  await act(async () => {
+    result.current.linesAdd([
+      {
+        merchandiseId: '123',
+      },
+    ]);
+  });
+
+  return result;
+}
