@@ -282,7 +282,6 @@ async function processRequest(
   const rsc = runRSC({App, state, log, request, response});
 
   if (isRSCRequest) {
-    response.headers.set('cache-control', response.cacheControlHeader);
     const {headers} = response;
     const [rscReadableForResponse, rscReadableForCache] = rsc.readable.tee();
 
@@ -291,6 +290,7 @@ async function processRequest(
       __HYDROGEN_WORKER__ ? undefined : (chunk) => nodeResponse!.write(chunk)
     ).then((buffered) => {
       if (!__HYDROGEN_WORKER__) nodeResponse!.end();
+      response.headers.set('cache-control', response.cacheControlHeader);
       return cacheResponse(response, request, [buffered], revalidate);
     });
 
