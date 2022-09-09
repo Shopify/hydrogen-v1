@@ -6,17 +6,16 @@ export default defineConfig({
     defaultLanguageCode: 'EN',
     storeDomain:
       // @ts-ignore
-      Oxygen?.env?.PUBLIC_SHOPIFY_STORE_DOMAIN ||
-      'hydrogen-preview.myshopify.com',
+      Oxygen?.env?.PUBLIC_STORE_DOMAIN || 'hydrogen-preview.myshopify.com',
     storefrontToken:
       // @ts-ignore
-      Oxygen?.env?.PUBLIC_SHOPIFY_STOREFRONT_API_TOKEN ||
+      Oxygen?.env?.PUBLIC_STOREFRONT_API_TOKEN ||
       '3b580e70970c4528da70c98e097c2fa0',
     privateStorefrontToken:
       // @ts-ignore
-      Oxygen?.env?.PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN,
+      Oxygen?.env?.SECRET_STOREFRONT_API_TOKEN,
     // @ts-ignore
-    storefrontId: Oxygen?.env?.PUBLIC_SHOPIFY_STOREFRONT_ID,
+    storefrontId: Oxygen?.env?.PUBLIC_STOREFRONT_ID,
     storefrontApiVersion: '2022-07',
   },
   session: CookieSessionStorage('__session', {

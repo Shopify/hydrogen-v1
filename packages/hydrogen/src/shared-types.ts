@@ -35,7 +35,6 @@ export type ShopifyConfig = {
   storeDomain: string;
   storefrontToken: string;
   storefrontApiVersion: string;
-  multipassSecret?: string;
   privateStorefrontToken?: string;
   storefrontId?: string;
 };

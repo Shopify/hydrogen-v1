@@ -20,8 +20,8 @@ export function getStorefrontApiRequestHeaders({
 }: {
   buyerIp?: string | null;
   storefrontToken: string;
-  secretToken?: string;
-  storefrontId?: string;
+  secretToken: string | undefined;
+  storefrontId: string | undefined;
 }) {
   const headers = {} as Record<string, any>;
 
