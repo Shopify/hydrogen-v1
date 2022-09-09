@@ -213,7 +213,7 @@ export default async function testCases({
     expect(body).toContain('>footer!<');
   });
 
-  it('buffers the RSC response', async () => {
+  it('streams the RSC response', async () => {
     const response = await fetch(
       getServerUrl() +
         `${RSC_PATHNAME}?state=` +
@@ -229,7 +229,7 @@ export default async function testCases({
       streamedChunks.push(chunk.toString());
     }
 
-    expect(streamedChunks.length).toBe(1);
+    expect(streamedChunks.length).toBeGreaterThan(1); // Streamed more than 1 chunk
 
     const body = streamedChunks.join('');
     expect(body).toContain('S1:"react.suspense"');
