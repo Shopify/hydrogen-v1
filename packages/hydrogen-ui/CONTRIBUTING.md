@@ -2,6 +2,8 @@
 
 - Exports should all be named; avoid using default exports
 - The main exported component's name should match the name of the file
+- Use the global variable `__HYDROGEN_DEV__` to `throw` errors in dev mode, and `console.error` in production mode
+  - If using `__HYDROGEN_DEV__` in a compound `if()` statement, it must be the first check. Otherwise the `if()` statement will not be fully removed in the production bundle.
 
 ## Writing Tests
 

@@ -209,7 +209,7 @@ export function ModelViewer(props: ModelViewerProps) {
     }
   }
 
-  if (!data.alt && __HYDROGEN_DEV__) {
+  if (__HYDROGEN_DEV__ && !data.alt) {
     console.warn(
       `<ModelViewer/> requires the 'data.alt' prop for accessibility`
     );
