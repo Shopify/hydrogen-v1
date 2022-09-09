@@ -1,8 +1,16 @@
 import {useServerRequest} from '../../foundation/ServerRequestProvider/index.js';
 import {wrapPromise} from '../../utilities/index.js';
+import {log} from '../../utilities/log/log.js';
 
-export const useDelay = function (data: any, time: number) {
-  if (!__HYDROGEN_DEV__) return data;
+export const useDelay = function (data: unknown, time: number) {
+  if (!__HYDROGEN_DEV__) {
+    log.warn(
+      new Error(
+        'The `useDelay` hook introduces an artificial delay which should not be used in production!'
+      ).stack
+    );
+    return data;
+  }
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const serverRequest = useServerRequest();
