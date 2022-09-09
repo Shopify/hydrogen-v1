@@ -33,9 +33,52 @@ function invokeCart(
           errors: (_, event) => event?.payload?.errors,
         }),
       },
+      CART_COMPLETED: {
+        target: 'cartCompleted',
+        actions: assign({
+          cart: (_, event) => undefined,
+          errors: (_, event) => undefined,
+        }),
+      },
     },
   };
 }
+
+const INITIALIZING_CART_EVENTS = {
+  CART_FETCH: {
+    target: 'cartFetching',
+  },
+  CART_CREATE: {
+    target: 'cartCreating',
+  },
+  CARTLINE_ADD: {
+    target: 'cartCreating',
+  },
+};
+
+const UPDATING_CART_EVENTS = {
+  CARTLINE_ADD: {
+    target: 'cartLineAdding',
+  },
+  CARTLINE_UPDATE: {
+    target: 'cartLineUpdating',
+  },
+  CARTLINE_REMOVE: {
+    target: 'cartLineRemoving',
+  },
+  NOTE_UPDATE: {
+    target: 'noteUpdating',
+  },
+  BUYER_IDENTITY_UPDATE: {
+    target: 'buyerIdentityUpdating',
+  },
+  CART_ATTRIBUTES_UPDATE: {
+    target: 'cartAttributesUpdating',
+  },
+  DISCOUNT_CODES_UPDATE: {
+    target: 'discountCodesUpdating',
+  },
+};
 
 const cartMachine = createMachine<
   CartMachineContext,
@@ -46,80 +89,19 @@ const cartMachine = createMachine<
   initial: 'uninitialized',
   states: {
     uninitialized: {
-      on: {
-        CART_FETCH: {
-          target: 'cartFetching',
-        },
-        CART_CREATE: {
-          target: 'cartCreating',
-        },
-        CARTLINE_ADD: {
-          target: 'cartCreating',
-        },
-      },
+      on: INITIALIZING_CART_EVENTS,
+    },
+    cartCompleted: {
+      on: INITIALIZING_CART_EVENTS,
     },
     initializationError: {
-      on: {
-        CART_FETCH: {
-          target: 'cartFetching',
-        },
-        CART_CREATE: {
-          target: 'cartCreating',
-        },
-        CARTLINE_ADD: {
-          target: 'cartCreating',
-        },
-      },
+      on: INITIALIZING_CART_EVENTS,
     },
     idle: {
-      on: {
-        CARTLINE_ADD: {
-          target: 'cartLineAdding',
-        },
-        CARTLINE_UPDATE: {
-          target: 'cartLineUpdating',
-        },
-        CARTLINE_REMOVE: {
-          target: 'cartLineRemoving',
-        },
-        NOTE_UPDATE: {
-          target: 'noteUpdating',
-        },
-        BUYER_IDENTITY_UPDATE: {
-          target: 'buyerIdentityUpdating',
-        },
-        CART_ATTRIBUTES_UPDATE: {
-          target: 'cartAttributesUpdating',
-        },
-        DISCOUNT_CODES_UPDATE: {
-          target: 'discountCodesUpdating',
-        },
-      },
+      on: UPDATING_CART_EVENTS,
     },
     error: {
-      on: {
-        CARTLINE_ADD: {
-          target: 'cartLineAdding',
-        },
-        CARTLINE_UPDATE: {
-          target: 'cartLineUpdating',
-        },
-        CARTLINE_REMOVE: {
-          target: 'cartLineRemoving',
-        },
-        NOTE_UPDATE: {
-          target: 'noteUpdating',
-        },
-        BUYER_IDENTITY_UPDATE: {
-          target: 'buyerIdentityUpdating',
-        },
-        CART_ATTRIBUTES_UPDATE: {
-          target: 'cartAttributesUpdating',
-        },
-        DISCOUNT_CODES_UPDATE: {
-          target: 'discountCodesUpdating',
-        },
-      },
+      on: UPDATING_CART_EVENTS,
     },
     cartFetching: invokeCart(['cartFetchAction'], {
       errorTarget: 'initializationError',
@@ -169,9 +151,16 @@ export function useCartAPIStateMachine({
       cartFetchAction: (_, event) => {
         if (event.type !== 'CART_FETCH') return;
         cartFetch(event?.payload?.cartId).then((res) => {
-          if (res?.errors || !res?.data?.cart) {
+          if (res?.errors) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
           }
+
+          if (!res?.data?.cart) {
+            return send({
+              type: 'CART_COMPLETED',
+            });
+          }
+
           send({
             type: 'RESOLVE',
             payload: {cart: cartFromGraphQL(res.data.cart)},
@@ -186,6 +175,13 @@ export function useCartAPIStateMachine({
           if (res?.errors || !res.data?.cartCreate?.cart) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
           }
+
+          if (!res?.data?.cartCreate.cart) {
+            return send({
+              type: 'CART_COMPLETED',
+            });
+          }
+
           send({
             type: 'RESOLVE',
             payload: {cart: cartFromGraphQL(res.data?.cartCreate.cart)},
@@ -196,9 +192,16 @@ export function useCartAPIStateMachine({
         if (event.type !== 'CARTLINE_ADD' || !context?.cart?.id) return;
 
         cartLineAdd(context.cart.id, event.payload.lines).then((res) => {
-          if (res?.errors || !res.data?.cartLinesAdd?.cart) {
+          if (res?.errors) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
           }
+
+          if (!res.data?.cartLinesAdd?.cart) {
+            return send({
+              type: 'CART_COMPLETED',
+            });
+          }
+
           send({
             type: 'RESOLVE',
             payload: {cart: cartFromGraphQL(res.data?.cartLinesAdd.cart)},
@@ -208,9 +211,16 @@ export function useCartAPIStateMachine({
       cartLineUpdateAction: (context, event) => {
         if (event.type !== 'CARTLINE_UPDATE' || !context?.cart?.id) return;
         cartLineUpdate(context.cart.id, event.payload.lines).then((res) => {
-          if (res?.errors || !res.data?.cartLinesUpdate?.cart) {
+          if (res?.errors) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
           }
+
+          if (!res.data?.cartLinesUpdate?.cart) {
+            return send({
+              type: 'CART_COMPLETED',
+            });
+          }
+
           send({
             type: 'RESOLVE',
             payload: {cart: cartFromGraphQL(res.data?.cartLinesUpdate.cart)},
@@ -220,9 +230,14 @@ export function useCartAPIStateMachine({
       cartLineRemoveAction: (context, event) => {
         if (event.type !== 'CARTLINE_REMOVE' || !context?.cart?.id) return;
         cartLineRemove(context.cart.id, event.payload.lines).then((res) => {
-          if (res?.errors || !res.data?.cartLinesRemove?.cart) {
+          if (res?.errors) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
           }
+
+          if (!res.data?.cartLinesRemove?.cart) {
+            return send('CART_COMPLETED');
+          }
+
           send({
             type: 'RESOLVE',
             payload: {cart: cartFromGraphQL(res.data?.cartLinesRemove.cart)},
@@ -232,9 +247,14 @@ export function useCartAPIStateMachine({
       noteUpdateAction: (context, event) => {
         if (event.type !== 'NOTE_UPDATE' || !context?.cart?.id) return;
         noteUpdate(context.cart.id, event.payload.note).then((res) => {
-          if (res?.errors || !res.data?.cartNoteUpdate?.cart) {
+          if (res?.errors) {
             return send({type: 'ERROR', payload: {errors: res?.errors}});
           }
+
+          if (!res.data?.cartNoteUpdate?.cart) {
+            return send('CART_COMPLETED');
+          }
+
           send({
             type: 'RESOLVE',
             payload: {cart: cartFromGraphQL(res.data?.cartNoteUpdate.cart)},
@@ -246,9 +266,14 @@ export function useCartAPIStateMachine({
           return;
         buyerIdentityUpdate(context.cart.id, event.payload.buyerIdentity).then(
           (res) => {
-            if (res?.errors || !res.data?.cartBuyerIdentityUpdate?.cart) {
+            if (res?.errors) {
               return send({type: 'ERROR', payload: {errors: res?.errors}});
             }
+
+            if (!res.data?.cartBuyerIdentityUpdate?.cart) {
+              return send('CART_COMPLETED');
+            }
+
             send({
               type: 'RESOLVE',
               payload: {
@@ -263,9 +288,14 @@ export function useCartAPIStateMachine({
           return;
         cartAttributesUpdate(context.cart.id, event.payload.attributes).then(
           (res) => {
-            if (res?.errors || !res.data?.cartAttributesUpdate?.cart) {
+            if (res?.errors) {
               return send({type: 'ERROR', payload: {errors: res?.errors}});
             }
+
+            if (!res.data?.cartAttributesUpdate?.cart) {
+              return send('CART_COMPLETED');
+            }
+
             send({
               type: 'RESOLVE',
               payload: {
@@ -280,9 +310,14 @@ export function useCartAPIStateMachine({
           return;
         discountCodesUpdate(context.cart.id, event.payload.discountCodes).then(
           (res) => {
-            if (res?.errors || !res.data?.cartDiscountCodesUpdate?.cart) {
+            if (res?.errors) {
               return send({type: 'ERROR', payload: {errors: res?.errors}});
             }
+
+            if (!res.data?.cartDiscountCodesUpdate?.cart) {
+              return send('CART_COMPLETED');
+            }
+
             send({
               type: 'RESOLVE',
               payload: {

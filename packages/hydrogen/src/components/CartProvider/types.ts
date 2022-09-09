@@ -165,6 +165,7 @@ export type CartMachineEvent =
   | BuyerIdentityUpdateEvent
   | CartAttributesUpdateEvent
   | DiscountCodesUpdateEvent
+  | {type: 'CART_COMPLETED'}
   | {type: 'RESOLVE'; payload: {cart: Cart}}
   | {type: 'ERROR'; payload: {errors: any}};
 
@@ -178,6 +179,13 @@ export type CartMachineTypeState =
     }
   | {
       value: 'initializationError';
+      context: CartMachineContext & {
+        cart: undefined;
+        errors: any;
+      };
+    }
+  | {
+      value: 'cartCompleted';
       context: CartMachineContext & {
         cart: undefined;
         errors: any;

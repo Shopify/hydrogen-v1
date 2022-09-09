@@ -44,6 +44,7 @@ export function CartProviderV2({
   });
 
   const [cartReady, setCartReady] = useState(false);
+  const cartCompleted = cartState.matches('cartCompleted');
 
   // send cart events when ready
   const onCartReadySend = useCallback(
@@ -58,7 +59,7 @@ export function CartProviderV2({
 
   // save cart id to local storage
   useEffect(() => {
-    if (cartState?.context?.cart?.id) {
+    if (cartState?.context?.cart?.id && storageAvailable('localStorage')) {
       try {
         window.localStorage.setItem(
           CART_ID_STORAGE_KEY,
@@ -70,19 +71,31 @@ export function CartProviderV2({
     }
   }, [cartState?.context?.cart?.id]);
 
+  // delete cart from local storage if cart fetched has been completed
+  useEffect(() => {
+    if (cartCompleted && storageAvailable('localStorage')) {
+      try {
+        window.localStorage.removeItem(CART_ID_STORAGE_KEY);
+      } catch (error) {
+        console.warn('Failed to delete cartId from localStorage', error);
+      }
+    }
+  }, [cartCompleted]);
+
   // fetch cart from local storage if cart id present and set cart as ready for use
   useEffect(() => {
-    if (cartReady) return;
-    try {
-      const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
-      if (cartId) {
-        cartSend({type: 'CART_FETCH', payload: {cartId}});
+    if (!cartReady && storageAvailable('localStorage')) {
+      try {
+        const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
+        if (cartId) {
+          cartSend({type: 'CART_FETCH', payload: {cartId}});
+        }
+      } catch (error) {
+        console.warn('error fetching cartId');
+        console.warn(error);
       }
-    } catch (error) {
-      console.warn('error fetching cartId');
-      console.warn(error);
+      setCartReady(true);
     }
-    setCartReady(true);
   }, [cartReady, cartSend]);
 
   const cartContextValue = useMemo<CartWithActions>(() => {
@@ -175,6 +188,7 @@ function tempTransposeStatus(
     case 'uninitialized':
       return 'uninitialized';
     case 'idle':
+    case 'cartCompleted':
     case 'error':
     case 'initializationError':
       return 'idle';
@@ -190,5 +204,35 @@ function tempTransposeStatus(
     case 'cartAttributesUpdating':
     case 'discountCodesUpdating':
       return 'updating';
+  }
+}
+
+/** Check for storage availability funciton obtained from
+ * https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
+ */
+function storageAvailable(type: 'localStorage' | 'sessionStorage') {
+  let storage;
+  try {
+    storage = window[type];
+    const x = '__storage_test__';
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  } catch (e) {
+    return (
+      e instanceof DOMException &&
+      // everything except Firefox
+      (e.code === 22 ||
+        // Firefox
+        e.code === 1014 ||
+        // test name field too, because code might not be present
+        // everything except Firefox
+        e.name === 'QuotaExceededError' ||
+        // Firefox
+        e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+      // acknowledge QuotaExceededError only if there's something already stored
+      storage &&
+      storage.length !== 0
+    );
   }
 }
