@@ -282,15 +282,25 @@ async function processRequest(
   const rsc = runRSC({App, state, log, request, response});
 
   if (isRSCRequest) {
-    const buffered = await bufferReadableStream(rsc.readable.getReader());
+    response.headers.set('cache-control', response.cacheControlHeader);
+    const {headers} = response;
+    const [rscReadableForResponse, rscReadableForCache] = rsc.readable.tee();
+
+    const cachePromise = bufferReadableStream(
+      rscReadableForCache.getReader(),
+      __HYDROGEN_WORKER__ ? undefined : (chunk) => nodeResponse!.write(chunk)
+    ).then((buffered) => {
+      if (!__HYDROGEN_WORKER__) nodeResponse!.end();
+      return cacheResponse(response, request, [buffered], revalidate);
+    });
+
+    request.ctx.runtime?.waitUntil?.(cachePromise);
+
     postRequestTasks('rsc', 200, request, response);
 
-    response.headers.set('cache-control', response.cacheControlHeader);
-    cacheResponse(response, request, [buffered], revalidate);
-
-    return new Response(buffered, {
-      headers: response.headers,
-    });
+    return __HYDROGEN_WORKER__
+      ? new Response(rscReadableForResponse, {headers})
+      : undefined;
   }
 
   if (isBotUA(url, request.headers.get('user-agent'))) {
