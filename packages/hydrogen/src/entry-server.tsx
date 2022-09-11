@@ -176,25 +176,26 @@ export const renderHydrogen = (App: any) => {
               // Don't stream when creating a response for cache
               response.doNotStream();
 
-              await setItemInCache(
-                lockCacheKey,
-                new Response(null),
-                CacheShort({
-                  maxAge: 10,
-                })
-              );
-
-              await processRequest(
-                handleRequest,
-                App,
-                url,
-                request,
-                sessionApi,
-                options,
-                response,
-                hydrogenConfig,
-                true
-              );
+              await Promise.all([
+                setItemInCache(
+                  lockCacheKey,
+                  new Response(null),
+                  CacheShort({
+                    maxAge: 10,
+                  })
+                ),
+                processRequest(
+                  handleRequest,
+                  App,
+                  url,
+                  request,
+                  sessionApi,
+                  options,
+                  response,
+                  hydrogenConfig,
+                  true
+                ),
+              ]);
 
               response.markAsSent();
             } catch (e: any) {
