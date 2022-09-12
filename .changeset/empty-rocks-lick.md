@@ -9,9 +9,9 @@ We've also added the `storefrontId` property to the config. This enables Hydroge
 
 Lastly, we've updated all Oxygen environment variables to a more consistent naming convention. The previous variables are still available, but are deprecated, and will be removed in the future. You’ll see a warning in your console if you use the old environment variables. You can update your variable references using this table:
 
-| **Old Oxygen variable**         | **New Oxygen variable**     |
-| ----------------------------------- | --------------------------- |
-| SHOPIFY_STORE_DOMAIN                | PUBLIC_STORE_DOMAIN         |
-| SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN | PUBLIC_STOREFRONT_API_TOKEN |
-| SHOPIFY_STOREFRONT_API_SECRET_TOKEN | SECRET_STOREFRONT_API_TOKEN |
-| SHOPIFY_STOREFRONT_ID               | PUBLIC_STOREFRONT_ID        |
+| **Old Oxygen variable**             | **New Oxygen variable**      |
+| ----------------------------------- | ---------------------------- |
+| SHOPIFY_STORE_DOMAIN                | PUBLIC_STORE_DOMAIN          |
+| SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN | PUBLIC_STOREFRONT_API_TOKEN  |
+| SHOPIFY_STOREFRONT_API_SECRET_TOKEN | PRIVATE_STOREFRONT_API_TOKEN |
+| SHOPIFY_STOREFRONT_ID               | PUBLIC_STOREFRONT_ID         |
