@@ -63,7 +63,7 @@ export function useCartFetch() {
         .catch((error) => {
           return {
             data: undefined,
-            error: error.toString(),
+            errors: error.toString(),
           };
         });
     },
