@@ -155,7 +155,7 @@ export type DiscountCodesUpdateEvent = {
   };
 };
 
-export type CartMachineEvent =
+export type CartMachineActionEvent =
   | CartFetchEvent
   | CartCreateEvent
   | CartLineAddEvent
@@ -164,10 +164,22 @@ export type CartMachineEvent =
   | NoteUpdateEvent
   | BuyerIdentityUpdateEvent
   | CartAttributesUpdateEvent
-  | DiscountCodesUpdateEvent
-  | {type: 'CART_COMPLETED'}
-  | {type: 'RESOLVE'; payload: {cart: Cart}}
-  | {type: 'ERROR'; payload: {errors: any}};
+  | DiscountCodesUpdateEvent;
+
+export type CartMachineFetchResultEvent =
+  | {type: 'CART_COMPLETED'; payload: {cartActionEvent: CartMachineActionEvent}}
+  | {
+      type: 'RESOLVE';
+      payload: {cartActionEvent: CartMachineActionEvent; cart: Cart};
+    }
+  | {
+      type: 'ERROR';
+      payload: {cartActionEvent: CartMachineActionEvent; errors: any};
+    };
+
+export type CartMachineEvent =
+  | CartMachineActionEvent
+  | CartMachineFetchResultEvent;
 
 export type CartMachineTypeState =
   | {

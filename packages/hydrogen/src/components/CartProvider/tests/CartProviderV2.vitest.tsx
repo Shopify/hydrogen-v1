@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ComponentProps} from 'react';
 import {vi} from 'vitest';
 import {renderHook, act} from '@testing-library/react';
 import {useCart} from '../../../hooks/useCart/useCart.js';
@@ -16,12 +16,16 @@ import {cartFromGraphQL} from '../useCartAPIStateMachine.client.js';
 import {CountryCode} from '../../../storefront-api-types.js';
 import {CART_ID_STORAGE_KEY} from '../constants.js';
 
-function ShopifyCartProvider({children}) {
-  return (
-    <ShopifyTestProviders>
-      <CartProviderV2>{children}</CartProviderV2>
-    </ShopifyTestProviders>
-  );
+function ShopifyCartProvider(
+  props: Omit<ComponentProps<typeof CartProviderV2>, 'children'> = {}
+) {
+  return function Wrapper({children}) {
+    return (
+      <ShopifyTestProviders>
+        <CartProviderV2 {...props}>{children}</CartProviderV2>
+      </ShopifyTestProviders>
+    );
+  };
 }
 
 describe('<CartProviderV2 />', () => {
@@ -42,7 +46,7 @@ describe('<CartProviderV2 />', () => {
       });
 
       const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
+        wrapper: ShopifyCartProvider(),
       });
 
       expect(result.current.status).toBe('fetching');
@@ -67,7 +71,7 @@ describe('<CartProviderV2 />', () => {
       });
 
       const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
+        wrapper: ShopifyCartProvider(),
       });
 
       expect(result.current.status).not.toBe('fetching');
@@ -103,7 +107,7 @@ describe('<CartProviderV2 />', () => {
       });
 
       const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
+        wrapper: ShopifyCartProvider(),
       });
 
       await act(async () => {});
@@ -128,7 +132,7 @@ describe('<CartProviderV2 />', () => {
       });
 
       const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
+        wrapper: ShopifyCartProvider(),
       });
 
       expect(result.current.status).toBe('uninitialized');
@@ -149,6 +153,37 @@ describe('<CartProviderV2 />', () => {
       });
     });
 
+    it('runs the onCartCreate and onCartCreateComplete callbacks when creating a cart', async () => {
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: CART}},
+      }));
+
+      const onCartCreateSpy = vi.fn();
+      const onCartCreateCompleteSpy = vi.fn();
+
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider({
+          onCreate: onCartCreateSpy,
+          onCreateComplete: onCartCreateCompleteSpy,
+        }),
+      });
+
+      act(() => {
+        result.current.cartCreate({});
+      });
+
+      expect(onCartCreateSpy).toBeCalledTimes(1);
+      expect(onCartCreateCompleteSpy).toBeCalledTimes(0);
+
+      await act(async () => {});
+
+      expect(onCartCreateCompleteSpy).toBeCalledTimes(1);
+    });
+
     it('creates a cart when adding a cart line', async () => {
       const cartCreateSpy = vi.fn(async () => ({
         data: {cartCreate: {cart: CART}},
@@ -158,7 +193,7 @@ describe('<CartProviderV2 />', () => {
       });
 
       const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
+        wrapper: ShopifyCartProvider(),
       });
 
       expect(result.current.status).toBe('uninitialized');
@@ -191,7 +226,7 @@ describe('<CartProviderV2 />', () => {
       });
 
       const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
+        wrapper: ShopifyCartProvider(),
       });
 
       expect(result.current.status).toBe('uninitialized');
@@ -232,7 +267,7 @@ describe('<CartProviderV2 />', () => {
       });
 
       const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
+        wrapper: ShopifyCartProvider(),
       });
 
       // First create cart should fail with error
@@ -334,6 +369,42 @@ describe('<CartProviderV2 />', () => {
 
         expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
       });
+
+      it('runs onLineAdd and onLineAddComplete callbacks', async () => {
+        const cartLineAddSpy = vi.fn(async () => ({
+          data: {cartLinesAdd: {cart: CART}},
+        }));
+
+        const onLineAddSpy = vi.fn();
+        const onLineAddCompleteSpy = vi.fn();
+
+        const result = await useCartWithInitializedCart(
+          {
+            cartLineAdd: cartLineAddSpy,
+          },
+          {
+            onLineAdd: onLineAddSpy,
+            onLineAddComplete: onLineAddCompleteSpy,
+          }
+        );
+
+        act(() => {
+          result.current.linesAdd([
+            {
+              merchandiseId: '123',
+            },
+          ]);
+        });
+
+        // Two times since `useCartWithInitializedCart` calls `linesAdd` once
+        expect(onLineAddSpy).toBeCalledTimes(2);
+        expect(onLineAddCompleteSpy).toBeCalledTimes(1);
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(onLineAddCompleteSpy).toBeCalledTimes(2);
+      });
     });
 
     describe('updates cartline', async () => {
@@ -392,6 +463,42 @@ describe('<CartProviderV2 />', () => {
 
         expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
       });
+
+      it('runs onLineUpdate and onLineUpdateComplete callbacks', async () => {
+        const cartLineUpdateSpy = vi.fn(async () => ({
+          data: {cartLinesUpdate: {cart: CART}},
+        }));
+
+        const onLineUpdateSpy = vi.fn();
+        const onLineUpdateCompleteSpy = vi.fn();
+
+        const result = await useCartWithInitializedCart(
+          {
+            cartLineUpdate: cartLineUpdateSpy,
+          },
+          {
+            onLineUpdate: onLineUpdateSpy,
+            onLineUpdateComplete: onLineUpdateCompleteSpy,
+          }
+        );
+
+        act(() => {
+          result.current.linesUpdate([
+            {
+              id: '123',
+              merchandiseId: '123',
+            },
+          ]);
+        });
+
+        expect(onLineUpdateSpy).toBeCalledTimes(1);
+        expect(onLineUpdateCompleteSpy).toBeCalledTimes(0);
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(onLineUpdateCompleteSpy).toBeCalledTimes(1);
+      });
     });
 
     describe('removes cartline', async () => {
@@ -438,6 +545,37 @@ describe('<CartProviderV2 />', () => {
         // wait till idle
         await act(async () => {});
         expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
+      });
+
+      it('runs onLineRemove and onLineRemoveComplete callbacks', async () => {
+        const cartLineRemoveSpy = vi.fn(async () => ({
+          data: {cartLinesRemove: {cart: CART}},
+        }));
+
+        const onLineRemoveSpy = vi.fn();
+        const onLineRemoveCompleteSpy = vi.fn();
+
+        const result = await useCartWithInitializedCart(
+          {
+            cartLineRemove: cartLineRemoveSpy,
+          },
+          {
+            onLineRemove: onLineRemoveSpy,
+            onLineRemoveComplete: onLineRemoveCompleteSpy,
+          }
+        );
+
+        act(() => {
+          result.current.linesRemove(['123']);
+        });
+
+        expect(onLineRemoveSpy).toBeCalledTimes(1);
+        expect(onLineRemoveCompleteSpy).toBeCalledTimes(0);
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(onLineRemoveCompleteSpy).toBeCalledTimes(1);
       });
     });
 
@@ -486,6 +624,37 @@ describe('<CartProviderV2 />', () => {
         await act(async () => {});
         expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
       });
+
+      it('runs onNoteUpdate and onNoteUpdateComplete callbacks', async () => {
+        const noteUpdateSpy = vi.fn(async () => ({
+          data: {cartNoteUpdate: {cart: CART}},
+        }));
+
+        const onNoteUpdateSpy = vi.fn();
+        const onNoteUpdateCompleteSpy = vi.fn();
+
+        const result = await useCartWithInitializedCart(
+          {
+            noteUpdate: noteUpdateSpy,
+          },
+          {
+            onNoteUpdate: onNoteUpdateSpy,
+            onNoteUpdateComplete: onNoteUpdateCompleteSpy,
+          }
+        );
+
+        act(() => {
+          result.current.noteUpdate('test note');
+        });
+
+        expect(onNoteUpdateSpy).toBeCalledTimes(1);
+        expect(onNoteUpdateCompleteSpy).toBeCalledTimes(0);
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(onNoteUpdateCompleteSpy).toBeCalledTimes(1);
+      });
     });
 
     describe('buyer identity update', async () => {
@@ -533,6 +702,37 @@ describe('<CartProviderV2 />', () => {
         await act(async () => {});
         expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
       });
+
+      it('runs onBuyerIdentityUpdate and onBuyerIdentityUpdateComplete callbacks', async () => {
+        const buyerIdentityUpdateSpy = vi.fn(async () => ({
+          data: {cartBuyerIdentityUpdate: {cart: CART}},
+        }));
+
+        const onBuyerIdentityUpdateSpy = vi.fn();
+        const onBuyerIdentityUpdateCompleteSpy = vi.fn();
+
+        const result = await useCartWithInitializedCart(
+          {
+            buyerIdentityUpdate: buyerIdentityUpdateSpy,
+          },
+          {
+            onBuyerIdentityUpdate: onBuyerIdentityUpdateSpy,
+            onBuyerIdentityUpdateComplete: onBuyerIdentityUpdateCompleteSpy,
+          }
+        );
+
+        act(() => {
+          result.current.buyerIdentityUpdate({countryCode: CountryCode.Us});
+        });
+
+        expect(onBuyerIdentityUpdateSpy).toBeCalledTimes(1);
+        expect(onBuyerIdentityUpdateCompleteSpy).toBeCalledTimes(0);
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(onBuyerIdentityUpdateCompleteSpy).toBeCalledTimes(1);
+      });
     });
 
     describe('cart attributes update', async () => {
@@ -579,6 +779,37 @@ describe('<CartProviderV2 />', () => {
         // wait till idle
         await act(async () => {});
         expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
+      });
+
+      it('runs onAttributesUpdate and onAttributesUpdateComplete callbacks', async () => {
+        const cartAttributesUpdateSpy = vi.fn(async () => ({
+          data: {cartAttributesUpdate: {cart: CART}},
+        }));
+
+        const onCartAttributesUpdateSpy = vi.fn();
+        const onCartAttributesUpdateCompleteSpy = vi.fn();
+
+        const result = await useCartWithInitializedCart(
+          {
+            cartAttributesUpdate: cartAttributesUpdateSpy,
+          },
+          {
+            onAttributesUpdate: onCartAttributesUpdateSpy,
+            onAttributesUpdateComplete: onCartAttributesUpdateCompleteSpy,
+          }
+        );
+
+        act(() => {
+          result.current.cartAttributesUpdate([{key: 'key', value: 'value'}]);
+        });
+
+        expect(onCartAttributesUpdateSpy).toBeCalledTimes(1);
+        expect(onCartAttributesUpdateCompleteSpy).toBeCalledTimes(0);
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(onCartAttributesUpdateCompleteSpy).toBeCalledTimes(1);
       });
     });
 
@@ -628,6 +859,37 @@ describe('<CartProviderV2 />', () => {
 
         expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
       });
+
+      it('runs onDiscountCodesUpdate and onDiscountCodesUpdateComplete callbacks', async () => {
+        const discountCodesUpdateSpy = vi.fn(async () => ({
+          data: {cartDiscountCodesUpdate: {cart: CART}},
+        }));
+
+        const onDiscountUpdateSpy = vi.fn();
+        const onDiscountUpdateCompleteSpy = vi.fn();
+
+        const result = await useCartWithInitializedCart(
+          {
+            discountCodesUpdate: discountCodesUpdateSpy,
+          },
+          {
+            onDiscountCodesUpdate: onDiscountUpdateSpy,
+            onDiscountCodesUpdateComplete: onDiscountUpdateCompleteSpy,
+          }
+        );
+
+        act(() => {
+          result.current.discountCodesUpdate(['DiscountCode']);
+        });
+
+        expect(onDiscountUpdateSpy).toBeCalledTimes(1);
+        expect(onDiscountUpdateCompleteSpy).toBeCalledTimes(0);
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(onDiscountUpdateCompleteSpy).toBeCalledTimes(1);
+      });
     });
   });
 
@@ -648,7 +910,7 @@ describe('<CartProviderV2 />', () => {
       });
 
       const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider,
+        wrapper: ShopifyCartProvider(),
       });
 
       // First create cart should fail with error
@@ -679,7 +941,13 @@ describe('<CartProviderV2 />', () => {
   });
 });
 
-async function useCartWithInitializedCart(cartActionsMocks = {}) {
+async function useCartWithInitializedCart(
+  cartActionsMocks = {},
+  cartProviderProps: Omit<
+    ComponentProps<typeof CartProviderV2>,
+    'children'
+  > = {}
+) {
   const cartCreateSpy = vi.fn(async () => ({
     data: {cartCreate: {cart: CART}},
   }));
@@ -691,7 +959,7 @@ async function useCartWithInitializedCart(cartActionsMocks = {}) {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const {result} = renderHook(() => useCart(), {
-    wrapper: ShopifyCartProvider,
+    wrapper: ShopifyCartProvider(cartProviderProps),
   });
 
   // creates a cart and wait till idle
