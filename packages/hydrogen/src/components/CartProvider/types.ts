@@ -92,6 +92,7 @@ export type CartAction =
 // State Machine types
 export type CartMachineContext = {
   cart?: Cart;
+  prevCart?: Cart;
   errors?: any;
 };
 
@@ -187,6 +188,7 @@ export type CartMachineTypeState =
       value: 'uninitialized';
       context: CartMachineContext & {
         cart: undefined;
+        prevCart: undefined;
         errors?: any;
       };
     }
@@ -194,6 +196,7 @@ export type CartMachineTypeState =
       value: 'initializationError';
       context: CartMachineContext & {
         cart: undefined;
+        prevCart: undefined;
         errors: any;
       };
     }
@@ -201,6 +204,7 @@ export type CartMachineTypeState =
       value: 'cartCompleted';
       context: CartMachineContext & {
         cart: undefined;
+        prevCart?: Cart;
         errors: any;
       };
     }
@@ -208,6 +212,7 @@ export type CartMachineTypeState =
       value: 'idle';
       context: CartMachineContext & {
         cart: Cart;
+        prevCart?: Cart;
         errors?: any;
       };
     }
@@ -215,6 +220,7 @@ export type CartMachineTypeState =
       value: 'error';
       context: CartMachineContext & {
         cart?: Cart;
+        prevCart?: Cart;
         errors: any;
       };
     }
