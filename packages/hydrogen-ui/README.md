@@ -25,6 +25,16 @@ Improve the developer experience:
 - [Add autocompletion for the Storefront API](#storefront-api-graphql-autocompletion)
 - [Add TypeScript types for Storefront API objects](#typescript-types)
 
+## Versioning
+
+Hydrogen-UI **does not follow semantic versioning**, because the implementation is tied to [specific versions](https://shopify.dev/api/usage/versioning#release-schedule) of the [Shopify Storefront API](https://shopify.dev/api/storefront), which follow [calver](https://calver.org/).
+
+For example, if you are using Storefront API version `2022-07`, then Hydrogen-UI versions `2022.7.x` will all be fully compatible with that version.
+
+As the Storefront API is updated every four months with breaking changes, Hydrogen-UI will also have breaking changes every four months, which are only considered a "minor" version update in semantic versioning.
+
+For example, if you are on Hydrogen-UI version `2022.7.0`, then version `2022.10.0` **is a breaking change**.
+
 ## Storefront API GraphQL autocompletion
 
 To enable GraphQL autocompletion for the Storefront API in your IDE:
@@ -44,7 +54,32 @@ GraphQL autocompletion and validation will now work in `.graphql` files or in [`
 
 ## TypeScript Types
 
-To add TypeScript types to your Storefront API objects, do the following:
+To help strongly-type your API responses from the Storefront API, you can use the `StorefrontApiResponse200` and `StorefrontApiResponse400Or500` helpers:
+
+```tsx
+import {
+  type StorefrontApiResponse400Or500,
+  type StorefrontApiResponse200,
+} from '@shopify/hydrogen-ui';
+
+async function FetchApi<DataGeneric>() {
+  const apiResponse = await fetch('...');
+
+  if (!apiResponse.ok) {
+    // 400 or 500 level error
+    return (await apiResponse.text()) as StorefrontApiResponse400Or500; // or apiResponse.json()
+  }
+
+  const graphqlResponse: StorefrontApiResponse200<DataGeneric> =
+    await apiResponse.json();
+
+  // can now access 'graphqlResponse.data' and 'graphqlResponse.errors'
+}
+```
+
+Or if you are using a library that handles 400/500 level errors for you, you can use `StorefrontApiResponse` instead.
+
+To add typing to objects that are trying to match a Storefront API object shape, you can import the shape like the following examples:
 
 ```ts
 import type {Product} from '@shopify/hydrogen-ui/storefront-api-types';
@@ -75,18 +110,6 @@ The production bundle is used by default if your bundler / runtime doesn't under
 There are two `umd` builds (development and production) of Hydrogen-UI, meant to be used directly by `<script src=""></script>` tags in HTML, or by `AMD`-compatible loaders.
 
 If you're using Hydrogen-UI as a global through the `<script>` tag, then the components can be accessed through the `hydrogenui` global variable.
-
-## Working on Hydrogen-UI
-
-There are two ways you can develop Hydrogen-UI components:
-
-- Develop components in the demo store:
-  1. Add `"@shopify/hydrogen-ui": "2022.07.0"` to the demo-store's `package.json`
-  2. Run `yarn` then `yarn dev` in the demo-store directory,
-  3. Run `yarn dev:demo` in the hydrogen-ui directory
-- Develop components in isolation:
-  1. Run `yarn dev` (or `yarn dev:story`) in the hydrogen-ui directory to spin up an instance of [Ladle](https://ladle.dev/)
-  2. Edit the component or the component's story `[ComponentName].stories.tsx`
 
 ## Common Problems
 
