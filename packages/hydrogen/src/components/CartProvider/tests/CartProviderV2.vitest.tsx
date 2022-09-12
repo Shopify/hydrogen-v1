@@ -3,7 +3,7 @@ import {vi} from 'vitest';
 import {renderHook, act} from '@testing-library/react';
 import {useCart} from '../../../hooks/useCart/useCart.js';
 import {ShopifyTestProviders} from '../../../utilities/tests/provider-helpers.js';
-import {CART} from './fixtures.js';
+import {CART, CART_WITH_LINES, CART_WITH_LINES_FLATTENED} from './fixtures.js';
 
 const mockUseCartActions = vi.fn();
 
@@ -15,6 +15,8 @@ import {CartProviderV2} from '../CartProviderV2.client.js';
 import {cartFromGraphQL} from '../useCartAPIStateMachine.client.js';
 import {CountryCode} from '../../../storefront-api-types.js';
 import {CART_ID_STORAGE_KEY} from '../constants.js';
+import {ClientAnalytics} from '../../../foundation/Analytics/ClientAnalytics.js';
+import {CartFragmentFragment} from '../graphql/CartFragment.js';
 
 function ShopifyCartProvider(
   props: Omit<ComponentProps<typeof CartProviderV2>, 'children'> = {}
@@ -182,6 +184,47 @@ describe('<CartProviderV2 />', () => {
       await act(async () => {});
 
       expect(onCartCreateCompleteSpy).toBeCalledTimes(1);
+    });
+
+    it('sends analytics event after creating a cart', async () => {
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: CART_WITH_LINES}},
+      }));
+
+      const ClientAnalyticsSpy = vi.spyOn(ClientAnalytics, 'publish');
+
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider(),
+      });
+
+      const cartInput = {
+        lines: [
+          {
+            merchandiseId: CART_WITH_LINES.lines.edges[0].node.merchandise.id,
+          },
+        ],
+      };
+
+      act(() => {
+        result.current.cartCreate(cartInput);
+      });
+
+      await act(async () => {});
+
+      expect(ClientAnalyticsSpy).toHaveBeenCalledTimes(1);
+      expect(ClientAnalyticsSpy).toHaveBeenCalledWith(
+        ClientAnalytics.eventNames.ADD_TO_CART,
+        true,
+        {
+          addedCartLines: cartInput.lines,
+          cart: cartFromGraphQL(CART_WITH_LINES),
+          prevCart: null,
+        }
+      );
     });
 
     it('creates a cart when adding a cart line', async () => {
@@ -405,6 +448,38 @@ describe('<CartProviderV2 />', () => {
 
         expect(onLineAddCompleteSpy).toBeCalledTimes(2);
       });
+
+      it('send analytics event after adding a cart line', async () => {
+        const cartLineAddSpy = vi.fn(async () => ({
+          data: {cartLinesAdd: {cart: CART_WITH_LINES}},
+        }));
+
+        const result = await useCartWithInitializedCart({
+          cartLineAdd: cartLineAddSpy,
+        });
+
+        const cartLinesInput = [{merchandiseId: '123'}];
+
+        const clientAnalyticsSpy = vi.spyOn(ClientAnalytics, 'publish');
+
+        act(() => {
+          result.current.linesAdd(cartLinesInput);
+        });
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(clientAnalyticsSpy).toHaveBeenCalledTimes(1);
+        expect(clientAnalyticsSpy).toHaveBeenLastCalledWith(
+          ClientAnalytics.eventNames.ADD_TO_CART,
+          true,
+          {
+            addedCartLines: cartLinesInput,
+            cart: cartFromGraphQL(CART_WITH_LINES),
+            prevCart: cartFromGraphQL(CART),
+          }
+        );
+      });
     });
 
     describe('updates cartline', async () => {
@@ -499,6 +574,39 @@ describe('<CartProviderV2 />', () => {
 
         expect(onLineUpdateCompleteSpy).toBeCalledTimes(1);
       });
+
+      it('send analytics event after updating a cart line', async () => {
+        const cartLineUpdateSpy = vi.fn(async () => ({
+          data: {cartLinesUpdate: {cart: CART_WITH_LINES}},
+        }));
+
+        const result = await useCartWithInitializedCart({
+          cartLineUpdate: cartLineUpdateSpy,
+        });
+
+        const cartLinesInput = [{id: '123', merchandiseId: '123', quantity: 2}];
+
+        const clientAnalyticsSpy = vi.spyOn(ClientAnalytics, 'publish');
+
+        act(() => {
+          result.current.linesUpdate(cartLinesInput);
+        });
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(clientAnalyticsSpy).toHaveBeenCalledTimes(1);
+        expect(clientAnalyticsSpy).toHaveBeenLastCalledWith(
+          ClientAnalytics.eventNames.UPDATE_CART,
+          true,
+          {
+            updatedCartLines: cartLinesInput,
+            cart: cartFromGraphQL(CART_WITH_LINES),
+            prevCart: cartFromGraphQL(CART),
+            oldCart: cartFromGraphQL(CART),
+          }
+        );
+      });
     });
 
     describe('removes cartline', async () => {
@@ -576,6 +684,43 @@ describe('<CartProviderV2 />', () => {
         await act(async () => {});
 
         expect(onLineRemoveCompleteSpy).toBeCalledTimes(1);
+      });
+
+      it('send analytics event after removing a cart line', async () => {
+        const cartCreateSpy = vi.fn(async () => ({
+          data: {cartCreate: {cart: CART_WITH_LINES}},
+        }));
+
+        const cartLineRemoveSpy = vi.fn(async () => ({
+          data: {cartLinesRemove: {cart: CART}},
+        }));
+
+        const result = await useCartWithInitializedCart({
+          cartCreate: cartCreateSpy,
+          cartLineRemove: cartLineRemoveSpy,
+        });
+
+        const clientAnalyticsSpy = vi.spyOn(ClientAnalytics, 'publish');
+
+        const cartLineIds = ['123'];
+
+        act(() => {
+          result.current.linesRemove(cartLineIds);
+        });
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(clientAnalyticsSpy).toHaveBeenCalledTimes(1);
+        expect(clientAnalyticsSpy).toHaveBeenLastCalledWith(
+          ClientAnalytics.eventNames.REMOVE_FROM_CART,
+          true,
+          {
+            removedCartLines: cartLineIds,
+            cart: cartFromGraphQL(CART),
+            prevCart: cartFromGraphQL(CART_WITH_LINES),
+          }
+        );
       });
     });
 
@@ -889,6 +1034,41 @@ describe('<CartProviderV2 />', () => {
         await act(async () => {});
 
         expect(onDiscountUpdateCompleteSpy).toBeCalledTimes(1);
+      });
+
+      it('sends analytics event on discount codes update', async () => {
+        const discountCodes = ['DiscountCode'];
+        const cartWithDiscountCode: CartFragmentFragment = {
+          ...CART,
+          discountCodes: [{code: discountCodes[0], applicable: true}],
+        };
+        const discountCodesUpdateSpy = vi.fn(async () => ({
+          data: {cartDiscountCodesUpdate: {cart: cartWithDiscountCode}},
+        }));
+
+        const result = await useCartWithInitializedCart({
+          discountCodesUpdate: discountCodesUpdateSpy,
+        });
+
+        const clientAnalyticsSpy = vi.spyOn(ClientAnalytics, 'publish');
+
+        act(() => {
+          result.current.discountCodesUpdate(discountCodes);
+        });
+
+        // wait till idle
+        await act(async () => {});
+
+        expect(clientAnalyticsSpy).toHaveBeenCalledTimes(1);
+        expect(clientAnalyticsSpy).toHaveBeenLastCalledWith(
+          ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
+          true,
+          {
+            updatedDiscountCodes: discountCodes,
+            cart: cartFromGraphQL(cartWithDiscountCode),
+            prevCart: cartFromGraphQL(CART),
+          }
+        );
       });
     });
   });
