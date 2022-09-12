@@ -226,8 +226,8 @@ function useCreateShopRequest(body: string) {
 
   const extraHeaders = getStorefrontApiRequestHeaders({
     buyerIp,
-    storefrontToken,
-    secretToken: privateStorefrontToken,
+    publicStorefrontToken: storefrontToken,
+    privateStorefrontToken,
     storefrontId,
   });
 

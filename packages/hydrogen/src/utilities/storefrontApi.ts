@@ -14,26 +14,28 @@ let storefrontIdWarned = false;
 
 export function getStorefrontApiRequestHeaders({
   buyerIp,
-  storefrontToken,
-  secretToken,
+  publicStorefrontToken,
+  privateStorefrontToken,
   storefrontId,
 }: {
   buyerIp?: string | null;
-  storefrontToken: string;
-  secretToken: string | undefined;
+  publicStorefrontToken: string;
+  privateStorefrontToken: string | undefined;
   storefrontId: string | undefined;
 }) {
   const headers = {} as Record<string, any>;
 
-  if (!secretToken && !secretTokenWarned) {
+  if (!privateStorefrontToken && !secretTokenWarned) {
     secretTokenWarned = true;
-    secretToken = getOxygenVariable(OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE);
+    privateStorefrontToken = getOxygenVariable(
+      OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE
+    );
 
-    if (!secretToken && !__HYDROGEN_DEV__) {
+    if (!privateStorefrontToken && !__HYDROGEN_DEV__) {
       log.error(
         'No secret Shopify storefront API token was defined. This means your app will be rate limited!\nSee how to add the token: '
       );
-    } else if (secretToken) {
+    } else if (privateStorefrontToken) {
       log.warn(
         'The private shopify storefront API token was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: '
       );
@@ -58,10 +60,10 @@ export function getStorefrontApiRequestHeaders({
   /**
    * Only pass one type of storefront token at a time.
    */
-  if (secretToken) {
-    headers[STOREFRONT_API_SECRET_TOKEN_HEADER] = secretToken;
+  if (privateStorefrontToken) {
+    headers[STOREFRONT_API_SECRET_TOKEN_HEADER] = privateStorefrontToken;
   } else {
-    headers[STOREFRONT_API_PUBLIC_TOKEN_HEADER] = storefrontToken;
+    headers[STOREFRONT_API_PUBLIC_TOKEN_HEADER] = publicStorefrontToken;
   }
 
   if (buyerIp) {

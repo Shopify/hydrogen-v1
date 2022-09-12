@@ -183,8 +183,8 @@ function queryShopBuilder(
 
     const extraHeaders = getStorefrontApiRequestHeaders({
       buyerIp,
-      storefrontToken,
-      secretToken: privateStorefrontToken,
+      publicStorefrontToken: storefrontToken,
+      privateStorefrontToken,
       storefrontId,
     });
 
