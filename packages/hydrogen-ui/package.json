@@ -102,6 +102,7 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "@google/model-viewer": "^1.12.1",
     "type-fest": "^2.19.0"
   }
 }

@@ -6,7 +6,7 @@ import {
   IMG_SRC_SET_SIZES,
 } from './image-size.js';
 import type {Image as ImageType} from './storefront-api-types.js';
-import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
+import type {PartialDeep, Simplify} from 'type-fest';
 
 type HtmlImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
 
@@ -26,7 +26,7 @@ export type ShopifyImageProps = Omit<HtmlImageProps, 'src'> & {
    * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
    * The `data` prop is required.
    */
-  data: SetRequired<PartialDeep<ImageType>, 'url'>;
+  data: PartialDeep<ImageType>;
   /** A custom function that generates the image URL. Parameters passed in
    * are `ShopifyLoaderParams`
    */
