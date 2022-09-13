@@ -1,2 +1,1 @@
-export {DocsGen, Options} from './DocsGen';
-export {Column} from './types';
+export {components} from './DocsGen';
