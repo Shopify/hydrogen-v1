@@ -1,7 +1,12 @@
-import type {ShopifyContextValue, LocalizationContextValue} from './types.js';
+import type {
+  ShopifyContextClientValue,
+  LocalizationContextValue,
+} from './types.js';
 import React, {createContext, ReactNode} from 'react';
 
-export const ShopifyContext = createContext<ShopifyContextValue | null>(null);
+export const ShopifyContext = createContext<ShopifyContextClientValue | null>(
+  null
+);
 export const LocalizationContext =
   createContext<LocalizationContextValue | null>(null);
 
@@ -11,7 +16,7 @@ export function ShopifyProviderClient({
   localization,
 }: {
   children: ReactNode;
-  shopifyConfig: ShopifyContextValue;
+  shopifyConfig: ShopifyContextClientValue;
   localization: LocalizationContextValue;
 }): JSX.Element {
   if (!shopifyConfig) {

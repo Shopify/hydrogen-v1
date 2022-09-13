@@ -1,5 +1,5 @@
 import type {
-  ShopifyContextValue,
+  ShopifyContextServerValue,
   LocalizationContextValue,
 } from '../ShopifyProvider/types.js';
 import {getTime} from '../../utilities/timing.js';
@@ -69,7 +69,7 @@ export class HydrogenRequest extends Request {
     cache: Map<string, any>;
     head: HeadData;
     hydrogenConfig?: ResolvedHydrogenConfig;
-    shopifyConfig?: ShopifyContextValue;
+    shopifyConfig?: ShopifyContextServerValue;
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;
     preloadQueries: PreloadQueriesByURL;
