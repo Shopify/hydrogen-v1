@@ -213,14 +213,22 @@ export function useShopQuery<T>({
 }
 
 function useCreateShopRequest(body: string) {
-  const {storeDomain, storefrontToken, storefrontApiVersion} = useShop();
+  const {
+    storeDomain,
+    storefrontToken,
+    storefrontApiVersion,
+    storefrontId,
+    privateStorefrontToken,
+  } = useShop();
 
   const request = useServerRequest();
   const buyerIp = request.getBuyerIp();
 
   const extraHeaders = getStorefrontApiRequestHeaders({
     buyerIp,
-    storefrontToken,
+    publicStorefrontToken: storefrontToken,
+    privateStorefrontToken,
+    storefrontId,
   });
 
   return {

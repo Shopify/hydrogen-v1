@@ -14,11 +14,6 @@
   "type": "module",
   "exports": {
     ".": {
-      "browser": {
-        "development": "./dist/umd/hydrogen-ui.dev.js",
-        "production": "./dist/umd/hydrogen-ui.prod.js",
-        "default": "./dist/umd/hydrogen-ui.prod.js"
-      },
       "module": {
         "types": "./dist/types/index.d.ts",
         "development": "./dist/dev/index.js",
@@ -45,8 +40,9 @@
   },
   "main": "./dist/prod/index.cjs",
   "module": "./dist/prod/index.js",
-  "browser": "./dist/umd/hydrogen-ui.prod.js",
   "types": "./dist/types/index.d.ts",
+  "unpkg": "./dist/umd/hydrogen-ui.prod.js",
+  "jsdelivr": "./dist/umd/hydrogen-ui.prod.js",
   "typesVersions": {
     "*": {
       "/index.js": [
@@ -94,7 +90,7 @@
     "graphql": "^16.6.0",
     "happy-dom": "^6.0.4",
     "prettier": "^2.7.1",
-    "vite": "^3.1.0",
+    "vite": "^2.9.13",
     "vitest": "^0.23.1"
   },
   "peerDependencies": {
@@ -102,6 +98,8 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "@google/model-viewer": "^1.12.1",
+    "graphql": "^16.6.0",
     "type-fest": "^2.19.0"
   }
 }

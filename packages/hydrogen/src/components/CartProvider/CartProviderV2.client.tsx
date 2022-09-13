@@ -21,6 +21,22 @@ import {CART_ID_STORAGE_KEY} from './constants.js';
 export function CartProviderV2({
   children,
   numCartLines,
+  onCreate,
+  onLineAdd,
+  onLineRemove,
+  onLineUpdate,
+  onNoteUpdate,
+  onBuyerIdentityUpdate,
+  onAttributesUpdate,
+  onDiscountCodesUpdate,
+  onCreateComplete,
+  onLineAddComplete,
+  onLineRemoveComplete,
+  onLineUpdateComplete,
+  onNoteUpdateComplete,
+  onBuyerIdentityUpdateComplete,
+  onAttributesUpdateComplete,
+  onDiscountCodesUpdateComplete,
   data: cart,
   cartFragment,
 }: {
@@ -28,6 +44,38 @@ export function CartProviderV2({
   children: React.ReactNode;
   /**  Maximum number of cart lines to fetch. Defaults to 250 cart lines. */
   numCartLines?: number;
+  /** A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API. */
+  onCreate?: () => void;
+  /** A callback that is invoked when the process to add a line item to the cart begins, but before the line item is added to the Storefront API. */
+  onLineAdd?: () => void;
+  /** A callback that is invoked when the process to remove a line item to the cart begins, but before the line item is removed from the Storefront API. */
+  onLineRemove?: () => void;
+  /** A callback that is invoked when the process to update a line item in the cart begins, but before the line item is updated in the Storefront API. */
+  onLineUpdate?: () => void;
+  /** A callback that is invoked when the process to add or update a note in the cart begins, but before the note is added or updated in the Storefront API. */
+  onNoteUpdate?: () => void;
+  /** A callback that is invoked when the process to update the buyer identity begins, but before the buyer identity is updated in the Storefront API. */
+  onBuyerIdentityUpdate?: () => void;
+  /** A callback that is invoked when the process to update the cart attributes begins, but before the attributes are updated in the Storefront API. */
+  onAttributesUpdate?: () => void;
+  /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
+  onDiscountCodesUpdate?: () => void;
+  /** A callback that is invoked when the process to create a cart completes */
+  onCreateComplete?: () => void;
+  /** A callback that is invoked when the process to add a line item to the cart completes */
+  onLineAddComplete?: () => void;
+  /** A callback that is invoked when the process to remove a line item to the cart completes */
+  onLineRemoveComplete?: () => void;
+  /** A callback that is invoked when the process to update a line item in the cart completes */
+  onLineUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to add or update a note in the cart completes */
+  onNoteUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to update the buyer identity completes */
+  onBuyerIdentityUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to update the cart attributes completes */
+  onAttributesUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to update the cart discount codes completes */
+  onDiscountCodesUpdateComplete?: () => void;
   /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
@@ -41,6 +89,49 @@ export function CartProviderV2({
   const [cartState, cartSend] = useCartAPIStateMachine({
     numCartLines,
     cartFragment,
+    onCartActionEntry(context, event) {
+      switch (event.type) {
+        case 'CART_CREATE':
+          return onCreate?.();
+        case 'CARTLINE_ADD':
+          return onLineAdd?.();
+        case 'CARTLINE_REMOVE':
+          return onLineRemove?.();
+        case 'CARTLINE_UPDATE':
+          return onLineUpdate?.();
+        case 'NOTE_UPDATE':
+          return onNoteUpdate?.();
+        case 'BUYER_IDENTITY_UPDATE':
+          return onBuyerIdentityUpdate?.();
+        case 'CART_ATTRIBUTES_UPDATE':
+          return onAttributesUpdate?.();
+        case 'DISCOUNT_CODES_UPDATE':
+          return onDiscountCodesUpdate?.();
+      }
+    },
+    onCartActionComplete(context, event) {
+      switch (event.type) {
+        case 'RESOLVE':
+          switch (event.payload.cartActionEvent.type) {
+            case 'CART_CREATE':
+              return onCreateComplete?.();
+            case 'CARTLINE_ADD':
+              return onLineAddComplete?.();
+            case 'CARTLINE_REMOVE':
+              return onLineRemoveComplete?.();
+            case 'CARTLINE_UPDATE':
+              return onLineUpdateComplete?.();
+            case 'NOTE_UPDATE':
+              return onNoteUpdateComplete?.();
+            case 'BUYER_IDENTITY_UPDATE':
+              return onBuyerIdentityUpdateComplete?.();
+            case 'CART_ATTRIBUTES_UPDATE':
+              return onAttributesUpdateComplete?.();
+            case 'DISCOUNT_CODES_UPDATE':
+              return onDiscountCodesUpdateComplete?.();
+          }
+      }
+    },
   });
 
   const [cartReady, setCartReady] = useState(false);
@@ -101,7 +192,7 @@ export function CartProviderV2({
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
       ...(cartState?.context?.cart ?? {lines: [], attributes: []}),
-      status: tempTransposeStatus(cartState.value),
+      status: transposeStatus(cartState.value),
       error: cartState?.context?.errors,
       totalQuantity: cartState?.context?.cart?.totalQuantity ?? 0,
       cartCreate(cartInput: CartInput) {
@@ -181,7 +272,7 @@ export function CartProviderV2({
   );
 }
 
-function tempTransposeStatus(
+function transposeStatus(
   status: CartMachineTypeState['value']
 ): CartWithActions['status'] {
   switch (status) {
