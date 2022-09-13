@@ -8,9 +8,9 @@ export {ProductProvider, useProduct} from './ProductProvider.js';
 export {ShopifyProvider, useShop} from './ShopifyProvider.js';
 export {ShopPayButton} from './ShopPayButton.js';
 export type {
-  StorefrontApiResponse200,
-  StorefrontApiResponse200Partial,
-  StorefrontApiResponse400Or500,
+  StorefrontApiResponseOk,
+  StorefrontApiResponseOkPartial,
+  StorefrontApiResponseError,
   StorefrontApiResponse,
   StorefrontApiResponsePartial,
 } from './storefront-api-response.types.js';

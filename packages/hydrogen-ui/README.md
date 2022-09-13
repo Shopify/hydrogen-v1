@@ -54,12 +54,12 @@ GraphQL autocompletion and validation will now work in `.graphql` files or in [`
 
 ## TypeScript Types
 
-To help strongly-type your API responses from the Storefront API, you can use the `StorefrontApiResponse200` and `StorefrontApiResponse400Or500` helpers:
+To help strongly-type your API responses from the Storefront API, you can use the `StorefrontApiResponseOk` and `StorefrontApiResponseError` helpers:
 
 ```tsx
 import {
-  type StorefrontApiResponse400Or500,
-  type StorefrontApiResponse200,
+  type StorefrontApiResponseError,
+  type StorefrontApiResponseOk,
 } from '@shopify/hydrogen-ui';
 
 async function FetchApi<DataGeneric>() {
@@ -67,10 +67,10 @@ async function FetchApi<DataGeneric>() {
 
   if (!apiResponse.ok) {
     // 400 or 500 level error
-    return (await apiResponse.text()) as StorefrontApiResponse400Or500; // or apiResponse.json()
+    return (await apiResponse.text()) as StorefrontApiResponseError; // or apiResponse.json()
   }
 
-  const graphqlResponse: StorefrontApiResponse200<DataGeneric> =
+  const graphqlResponse: StorefrontApiResponseOk<DataGeneric> =
     await apiResponse.json();
 
   // can now access 'graphqlResponse.data' and 'graphqlResponse.errors'

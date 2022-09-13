@@ -19,25 +19,25 @@ type StorefrontApiExtensions = {
 };
 
 /**
- * The Storefront API can return a 200 OK response code when the query succeeds, and will populate the `data` property. The generic you pass in through type parameters will be the shape of the `data` object if successful. If you prefer a "deeply-partial" version of that generic object, consider using `StorefrontApiResponse200Partial` instead.
+ * The Storefront API can return a 200 OK response code when the query succeeds, and will populate the `data` property. The generic you pass in through type parameters will be the shape of the `data` object if successful. If you prefer a "deeply-partial" version of that generic object, consider using `StorefrontApiResponseOkPartial` instead.
  *
  * The Storefront API can also return a 200 OK response code in cases that would typically produce 4xx errors in REST. This will propulate the `errors` property.
  *
  * Refer to https://shopify.dev/api/storefront#status_and_error_codes for more information.
  */
-export type StorefrontApiResponse200<DataGeneric> = FormattedExecutionResult<
+export type StorefrontApiResponseOk<DataGeneric> = FormattedExecutionResult<
   DataGeneric,
   StorefrontApiExtensions
 >;
 
 /**
- * The Storefront API can return a 200 OK response code when the query succeeds, and will populate the `data` property. The generic you pass in through type parameters will be the shape of the `data` object, with `Partial` deeply-applied to all nested objects and properties, if successful. If you prefer not using this "deeply-partial" generic data object, consider using `StorefrontApiResponse200` instead.
+ * The Storefront API can return a 200 OK response code when the query succeeds, and will populate the `data` property. The generic you pass in through type parameters will be the shape of the `data` object, with `Partial` deeply-applied to all nested objects and properties, if successful. If you prefer not using this "deeply-partial" generic data object, consider using `StorefrontApiResponseOk` instead.
  *
  * The Storefront API can also return a 200 OK response code in cases that would typically produce 4xx errors in REST. This will propulate the `errors` property.
  *
  * Refer to https://shopify.dev/api/storefront#status_and_error_codes for more information.
  */
-export type StorefrontApiResponse200Partial<DataGeneric> =
+export type StorefrontApiResponseOkPartial<DataGeneric> =
   FormattedExecutionResult<PartialDeep<DataGeneric>, StorefrontApiExtensions>;
 
 /**
@@ -49,7 +49,7 @@ export type StorefrontApiResponse200Partial<DataGeneric> =
  *
  * Refer to https://shopify.dev/api/storefront#status_and_error_codes for more information.
  */
-export type StorefrontApiResponse400Or500 =
+export type StorefrontApiResponseError =
   | string
   | {
       errors: {query: string};
@@ -57,7 +57,7 @@ export type StorefrontApiResponse400Or500 =
   | {errors: string};
 
 /**
- * The Storefront API can return a 200 OK response code when the query succeeds, and will populate the `data` property. The generic you pass in through type parameters will be the shape of the `data` object if successful. If you prefer a "deeply-partial" version of that generic object, consider using `StorefrontApiResponse200Partial` instead.
+ * The Storefront API can return a 200 OK response code when the query succeeds, and will populate the `data` property. The generic you pass in through type parameters will be the shape of the `data` object if successful. If you prefer a "deeply-partial" version of that generic object, consider using `StorefrontApiResponseOkPartial` instead.
  *
  * The Storefront API can also return a 200 OK response code in cases that would typically produce 4xx errors in REST. This will propulate the `errors` property.
  *
@@ -66,11 +66,11 @@ export type StorefrontApiResponse400Or500 =
  * Refer to https://shopify.dev/api/storefront#status_and_error_codes for more information.
  */
 export type StorefrontApiResponse<DataGeneric> =
-  | StorefrontApiResponse200<DataGeneric>
-  | StorefrontApiResponse400Or500;
+  | StorefrontApiResponseOk<DataGeneric>
+  | StorefrontApiResponseError;
 
 /**
- * The Storefront API can return a 200 OK response code when the query succeeds, and will populate the `data` property. The generic you pass in through type parameters will be the shape of the `data` object, with `Partial` deeply-applied to all nested objects and properties, if successful. If you prefer not using this "deeply-partial" generic data object, consider using `StorefrontApiResponse200` instead.
+ * The Storefront API can return a 200 OK response code when the query succeeds, and will populate the `data` property. The generic you pass in through type parameters will be the shape of the `data` object, with `Partial` deeply-applied to all nested objects and properties, if successful. If you prefer not using this "deeply-partial" generic data object, consider using `StorefrontApiResponseOk` instead.
  *
  * The Storefront API can also return a 200 OK response code in cases that would typically produce 4xx errors in REST. This will propulate the `errors` property.
  *
@@ -79,5 +79,5 @@ export type StorefrontApiResponse<DataGeneric> =
  * Refer to https://shopify.dev/api/storefront#status_and_error_codes for more information.
  */
 export type StorefrontApiResponsePartial<DataGeneric> =
-  | StorefrontApiResponse200Partial<DataGeneric>
-  | StorefrontApiResponse400Or500;
+  | StorefrontApiResponseOkPartial<DataGeneric>
+  | StorefrontApiResponseError;
