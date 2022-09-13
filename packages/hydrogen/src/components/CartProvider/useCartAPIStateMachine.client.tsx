@@ -4,6 +4,7 @@ import {CartFragmentFragment} from './graphql/CartFragment.js';
 import {
   Cart,
   CartMachineActionEvent,
+  CartMachineActions,
   CartMachineContext,
   CartMachineEvent,
   CartMachineFetchResultEvent,
@@ -15,12 +16,12 @@ import {useMemo} from 'react';
 import {InitEvent} from '@xstate/fsm/lib/types.js';
 
 function invokeCart(
-  action: string,
+  action: keyof CartMachineActions,
   options?: {
-    entryActions?: [string];
-    resolveTarget?: string;
-    errorTarget?: string;
-    exitActions?: [string];
+    entryActions?: [keyof CartMachineActions];
+    resolveTarget?: CartMachineTypeState['value'];
+    errorTarget?: CartMachineTypeState['value'];
+    exitActions?: [keyof CartMachineActions];
   }
 ): StateMachine.Config<CartMachineContext, CartMachineEvent>['states']['on'] {
   return {
@@ -53,7 +54,11 @@ function invokeCart(
   };
 }
 
-const INITIALIZING_CART_EVENTS = {
+const INITIALIZING_CART_EVENTS: StateMachine.Machine<
+  CartMachineContext,
+  CartMachineEvent,
+  CartMachineTypeState
+>['config']['states']['uninitialized']['on'] = {
   CART_FETCH: {
     target: 'cartFetching',
   },
@@ -65,7 +70,11 @@ const INITIALIZING_CART_EVENTS = {
   },
 };
 
-const UPDATING_CART_EVENTS = {
+const UPDATING_CART_EVENTS: StateMachine.Machine<
+  CartMachineContext,
+  CartMachineEvent,
+  CartMachineTypeState
+>['config']['states']['idle']['on'] = {
   CARTLINE_ADD: {
     target: 'cartLineAdding',
   },
@@ -114,8 +123,6 @@ const cartMachine = createMachine<
     },
     cartFetching: invokeCart('cartFetchAction', {
       errorTarget: 'initializationError',
-      entryActions: ['onFetch'],
-      exitActions: ['onFetchComplete'],
     }),
     cartCreating: invokeCart('cartCreateAction', {
       errorTarget: 'initializationError',
@@ -312,7 +319,7 @@ export function useCartAPIStateMachine({
           }
         },
       }),
-    },
+    } as CartMachineActions,
   });
 
   return useMemo(() => [state, send, service] as const, [state, send, service]);
