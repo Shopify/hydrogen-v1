@@ -6,7 +6,7 @@ export const useDelay = function (data: unknown, time: number) {
   if (!__HYDROGEN_DEV__) {
     log.warn(
       new Error(
-        'The `useDelay` hook introduces an artificial delay which should not be used in production!'
+        'The `useDelay` hook introduces an artificial delay that should not be used in production!'
       ).stack
     );
     return data;

@@ -25,7 +25,7 @@ export default function Page() {
   );
 
   // Add another delay. The component will not finish rendering
-  // and return for another three seconds
+  // and be returned for another three seconds.
   useDelay('uniqueDelayKey', 3000);
 
   return <h1>{data.property}</h1>;
@@ -34,7 +34,7 @@ export default function Page() {
 const QUERY = gql`/** add your query here **/`;
 ```
 
-The `useDelay` hook is especially useful when testing suspense boundary fallbacks:
+The `useDelay` hook is especially useful when testing suspense boundary fallbacks. The following is an example:
 
 ```tsx
 import {useShopQuery, gql, useDelay} from '@shopify/hydrogen';
@@ -70,7 +70,7 @@ The `useDelay` hook takes the following arguments:
 
 | Key     | Required | Description                                                    |
 | ------- | -------- | -------------------------------------------------------------- |
-| `delay` | Yes      | A unique string or the result of `useQuery` or `useShopQuery`. |
+| `delay` | Yes      | A unique string or the result of either `useQuery` or `useShopQuery`. |
 | `time`  | Yes      | The amount of time in miliseconds to delay.                    |
 
 ## Return value
