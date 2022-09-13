@@ -1,6 +1,6 @@
 {
   "name": "@shopify/hydrogen-ui-alpha",
-  "version": "2022.7.3",
+  "version": "0.0.0-unstable-20220913160311",
   "description": "Components for modern custom Shopify storefronts",
   "homepage": "https://github.com/Shopify/hydrogen#readme",
   "license": "MIT",
