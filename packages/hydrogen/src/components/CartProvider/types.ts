@@ -7,6 +7,7 @@ import {
   MutationCartAttributesUpdateArgs,
 } from '../../storefront-api-types.js';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
+import {StateMachine} from '@xstate/fsm';
 
 export type Status = State['status'];
 
@@ -155,7 +156,7 @@ export type DiscountCodesUpdateEvent = {
   };
 };
 
-export type CartMachineEvent =
+export type CartMachineActionEvent =
   | CartFetchEvent
   | CartCreateEvent
   | CartLineAddEvent
@@ -164,10 +165,22 @@ export type CartMachineEvent =
   | NoteUpdateEvent
   | BuyerIdentityUpdateEvent
   | CartAttributesUpdateEvent
-  | DiscountCodesUpdateEvent
-  | {type: 'CART_COMPLETED'}
-  | {type: 'RESOLVE'; payload: {cart: Cart}}
-  | {type: 'ERROR'; payload: {errors: any}};
+  | DiscountCodesUpdateEvent;
+
+export type CartMachineFetchResultEvent =
+  | {type: 'CART_COMPLETED'; payload: {cartActionEvent: CartMachineActionEvent}}
+  | {
+      type: 'RESOLVE';
+      payload: {cartActionEvent: CartMachineActionEvent; cart: Cart};
+    }
+  | {
+      type: 'ERROR';
+      payload: {cartActionEvent: CartMachineActionEvent; errors: any};
+    };
+
+export type CartMachineEvent =
+  | CartMachineActionEvent
+  | CartMachineFetchResultEvent;
 
 export type CartMachineTypeState =
   | {
@@ -214,3 +227,22 @@ export type CartMachineTypeState =
   | {value: 'buyerIdentityUpdating'; context: CartMachineContext}
   | {value: 'cartAttributesUpdating'; context: CartMachineContext}
   | {value: 'discountCodesUpdating'; context: CartMachineContext};
+
+export type CartMachineAction = StateMachine.ActionFunction<
+  CartMachineContext,
+  CartMachineEvent
+>;
+
+export type CartMachineActions = {
+  cartFetchAction: CartMachineAction;
+  cartCreateAction: CartMachineAction;
+  cartLineRemoveAction: CartMachineAction;
+  cartLineUpdateAction: CartMachineAction;
+  cartLineAddAction: CartMachineAction;
+  noteUpdateAction: CartMachineAction;
+  buyerIdentityUpdateAction: CartMachineAction;
+  cartAttributesUpdateAction: CartMachineAction;
+  discountCodesUpdateAction: CartMachineAction;
+  onCartActionEntry?: CartMachineAction;
+  onCartActionComplete?: CartMachineAction;
+};
