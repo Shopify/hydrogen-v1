@@ -82,6 +82,7 @@ export class HydrogenRequest extends Request {
     scopes: Map<string, Record<string, any>>;
     localization?: LocalizationContextValue;
     [key: string]: any;
+    throttledRequests: Record<string, any>;
   };
 
   constructor(input: any);
@@ -116,6 +117,7 @@ export class HydrogenRequest extends Request {
       preloadQueries: new Map(),
       scopes: new Map(),
       flashSession: {},
+      throttledRequests: {},
     };
     this.cookies = this.parseCookies();
   }
