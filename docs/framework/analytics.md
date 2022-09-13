@@ -332,7 +332,7 @@ To send analytics data from the server-side, complete the following steps:
     export default defineConfig({
       /* In this example, the environment variable is stored in `Oxygen.env`.
          Because you're not deploying to Oxygen, you can choose a different storage location.*/
-      storefrontId: Oxygen?.env?.PUBLIC_SHOPIFY_STOREFRONT_ID
+      storefrontId: Oxygen?.env?.PUBLIC_STOREFRONT_ID
     });
     ```
 

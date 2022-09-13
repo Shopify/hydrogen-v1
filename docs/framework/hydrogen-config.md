@@ -29,11 +29,11 @@ export default defineConfig({
     /* The domain of your Shopify store */
     storeDomain: '{shop_domain}.myshopify.com',
     /* Your app's public Storefront API access token. Authenticates browser and client requests. */
-    storefrontToken: Oxygen?.env?.PUBLIC_SHOPIFY_STOREFRONT_API_TOKEN,
+    storefrontToken: Oxygen?.env?.PUBLIC_STOREFRONT_API_TOKEN,
     /* Your app's private Storefront API server (delegate access) token. Authenticates server requests. */
-    privateStorefrontToken: Oxygen?.env?.PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN,
+    privateStorefrontToken: Oxygen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
     /* The unique ID for the storefront. This prop is required on non-Oxygen runtimes to avoid breaking the analytics dashboard in the Shopify admin.*/
-    storefrontId: Oxygen?.env?.PUBLIC_SHOPIFY_STOREFRONT_ID,
+    storefrontId: Oxygen?.env?.PUBLIC_STOREFRONT_ID,
     /* The Storefront API version that your app uses */
     storefrontApiVersion: '2022-07',
   },

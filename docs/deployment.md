@@ -352,9 +352,9 @@ If you're deploying to a non-Oxygen runtime, then this is a necessary step to av
 
 1. Create a [delegate access token](https://shopify.dev/apps/auth/oauth/delegate-access-tokens) for the Storefront API.
 
-1. [Store the token](https://vitejs.dev/guide/env-and-mode.html#env-files) in a private environment variable called `PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN`.
+1. [Store the token](https://vitejs.dev/guide/env-and-mode.html#env-files) in a private environment variable called `PRIVATE_STOREFRONT_API_TOKEN`.
 
-1. In the Hydrogen configuration file, set the private token using the variable `PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN`.
+1. In the Hydrogen configuration file, set the private token using the variable `PRIVATE_STOREFRONT_API_TOKEN`.
 
     {% codeblock file, filename: 'hydrogen.config.ts' %}
 
@@ -363,7 +363,7 @@ If you're deploying to a non-Oxygen runtime, then this is a necessary step to av
       privateStorefrontToken:
       /* In this example, the environment variable is stored in `Oxygen.env`.
          If you're not deploying to Oxygen, then you can choose a different storage location.*/
-        Oxygen?.env?.PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN,
+        Oxygen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
     });
     ```
 
@@ -377,7 +377,7 @@ If you're deploying to a non-Oxygen runtime, then this is a necessary step to av
     export default defineConfig({
       /* In this example, the environment variable is stored in `Oxygen.env`.
          Because you're not deploying to Oxygen, you can choose a different storage location.*/
-      storefrontId: Oxygen?.env?.PUBLIC_SHOPIFY_STOREFRONT_ID
+      storefrontId: Oxygen?.env?.PUBLIC_STOREFRONT_ID
     });
     ```
 

@@ -71,7 +71,7 @@ These variables aren't exposed to the browser and server components can only acc
 ```tsx
 export default defineConfig({
   privateStorefrontToken:
-    Oxygen?.env?.PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN,
+    Oxygen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
 });
 ```
 {% endcodeblock %}
@@ -114,14 +114,14 @@ app.use(hydrogenMiddleware({/* ... */}))
 
 Prevent rate-limiting on server requests to the Storefront API by storing server tokens as private variables.
 
-You need to authenticate server requests to the Storefront API with a [delegate access token](/apps/auth/oauth/delegate-access-tokens) that's stored in a private variable (`PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN`) and referenced in the [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config):
+You need to authenticate server requests to the Storefront API with a [delegate access token](/apps/auth/oauth/delegate-access-tokens) that's stored in a private variable (`PRIVATE_STOREFRONT_API_TOKEN`) and referenced in the [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config):
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
 ```tsx
 export default defineConfig({
   privateStorefrontToken:
-    Oxygen?.env?.PRIVATE_SHOPIFY_STOREFRONT_API_TOKEN,
+    Oxygen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
 });
 ```
 
