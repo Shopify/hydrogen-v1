@@ -99,6 +99,7 @@
   },
   "dependencies": {
     "@google/model-viewer": "^1.12.1",
+    "graphql": "^16.6.0",
     "type-fest": "^2.19.0"
   }
 }
