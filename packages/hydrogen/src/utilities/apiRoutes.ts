@@ -6,6 +6,7 @@ import {
 import {matchPath} from './matchPath.js';
 import {
   getLoggerWithContext,
+  Logger,
   logServerResponse,
 } from '../utilities/log/index.js';
 import type {HydrogenRequest} from '../foundation/HydrogenRequest/HydrogenRequest.server.js';
@@ -24,6 +25,7 @@ let memoizedRawRoutes: ImportGlobEagerOutput = {};
 
 type RouteParams = Record<string, string>;
 export type RequestOptions = {
+  log: Logger;
   params: RouteParams;
   queryShop: <T>(args: QueryShopArgs) => Promise<UseShopQueryResponse<T>>;
   session: SessionApi | null;
@@ -170,12 +172,20 @@ function queryShopBuilder(
       );
     }
 
-    const {storeDomain, storefrontApiVersion, storefrontToken} = shopifyConfig;
+    const {
+      storeDomain,
+      storefrontApiVersion,
+      storefrontToken,
+      privateStorefrontToken,
+      storefrontId,
+    } = shopifyConfig;
     const buyerIp = request.getBuyerIp();
 
     const extraHeaders = getStorefrontApiRequestHeaders({
       buyerIp,
-      storefrontToken,
+      publicStorefrontToken: storefrontToken,
+      privateStorefrontToken,
+      storefrontId,
     });
 
     const fetcher = fetchBuilder<T>(
@@ -212,6 +222,7 @@ export async function renderApiRoute(
 
   try {
     response = await route.resource(request, {
+      log,
       params: route.params,
       queryShop: queryShopBuilder(hydrogenConfig.shopify, request),
       hydrogenConfig,

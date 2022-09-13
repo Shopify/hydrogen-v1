@@ -6,7 +6,7 @@ import {
   IMG_SRC_SET_SIZES,
 } from './image-size.js';
 import type {Image as ImageType} from './storefront-api-types.js';
-import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
+import type {PartialDeep, Simplify} from 'type-fest';
 
 type HtmlImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
 
@@ -26,7 +26,7 @@ export type ShopifyImageProps = Omit<HtmlImageProps, 'src'> & {
    * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
    * The `data` prop is required.
    */
-  data: SetRequired<PartialDeep<ImageType>, 'url'>;
+  data: PartialDeep<ImageType>;
   /** A custom function that generates the image URL. Parameters passed in
    * are `ShopifyLoaderParams`
    */
@@ -71,14 +71,24 @@ export function Image({
   ...rest
 }: ShopifyImageProps) {
   if (!data.url) {
-    throw new Error(`<Image/>: the 'data' prop requires the 'url' property`);
+    const missingUrlError = `<Image/>: the 'data' prop requires the 'url' property. Image: ${
+      data.id ?? 'no ID provided'
+    }`;
+
+    if (__HYDROGEN_DEV__) {
+      throw new Error(missingUrlError);
+    } else {
+      console.error(missingUrlError);
+    }
+
+    return null;
   }
 
   if (__HYDROGEN_DEV__ && !data.altText && !rest.alt) {
     console.warn(
-      `<Image/>: the 'data' prop should have the 'altText' property, or the 'alt' prop, and one of them should not be empty. ${`Image: ${
+      `<Image/>: the 'data' prop should have the 'altText' property, or the 'alt' prop, and one of them should not be empty. Image: ${
         data.id ?? data.url
-      }`}`
+      }`
     );
   }
 
@@ -94,9 +104,9 @@ export function Image({
 
   if (__HYDROGEN_DEV__ && (!imgElementWidth || !imgElementHeight)) {
     console.warn(
-      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. ${`Image: ${
+      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. Image: ${
         data.id ?? data.url
-      }`}`
+      }`
     );
   }
 
@@ -111,9 +121,9 @@ export function Image({
     });
     if (typeof finalSrc !== 'string' || !finalSrc) {
       throw new Error(
-        `<Image/>: 'loader' did not return a valid string. ${`Image: ${
+        `<Image/>: 'loader' did not return a valid string. Image: ${
           data.id ?? data.url
-        }`}`
+        }`
       );
     }
   }
@@ -170,7 +180,9 @@ function internalImageSrcSet({
 }: InternalShopifySrcSetGeneratorsParams) {
   const hasCustomWidths = widths && Array.isArray(widths);
   if (hasCustomWidths && widths.some((size) => isNaN(size as number))) {
-    throw new Error(`<Image/>: the 'widths' must be an array of numbers`);
+    throw new Error(
+      `<Image/>: the 'widths' must be an array of numbers. Image: ${src}`
+    );
   }
 
   let aspectRatio = 1;

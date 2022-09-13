@@ -16,6 +16,7 @@
   --shop-pay-button--width: 100%; /* Sets the width for the shop-pay-button web component */
   --height-nav: 3rem;
   --screen-height: 100vh;
+  --screen-height-dynamic: 100vh;
 
   @media (min-width: 32em) {
     --height-nav: 4rem;
@@ -27,6 +28,9 @@
   }
   @supports (height: 100svh) {
     --screen-height: 100svh;
+  }
+  @supports (height: 100dvh) {
+    --screen-height-dynamic: 100dvh;
   }
 }
 

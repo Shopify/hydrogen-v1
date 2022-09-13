@@ -17,6 +17,7 @@ const Template: Story<{
       url: props['data.url'],
       width: props['data.width'],
       height: props['data.height'],
+      id: 'testing',
     },
     width: props.width,
     height: props.height,

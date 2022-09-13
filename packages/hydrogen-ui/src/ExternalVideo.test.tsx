@@ -1,20 +1,17 @@
 import * as React from 'react';
 import {render, screen} from '@testing-library/react';
-import {PartialDeep} from 'type-fest';
-import type {
-  ExternalVideo as ExternalVideoType,
-  Image,
-} from './storefront-api-types.js';
 import {ExternalVideo} from './ExternalVideo.js';
-import {faker} from '@faker-js/faker';
 import {vi} from 'vitest';
+import {getExternalVideoData} from './ExternalVideo.test.helpers.js';
+
+const testId = 'video-iframe';
 
 describe('<ExternalVideo />', () => {
   it('renders an iframe element with sensible defaults', () => {
     const video = getExternalVideoData();
-    render(<ExternalVideo data={video} />);
+    render(<ExternalVideo data={video} data-testid={testId} />);
 
-    const videoEl = screen.getByTestId('video-iframe');
+    const videoEl = screen.getByTestId(testId);
 
     expect(videoEl).toBeInTheDocument();
 
@@ -31,6 +28,7 @@ describe('<ExternalVideo />', () => {
   it('allows defaults to be overridden', () => {
     render(
       <ExternalVideo
+        data-testid={testId}
         data={getExternalVideoData()}
         id="hello"
         allow="autoplay"
@@ -39,7 +37,7 @@ describe('<ExternalVideo />', () => {
       />
     );
 
-    const videoEl = screen.getByTestId('video-iframe');
+    const videoEl = screen.getByTestId(testId);
 
     expect(videoEl).toHaveAttribute('id', 'hello');
     expect(videoEl).toHaveAttribute('allow', 'autoplay');
@@ -54,6 +52,7 @@ describe('<ExternalVideo />', () => {
     };
     render(
       <ExternalVideo
+        data-testid={testId}
         data={getExternalVideoData({
           embedUrl: 'https://www.youtube.com/embed/a2YSgfwXc9c',
         })}
@@ -61,7 +60,7 @@ describe('<ExternalVideo />', () => {
       />
     );
 
-    const videoEl = screen.getByTestId('video-iframe');
+    const videoEl = screen.getByTestId(testId);
 
     expect(videoEl).toHaveAttribute(
       'src',
@@ -70,9 +69,15 @@ describe('<ExternalVideo />', () => {
   });
 
   it('allows passthrough props', () => {
-    render(<ExternalVideo data={getExternalVideoData()} className="fancy" />);
+    render(
+      <ExternalVideo
+        data={getExternalVideoData()}
+        className="fancy"
+        data-testid={testId}
+      />
+    );
 
-    const videoEl = screen.getByTestId('video-iframe');
+    const videoEl = screen.getByTestId(testId);
 
     expect(videoEl).toHaveAttribute('class', 'fancy');
   });
@@ -80,38 +85,8 @@ describe('<ExternalVideo />', () => {
   it(`throws when 'data.embedUrl' isn't passed`, () => {
     // to silence the test runner's console.error from being called
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => render(<ExternalVideo data={{id: 'hi'}} />)).toThrow();
     expect(console.error).toHaveBeenCalled();
-    consoleSpy.mockRestore();
   });
 });
-
-export function getExternalVideoData(
-  externalVideo: Partial<ExternalVideoType> = {}
-): PartialDeep<ExternalVideoType> {
-  return {
-    id: externalVideo.id ?? faker.random.words(),
-    mediaContentType: 'EXTERNAL_VIDEO',
-    embedUrl: externalVideo.embedUrl ?? faker.internet.url(),
-    host:
-      externalVideo.host ?? faker.datatype.number({max: 2, min: 1}) === 1
-        ? 'YOUTUBE'
-        : 'VIMEO',
-    previewImage: getPreviewImage(externalVideo.previewImage ?? undefined),
-  };
-}
-
-// will move this into Image.test.tsx when it's moved into h-ui
-export function getPreviewImage(image: Partial<Image> = {}) {
-  return {
-    id: image.id ?? faker.random.words(),
-    altText: image.altText ?? faker.random.words(),
-    url: image.url ?? faker.image.image(),
-    width: image.width ?? faker.datatype.number(),
-    height: image.height ?? faker.datatype.number(),
-    originalSrc: '',
-    transformedSrc: '',
-    src: '',
-  };
-}

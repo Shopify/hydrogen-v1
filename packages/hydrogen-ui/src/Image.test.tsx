@@ -3,8 +3,7 @@ import {vi} from 'vitest';
 import {render, screen} from '@testing-library/react';
 import {Image} from './Image.js';
 import * as utilities from './image-size.js';
-import {faker} from '@faker-js/faker';
-import type {Image as ImageType} from './storefront-api-types.js';
+import {getPreviewImage} from './Image.test.helpers.js';
 
 describe('<Image />', () => {
   beforeAll(() => {
@@ -318,6 +317,10 @@ describe('<Image />', () => {
     expect(image).not.toHaveAttribute('height');
   });
 
+  it(`throws an error if you don't have data.url`, () => {
+    expect(() => render(<Image data={{url: ''}} />)).toThrowError();
+  });
+
   // eslint-disable-next-line jest/expect-expect
   it.skip(`typescript types`, () => {
     // this test is actually just using //@ts-expect-error as the assertion, and don't need to execute in order to have TS validation on them
@@ -336,16 +339,3 @@ describe('<Image />', () => {
     <Image data={{url: ''}} foo="bar" />;
   });
 });
-
-function getPreviewImage(image: Partial<ImageType> = {}) {
-  return {
-    id: image.id ?? faker.random.words(),
-    altText: image.altText ?? faker.random.words(),
-    url: image.url ?? faker.image.imageUrl(),
-    width: image.width ?? faker.datatype.number(),
-    height: image.height ?? faker.datatype.number(),
-    originalSrc: '',
-    transformedSrc: '',
-    src: '',
-  };
-}
