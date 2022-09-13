@@ -179,6 +179,8 @@ export function Metafield<TTag extends ElementType>(
 
   const Wrapper = as ?? 'span';
   return (
-    <Wrapper {...passthroughProps}>{parsedMetafield.value?.toString()}</Wrapper>
+    <Wrapper {...passthroughProps}>
+      {parsedMetafield.value?.toString?.()}
+    </Wrapper>
   );
 }

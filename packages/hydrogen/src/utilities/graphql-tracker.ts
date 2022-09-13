@@ -6,22 +6,23 @@ import type {
   SelectionNode,
   ASTNode,
 } from 'graphql';
+import type {UseShopQueryResponse} from '../hooks/useShopQuery/index.js';
 
 import gqlDev from 'graphql-tag';
 
 export const TIMEOUT_MS = 2000;
 
-type TrackerParams = {
+type TrackerParams<DataGeneric> = {
   query: ASTNode | string;
-  data: {data: unknown};
+  data: UseShopQueryResponse<DataGeneric>;
   onUnusedData?: (params: {queryName: string; properties: string[]}) => void;
 };
 
-export function injectGraphQLTracker({
+export function injectGraphQLTracker<DataGeneric>({
   query,
   data,
   onUnusedData,
-}: TrackerParams) {
+}: TrackerParams<DataGeneric>) {
   if (__HYDROGEN_DEV__ && typeof query === 'string') {
     query = gqlDev`${query}`;
   }

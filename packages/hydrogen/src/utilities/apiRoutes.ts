@@ -17,7 +17,7 @@ import type {
   SessionStorageAdapter,
 } from '../foundation/session/session-types.js';
 import {emptySessionImplementation} from '../foundation/session/session.js';
-import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
+import type {UseShopQueryResponse} from '../hooks/useShopQuery/index.js';
 import {FORM_REDIRECT_COOKIE, RSC_PATHNAME} from '../constants.js';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];

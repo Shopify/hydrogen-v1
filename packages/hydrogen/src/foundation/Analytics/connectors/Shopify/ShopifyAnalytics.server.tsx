@@ -17,18 +17,30 @@ export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
   const cookies = parse(request.headers.get('Cookie') || '');
   const domain = cookieDomain || storeDomain;
 
-  const {
-    data: {
-      shop: {
-        id,
-        paymentSettings: {currencyCode},
-      },
-    },
-  } = useShopQuery<{shop: Shop}>({
+  const {data, errors} = useShopQuery<{shop: Shop}>({
     query: SHOP_QUERY,
     cache: CacheLong(),
     preload: '*',
   });
+
+  if (!data?.shop || errors) {
+    const noDataError = `ShopifyAnalytics.server.tsx: no data was returned for the analytics query. ${
+      errors ? `Errors: ${errors.map((err) => err.message).join('; ')}` : ''
+    }`;
+    if (__HYDROGEN_DEV__) {
+      throw new Error(noDataError);
+    } else {
+      console.error(noDataError);
+      return null;
+    }
+  }
+
+  const {
+    shop: {
+      id,
+      paymentSettings: {currencyCode},
+    },
+  } = data;
 
   useServerAnalytics({
     shopify: {

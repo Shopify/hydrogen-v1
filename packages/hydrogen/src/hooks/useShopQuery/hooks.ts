@@ -9,12 +9,7 @@ import {fetchSync} from '../../foundation/fetchSync/server/fetchSync.js';
 import {META_ENV_SSR} from '../../foundation/ssr-interop.js';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
 import {parseJSON} from '../../utilities/parse.js';
-
-export interface UseShopQueryResponse<T> {
-  /** The data returned by the query. */
-  data: T;
-  errors: any;
-}
+import type {StorefrontApiResponseOk} from './shop-query.types.js';
 
 // Check if the response body has GraphQL errors
 // https://spec.graphql.org/June2018/#sec-Response-Format
@@ -31,7 +26,7 @@ const shouldCacheResponse = ([body]: [any, Response]) => {
 /**
  * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
  */
-export function useShopQuery<T>({
+export function useShopQuery<DataGeneric>({
   query,
   variables = {},
   cache,
@@ -54,12 +49,12 @@ export function useShopQuery<T>({
    * to preload the query for all requests.
    */
   preload?: PreloadOptions;
-}): UseShopQueryResponse<T> {
+}): StorefrontApiResponseOk<DataGeneric> {
   /**
    * If no query is passed, we no-op here to allow developers to obey the Rules of Hooks.
    */
   if (!query) {
-    return {data: undefined as unknown as T, errors: undefined};
+    return {data: undefined, errors: undefined};
   }
 
   if (!META_ENV_SSR) {
@@ -75,8 +70,8 @@ export function useShopQuery<T>({
   const {url, requestInit} = useCreateShopRequest(body); // eslint-disable-line react-hooks/rules-of-hooks
 
   let text: string;
-  let data: any;
-  let useQueryError: any;
+  let data: StorefrontApiResponseOk<DataGeneric> | null = null;
+  let useQueryError: Response | Error | null = null;
   let response: ReturnType<typeof fetchSync> | null = null;
 
   try {
@@ -139,7 +134,9 @@ export function useShopQuery<T>({
    * get returned to the consumer.
    */
   if (data?.errors) {
-    const errors = Array.isArray(data.errors) ? data.errors : [data.errors];
+    const errors: StorefrontApiResponseOk<DataGeneric>['errors'] =
+      Array.isArray(data.errors) ? data.errors : [data.errors];
+
     const requestId = response?.headers?.get('x-request-id') ?? '';
     for (const error of errors) {
       if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {

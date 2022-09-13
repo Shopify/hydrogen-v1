@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type {Story} from '@ladle/react';
 import {Metafield, type MetafieldProps} from './Metafield.js';
-import {getRawMetafield} from './metafield.test.helpers.js';
+import {getRawMetafield} from './Metafield.test.helpers.js';
 
 const Template: Story<MetafieldProps<React.ElementType>> = (props) => {
   return <Metafield {...props} />;
