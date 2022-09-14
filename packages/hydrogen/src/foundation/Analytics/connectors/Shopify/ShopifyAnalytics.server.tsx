@@ -25,7 +25,7 @@ export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
   });
 
   if (!data?.shop || errors) {
-    const noDataError = `ShopifyAnalytics.server.tsx: no data was returned for the analytics query. ${
+    const noDataError = `ShopifyAnalytics.server.tsx: There was an issue with the analytics query. Either no data was returned or there were errors. ${
       errors ? `Errors: ${errors.map((err) => err.message).join('; ')}` : ''
     }`;
     if (__HYDROGEN_DEV__) {
