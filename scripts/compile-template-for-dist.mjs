@@ -15,7 +15,7 @@ import fs from 'fs-extra';
 function copyDir(srcDir, destDir) {
   fs.mkdirSync(destDir, {recursive: true});
   for (const file of fs.readdirSync(srcDir)) {
-    const newFile = file.startsWith('_') ? '.' + file.substring(1) : file;
+    const newFile = file.startsWith('_') ? `.${file.substring(1)}` : file;
     const srcFile = resolve(srcDir, file);
     const destFile = resolve(destDir, newFile);
     copy(srcFile, destFile);
