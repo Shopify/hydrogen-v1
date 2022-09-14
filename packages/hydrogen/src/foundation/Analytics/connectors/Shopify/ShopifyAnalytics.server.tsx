@@ -10,6 +10,7 @@ import {CacheLong} from '../../../Cache/strategies/index.js';
 import {gql} from '../../../../utilities/graphql-tag.js';
 import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
 import type {Shop} from '../../../../storefront-api-types.js';
+import {log} from '../../../../utilities/log/index.js';
 
 export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
   const {storeDomain} = useShop();
@@ -30,7 +31,7 @@ export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
     if (__HYDROGEN_DEV__) {
       throw new Error(noDataError);
     } else {
-      console.error(noDataError);
+      log.error(noDataError);
       return null;
     }
   }
