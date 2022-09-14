@@ -1,25 +1,29 @@
 import React from 'react';
 import {ServerRequestProvider} from '../../foundation/ServerRequestProvider/ServerRequestProvider.js';
+import {ServerPropsProvider} from '../../foundation/ServerPropsProvider/ServerPropsProvider.js';
 import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.js';
+import {ShopifyProviderOptions} from '../../utilities/tests/provider-helpers.js';
 
-interface MockedServerRequestProviderProps {
-  request?: HydrogenRequest;
-  children: React.ReactElement;
-}
+export function MockedServerRequestProvider({
+  children,
+  setServerProps = () => {},
+  serverProps = {pathname: '', search: ''},
+  requestUrl = 'https://examples.com',
+}: Omit<ShopifyProviderOptions, 'history'> & {
+  children: React.ReactNode;
+  requestUrl: string;
+}) {
+  const request = new HydrogenRequest(new Request(requestUrl));
 
-export function MockedServerRequestProvider(
-  props: MockedServerRequestProviderProps
-) {
-  let request: HydrogenRequest;
-
-  if (props.request) {
-    request = props.request;
-  } else {
-    request = new HydrogenRequest(new Request('https://examples.com'));
-  }
   return (
     <ServerRequestProvider request={request}>
-      {props.children}
+      <ServerPropsProvider
+        setServerPropsForRsc={setServerProps}
+        initialServerProps={serverProps}
+        setRscResponseFromApiRoute={() => {}}
+      >
+        {children}
+      </ServerPropsProvider>
     </ServerRequestProvider>
   );
 }
