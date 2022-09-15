@@ -7,5 +7,12 @@ export {Money} from './Money.js';
 export {ProductProvider, useProduct} from './ProductProvider.js';
 export {ShopifyProvider, useShop} from './ShopifyProvider.js';
 export {ShopPayButton} from './ShopPayButton.js';
+export type {
+  StorefrontApiResponseOk,
+  StorefrontApiResponseOkPartial,
+  StorefrontApiResponseError,
+  StorefrontApiResponse,
+  StorefrontApiResponsePartial,
+} from './storefront-api-response.types.js';
 export {useMoney} from './useMoney.js';
 export {Video} from './Video.js';

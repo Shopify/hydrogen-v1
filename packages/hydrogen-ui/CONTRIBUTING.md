@@ -1,3 +1,15 @@
+## Working on Hydrogen-UI
+
+There are two ways you can develop Hydrogen-UI components:
+
+- Develop components in the demo store:
+  1. Add `"@shopify/hydrogen-ui": "{major}.{minor}.{patch}"` to the demo-store's `package.json`
+  2. Run `yarn` then `yarn dev` in the demo-store directory,
+  3. Run `yarn dev:demo` in the hydrogen-ui directory
+- Develop components in isolation:
+  1. Run `yarn dev` (or `yarn dev:story`) in the hydrogen-ui directory to spin up an instance of [Ladle](https://ladle.dev/)
+  2. Edit the component or the component's story `[ComponentName].stories.tsx`
+
 ## Authoring Components
 
 - Exports should all be named; avoid using default exports

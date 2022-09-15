@@ -3,7 +3,8 @@ import {ShopifyProviderClient} from './ShopifyProvider.client.js';
 import type {
   ShopifyProviderProps,
   LocalizationContextValue,
-  ShopifyContextValue,
+  ShopifyContextServerValue,
+  ShopifyContextClientValue,
 } from './types.js';
 import type {CountryCode, LanguageCode} from '../../storefront-api-types.js';
 
@@ -17,19 +18,42 @@ import {getOxygenVariable} from '../../utilities/storefrontApi.js';
 import {SHOPIFY_STOREFRONT_ID_VARIABLE} from '../../constants.js';
 import {getLocale} from '../../utilities/locale/index.js';
 
-function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
+export const CLIENT_CONTEXT_ALLOW_LIST = [
+  'defaultCountryCode',
+  'defaultLanguageCode',
+  'storeDomain',
+  'storefrontToken',
+  'storefrontApiVersion',
+  'storefrontId',
+] as const;
+
+function makeShopifyContext(shopifyConfig: ShopifyConfig): {
+  shopifyProviderServerValue: ShopifyContextServerValue;
+  shopifyProviderClientValue: ShopifyContextClientValue;
+} {
   const countryCode = shopifyConfig.defaultCountryCode ?? DEFAULT_COUNTRY;
   const languageCode = shopifyConfig.defaultLanguageCode ?? DEFAULT_LANGUAGE;
   const storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
 
-  return {
+  const shopifyProviderServerValue = {
     defaultCountryCode: countryCode.toUpperCase() as `${CountryCode}`,
     defaultLanguageCode: languageCode.toUpperCase() as `${LanguageCode}`,
     storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
     storefrontToken: shopifyConfig.storefrontToken,
     storefrontApiVersion: shopifyConfig.storefrontApiVersion,
-    multipassSecret: shopifyConfig.multipassSecret,
     storefrontId,
+    privateStorefrontToken: shopifyConfig.privateStorefrontToken,
+  };
+
+  return {
+    shopifyProviderServerValue,
+    shopifyProviderClientValue: CLIENT_CONTEXT_ALLOW_LIST.reduce(
+      (clientConfigValue, key) => {
+        clientConfigValue[key] = shopifyProviderServerValue[key];
+        return clientConfigValue;
+      },
+      {} as ShopifyContextClientValue
+    ),
   };
 }
 
@@ -89,24 +113,24 @@ export function ShopifyProvider({
     actualShopifyConfig = shopifyConfig;
   }
 
-  const shopifyProviderValue = useMemo(
+  const {shopifyProviderServerValue, shopifyProviderClientValue} = useMemo(
     () => makeShopifyContext(actualShopifyConfig),
     [actualShopifyConfig]
   );
 
   const localization = getLocalizationContextValue(
-    shopifyProviderValue.defaultLanguageCode,
-    shopifyProviderValue.defaultCountryCode,
+    shopifyProviderServerValue.defaultLanguageCode,
+    shopifyProviderServerValue.defaultCountryCode,
     languageCode,
     countryCode
   );
 
   request.ctx.localization = localization;
-  request.ctx.shopifyConfig = shopifyProviderValue;
+  request.ctx.shopifyConfig = shopifyProviderServerValue;
 
   return (
     <ShopifyProviderClient
-      shopifyConfig={shopifyProviderValue}
+      shopifyConfig={shopifyProviderClientValue}
       localization={localization}
     >
       {children}

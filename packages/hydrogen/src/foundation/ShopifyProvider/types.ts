@@ -1,13 +1,20 @@
 import type {CountryCode, LanguageCode} from '../../storefront-api-types.js';
 import type {ReactNode} from 'react';
 import type {ShopifyConfigFetcher, ShopifyConfig} from '../../types.js';
+import type {CLIENT_CONTEXT_ALLOW_LIST} from './ShopifyProvider.server.js';
 
-export interface ShopifyContextValue
+export interface ShopifyContextServerValue
   extends Omit<ShopifyConfig, 'defaultLanguageCode' | 'defaultCountryCode'> {
   defaultLanguageCode: `${LanguageCode}`;
   defaultCountryCode: `${CountryCode}`;
-  storefrontId: string | null;
 }
+
+type CLIENT_KEYS = typeof CLIENT_CONTEXT_ALLOW_LIST[number];
+
+export type ShopifyContextClientValue = Pick<
+  ShopifyContextServerValue,
+  CLIENT_KEYS
+>;
 
 // TODO: improve types with intrinsic string manipulation
 export type Locale = string;
