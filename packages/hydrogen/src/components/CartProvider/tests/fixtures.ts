@@ -3,12 +3,15 @@ import {getPrice} from '../../../utilities/tests/price.js';
 import {flattenConnection} from '../../../utilities/index.js';
 import type {CartWithActions} from '../types.js';
 import {defaultCartFragment} from '../cart-queries.js';
+import {CountryCode} from '../../../storefront-api-types.js';
 
 export const CART = {
   id: 'abc',
   checkoutUrl: 'https://shopify.com/checkout',
   attributes: [],
-  buyerIdentity: {},
+  buyerIdentity: {
+    countryCode: CountryCode.Us,
+  },
   discountCodes: [],
   totalQuantity: 0,
   cost: {

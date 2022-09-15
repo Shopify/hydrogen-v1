@@ -288,7 +288,7 @@ describe('<CartProviderV2 />', () => {
 
       expect(result.current).toMatchObject({
         // @TODO: change to initializationError
-        status: 'idle',
+        status: 'uninitialized',
         error: errorMock,
       });
     });
@@ -332,7 +332,7 @@ describe('<CartProviderV2 />', () => {
       await act(async () => {});
 
       expect(result.current).toMatchObject({
-        status: 'idle',
+        status: 'uninitialized',
         error: expect.arrayContaining([]),
       });
 
@@ -439,14 +439,12 @@ describe('<CartProviderV2 />', () => {
           ]);
         });
 
-        // Two times since `useCartWithInitializedCart` calls `linesAdd` once
-        expect(onLineAddSpy).toBeCalledTimes(2);
-        expect(onLineAddCompleteSpy).toBeCalledTimes(1);
+        expect(onLineAddSpy).toBeCalledTimes(1);
 
         // wait till idle
         await act(async () => {});
 
-        expect(onLineAddCompleteSpy).toBeCalledTimes(2);
+        expect(onLineAddCompleteSpy).toBeCalledTimes(1);
       });
 
       it('send analytics event after adding a cart line', async () => {
@@ -1117,6 +1115,201 @@ describe('<CartProviderV2 />', () => {
 
       // @TODO: show idle state for now instead of an error state
       expect(result.current.status).toEqual('idle');
+    });
+  });
+
+  describe('countryCode', async () => {
+    it('creates a cart with countryCode from props', async () => {
+      const mockCountryCode = CountryCode.Ca;
+      const cartWithCountry = {
+        ...CART,
+        buyerIdentity: {countryCode: mockCountryCode},
+      };
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartWithCountry}},
+      }));
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+      });
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider({countryCode: mockCountryCode}),
+      });
+
+      act(() => {
+        result.current.cartCreate({});
+      });
+
+      await act(async () => {});
+
+      expect(cartCreateSpy).toBeCalledTimes(1);
+      expect(cartCreateSpy).toHaveBeenCalledWith({
+        buyerIdentity: {countryCode: mockCountryCode},
+      });
+    });
+
+    it('creates a cart with countryCode from cartCreate input instead of props', async () => {
+      const mockCountryCode = CountryCode.Ca;
+      const mockCountryCodeServerProps = CountryCode.Us;
+      const cartWithCountry = {
+        ...CART,
+        buyerIdentity: {countryCode: mockCountryCode},
+      };
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartWithCountry}},
+      }));
+
+      const buyerIdentityUpdateSpy = vi.fn(async () => ({
+        data: {cartBuyerIdentityUpdate: {cart: CART}},
+      }));
+
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+        buyerIdentityUpdate: buyerIdentityUpdateSpy,
+      });
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider({countryCode: mockCountryCodeServerProps}),
+      });
+
+      act(() => {
+        result.current.cartCreate({
+          buyerIdentity: {countryCode: mockCountryCode},
+        });
+      });
+
+      await act(async () => {});
+
+      expect(cartCreateSpy).toBeCalledTimes(1);
+      expect(cartCreateSpy).toHaveBeenCalledWith({
+        buyerIdentity: {countryCode: mockCountryCode},
+      });
+
+      // Our current cart provider tries to always change the country code back.
+      // @TODO: is this the behaviour we want?
+      expect(buyerIdentityUpdateSpy).toHaveBeenCalledWith(CART.id, {
+        countryCode: mockCountryCodeServerProps,
+      });
+    });
+
+    it('will try to match once the countryCode props if cart has a different countryCode', async () => {
+      /** We might not be able to change the country code always
+       * because when a cart has a customer assigned with an address
+       * It will always take precendence and the country code will not get
+       * updated.
+       */
+      const mockCountryCode = CountryCode.Ca;
+      const mockCountryCodeServerProps = CountryCode.Us;
+      const cartWithCountryCa = {
+        ...CART,
+        buyerIdentity: {countryCode: mockCountryCode},
+      };
+
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartWithCountryCa}},
+      }));
+
+      const buyerIdentityUpdateSpy = vi.fn(async () => ({
+        data: {cartBuyerIdentityUpdate: {cart: cartWithCountryCa}},
+      }));
+
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+        buyerIdentityUpdate: buyerIdentityUpdateSpy,
+      });
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider({countryCode: mockCountryCodeServerProps}),
+      });
+
+      act(() => {
+        result.current.cartCreate({});
+      });
+
+      await act(async () => {});
+
+      // Our current cart provider tries to always change the country code
+      // it stops once it fails
+      expect(buyerIdentityUpdateSpy).toHaveBeenCalledTimes(1);
+      expect(buyerIdentityUpdateSpy).toHaveBeenCalledWith(CART.id, {
+        countryCode: mockCountryCodeServerProps,
+      });
+    });
+  });
+
+  describe('customerAccessToken', async () => {
+    it('creates a cart with customerAccessToken from props', async () => {
+      const mockCustomerAccessToken = 'access token test';
+      const cartWithCustomer = {
+        ...CART,
+        buyerIdentity: {
+          countryCode: CountryCode.Us,
+          customer: {email: 'test@test.com'},
+        },
+      };
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartWithCustomer}},
+      }));
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+      });
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider({
+          customerAccessToken: mockCustomerAccessToken,
+        }),
+      });
+
+      act(() => {
+        result.current.cartCreate({});
+      });
+
+      await act(async () => {});
+
+      expect(cartCreateSpy).toBeCalledTimes(1);
+      expect(cartCreateSpy).toHaveBeenCalledWith({
+        buyerIdentity: {
+          countryCode: CountryCode.Us,
+          customerAccessToken: mockCustomerAccessToken,
+        },
+      });
+    });
+
+    it('creates a cart with customerAccessToken input instead of props', async () => {
+      const mockPropsAccessToken = 'server token test';
+      const mockCustomerAccessToken = 'access token test';
+      const cartWithCustomer = {
+        ...CART,
+        buyerIdentity: {
+          countryCode: CountryCode.Us,
+          customer: {email: 'test@test.com'},
+        },
+      };
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartWithCustomer}},
+      }));
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+      });
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider({
+          customerAccessToken: mockPropsAccessToken,
+        }),
+      });
+
+      act(() => {
+        result.current.cartCreate({
+          buyerIdentity: {
+            customerAccessToken: mockCustomerAccessToken,
+          },
+        });
+      });
+
+      await act(async () => {});
+
+      expect(cartCreateSpy).toBeCalledTimes(1);
+      expect(cartCreateSpy).toHaveBeenCalledWith({
+        buyerIdentity: {
+          countryCode: CountryCode.Us,
+          customerAccessToken: mockCustomerAccessToken,
+        },
+      });
     });
   });
 });
