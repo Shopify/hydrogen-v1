@@ -14,6 +14,7 @@
   "exports": {
     ".": "./dist/esnext/index.js",
     "./experimental": "./dist/esnext/experimental.js",
+    "./testing": "./dist/esnext/testing.js",
     "./plugin": {
       "import": "./dist/esnext/framework/plugin.js",
       "require": "./dist/node/framework/plugin.js"
