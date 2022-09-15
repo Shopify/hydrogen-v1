@@ -71,7 +71,7 @@ export const getStorefrontApiUrl = client.getStorefrontApiUrl;
 export const getPrivateTokenHeaders = client.getPrivateTokenHeaders;
 ```
 
-Then you can use this in your server-side queries. Here's an example of using it for [NextJS's `getServerSideProps](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props):
+Then you can use this in your server-side queries. Here's an example of using it for [NextJS's `getServerSideProps`](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props):
 
 ```ts
 // filename: '/pages/index.js'
