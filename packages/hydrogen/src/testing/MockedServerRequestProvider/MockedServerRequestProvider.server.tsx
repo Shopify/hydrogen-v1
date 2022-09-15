@@ -10,8 +10,8 @@ export function MockedServerRequestProvider({
   serverProps = {pathname: '', search: ''},
   requestUrl = 'https://examples.com',
 }: Omit<ShopifyProviderOptions, 'history'> & {
-  children: React.ReactNode;
-  requestUrl: string;
+  children: React.ReactElement;
+  requestUrl?: string;
 }) {
   const request = new HydrogenRequest(new Request(requestUrl));
 

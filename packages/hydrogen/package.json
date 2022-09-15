@@ -17,6 +17,10 @@
       "import": "./dist/esnext/experimental.js",
       "require": "./dist/node/experimental.js"
     },
+    "./testing": {
+      "import": "./dist/esnext/testing.js",
+      "require": "./dist/node/testing.js"
+    },
     "./plugin": {
       "import": "./dist/esnext/framework/plugin.js",
       "require": "./dist/node/framework/plugin.js"

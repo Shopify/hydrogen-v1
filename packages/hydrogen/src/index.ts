@@ -65,5 +65,3 @@ export {
   type ResourceGetter as HydrogenApiRoute,
   RequestOptions as HydrogenApiRouteOptions,
 } from './utilities/apiRoutes.js';
-
-export {MockedServerRequestProvider} from './testing/MockedServerRequestProvider/index.js';
