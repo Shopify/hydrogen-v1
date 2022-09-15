@@ -6,15 +6,24 @@ export async function api(
   _request: HydrogenRequest,
   {queryShop}: HydrogenApiRouteOptions,
 ) {
-  const {
-    data: {
-      localization: {availableCountries},
-    },
-  } = await queryShop<{
+  const {data, errors} = await queryShop<{
     localization: Localization;
   }>({
     query: COUNTRIES_QUERY,
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
+  const {
+    localization: {availableCountries},
+  } = data;
 
   return availableCountries.sort((a, b) => a.name.localeCompare(b.name));
 }

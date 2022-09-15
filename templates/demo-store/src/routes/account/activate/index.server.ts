@@ -47,6 +47,15 @@ export async function api(
     cache: CacheNone(),
   });
 
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
   if (data?.customerActivate?.customerAccessToken?.accessToken) {
     await session.set(
       'customerAccessToken',

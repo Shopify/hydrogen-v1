@@ -12,7 +12,10 @@ import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {PAGINATION_SIZE} from '~/lib/const';
 import {ProductGrid, PageHeader, Section} from '~/components';
 import {Layout} from '~/components/index.server';
-import type {Collection} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Collection,
+  ProductConnection,
+} from '@shopify/hydrogen/storefront-api-types';
 
 export default function AllProducts() {
   return (
@@ -34,7 +37,7 @@ function AllProductsGrid() {
     country: {isoCode: countryCode},
   } = useLocalization();
 
-  const {data} = useShopQuery<any>({
+  const {data, errors} = useShopQuery<{products: ProductConnection}>({
     query: ALL_PRODUCTS_QUERY,
     variables: {
       country: countryCode,
@@ -43,6 +46,15 @@ function AllProductsGrid() {
     },
     preload: true,
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
 
   const products = data.products;
 

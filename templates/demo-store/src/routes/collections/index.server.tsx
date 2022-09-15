@@ -1,6 +1,9 @@
 import {Suspense} from 'react';
 import {useShopQuery, useLocalization, gql, Seo} from '@shopify/hydrogen';
-import type {Collection} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Collection,
+  CollectionConnection,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {PageHeader, Section, Grid} from '~/components';
 import {Layout, CollectionCard} from '~/components/index.server';
@@ -26,7 +29,7 @@ function CollectionGrid() {
     country: {isoCode: countryCode},
   } = useLocalization();
 
-  const {data} = useShopQuery<any>({
+  const {data, errors} = useShopQuery<{collections: CollectionConnection}>({
     query: COLLECTIONS_QUERY,
     variables: {
       pageBy: PAGINATION_SIZE,
@@ -36,7 +39,16 @@ function CollectionGrid() {
     preload: true,
   });
 
-  const collections: Collection[] = data.collections.nodes;
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
+  const collections = data.collections.nodes;
 
   return (
     <Grid items={collections.length === 3 ? 3 : 2}>

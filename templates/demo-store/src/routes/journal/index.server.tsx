@@ -43,7 +43,7 @@ function JournalsGrid({pageBy}: {pageBy: number}) {
     country: {isoCode: countryCode},
   } = useLocalization();
 
-  const {data} = useShopQuery<{
+  const {data, errors} = useShopQuery<{
     blog: BlogType;
   }>({
     query: BLOG_QUERY,
@@ -54,7 +54,15 @@ function JournalsGrid({pageBy}: {pageBy: number}) {
     },
   });
 
-  // TODO: How to fix this type?
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
   const rawArticles = flattenConnection<Article>(data.blog.articles);
 
   const articles = rawArticles.map((article) => {

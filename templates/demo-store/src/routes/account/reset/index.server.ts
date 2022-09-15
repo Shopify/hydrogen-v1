@@ -4,6 +4,10 @@ import {
   type HydrogenApiRouteOptions,
   type HydrogenRequest,
 } from '@shopify/hydrogen';
+import {
+  CustomerAccessToken,
+  CustomerUserError,
+} from '@shopify/hydrogen/storefront-api-types';
 import {getApiErrorMessage} from '~/lib/utils';
 
 /**
@@ -31,7 +35,12 @@ export async function api(
     );
   }
 
-  const {data, errors} = await queryShop<{customerReset: any}>({
+  const {data, errors} = await queryShop<{
+    customerReset: {
+      customerAccessToken: CustomerAccessToken;
+      customerUserErrors: CustomerUserError;
+    };
+  }>({
     query: CUSTOMER_RESET_MUTATION,
     variables: {
       id: `gid://shopify/Customer/${jsonBody.id}`,
@@ -43,6 +52,15 @@ export async function api(
     // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
 
   if (data?.customerReset?.customerAccessToken?.accessToken) {
     await session.set(

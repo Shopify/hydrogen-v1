@@ -22,13 +22,22 @@ export async function api(
   request: HydrogenRequest,
   {queryShop}: HydrogenApiRouteOptions,
 ) {
-  const {data} = await queryShop<SitemapQueryData>({
+  const {data, errors} = await queryShop<SitemapQueryData>({
     query: QUERY,
     variables: {
       language: 'EN',
       urlLimits: MAX_URLS,
     },
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
 
   return new Response(shopSitemap(data, new URL(request.url).origin), {
     headers: {

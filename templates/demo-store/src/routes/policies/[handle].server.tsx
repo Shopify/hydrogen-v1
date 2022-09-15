@@ -7,6 +7,7 @@ import {
   gql,
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
+import {Shop} from '@shopify/hydrogen/storefront-api-types';
 import {Suspense} from 'react';
 
 import {Button, PageHeader, Section} from '~/components';
@@ -39,9 +40,7 @@ export default function Policy({params}: HydrogenRouteProps) {
   // The currently visited policy page key
   const activePolicy = Object.keys(policy).find((key) => policy[key])!;
 
-  const {
-    data: {shop},
-  } = useShopQuery({
+  const {data, errors} = useShopQuery<{shop: Shop}>({
     query: POLICIES_QUERY,
     variables: {
       languageCode,
@@ -49,6 +48,18 @@ export default function Policy({params}: HydrogenRouteProps) {
     },
   });
 
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
+  const {shop} = data;
+
+  // @ts-expect-error
   const page = shop?.[activePolicy];
 
   // If the policy page is empty, return not found

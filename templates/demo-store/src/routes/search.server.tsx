@@ -7,6 +7,7 @@ import {
   useShopQuery,
   useUrl,
 } from '@shopify/hydrogen';
+import type {ProductConnection} from '@shopify/hydrogen/storefront-api-types';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {ProductGrid, Section, Text} from '~/components';
@@ -32,7 +33,7 @@ export default function Search({
 
   const searchTerm = searchParams.get('q');
 
-  const {data} = useShopQuery<any>({
+  const {data, errors} = useShopQuery<{products: ProductConnection}>({
     query: SEARCH_QUERY,
     variables: {
       handle,
@@ -45,7 +46,7 @@ export default function Search({
   });
 
   const products = data?.products;
-  const noResults = products?.nodes?.length === 0;
+  const noResults = products?.nodes?.length === 0 || errors?.length;
 
   if (!searchTerm || noResults) {
     return (

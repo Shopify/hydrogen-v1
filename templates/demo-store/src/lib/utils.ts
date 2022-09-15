@@ -212,8 +212,8 @@ export function parseMenu(menu: Menu, customPrefixes = {}): EnhancedMenu {
 
 export function getApiErrorMessage(
   field: string,
-  data: Record<string, any>,
-  errors: UserError[],
+  data?: Record<string, any> | null,
+  errors?: readonly UserError[],
 ) {
   if (errors?.length) return errors[0].message ?? errors[0];
   if (data?.[field]?.customerUserErrors?.length)

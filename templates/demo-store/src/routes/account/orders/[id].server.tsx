@@ -39,8 +39,8 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
   if (!customerAccessToken) return response.redirect('/account/login');
   if (!id) return response.redirect('/account/');
 
-  const {data} = useShopQuery<{
-    customer?: Customer;
+  const {data, errors} = useShopQuery<{
+    customer: Customer;
   }>({
     query: ORDER_QUERY,
     variables: {
@@ -52,9 +52,16 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
     cache: CacheNone(),
   });
 
-  const [order] = flattenConnection<Order>(data?.customer?.orders ?? {}) || [
-    null,
-  ];
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
+  const [order] = flattenConnection(data.customer.orders ?? {}) || [null];
 
   if (!order) return null;
 

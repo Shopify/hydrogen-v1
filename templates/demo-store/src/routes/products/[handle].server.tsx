@@ -21,6 +21,10 @@ import {
   Section,
   Text,
 } from '~/components';
+import {
+  Product as ProductType,
+  Shop,
+} from '@shopify/hydrogen/storefront-api-types';
 
 export default function Product() {
   const {handle} = useRouteParams();
@@ -29,9 +33,10 @@ export default function Product() {
     country: {isoCode: countryCode},
   } = useLocalization();
 
-  const {
-    data: {product, shop},
-  } = useShopQuery({
+  const {data, errors} = useShopQuery<{
+    shop: Shop;
+    product: ProductType;
+  }>({
     query: PRODUCT_QUERY,
     variables: {
       country: countryCode,
@@ -40,6 +45,17 @@ export default function Product() {
     },
     preload: true,
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
+  const {product, shop} = data;
 
   if (!product) {
     return <NotFound type="product" />;

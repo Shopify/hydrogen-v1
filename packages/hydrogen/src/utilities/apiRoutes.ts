@@ -17,7 +17,7 @@ import type {
   SessionStorageAdapter,
 } from '../foundation/session/session-types.js';
 import {emptySessionImplementation} from '../foundation/session/session.js';
-import type {UseShopQueryResponse} from '../hooks/useShopQuery/index.js';
+import type {StorefrontApiResponseOk} from '../hooks/useShopQuery/index.js';
 import {FORM_REDIRECT_COOKIE, RSC_PATHNAME} from '../constants.js';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
@@ -27,7 +27,7 @@ type RouteParams = Record<string, string>;
 export type RequestOptions = {
   log: Logger;
   params: RouteParams;
-  queryShop: <T>(args: QueryShopArgs) => Promise<UseShopQueryResponse<T>>;
+  queryShop: <T>(args: QueryShopArgs) => Promise<StorefrontApiResponseOk<T>>;
   session: SessionApi | null;
   hydrogenConfig: ResolvedHydrogenConfig;
 };

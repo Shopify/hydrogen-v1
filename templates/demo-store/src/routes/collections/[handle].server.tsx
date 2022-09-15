@@ -14,6 +14,7 @@ import {
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {PageHeader, ProductGrid, Section, Text} from '~/components';
 import {NotFound, Layout} from '~/components/index.server';
+import {Collection as CollectionType} from '@shopify/hydrogen/storefront-api-types';
 
 const pageBy = 48;
 
@@ -24,9 +25,7 @@ export default function Collection({params}: HydrogenRouteProps) {
     country: {isoCode: country},
   } = useLocalization();
 
-  const {
-    data: {collection},
-  } = useShopQuery({
+  const {data, errors} = useShopQuery<{collection: CollectionType}>({
     query: COLLECTION_QUERY,
     variables: {
       handle,
@@ -36,6 +35,17 @@ export default function Collection({params}: HydrogenRouteProps) {
     },
     preload: true,
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
+  const {collection} = data;
 
   if (!collection) {
     return <NotFound type="collection" />;

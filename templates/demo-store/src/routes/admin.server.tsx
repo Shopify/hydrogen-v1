@@ -14,12 +14,21 @@ import type {Shop} from '@shopify/hydrogen/storefront-api-types';
 */
 
 export default function AdminRedirect({response}: HydrogenRouteProps) {
-  const {data} = useShopQuery<{
+  const {data, errors} = useShopQuery<{
     shop: Shop;
   }>({
     query: SHOP_QUERY,
     cache: CacheLong(),
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
 
   const {url} = data.shop.primaryDomain;
   return response.redirect(`${url}/admin`);

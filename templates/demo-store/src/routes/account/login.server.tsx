@@ -12,19 +12,33 @@ import {
 
 import {AccountLoginForm} from '~/components';
 import {Layout} from '~/components/index.server';
+import {
+  CustomerAccessToken,
+  CustomerUserError,
+  Shop,
+} from '@shopify/hydrogen/storefront-api-types';
 
 export default function Login({response}: HydrogenRouteProps) {
   response.cache(CacheNone());
 
-  const {
-    data: {
-      shop: {name},
-    },
-  } = useShopQuery({
+  const {data, errors} = useShopQuery<{shop: Shop}>({
     query: SHOP_QUERY,
     cache: CacheLong(),
     preload: '*',
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
+  const {
+    shop: {name},
+  } = data;
 
   return (
     <Layout>
@@ -61,7 +75,12 @@ export async function api(
     );
   }
 
-  const {data, errors} = await queryShop<{customerAccessTokenCreate: any}>({
+  const {data, errors} = await queryShop<{
+    customerAccessTokenCreate: {
+      customerUserErrors: CustomerUserError;
+      customerAccessToken: CustomerAccessToken;
+    };
+  }>({
     query: LOGIN_MUTATION,
     variables: {
       input: {
@@ -72,6 +91,15 @@ export async function api(
     // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
 
   if (data?.customerAccessTokenCreate?.customerAccessToken?.accessToken) {
     await session.set(

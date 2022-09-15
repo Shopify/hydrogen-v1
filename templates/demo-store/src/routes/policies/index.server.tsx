@@ -16,7 +16,7 @@ export default function Policies() {
     language: {isoCode: languageCode},
   } = useLocalization();
 
-  const {data} = useShopQuery<{
+  const {data, errors} = useShopQuery<{
     shop: Shop;
   }>({
     query: POLICIES_QUERY,
@@ -30,6 +30,15 @@ export default function Policies() {
       pageType: ShopifyAnalyticsConstants.pageType.page,
     },
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
 
   const {
     privacyPolicy,

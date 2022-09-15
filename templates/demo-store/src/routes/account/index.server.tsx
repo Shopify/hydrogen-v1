@@ -44,7 +44,7 @@ export default function Account({response}: HydrogenRouteProps) {
 
   if (!customerAccessToken) return response.redirect('/account/login');
 
-  const {data} = useShopQuery<{
+  const {data, errors} = useShopQuery<{
     customer: Customer;
     featuredCollections: CollectionConnection;
     featuredProducts: ProductConnection;
@@ -57,6 +57,15 @@ export default function Account({response}: HydrogenRouteProps) {
     },
     cache: CacheNone(),
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
 
   const {customer, featuredCollections, featuredProducts} = data;
 

@@ -8,6 +8,7 @@ import {
   useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
+import type {Shop} from '@shopify/hydrogen/storefront-api-types';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
@@ -43,7 +44,7 @@ function HomepageContent() {
     country: {isoCode: countryCode},
   } = useLocalization();
 
-  const {data} = useShopQuery<{
+  const {data, errors} = useShopQuery<{
     heroBanners: CollectionConnection;
     featuredCollections: CollectionConnection;
     featuredProducts: ProductConnection;
@@ -55,6 +56,15 @@ function HomepageContent() {
     },
     preload: true,
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
 
   const {heroBanners, featuredCollections, featuredProducts} = data;
 
@@ -84,15 +94,24 @@ function HomepageContent() {
 }
 
 function SeoForHomepage() {
-  const {
-    data: {
-      shop: {name, description},
-    },
-  } = useShopQuery({
+  const {data, errors} = useShopQuery<{shop: Shop}>({
     query: HOMEPAGE_SEO_QUERY,
     cache: CacheLong(),
     preload: true,
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
+  const {
+    shop: {name, description},
+  } = data;
 
   return (
     <Seo

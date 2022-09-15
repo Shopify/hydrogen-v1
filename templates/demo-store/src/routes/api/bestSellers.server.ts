@@ -7,9 +7,7 @@ export async function api(
   _request: HydrogenRequest,
   {queryShop}: HydrogenApiRouteOptions,
 ) {
-  const {
-    data: {products},
-  } = await queryShop<{
+  const {data, errors} = await queryShop<{
     products: ProductConnection;
   }>({
     query: TOP_PRODUCTS_QUERY,
@@ -17,6 +15,17 @@ export async function api(
       count: 4,
     },
   });
+
+  if (!data || errors) {
+    throw new Error(
+      `There were either errors or no data returned for the query. ${
+        errors?.length &&
+        `Errors: ${errors.map((err) => err.message).join('. ')}`
+      }`,
+    );
+  }
+
+  const {products} = data;
 
   return products.nodes;
 }
