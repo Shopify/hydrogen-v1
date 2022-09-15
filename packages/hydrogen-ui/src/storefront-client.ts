@@ -112,7 +112,7 @@ export function createStorefrontClient({
 }
 
 type StorefrontClientProps = {
-  /** The host name of the domain (eg: `{shop}.myshopify.com`). If a URL with a scheme (for example `https://`) is passed in, then the scheme is removed. */
+  /** The host name of the domain (eg: `{shop}.myshopify.com`). */
   storeDomain: string;
   /** The Storefront API delegate access token. Refer to the [authentication](https://shopify.dev/api/storefront#authentication) and [delegate access token](https://shopify.dev/apps/auth/oauth/delegate-access-tokens) documentation for more details. */
   privateStorefrontToken?: string;
