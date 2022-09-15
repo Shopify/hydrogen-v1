@@ -2,6 +2,8 @@ import {SFAPI_VERSION} from './storefront-api-constants.js';
 
 /**
  * The `createStorefrontClient()` function creates helpers that enable you to quickly query the Shopify Storefront API.
+ *
+ * When used on the server, it is recommended to use the `privateStorefrontToken` prop. When used on the client, it is recommended to use the `publicStorefrontToken` prop.
  */
 export function createStorefrontClient({
   storeDomain,
