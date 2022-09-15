@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.4.0
+
+### Patch Changes
+
+- If the demo store e2e tests are sometimes failing, update your `vite.config.js` to make sure that tests only execute on one thread: ([#2144](https://github.com/Shopify/hydrogen/pull/2144)) by [@blittle](https://github.com/blittle)
+
+  ```diff
+  export default defineConfig({
+    plugins: [hydrogen()],
+    resolve: {
+      alias: [{find: /^~\/(.*)/, replacement: '/src/$1'}],
+    },
+    optimizeDeps: {
+      include: ['@headlessui/react', 'clsx', 'react-use', 'typographic-base'],
+    },
+    test: {
+      globals: true,
+      testTimeout: 10000,
+      hookTimeout: 10000,
+  +    maxThreads: 1,
+  +    minThreads: 1,
+    },
+  });
+  ```
+
+* Fix the demostore e2e tests to be more stable ([#2006](https://github.com/Shopify/hydrogen/pull/2006)) by [@blittle](https://github.com/blittle)
+
 ## 1.3.2
 
 ## 1.3.1
