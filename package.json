@@ -90,9 +90,5 @@
       "prettier --write"
     ]
   },
-  "resolutions": {
-    "unified": "9.2.2",
-    "@shopify/cli-kit": "3.6.1"
-  },
   "version": "0.0.0"
 }

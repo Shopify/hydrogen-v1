@@ -11,8 +11,8 @@
     "partytown": "partytown copylib public/~partytown"
   },
   "devDependencies": {
-    "@shopify/cli": "latest",
-    "@shopify/cli-hydrogen": "latest",
+    "@shopify/cli": "^3.12.0",
+    "@shopify/cli-hydrogen": "^3.12.0",
     "vite": "^2.9.0"
   },
   "dependencies": {
