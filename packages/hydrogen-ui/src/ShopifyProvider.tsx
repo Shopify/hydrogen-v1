@@ -1,7 +1,6 @@
 import {createContext, useContext, useMemo, type ReactNode} from 'react';
 import type {LanguageCode, CountryCode, Shop} from './storefront-api-types.js';
-
-const SFAPI_VERSION = '2022-07';
+import {SFAPI_VERSION} from './storefront-api-constants.js';
 
 const ShopifyContext = createContext<ShopifyContextValue>({
   storeDomain: 'test.myshopify.com',

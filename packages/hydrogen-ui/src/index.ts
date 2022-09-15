@@ -14,5 +14,6 @@ export type {
   StorefrontApiResponse,
   StorefrontApiResponsePartial,
 } from './storefront-api-response.types.js';
+export {createStorefrontClient} from './storefront-client.js';
 export {useMoney} from './useMoney.js';
 export {Video} from './Video.js';

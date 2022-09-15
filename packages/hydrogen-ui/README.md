@@ -52,6 +52,50 @@ schema: node_modules/@shopify/hydrogen-ui/storefront.schema.json
 
 GraphQL autocompletion and validation will now work in `.graphql` files or in [`gql`](https://github.com/apollographql/graphql-tag) template literals!
 
+## Storefront Client
+
+To make it easier to query the Storefront API, Hydrogen-UI exposes a helper function called `createStorefrontClient()`. The client can take in either the [delegate access token](https://shopify.dev/api/storefront#authentication) as `privateStorefrontToken` - which is ideal for server-side requests to the Storefront API - or take in `publicAccessToken`. For example:
+
+```ts
+// filename: '/shopify-client.js'
+
+import {createStorefrontClient} from '@shopify/hydrogen-ui';
+
+const client = createStorefrontClient({
+  privateStorefrontToken: '...',
+  storeDomain: 'myshop',
+  storefrontApiVersion: '2022-07',
+});
+
+export const getStorefrontApiUrl = client.getStorefrontApiUrl;
+export const getPrivateTokenHeaders = client.getPrivateTokenHeaders;
+```
+
+Then you can use this in your server-side queries. Here's an example of using it for [NextJS's `getServerSideProps`](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props):
+
+```ts
+// filename: '/pages/index.js'
+
+import {
+  getStorefrontApiUrl,
+  getPrivateTokenHeaders,
+} from '../shopify-client.js';
+
+export async function getServerSideProps() {
+  const response = await fetch(getStorefrontApiUrl(), {
+    body: GRAPHQL_QUERY,
+    headers: getPrivateTokenHeaders(),
+    method: 'POST',
+  });
+
+  const json = await response.json();
+
+  return {props: json};
+}
+```
+
+If you're using TypeScript, refer to the [TypeScript](#typescript-types) section on how to improve the typing experience here as well!
+
 ## TypeScript Types
 
 To help strongly-type your API responses from the Storefront API, you can use the `StorefrontApiResponseOk` and `StorefrontApiResponseError` helpers:
