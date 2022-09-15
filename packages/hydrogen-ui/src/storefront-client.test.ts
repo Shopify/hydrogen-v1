@@ -87,8 +87,10 @@ describe(`createStorefrontClient`, () => {
         client.getPublicTokenHeaders({
           publicStorefrontToken: 'newPublic',
           storefrontApiVersion: '2000-01',
+          buyerIp: '1.1.1.1',
         })
       ).toEqual({
+        'Shopify-Storefront-Buyer-IP': '1.1.1.1',
         'X-Shopify-Storefront-Access-Token': 'newPublic',
         'X-SDK-Variant': 'hydrogen-ui',
         'X-SDK-Version': '2000-01',

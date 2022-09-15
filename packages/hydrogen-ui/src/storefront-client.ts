@@ -84,6 +84,12 @@ export function createStorefrontClient({
         );
       }
 
+      if (__HYDROGEN_DEV__ && !overrideProps?.buyerIp && !globalThis.document) {
+        console.warn(
+          `StorefrontClient: when making a request from the server it is recommended to pass in the 'buyerIp' property which improves analytics and data in the admin.`
+        );
+      }
+
       return {
         'content-type': 'application/graphql',
         'X-SDK-Variant': 'hydrogen-ui',
@@ -96,6 +102,9 @@ export function createStorefrontClient({
               'Shopify-Storefront-Id':
                 overrideProps?.storefrontId ?? storefrontId,
             }
+          : {}),
+        ...(overrideProps?.buyerIp
+          ? {'Shopify-Storefront-Buyer-IP': overrideProps.buyerIp}
           : {}),
       };
     },
@@ -120,7 +129,12 @@ type OverrideTokenHeaderProps = Partial<
     StorefrontClientProps,
     'storeDomain' | 'storefrontId' | 'storefrontApiVersion'
   >
->;
+> & {
+  /**
+   * The client's IP address. Passing this to the Storefront API when using a server-to-server token will help improve your store's analytics data.
+   */
+  buyerIp?: string;
+};
 
 type StorefrontClientReturn = {
   /**
@@ -140,12 +154,7 @@ type StorefrontClientReturn = {
    */
   getPrivateTokenHeaders: (
     props?: OverrideTokenHeaderProps &
-      Pick<StorefrontClientProps, 'privateStorefrontToken'> & {
-        /**
-         * The client's IP address. Passing this to the Storefront API when using a server-to-server token will help improve your store's analytics data.
-         */
-        buyerIp?: string;
-      }
+      Pick<StorefrontClientProps, 'privateStorefrontToken'>
   ) => Record<string, string>;
   /**
    * Returns an object that contains headers that are needed for each query to Storefront API GraphQL endpoint. This method uses a public token which has a higher chance of running into throttling errors, but can be exposed to clients. Server-side calls should prefer using `getPrivateTokenHeaders()` instead.
