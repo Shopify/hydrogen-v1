@@ -4,17 +4,18 @@ import {useLoadScript} from './useLoadScript.client.js';
 
 export default function Test() {
   const loaded = useLoadScript({
-    strategy: 'beforeHydration',
-    id: 'test',
-    src: 'https://www.googletagmanager.com/gtag/js?id=UA-123456789-1',
+    load: 'onIdle',
+    id: 'test-script',
+    dangerouslySetInnerHTML: {__html: 'test'},
   });
+
   return (
     <>
-      <Script strategy="beforeHydration">
+      <Script id="add" load="beforeHydration">
         {`console.log('🎉 Inline code inside <Script children/> works');`}
       </Script>
 
-      <Script strategy="afterHydration" target="head">
+      <Script load="afterHydration" target="head">
         {`console.log('🎉 Inline code inside <Script children/> works');`}
       </Script>
     </>

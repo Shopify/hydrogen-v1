@@ -4,10 +4,10 @@
 import React from 'react';
 import {ScriptBeforeHydration} from './ScriptBeforeHydration.js';
 import {ScriptPostHydration} from './ScriptPostHydration.client.js';
-import {type ScriptProps} from './loadScript.js';
+import {ScriptProps} from './types.js';
 
 export function Script(props: ScriptProps): JSX.Element | null {
-  const beforeHydration = props.strategy === 'beforeHydration';
+  const beforeHydration = props.load === 'beforeHydration';
 
   return beforeHydration ? (
     <ScriptBeforeHydration {...props} /> // beforeHydration

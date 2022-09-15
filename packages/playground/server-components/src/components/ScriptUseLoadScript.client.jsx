@@ -2,19 +2,19 @@ import {useLoadScript} from '@shopify/hydrogen/experimental';
 
 export default function ScriptUseLoadScript({
   reload = false,
-  strategy = 'afterHydration',
+  load = 'afterHydration',
 }) {
   // Load script as afterHydration in the <head />
   const status = useLoadScript({
     src: '/scripts/cdn?script=use-load-script.js',
     id: 'use-load-script',
     target: 'head',
-    strategy,
+    load,
     reload,
   });
 
   return (
-    <div>
+    <div style={{marginTop: '1rem'}}>
       {status === 'loading' && <p>Loading...</p>}
       {status === 'error' && <p>Error...</p>}
       {status === 'done' && (
@@ -26,7 +26,7 @@ export default function ScriptUseLoadScript({
             <br />
             reload: <code>{reload ? 'true' : 'false'}</code>
             <br />
-            strategy: <code>{strategy}</code>
+            load: <code>{load}</code>
           </small>
           <h2 style={{color: 'orange'}}>
             Loaded use-load-script.js via {`useLoadScript({..})`} 🔥{' '}

@@ -21,14 +21,14 @@ export default function ScriptPage({params}) {
         src="/scripts/cdn?script=missing-script.js"
         id="callback-error-script"
         target="body"
-        strategy="onIdle"
+        load="onIdle"
       />
 
       <ScriptCallbacks
         src="/scripts/cdn?script=callback-script.js"
         id="callback-success-script"
         target="body"
-        strategy="onIdle"
+        load="onIdle"
       />
 
       {/* in the head  */}
@@ -40,9 +40,9 @@ export default function ScriptPage({params}) {
 
       <ScriptsOnIdle />
 
-      <ScriptLoadScript strategy="onIdle" />
+      <ScriptLoadScript load="onIdle" />
 
-      <ScriptUseLoadScript reload={true} strategy="onIdle" />
+      <ScriptUseLoadScript reload={true} load="onIdle" />
 
       <ScriptReload handle={params.handle} />
 
@@ -80,7 +80,7 @@ export default function ScriptPage({params}) {
         id="dy-head"
         nonce="dy-11"
         target="body"
-        strategy="onIdle"
+        load="onIdle"
       />
 
       <Script
@@ -88,13 +88,13 @@ export default function ScriptPage({params}) {
         id="dy-body"
         nonce="dy-12"
         target="body"
-        strategy="onIdle"
+        load="onIdle"
       />
       <Script
         id="dy-body"
         nonce="dy-12"
         target="body"
-        // strategy="onIdle" // doesn't work with inline scripts
+        // load="onIdle" // doesn't work with inline scripts
         dangerouslySetInnerHTML={{
           __html: `
             console.log('✅ Loaded inline dy in the body');
@@ -141,11 +141,11 @@ function ScriptsBeforeHydration() {
   return (
     <>
       {/*
-        `beforeHydration` strategy examples
+        `beforeHydration` load examples
       */}
       <Script
         id="beforeHydration-dangerouslySetInnerHTML"
-        strategy="beforeHydration"
+        load="beforeHydration"
         dangerouslySetInnerHTML={{
           __html: `
             console.log("💨 Inline <Script beforeHydration dangerouslySetInnerHTML/> injected _learnq");
@@ -156,7 +156,7 @@ function ScriptsBeforeHydration() {
         data-test="head-script"
       />
 
-      <Script id="beforeHydration-children" strategy="beforeHydration">
+      <Script id="beforeHydration-children" load="beforeHydration">
         {`console.log('💨 Inline <Script beforeHydration children/> injected dataLayer');`}
         {`window.dataLayer = window.dataLayer || [];`}
       </Script>
@@ -164,7 +164,7 @@ function ScriptsBeforeHydration() {
       <Script
         src="/scripts/cdn?script=before-hydration-script.js"
         id="beforeHydration-src"
-        strategy="beforeHydration"
+        load="beforeHydration"
       />
     </>
   );
@@ -174,7 +174,7 @@ function ScriptsAfterHydration() {
   return (
     <>
       {/*
-        `afterHydration` strategy examples
+        `afterHydration` load examples
       */}
       <section className="after-hydration">
         Loading afterHydration script via Script tag
@@ -182,7 +182,7 @@ function ScriptsAfterHydration() {
 
       <Script
         id="afterHydration-dangerouslySetInnerHTML"
-        strategy="afterHydration"
+        load="afterHydration"
         dangerouslySetInnerHTML={{
           __html: `
             console.log("🌊 Inline <Script afterHydration dangerouslySetInnerHTML/>");
@@ -190,14 +190,14 @@ function ScriptsAfterHydration() {
         }}
       />
 
-      <Script id="afterHydration-children" strategy="afterHydration">
+      <Script id="afterHydration-children" load="afterHydration">
         {`console.log('🌊 Inline <Script afterHydration children/>');`}
       </Script>
 
       <Script
         src="/scripts/cdn?script=after-hydration-script.js"
         id="after-hydration-script"
-        strategy="afterHydration"
+        load="afterHydration"
       />
     </>
   );
@@ -207,7 +207,7 @@ function ScriptsOnIdle() {
   return (
     <>
       {/*
-        `onIdle` strategy examples
+        `onIdle` load examples
       */}
       <section className="on-idle-hydration">
         <p>Loading on-idle-hydration script...</p>
@@ -215,7 +215,7 @@ function ScriptsOnIdle() {
 
       <Script
         id="onIdle-dangerouslySetInnerHTML"
-        strategy="onIdle"
+        load="onIdle"
         dangerouslySetInnerHTML={{
           __html: `
             console.log("🕰 Inline <Script onIdle dangerouslySetInnerHTML/>");
@@ -223,14 +223,14 @@ function ScriptsOnIdle() {
         }}
       />
 
-      <Script id="onIdle-children" strategy="onIdle">
+      <Script id="onIdle-children" load="onIdle">
         {`console.log('🕰 Inline <Script onIdle children/>');`}
       </Script>
 
       <Script
         src="/scripts/cdn?script=on-idle-script.js"
         id="on-idle-hydration-script"
-        strategy="onIdle"
+        load="onIdle"
       />
     </>
   );

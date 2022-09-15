@@ -1,29 +1,22 @@
 import {useState, useEffect} from 'react';
 import {useUrl} from '../useUrl/useUrl.js';
-import {loadScript, type PostHydrationProps} from './loadScript.js';
+import {loadScript, PrevPathCache} from './loadScript.js';
 import {loadScriptOnIdle} from './loadScriptOnIdle.js';
-
-export type ScriptState = 'loading' | 'done' | 'error';
-
-let prevPathname = '';
-
-type UseScriptProps = {
-  /* because the hook form is stateful we don't accept `beforeHydration` */
-  strategy?: Exclude<
-    PostHydrationProps['strategy'],
-    'beforeHydration' | 'worker'
-  >;
-} & PostHydrationProps;
+import {ScriptState, UseScriptProps} from './types.js';
 
 export function useLoadScript(options: UseScriptProps) {
   const {pathname} = useUrl();
   const [status, setStatus] = useState<ScriptState>('loading');
   const optionString = JSON.stringify(options);
+  const key = (options?.id ?? '') + (options?.src ?? '');
+  const prevPathname = PrevPathCache.get(key);
   const pathChanged = prevPathname ? pathname !== prevPathname : false;
   const reloadOnNav = options?.reload && pathChanged;
 
   useEffect(() => {
-    prevPathname = pathname;
+    if (!PrevPathCache.has(key)) {
+      PrevPathCache.set(key, pathname);
+    }
 
     if (status !== 'loading') {
       return;
@@ -32,9 +25,9 @@ export function useLoadScript(options: UseScriptProps) {
     async function loadScriptWrapper() {
       let loaded;
       try {
-        if (options?.strategy === 'afterHydration') {
+        if (options?.load === 'afterHydration') {
           loaded = await loadScript(options);
-        } else if (options?.strategy === 'onIdle') {
+        } else if (options?.load === 'onIdle') {
           loaded = await loadScriptOnIdle(options);
         }
         if (loaded) {

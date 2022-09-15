@@ -6,7 +6,6 @@ export {
   type ExternalImageProps,
   type ShopifyImageProps,
 } from './Image/index.js';
-export {Script, type ScriptProps} from '../foundation/Script/index.js';
 export {ExternalVideo} from './ExternalVideo/index.js';
 export {AddToCartButton} from './AddToCartButton/index.js';
 export {ModelViewer} from './ModelViewer/index.js';

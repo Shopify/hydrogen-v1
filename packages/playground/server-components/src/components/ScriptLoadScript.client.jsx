@@ -3,7 +3,7 @@ import {loadScript} from '@shopify/hydrogen/experimental';
 
 let loading = false;
 
-export default function ScriptLoadScript({strategy}) {
+export default function ScriptLoadScript({load}) {
   const [status, setStatus] = useState('loading');
 
   useEffect(() => {
@@ -15,17 +15,17 @@ export default function ScriptLoadScript({strategy}) {
       const script = await loadScript({
         src: '/scripts/cdn?script=load-script.js',
         id: 'load-script',
-        strategy,
+        load,
       });
       if (script.status) {
         console.log('📦 Script loaded via loadScript({..})');
         setStatus('done');
       }
     })();
-  }, [strategy]);
+  }, [load]);
 
   return (
-    <section className="loadScript">
+    <section className="loadScript" style={{marginTop: '1rem'}}>
       {status === 'loading' && <p>Loading...</p>}
       {status === 'error' && <p>Error...</p>}
       {status === 'done' && (
@@ -35,7 +35,7 @@ export default function ScriptLoadScript({strategy}) {
             <br />
             reload: <code>false</code>
             <br />
-            strategy: <code>{strategy}</code>
+            load: <code>{load}</code>
           </small>
           <h2 style={{color: 'green'}}>
             Loaded load-script.js via {`loadScript({})`} 📦{' '}

@@ -1,10 +1,10 @@
 import React from 'react';
-import type {BeforeHydrationProps} from './loadScript';
+import {BeforeHydrationProps} from './types.js';
 
 /*
   Adds an inline <script> tag before react hydrates on the client.
 
-  This strategy is helpful for adding global window variables
+  This load strategy is helpful for adding global window variables
   such window.dataLayer, window._learnq etc, or pre-hydration
   event listeners, mutation observers, etc.
 
@@ -35,7 +35,7 @@ import type {BeforeHydrationProps} from './loadScript';
   />
 
   // inline script via children
-  <Script id="beforeHydration-children" strategy="beforeHydration">
+  <Script id="beforeHydration-children" load="beforeHydration">
     {`console.log('🎉 Inline code inside <Script children/> works');`}
     {`window.dataLayer = window.dataLayer || [];`}
   </Script>
@@ -44,11 +44,11 @@ import type {BeforeHydrationProps} from './loadScript';
   <Script
     src="/scripts/cdn?script=before-hydration-script.js"
     id="inline-before-hydration-script"
-    strategy="beforeHydration"
+    load="beforeHydration"
   />
 */
 
-const ignoreProps = ['strategy', 'onReady', 'target'];
+const ignoreProps = ['load', 'onReady', 'target'];
 
 type AllowedBeforeHydrationProps = Exclude<
   BeforeHydrationProps,
@@ -58,7 +58,7 @@ type AllowedBeforeHydrationProps = Exclude<
 export function ScriptBeforeHydration(
   passedProps: BeforeHydrationProps
 ): JSX.Element {
-  const {id = '', src: srcProp = null} = passedProps;
+  const {id, src: srcProp = null} = passedProps;
   const src = typeof srcProp === 'string' ? srcProp : undefined;
 
   // Remove props that are not allowed on <script> tags
@@ -100,7 +100,7 @@ export function ScriptBeforeHydration(
         {...props}
         suppressHydrationWarning
         dangerouslySetInnerHTML={{__html: js}}
-        data-strategy="beforeHydration"
+        data-load="beforeHydration"
       />
     );
   }
@@ -115,7 +115,7 @@ export function ScriptBeforeHydration(
       src={src}
       async={false}
       defer={false} // if the user wants defer or async they should use onIdle or afterHydration strategies
-      data-strategy="beforeHydration"
+      data-load="beforeHydration"
     />
   );
 }

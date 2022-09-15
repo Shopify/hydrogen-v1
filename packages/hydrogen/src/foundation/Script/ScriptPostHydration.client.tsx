@@ -3,7 +3,7 @@
 **/
 /*
   TODO:
-  eslint-rule for beforeHydration strategy  `\`next/script\`'s \`beforeHydration\` strategy should not be used outside of \`pages/_document.js\`. See: ${url}`
+  eslint-rule for beforeHydration load  `\`next/script\`'s \`beforeHydration\` strategy should not be used outside of \`pages/_document.js\`. See: ${url}`
   @see: /next.js/packages/eslint-plugin-next/lib/rules/no-before-interactive-script-outside-document.js
 
   eslint-rule warns when used inside .server — can't use callbacks onError, onLoad, onReady
@@ -28,22 +28,11 @@
 */
 import {useEffect} from 'react';
 import {loadScriptOnIdle} from './loadScriptOnIdle.js';
-import {
-  loadScript,
-  LoadCache,
-  ScriptCache,
-  type PostHydrationProps,
-} from './loadScript.js';
+import {loadScript, LoadCache, ScriptCache} from './loadScript.js';
+import {PostHydrationProps} from './types.js';
 
 export function ScriptPostHydration(props: PostHydrationProps): null {
-  const {
-    id,
-    src = '',
-    // onLoad = () => {},
-    onReady = null,
-    strategy = 'afterHydration',
-    // onError,
-  } = props;
+  const {id, src = '', onReady = null, load = 'afterHydration'} = props;
   const key = (id ?? '') + (src ?? '');
 
   // Run onReady if script has loaded before but component is re-mounted
@@ -56,16 +45,16 @@ export function ScriptPostHydration(props: PostHydrationProps): null {
     onReady(cachedScript.script);
   }, [key, onReady]);
 
-  // Load script based on delayed loading strategy
+  // Load script based on delayed loading load
   useEffect(() => {
     (async () => {
-      if (strategy === 'afterHydration') {
+      if (load === 'afterHydration') {
         await loadScript(props);
-      } else if (strategy === 'onIdle') {
+      } else if (load === 'onIdle') {
         loadScriptOnIdle(props);
       }
     })();
-  }, [props, strategy]);
+  }, [props, load]);
 
   return null;
 }

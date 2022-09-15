@@ -3,7 +3,8 @@ import {Script} from '@shopify/hydrogen/experimental';
 export default function HydrationCompleteListener() {
   return (
     <Script
-      strategy="beforeHydration"
+      id="hydration-complete"
+      load="beforeHydration"
       dangerouslySetInnerHTML={{
         __html: `
           const start = performance.now();

@@ -1,11 +1,11 @@
-import {TimingCache} from './loadScript.js';
+import {StartTimeCache} from './loadScript.js';
 
 export function logScriptPerformance(key: string, src: string | undefined) {
   if (!src) return;
 
   let loadTime = 0;
-  if (TimingCache.has(key)) {
-    const start = TimingCache.get(key)?.start;
+  if (StartTimeCache.has(key)) {
+    const start = StartTimeCache.get(key);
     if (start) {
       loadTime = start;
     }
