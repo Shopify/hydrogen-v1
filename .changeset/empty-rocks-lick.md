@@ -1,6 +1,5 @@
 ---
 '@shopify/hydrogen': patch
-'create-hydrogen-app': patch
 ---
 
 We've exposed the private server-to-server Storefront API token in the Hydrogen config file. This private token is required when deploying to production, otherwise the requests to the storefront API will be rate-limited. This change will make it easier to configure Hydrogen when deploying to non-Oxygen environments. We'll also display a warning in production mode if this token is not defined.
