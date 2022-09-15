@@ -12,8 +12,8 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "vite": "^2.9.13",
-    "@shopify/cli": "^3.3.3",
-    "@shopify/cli-hydrogen": "^3.3.3"
+    "@shopify/cli": "^3.12.0",
+    "@shopify/cli-hydrogen": "^3.12.0"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "*",

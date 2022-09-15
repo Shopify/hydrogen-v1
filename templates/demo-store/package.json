@@ -17,8 +17,8 @@
     "test:ci": "yarn build -t node && vitest run"
   },
   "devDependencies": {
-    "@shopify/cli": "^3.3.3",
-    "@shopify/cli-hydrogen": "^3.3.3",
+    "@shopify/cli": "^3.12.0",
+    "@shopify/cli-hydrogen": "^3.12.0",
     "@shopify/prettier-config": "^1.1.2",
     "@tailwindcss/forms": "^0.5.2",
     "@tailwindcss/typography": "^0.5.2",
