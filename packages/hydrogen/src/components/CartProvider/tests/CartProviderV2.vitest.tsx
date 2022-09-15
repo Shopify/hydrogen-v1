@@ -1098,7 +1098,7 @@ describe('<CartProviderV2 />', () => {
         wrapper: ShopifyCartProvider(),
       });
 
-      // First create cart should fail with error
+      // First create cart should be successful
       await act(async () => {
         result.current.linesAdd([
           {
@@ -1318,6 +1318,191 @@ describe('<CartProviderV2 />', () => {
           countryCode: CountryCode.Us,
           customerAccessToken: mockCustomerAccessToken,
         },
+      });
+    });
+  });
+
+  describe('Optimistic UI cart actions', () => {
+    it('removes cart line optimistically', async () => {
+      const cartLineRemoveSpy = vi.fn(async () => ({
+        data: {cartLinesRemove: {cart: cartMock}},
+      }));
+
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartMockWithLine}},
+      }));
+
+      const result = await useCartWithInitializedCart({
+        cartLineRemove: cartLineRemoveSpy,
+        cartCreate: cartCreateSpy,
+      });
+
+      expect(result.current.lines).toEqual(
+        cartFromGraphQL(cartMockWithLine).lines
+      );
+
+      act(() => {
+        result.current.linesRemove([cartMockWithLine.lines.edges[0].node.id]);
+      });
+
+      expect(result.current.status).toEqual('updating');
+      expect(result.current.lines).toEqual([]);
+
+      // wait till idle
+      await act(async () => {});
+
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(cartMock),
+      });
+    });
+
+    it('reverts optimistic UI if remove cart line fails', async () => {
+      const errorMock = new Error('Error removing cart line');
+
+      const cartLineRemoveSpy = vi.fn(async () => ({
+        errors: errorMock,
+      }));
+
+      const cartCreateResolveSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartMockWithLine}},
+      }));
+
+      const result = await useCartWithInitializedCart({
+        cartCreate: cartCreateResolveSpy,
+        cartLineRemove: cartLineRemoveSpy,
+      });
+
+      act(() => {
+        result.current.linesRemove([cartMockWithLine.lines.edges[0].node.id]);
+      });
+
+      expect(result.current.status).toEqual('updating');
+      expect(result.current.lines).toEqual([]);
+
+      // wait till idle
+      await act(async () => {});
+
+      // reverts to last valid cart because of error
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(cartMockWithLine),
+        error: errorMock,
+      });
+    });
+
+    it('updates cart line optimistically', async () => {
+      const mockQuantity = 4;
+      const mockCartWithUpdatedQuantity = {
+        ...cartMockWithLine,
+        lines: {
+          edges: [
+            {
+              node: {
+                ...cartMockWithLine.lines.edges[0].node,
+                quantity: mockQuantity,
+              },
+            },
+          ],
+        },
+      };
+      const cartLineUpdateSpy = vi.fn(async () => ({
+        data: {cartLinesUpdate: {cart: mockCartWithUpdatedQuantity}},
+      }));
+
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartMockWithLine}},
+      }));
+
+      const result = await useCartWithInitializedCart({
+        cartLineUpdate: cartLineUpdateSpy,
+        cartCreate: cartCreateSpy,
+      });
+
+      expect(result.current.lines).toEqual(
+        cartFromGraphQL(cartMockWithLine).lines
+      );
+
+      act(() => {
+        result.current.linesUpdate([
+          {
+            id: cartMockWithLine.lines.edges[0].node.id,
+            quantity: mockQuantity,
+          },
+        ]);
+      });
+
+      expect(result.current.status).toEqual('updating');
+      expect(result.current.lines).toEqual(
+        cartFromGraphQL(mockCartWithUpdatedQuantity).lines
+      );
+
+      // wait till idle
+      await act(async () => {});
+
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(mockCartWithUpdatedQuantity),
+      });
+    });
+
+    it('reverts optimistic UI if update cart line fails', async () => {
+      const mockQuantity = 4;
+      const mockCartWithUpdatedQuantity = {
+        ...cartMockWithLine,
+        lines: {
+          edges: [
+            {
+              node: {
+                ...cartMockWithLine.lines.edges[0].node,
+                quantity: mockQuantity,
+              },
+            },
+          ],
+        },
+      };
+
+      const errorMock = new Error('Error removing cart line');
+
+      const cartLineUpdateSpy = vi.fn(async () => ({
+        errors: errorMock,
+      }));
+
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartMockWithLine}},
+      }));
+
+      const result = await useCartWithInitializedCart({
+        cartLineUpdate: cartLineUpdateSpy,
+        cartCreate: cartCreateSpy,
+      });
+
+      expect(result.current.lines).toEqual(
+        cartFromGraphQL(cartMockWithLine).lines
+      );
+
+      act(() => {
+        result.current.linesUpdate([
+          {
+            id: cartMockWithLine.lines.edges[0].node.id,
+            quantity: mockQuantity,
+          },
+        ]);
+      });
+
+      expect(result.current.status).toEqual('updating');
+      expect(result.current.lines).toEqual(
+        cartFromGraphQL(mockCartWithUpdatedQuantity).lines
+      );
+
+      // wait till idle
+      await act(async () => {});
+
+      // reverts to last valid cart because of error
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(cartMockWithLine),
+        error: errorMock,
       });
     });
   });
