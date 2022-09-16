@@ -5,13 +5,13 @@ export default function ScriptCallbacks(props) {
     <Script
       {...props}
       onLoad={(load) => {
-        console.log('📞 ✅ onLoad event', load);
+        console.log('📞 🌕 onLoad event', load);
       }}
       onReady={(ready) => {
-        console.log('📞 ✅ onReady event', ready);
+        console.log('📞 🟢 onReady event', ready);
       }}
       onError={(error) => {
-        console.error('📞 ❌ onError event', error);
+        console.error('📞 🔴 onError event', error);
       }}
     />
   );

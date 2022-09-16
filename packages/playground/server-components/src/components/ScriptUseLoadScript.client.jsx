@@ -1,35 +1,38 @@
-import {useLoadScript} from '@shopify/hydrogen/experimental';
+import {useScript} from '@shopify/hydrogen/experimental';
 
 export default function ScriptUseLoadScript({
   reload = false,
   load = 'afterHydration',
+  src = '/scripts/cdn?script=use-load-script.js',
+  target = 'body',
+  id = 'use-load-script',
 }) {
   // Load script as afterHydration in the <head />
-  const status = useLoadScript({
-    src: '/scripts/cdn?script=use-load-script.js',
-    id: 'use-load-script',
-    target: 'head',
+  const status = useScript({
+    src,
+    id,
+    target,
     load,
     reload,
   });
 
   return (
-    <div style={{marginTop: '1rem'}}>
-      {status === 'loading' && <p>Loading...</p>}
-      {status === 'error' && <p>Error...</p>}
+    <div style={{marginTop: '1rem'}} id={id}>
+      {status === 'loading' && <p>Loading ScriptUseLoadScript...</p>}
+      {status === 'error' && <p>Error ScriptUseLoadScript...</p>}
       {status === 'done' && (
         <div style={{border: '1px solid black', padding: '1rem'}}>
           <small>
-            Injected by use-load-script.
+            useLoadScript
             <br />
-            target: <code>head</code>
+            target: <code>{target}</code>
             <br />
-            reload: <code>{reload ? 'true' : 'false'}</code>
+            reload: <code>{reload ? '✅' : '❌'}</code>
             <br />
-            load: <code>{load}</code>
+            load: <code>{load === 'inWorker' ? '⚙️ inWorker' : load}</code>
           </small>
           <h2 style={{color: 'orange'}}>
-            Loaded use-load-script.js via {`useLoadScript({..})`} 🔥{' '}
+            Loaded {id} via {`useLoadScript({..})`} 🔥{' '}
           </h2>
         </div>
       )}

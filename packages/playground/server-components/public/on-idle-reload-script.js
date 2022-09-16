@@ -397,22 +397,18 @@
     'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'
   ).then(() => {
     return sleep(1000).then(() => {
-      const target = document.querySelector(
-        'section.after-hydration-reload-script'
-      );
+      const target = document.querySelector('section.on-idle-reload-script');
       const handle = target.getAttribute('data-handle');
       const randomIndex = randomNumber(1, 50);
       target.style = `border: 1px solid black; background-color: #${
         randomColor() || '#333'
       }; color: black; padding: 1rem; margin-top: 1rem; margin-bottom: 1rem;`;
       target.innerHTML = `
-        <small>Injected by after-hydration-reload-script.<br />reload:✅<br />strategy: afterHydration</small>
-        <h1>Script loaded for handle: ${handle}</h1>
+        <small>Injected by Script onIdle reload tag.<br />reload:✅<br />strategy: onIdle</small>
+        <h1>Injected by on-idle-reload-script.js</h1>
         <p>${text[Math.ceil(randomIndex)]}</p>
       `;
-      console.log(
-        '🌊 <Script afterHydration src reload /> loaded, injecting code..'
-      );
+      console.log('🏖🔂 <Script onIdle reload src />loaded, injecting html..');
     });
   });
 })();
