@@ -11,7 +11,7 @@ import type {
 
 declare global {
   // eslint-disable-next-line no-var
-  var Oxygen: {env: any; [key: string]: any};
+  var Hydrogen: {env: any; [key: string]: any};
 }
 
 const CUSTOMER_INFO_QUERY = gql`
@@ -85,8 +85,7 @@ export async function api(
     if (!customer && !customerAccessToken) {
       return handleLoggedOutResponse({
         return_to: body?.return_to ?? null,
-        // @ts-ignore
-        checkoutDomain: Oxygen.env.SHOPIFY_CHECKOUT_DOMAIN,
+        checkoutDomain: Hydrogen.env.SHOPIFY_CHECKOUT_DOMAIN,
       });
     }
 
@@ -108,8 +107,7 @@ export async function api(
     try {
       // generate a multipass url and token
       const multipassify = new Multipassify(
-        // @ts-ignore
-        Oxygen.env.SHOPIFY_STORE_MULTIPASS_SECRET
+        Hydrogen.env.SHOPIFY_STORE_MULTIPASS_SECRET
       );
 
       const customerInfo: CustomerInfoType = {
@@ -122,8 +120,7 @@ export async function api(
       // Generating a token for customer
       const data = multipassify.generate(
         customerInfo,
-        // @ts-ignore
-        Oxygen.env.SHOPIFY_STORE_DOMAIN,
+        Hydrogen.env.SHOPIFY_STORE_DOMAIN,
         request
       );
 

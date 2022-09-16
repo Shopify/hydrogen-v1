@@ -143,7 +143,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
     transform(code, id) {
       if (id === resolvedConfigPath) {
         const s = new MagicString(code);
-        // Wrap in function to avoid evaluating `Oxygen.env`
+        // Wrap in function to avoid evaluating `Hydrogen.env`
         // in the config until we have polyfilled it properly.
         s.replace(/export\s+default\s+(\w+)\s*\(/g, (all, m1) =>
           all.replace(m1, `() => ${m1}`)

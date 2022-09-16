@@ -28,7 +28,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         return await server.transformIndexHtml(url, indexHtml);
       }
 
-      await polyfillOxygenEnv(server.config);
+      await polyfillHydrogenEnv(server.config);
 
       // The default vite middleware rewrites the URL `/graphqil` to `/index.html`
       // By running this middleware first, we avoid that.
@@ -81,11 +81,13 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
 
 declare global {
   // eslint-disable-next-line no-var
-  var Oxygen: {env: any; [key: string]: any};
+  var Hydrogen: {env: any; [key: string]: any};
 }
 
-async function polyfillOxygenEnv(config: ResolvedConfig) {
+async function polyfillHydrogenEnv(config: ResolvedConfig) {
   const env = await loadEnv(config.mode, config.root, '');
 
+  globalThis.Hydrogen = {env};
+  /* @ts-ignore */
   globalThis.Oxygen = {env};
 }

@@ -1,6 +1,6 @@
 export function GTM() {
-  const GTM_ID = Oxygen?.env?.GTM_ID;
-  const GA4_ID = Oxygen?.env?.GA4_ID;
+  const GTM_ID = Hydrogen?.env?.GTM_ID;
+  const GA4_ID = Hydrogen?.env?.GA4_ID;
 
   return (
     <>

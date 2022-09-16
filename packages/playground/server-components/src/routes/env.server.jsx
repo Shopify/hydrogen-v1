@@ -7,7 +7,7 @@ export default function Env() {
 
       <div className="secrets-server">
         <div>PUBLIC_VARIABLE:{import.meta.env.PUBLIC_VARIABLE || ''}|</div>
-        <div>PRIVATE_VARIABLE:{Oxygen.env.PRIVATE_VARIABLE || ''}|</div>
+        <div>PRIVATE_VARIABLE:{Hydrogen.env.PRIVATE_VARIABLE || ''}|</div>
       </div>
 
       <div className="secrets-client">

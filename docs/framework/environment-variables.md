@@ -4,10 +4,7 @@ title: Environment variables
 description: Learn how to store sensitive information in your Hydrogen project.
 ---
 
-Environment variables, also known as secrets, allow you to load different values in your app depending on the running environment. This guide describes how to store environment variables in your Hydrogen project.
-
-> Note:
-> In the following examples, environment variables are stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
+Environment variables allow you to load different values in your app depending on the running environment. This guide describes how to store environment variables in your Hydrogen project.
 
 ## How environment variables work
 
@@ -23,6 +20,34 @@ MY_SECRET_API_TOKEN="topsecret"
 
 {% endcodeblock %}
 
+Environment variables are available within server components with the global object `Hydrogen.env`:
+
+{% codeblock file, filename: 'Component.server.jsx' %}
+
+```js
+export default ServerComponent() {
+  const token = Hydrogen.env.SOME_TOKEN;
+  // ...
+}
+```
+
+{% endcodeblock %}
+
+Environment variables are unavailable within client components. If you need to access an environment variable within a client component, pass the variable as a prop from a server component to the client component:
+
+{% codeblock file, filename: 'Component.server.jsx' %}
+
+```js
+export default ServerComponent() {
+  const token = Hydrogen.env.SOME_TOKEN;
+  return <ClientComponent token={token} />
+}
+```
+
+{% endcodeblock %}
+
+Note: Make sure that you *never* pass secret environment variables to client components.
+
 ### Files for specific environments
 
 Hydrogen supports files for specific environments. For example, you might have the following files that map to different environments:
@@ -33,50 +58,7 @@ Hydrogen supports files for specific environments. For example, you might have t
 
 The file that Hydrogen uses is determined by the running [Vite mode](https://vitejs.dev/guide/env-and-mode.html#modes). For example, if you're running a development server, then `.env.development` overrides `.env`.
 
-## Public variables
-
-In Hydrogen, variables that are prefixed with `PUBLIC_` in `.env` files are treated as public and are available in the browser and client.
-
-Public variables are commonly used in client components, but they can be used anywhere.
-
-Only public variables can be exposed to the client.
-
-> Caution:
-> Store only non-sensitive data in public variables. Public variables are added to the bundle code at build time as strings.
-
-These variables can be accessed using Vite's [`import.meta.env`](https://vitejs.dev/guide/env-and-mode.html) object in any component:
-
-{% codeblock file, filename: 'Component.client.jsx' %}
-
-```js
-export default Component() {
-  const url = import.meta.env.PUBLIC_MY_API_URL;
-  // import.meta.env.MY_SECRET_API_TOKEN is undefined
-  // ...
-}
-```
-
-{% endcodeblock %}
-
-## Private variables
-
-In Hydrogen, variables that are prefixed with `PRIVATE` in the `.env` file are treated as server runtime variables in non-production environments.
-
-Private variables are only available in components that run exclusively in the server or in utilities that are imported by those components.
-
-These variables aren't exposed to the browser and server components can only access them from the Hydrogen configuration:
-
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
-```tsx
-export default defineConfig({
-  privateStorefrontToken:
-    Oxygen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
-});
-```
-{% endcodeblock %}
-
-### Private variables in production
+### Environment variables in production
 
 > Caution:
 > [Avoid rate-limiting in production](#use-storefront-api-server-tokens) by storing Storefront API server tokens in private variables.
@@ -93,15 +75,15 @@ cross-env MY_SECRET=... node dist/server
 
 {% endcodeblock %}
 
-If you're using `@shopify/hydrogen/platforms/*` as the server build entry point, then the global `Oxygen` object is populated automatically. However, if you're using a custom entry point, then you must create this object manually.
+If you're using `@shopify/hydrogen/platforms/*` as the server build entry point, then the global `Hydrogen` object is populated automatically. However, if you're using a custom entry point, then you must create this object manually.
 
-The following example shows how to manually create the global `Oxygen` object in a custom Node.js server entry file:
+The following example shows how to manually create the global `Hydrogen` object in a custom Node.js server entry file:
 
 {% codeblock file, filename: 'server.js' %}
 
 ```js
 const app = /* Custom server such as Express or Fastify */;
-globalThis.Oxygen = {env: process.env};
+globalThis.Hydrogen = {env: process.env};
 app.use(hydrogenMiddleware({/* ... */}))
 ```
 
@@ -120,8 +102,7 @@ You need to authenticate server requests to the Storefront API with a [delegate 
 
 ```tsx
 export default defineConfig({
-  privateStorefrontToken:
-    Oxygen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
+  privateStorefrontToken: Hydrogen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
 });
 ```
 

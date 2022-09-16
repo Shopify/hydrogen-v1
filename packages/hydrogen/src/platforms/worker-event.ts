@@ -9,5 +9,11 @@ interface FetchEvent extends Event {
 
 // @ts-ignore
 addEventListener('fetch', (event: FetchEvent) =>
-  event.respondWith(moduleEntry.fetch(event.request, globalThis, event))
+  event.respondWith(
+    moduleEntry.fetch(
+      event.request,
+      globalThis as unknown as Record<string, string>,
+      event
+    )
+  )
 );

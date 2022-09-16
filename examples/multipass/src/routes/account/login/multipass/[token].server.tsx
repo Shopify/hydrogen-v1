@@ -40,7 +40,7 @@ export async function api(
 
   // create a multipassify instance
   const multipassify = new Multipassify(
-    Oxygen.env.SHOPIFY_STORE_MULTIPASS_SECRET
+    Hydrogen.env.SHOPIFY_STORE_MULTIPASS_SECRET
   );
 
   try {

@@ -1,4 +1,4 @@
-/* global Oxygen */
+/* global Hydrogen */
 import {
   OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE,
   STOREFRONT_API_SECRET_TOKEN_HEADER,
@@ -27,7 +27,7 @@ export function getStorefrontApiRequestHeaders({
 
   if (!privateStorefrontToken && !secretTokenWarned) {
     secretTokenWarned = true;
-    privateStorefrontToken = getOxygenVariable(
+    privateStorefrontToken = getEnvironmentVariable(
       OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE
     );
 
@@ -44,7 +44,7 @@ export function getStorefrontApiRequestHeaders({
 
   if (!storefrontId && !storefrontIdWarned) {
     storefrontIdWarned = true;
-    storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
+    storefrontId = getEnvironmentVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
 
     if (!storefrontId && !__HYDROGEN_DEV__) {
       log.warn(
@@ -77,6 +77,6 @@ export function getStorefrontApiRequestHeaders({
   return headers;
 }
 
-export function getOxygenVariable(key: string): any {
-  return typeof Oxygen !== 'undefined' ? Oxygen?.env?.[key] : null;
+export function getEnvironmentVariable(key: string): any {
+  return typeof Hydrogen !== 'undefined' ? Hydrogen?.env?.[key] : null;
 }

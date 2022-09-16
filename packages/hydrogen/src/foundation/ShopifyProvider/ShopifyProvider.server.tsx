@@ -14,7 +14,7 @@ import {
   useRequestCacheData,
   useServerRequest,
 } from '../ServerRequestProvider/index.js';
-import {getOxygenVariable} from '../../utilities/storefrontApi.js';
+import {getEnvironmentVariable} from '../../utilities/storefrontApi.js';
 import {SHOPIFY_STOREFRONT_ID_VARIABLE} from '../../constants.js';
 import {getLocale} from '../../utilities/locale/index.js';
 
@@ -33,7 +33,7 @@ function makeShopifyContext(shopifyConfig: ShopifyConfig): {
 } {
   const countryCode = shopifyConfig.defaultCountryCode ?? DEFAULT_COUNTRY;
   const languageCode = shopifyConfig.defaultLanguageCode ?? DEFAULT_LANGUAGE;
-  const storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
+  const storefrontId = getEnvironmentVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
 
   const shopifyProviderServerValue = {
     defaultCountryCode: countryCode.toUpperCase() as `${CountryCode}`,

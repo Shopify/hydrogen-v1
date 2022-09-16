@@ -5,18 +5,15 @@ import {
   assetBasePath,
 } from './virtual.js';
 
-declare global {
-  // eslint-disable-next-line no-var
-  var globalThis: {
-    Oxygen: {env: any};
-    [key: string]: any;
-  };
+declare namespace globalThis {
+  let Oxygen: {env: Record<string, string>};
+  let Hydrogen: {env: Record<string, string>};
 }
 
 export default {
   async fetch(
     request: Request,
-    env: unknown,
+    env: Record<string, string>,
     context: {waitUntil: (promise: Promise<any>) => void}
   ) {
     // Proxy assets to the CDN. This should be removed
@@ -24,6 +21,10 @@ export default {
     const url = new URL(request.url);
     if (assetBasePath && isAsset(url.pathname)) {
       return fetch(request.url.replace(url.origin, assetBasePath), request);
+    }
+
+    if (!globalThis.Hydrogen) {
+      globalThis.Hydrogen = {env};
     }
 
     if (!globalThis.Oxygen) {

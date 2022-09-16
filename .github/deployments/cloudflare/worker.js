@@ -42,6 +42,11 @@ async function handleEvent(event) {
       globalThis.Oxygen = {};
     }
 
+    // TODO: Switch to module syntax and transfer args to Hydrogen.env
+    if (!globalThis.Hydrogen) {
+      globalThis.Hydrogen = {};
+    }
+
     return await handleRequest(event.request, {
       indexTemplate,
       cache: caches.default,

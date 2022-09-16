@@ -34,7 +34,7 @@ export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
     shopify: {
       shopId: id,
       currency: currencyCode,
-      storefrontId: globalThis.Oxygen?.env?.SHOPIFY_STOREFRONT_ID || '0',
+      storefrontId: globalThis.Hydrogen?.env?.SHOPIFY_STOREFRONT_ID || '0',
       acceptedLanguage:
         request.headers.get('Accept-Language')?.replace(/-.*/, '') || 'en',
       isPersistentCookie: !!cookies[SHOPIFY_S] || !!cookies[SHOPIFY_Y],

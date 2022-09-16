@@ -24,6 +24,7 @@ export async function createServer({
 }: CreateServerOptions = {}) {
   // @ts-ignore
   globalThis.Oxygen = {env: process.env};
+  globalThis.Hydrogen = {env: process.env};
 
   const app = connect();
 

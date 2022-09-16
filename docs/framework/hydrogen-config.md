@@ -10,9 +10,6 @@ This guide describes Hydrogen's configuration properties and how to change the l
 
 ## Example configuration
 
-> Note:
-> In the following example, environment variables are stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
-
 The Hydrogen configuration file contains information that's needed at runtime for routing, connecting to the Storefront API, and many other options. The following example shows a basic Hydrogen configuration file:
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
@@ -29,11 +26,11 @@ export default defineConfig({
     /* The domain of your Shopify store */
     storeDomain: '{shop_domain}.myshopify.com',
     /* Your app's public Storefront API access token. Authenticates browser and client requests. */
-    storefrontToken: Oxygen?.env?.PUBLIC_STOREFRONT_API_TOKEN,
+    storefrontToken: Hydrogen?.env?.PUBLIC_STOREFRONT_API_TOKEN,
     /* Your app's private Storefront API server (delegate access) token. Authenticates server requests. */
-    privateStorefrontToken: Oxygen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
+    privateStorefrontToken: Hydrogen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
     /* The unique ID for the storefront. This prop is required on non-Oxygen runtimes to avoid breaking the analytics dashboard in the Shopify admin.*/
-    storefrontId: Oxygen?.env?.PUBLIC_STOREFRONT_ID,
+    storefrontId: Hydrogen?.env?.PUBLIC_STOREFRONT_ID,
     /* The Storefront API version that your app uses */
     storefrontApiVersion: '2022-07',
   },

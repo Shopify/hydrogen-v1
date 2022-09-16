@@ -5,8 +5,8 @@ import {
   indexTemplate,
 } from '@shopify/hydrogen/platforms';
 
-// Mock Oxygen global
-globalThis.Oxygen = {env: globalThis};
+// Mock Hydrogen global
+globalThis.Hydrogen = {env: globalThis};
 
 async function handleAsset(url, event) {
   const response = await getAssetFromKV(event, {});
