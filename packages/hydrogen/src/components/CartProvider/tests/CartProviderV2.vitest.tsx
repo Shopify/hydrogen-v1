@@ -1216,7 +1216,9 @@ describe('<CartProviderV2 />', () => {
         buyerIdentityUpdate: buyerIdentityUpdateSpy,
       });
       const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider({countryCode: mockCountryCodeServerProps}),
+        wrapper: ShopifyCartProvider({
+          countryCode: mockCountryCodeServerProps,
+        }),
       });
 
       act(() => {

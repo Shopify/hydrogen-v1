@@ -97,7 +97,19 @@ export function CartProviderV2({
   countryCode?: CountryCode;
 }) {
   if (countryCode) countryCode = countryCode.toUpperCase() as CountryCode;
+  const [prevCountryCode, setPrevCountryCode] = useState(countryCode);
+  const [prevCustomerAccessToken, setPrevCustomerAccessToken] =
+    useState(customerAccessToken);
   const customerOverridesCountryCode = useRef(false);
+
+  if (
+    prevCountryCode !== countryCode ||
+    prevCustomerAccessToken !== customerAccessToken
+  ) {
+    setPrevCountryCode(countryCode);
+    setPrevCustomerAccessToken(customerAccessToken);
+    customerOverridesCountryCode.current = false;
+  }
 
   const {cartFragment: usedCartFragment} = useCartActions({
     numCartLines,
@@ -165,10 +177,6 @@ export function CartProviderV2({
   const [cartReady, setCartReady] = useState(false);
   const cartCompleted = cartState.matches('cartCompleted');
 
-  useEffect(() => {
-    customerOverridesCountryCode.current = false;
-  }, [countryCode, customerAccessToken]);
-
   const countryChanged =
     (cartState.value === 'idle' ||
       cartState.value === 'error' ||
@@ -186,9 +194,8 @@ export function CartProviderV2({
     countryCode,
     customerAccessToken,
     countryChanged,
-    cartSend,
     customerOverridesCountryCode,
-    cartState?.context?.cart?.buyerIdentity?.countryCode,
+    cartSend,
   ]);
 
   // send cart events when ready
