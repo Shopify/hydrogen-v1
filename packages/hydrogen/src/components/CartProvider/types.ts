@@ -92,6 +92,7 @@ export type CartAction =
 // State Machine types
 export type CartMachineContext = {
   cart?: Cart;
+  lastValidCart?: Cart;
   rawCartResult?: CartFragmentFragment;
   prevCart?: Cart;
   errors?: any;
@@ -193,6 +194,7 @@ export type CartMachineTypeState =
       value: 'uninitialized';
       context: CartMachineContext & {
         cart: undefined;
+        lastValidCart: undefined;
         prevCart: undefined;
         errors?: any;
       };
@@ -201,6 +203,7 @@ export type CartMachineTypeState =
       value: 'initializationError';
       context: CartMachineContext & {
         cart: undefined;
+        lastValidCart: undefined;
         prevCart: undefined;
         errors: any;
       };
@@ -210,6 +213,7 @@ export type CartMachineTypeState =
       context: CartMachineContext & {
         cart: undefined;
         prevCart?: Cart;
+        lastValidCart: undefined;
         errors: any;
       };
     }
@@ -218,6 +222,7 @@ export type CartMachineTypeState =
       context: CartMachineContext & {
         cart: Cart;
         prevCart?: Cart;
+        lastValidCart?: Cart;
         errors?: any;
       };
     }
@@ -226,6 +231,7 @@ export type CartMachineTypeState =
       context: CartMachineContext & {
         cart?: Cart;
         prevCart?: Cart;
+        lastValidCart?: Cart;
         errors: any;
       };
     }
@@ -255,5 +261,9 @@ export type CartMachineActions = {
   cartAttributesUpdateAction: CartMachineAction;
   discountCodesUpdateAction: CartMachineAction;
   onCartActionEntry?: CartMachineAction;
+  onCartActionOptimisticUI?: StateMachine.AssignActionObject<
+    CartMachineContext,
+    CartMachineEvent
+  >;
   onCartActionComplete?: CartMachineAction;
 };

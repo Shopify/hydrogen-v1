@@ -26,7 +26,12 @@ function invokeCart(
   }
 ): StateMachine.Config<CartMachineContext, CartMachineEvent>['states']['on'] {
   return {
-    entry: [...(options?.entryActions || []), 'onCartActionEntry', action],
+    entry: [
+      ...(options?.entryActions || []),
+      'onCartActionEntry',
+      'onCartActionOptimisticUI',
+      action,
+    ],
     on: {
       RESOLVE: {
         target: options?.resolveTarget || 'idle',
@@ -41,16 +46,20 @@ function invokeCart(
       },
       ERROR: {
         target: options?.errorTarget || 'error',
-        actions: assign({
-          prevCart: (context) => context?.cart,
-          errors: (_, event) => event?.payload?.errors,
-        }),
+        actions: [
+          assign({
+            prevCart: (context) => context?.cart,
+            cart: (context, _) => context?.lastValidCart,
+            errors: (_, event) => event?.payload?.errors,
+          }),
+        ],
       },
       CART_COMPLETED: {
         target: 'cartCompleted',
         actions: assign({
           prevCart: (_) => undefined,
           cart: (_) => undefined,
+          lastValidCart: (_) => undefined,
           errors: (_) => undefined,
         }),
       },
@@ -142,6 +151,7 @@ const cartMachine = createMachine<
 export function useCartAPIStateMachine({
   numCartLines,
   onCartActionEntry,
+  onCartActionOptimisticUI,
   onCartActionComplete,
   data: cart,
   cartFragment,
@@ -154,11 +164,17 @@ export function useCartAPIStateMachine({
     context: CartMachineContext,
     event: CartMachineActionEvent
   ) => void;
+  /** A callback that is invoked after executing the entry actions for optimistic UI changes.  */
+  onCartActionOptimisticUI?: (
+    context: CartMachineContext,
+    event: CartMachineEvent
+  ) => Partial<CartMachineContext>;
   /** A callback that is invoked after a Cart API completes. */
   onCartActionComplete?: (
     context: CartMachineContext,
     event: CartMachineFetchResultEvent
   ) => void;
+  /** A callback that is invoked after a Cart API completes. */
   /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
@@ -316,6 +332,11 @@ export function useCartAPIStateMachine({
             onCartActionEntry(context, event);
           }
         },
+      }),
+      ...(onCartActionOptimisticUI && {
+        onCartActionOptimisticUI: assign((context, event) => {
+          return onCartActionOptimisticUI(context, event);
+        }),
       }),
       ...(onCartActionComplete && {
         onCartActionComplete: (context, event) => {

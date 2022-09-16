@@ -140,6 +140,45 @@ export function CartProviderV2({
           return onDiscountCodesUpdate?.();
       }
     },
+    onCartActionOptimisticUI(context, event) {
+      if (!context?.cart) return {cart: undefined};
+      switch (event.type) {
+        case 'CARTLINE_REMOVE':
+          return {
+            ...context,
+            lastValidCart: context.cart,
+            cart: {
+              ...context.cart,
+              lines: context?.cart?.lines.filter(
+                ({id}) => !event.payload.lines.includes(id)
+              ),
+            },
+          };
+        case 'CARTLINE_UPDATE':
+          return {
+            ...context,
+            lastValidCart: context.cart,
+            cart: {
+              ...context.cart,
+              lines: context.cart.lines.map((line) => {
+                const updatedLine = event.payload.lines.find(
+                  ({id}) => id === line.id
+                );
+
+                if (updatedLine && updatedLine.quantity) {
+                  return {
+                    ...line,
+                    quantity: updatedLine.quantity,
+                  };
+                }
+
+                return line;
+              }),
+            },
+          };
+      }
+      return {cart: context.cart ? {...context.cart} : undefined};
+    },
     onCartActionComplete(context, event) {
       const cartActionEvent = event.payload.cartActionEvent;
       switch (event.type) {
