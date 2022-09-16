@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
 import {
   AttributeInput,
@@ -6,9 +6,11 @@ import {
   CartInput,
   CartLineInput,
   CartLineUpdateInput,
+  CountryCode,
 } from '../../storefront-api-types.js';
 import {CartContext} from './context.js';
 import {
+  BuyerIdentityUpdateEvent,
   CartCreateEvent,
   CartLineAddEvent,
   CartLineRemoveEvent,
@@ -46,6 +48,8 @@ export function CartProviderV2({
   onDiscountCodesUpdateComplete,
   data: cart,
   cartFragment,
+  customerAccessToken,
+  countryCode = CountryCode.Us,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
@@ -87,10 +91,30 @@ export function CartProviderV2({
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
   cartFragment?: string;
+  /** A customer access token that's accessible on the server if there's a customer login. */
+  customerAccessToken?: CartBuyerIdentityInput['customerAccessToken'];
+  /** The ISO country code for i18n. */
+  countryCode?: CountryCode;
 }) {
+  if (countryCode) countryCode = countryCode.toUpperCase() as CountryCode;
+  const [prevCountryCode, setPrevCountryCode] = useState(countryCode);
+  const [prevCustomerAccessToken, setPrevCustomerAccessToken] =
+    useState(customerAccessToken);
+  const customerOverridesCountryCode = useRef(false);
+
+  if (
+    prevCountryCode !== countryCode ||
+    prevCustomerAccessToken !== customerAccessToken
+  ) {
+    setPrevCountryCode(countryCode);
+    setPrevCustomerAccessToken(customerAccessToken);
+    customerOverridesCountryCode.current = false;
+  }
+
   const {cartFragment: usedCartFragment} = useCartActions({
     numCartLines,
     cartFragment,
+    countryCode,
   });
 
   const [cartState, cartSend] = useCartAPIStateMachine({
@@ -117,38 +141,33 @@ export function CartProviderV2({
       }
     },
     onCartActionComplete(context, event) {
+      const cartActionEvent = event.payload.cartActionEvent;
       switch (event.type) {
         case 'RESOLVE':
-          switch (event.payload.cartActionEvent.type) {
+          switch (cartActionEvent.type) {
             case 'CART_CREATE':
-              publishCreateAnalytics(context, event.payload.cartActionEvent);
+              publishCreateAnalytics(context, cartActionEvent);
               return onCreateComplete?.();
             case 'CARTLINE_ADD':
-              publishLineAddAnalytics(context, event.payload.cartActionEvent);
+              publishLineAddAnalytics(context, cartActionEvent);
               return onLineAddComplete?.();
             case 'CARTLINE_REMOVE':
-              publishLineRemoveAnalytics(
-                context,
-                event.payload.cartActionEvent
-              );
+              publishLineRemoveAnalytics(context, cartActionEvent);
               return onLineRemoveComplete?.();
             case 'CARTLINE_UPDATE':
-              publishLineUpdateAnalytics(
-                context,
-                event.payload.cartActionEvent
-              );
+              publishLineUpdateAnalytics(context, cartActionEvent);
               return onLineUpdateComplete?.();
             case 'NOTE_UPDATE':
               return onNoteUpdateComplete?.();
             case 'BUYER_IDENTITY_UPDATE':
+              if (countryCodeNotUpdated(context, cartActionEvent)) {
+                customerOverridesCountryCode.current = true;
+              }
               return onBuyerIdentityUpdateComplete?.();
             case 'CART_ATTRIBUTES_UPDATE':
               return onAttributesUpdateComplete?.();
             case 'DISCOUNT_CODES_UPDATE':
-              publishDiscountCodesUpdateAnalytics(
-                context,
-                event.payload.cartActionEvent
-              );
+              publishDiscountCodesUpdateAnalytics(context, cartActionEvent);
               return onDiscountCodesUpdateComplete?.();
           }
       }
@@ -157,6 +176,27 @@ export function CartProviderV2({
 
   const [cartReady, setCartReady] = useState(false);
   const cartCompleted = cartState.matches('cartCompleted');
+
+  const countryChanged =
+    (cartState.value === 'idle' ||
+      cartState.value === 'error' ||
+      cartState.value === 'cartCompleted') &&
+    countryCode !== cartState?.context?.cart?.buyerIdentity?.countryCode &&
+    !cartState.context.errors;
+
+  useEffect(() => {
+    if (!countryChanged || customerOverridesCountryCode.current) return;
+    cartSend({
+      type: 'BUYER_IDENTITY_UPDATE',
+      payload: {buyerIdentity: {countryCode, customerAccessToken}},
+    });
+  }, [
+    countryCode,
+    customerAccessToken,
+    countryChanged,
+    customerOverridesCountryCode,
+    cartSend,
+  ]);
 
   // send cart events when ready
   const onCartReadySend = useCallback(
@@ -210,23 +250,48 @@ export function CartProviderV2({
     }
   }, [cartReady, cartSend]);
 
+  const cartCreate = useCallback(
+    (cartInput: CartInput) => {
+      if (countryCode && !cartInput.buyerIdentity?.countryCode) {
+        if (cartInput.buyerIdentity == null) {
+          cartInput.buyerIdentity = {};
+        }
+        cartInput.buyerIdentity.countryCode = countryCode;
+      }
+
+      if (
+        customerAccessToken &&
+        !cartInput.buyerIdentity?.customerAccessToken
+      ) {
+        if (cartInput.buyerIdentity == null) {
+          cartInput.buyerIdentity = {};
+        }
+        cartInput.buyerIdentity.customerAccessToken = customerAccessToken;
+      }
+      onCartReadySend({
+        type: 'CART_CREATE',
+        payload: cartInput,
+      });
+    },
+    [countryCode, customerAccessToken, onCartReadySend]
+  );
+
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
       ...(cartState?.context?.cart ?? {lines: [], attributes: []}),
       status: transposeStatus(cartState.value),
       error: cartState?.context?.errors,
       totalQuantity: cartState?.context?.cart?.totalQuantity ?? 0,
-      cartCreate(cartInput: CartInput) {
-        onCartReadySend({
-          type: 'CART_CREATE',
-          payload: cartInput,
-        });
-      },
+      cartCreate,
       linesAdd(lines: CartLineInput[]) {
-        onCartReadySend({
-          type: 'CARTLINE_ADD',
-          payload: {lines},
-        });
+        if (cartState?.context?.cart?.id) {
+          onCartReadySend({
+            type: 'CARTLINE_ADD',
+            payload: {lines},
+          });
+        } else {
+          cartCreate({lines});
+        }
       },
       linesRemove(lines: string[]) {
         onCartReadySend({
@@ -279,6 +344,7 @@ export function CartProviderV2({
       cartFragment: usedCartFragment,
     };
   }, [
+    cartCreate,
     cartState?.context?.cart,
     cartState?.context?.errors,
     cartState.value,
@@ -298,11 +364,11 @@ function transposeStatus(
 ): CartWithActions['status'] {
   switch (status) {
     case 'uninitialized':
+    case 'initializationError':
       return 'uninitialized';
     case 'idle':
     case 'cartCompleted':
     case 'error':
-    case 'initializationError':
       return 'idle';
     case 'cartFetching':
       return 'fetching';
@@ -347,6 +413,17 @@ function storageAvailable(type: 'localStorage' | 'sessionStorage') {
       storage.length !== 0
     );
   }
+}
+
+function countryCodeNotUpdated(
+  context: CartMachineContext,
+  event: BuyerIdentityUpdateEvent
+) {
+  return (
+    event.payload.buyerIdentity.countryCode &&
+    context.cart?.buyerIdentity?.countryCode !==
+      event.payload.buyerIdentity.countryCode
+  );
 }
 
 // Cart Analytics
