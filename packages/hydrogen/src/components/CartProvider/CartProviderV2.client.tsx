@@ -356,7 +356,7 @@ function publishCreateAnalytics(
 ) {
   ClientAnalytics.publish(ClientAnalytics.eventNames.ADD_TO_CART, true, {
     addedCartLines: event.payload.lines,
-    cart: context.cart,
+    cart: context.rawCartResult,
     prevCart: null,
   });
 }
@@ -367,7 +367,7 @@ function publishLineAddAnalytics(
 ) {
   ClientAnalytics.publish(ClientAnalytics.eventNames.ADD_TO_CART, true, {
     addedCartLines: event.payload.lines,
-    cart: context.cart,
+    cart: context.rawCartResult,
     prevCart: context.prevCart,
   });
 }
@@ -379,7 +379,7 @@ function publishLineUpdateAnalytics(
   ClientAnalytics.publish(ClientAnalytics.eventNames.UPDATE_CART, true, {
     updatedCartLines: event.payload.lines,
     oldCart: context.prevCart,
-    cart: context.cart,
+    cart: context.rawCartResult,
     prevCart: context.prevCart,
   });
 }
@@ -390,7 +390,7 @@ function publishLineRemoveAnalytics(
 ) {
   ClientAnalytics.publish(ClientAnalytics.eventNames.REMOVE_FROM_CART, true, {
     removedCartLines: event.payload.lines,
-    cart: context.cart,
+    cart: context.rawCartResult,
     prevCart: context.prevCart,
   });
 }
@@ -404,7 +404,7 @@ function publishDiscountCodesUpdateAnalytics(
     true,
     {
       updatedDiscountCodes: event.payload.discountCodes,
-      cart: context.cart,
+      cart: context.rawCartResult,
       prevCart: context.prevCart,
     }
   );

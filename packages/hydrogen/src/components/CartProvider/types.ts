@@ -83,7 +83,7 @@ export type CartAction =
   | {type: 'buyerIdentityUpdate'}
   | {type: 'cartAttributesUpdate'}
   | {type: 'discountCodesUpdate'}
-  | {type: 'resolve'; cart: Cart}
+  | {type: 'resolve'; cart: Cart; rawCartResult?: CartFragmentFragment}
   | {type: 'reject'; errors: any}
   | {type: 'resetCart'};
 
@@ -92,6 +92,7 @@ export type CartAction =
 // State Machine types
 export type CartMachineContext = {
   cart?: Cart;
+  rawCartResult?: CartFragmentFragment;
   prevCart?: Cart;
   errors?: any;
 };
@@ -172,7 +173,11 @@ export type CartMachineFetchResultEvent =
   | {type: 'CART_COMPLETED'; payload: {cartActionEvent: CartMachineActionEvent}}
   | {
       type: 'RESOLVE';
-      payload: {cartActionEvent: CartMachineActionEvent; cart: Cart};
+      payload: {
+        cartActionEvent: CartMachineActionEvent;
+        cart: Cart;
+        rawCartResult: CartFragmentFragment;
+      };
     }
   | {
       type: 'ERROR';

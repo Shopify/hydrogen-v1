@@ -33,6 +33,7 @@ function invokeCart(
           assign({
             prevCart: (context) => context?.cart,
             cart: (_, event) => event?.payload?.cart,
+            rawCartResult: (_, event) => event?.payload?.rawCartResult,
             errors: (_) => undefined,
           }),
         ],
@@ -357,7 +358,11 @@ function eventFromFetchResult(
 
   return {
     type: 'RESOLVE',
-    payload: {cart: cartFromGraphQL(cart), cartActionEvent},
+    payload: {
+      cart: cartFromGraphQL(cart),
+      rawCartResult: cart,
+      cartActionEvent,
+    },
   };
 }
 
