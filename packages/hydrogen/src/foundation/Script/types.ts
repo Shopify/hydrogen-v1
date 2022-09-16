@@ -47,7 +47,7 @@ export type BeforeHydrationProps = {
 } & BaseProps;
 
 export type PostHydrationProps = {
-  id?: string; // required as it will be used as key
+  id: string; // required as it will be used as key
   onError?: (e: any) => void;
   /* Event emitted when the script is loaded */
   onLoad?: (e: Event) => void;
@@ -75,7 +75,26 @@ export type ScriptCacheProps = {
   promise: Promise<ScriptResponse>;
 };
 
+type UseScriptReloadProps =
+  | {
+      id: string;
+      reload?: boolean;
+      /* `beforeHydration` and `inWorker` are not allowed  */
+      load?: Exclude<
+        PostHydrationProps['load'],
+        'beforeHydration' | 'inWorker'
+      >;
+    }
+  | {
+      id?: string;
+      reload?: never;
+      /* `beforeHydration` os not allowed inside a hook  */
+      load?: Exclude<
+        PostHydrationProps['load'],
+        'afterHydration' | 'onIdle' | 'inWorker'
+      >;
+    };
+
 export type UseScriptProps = {
-  /* `beforeHydration`  is not allowed because the hook is stateful e.g postHydration  */
-  load?: Exclude<PostHydrationProps['load'], 'beforeHydration' | 'worker'>;
-} & PostHydrationProps;
+  src: string;
+} & UseScriptReloadProps;

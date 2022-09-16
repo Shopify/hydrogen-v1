@@ -1,41 +1,68 @@
 import {requestIdleCallback} from '../../utilities/request-idle-callback-polyfill.js';
-import {loadScript, type ScriptProps} from './loadScript.js';
+import {loadScript} from './loadScript.js';
+import type {ScriptProps} from './types.js';
+
+type IdleCallbackHandle = number;
+
+const IdleCallbackCache = new Map<string, IdleCallbackHandle>();
+const IdleLoadingCache = new Map<string, boolean>();
 
 /*
-Avoid making changes to the DOM within your idle callback. By the time your callback is run
-the current frame has already finished drawing, and all layout updates and computations
-have been completed. If you make changes that affect layout, you may force a situation
-in which the browser has to stop and do recalculations that would otherwise be unnecessary.
-
-If your callback needs to change the DOM, it should use Window.requestAnimationFrame() to schedule that.
-@see: https://developer.mozilla.org/en-US/docs/Web/API/Background_Tasks_API
-TODO: write to the dom with a requestAnimationFrame inside loadScript
+  Injects a <script /> in the DOM based on the `onIdle` loading strategy
+  using requestIdleCallback/shim
 */
+export function loadScriptOnIdle(
+  props: ScriptProps,
+  cb: (status: boolean) => void = () => {}
+): any {
+  const key = props.id ?? '' + props.src ?? '';
+  const isReload = props.reload ?? false;
 
-/**
- * Avoid tasks whose run time can't be predicted. Your idle callback should avoid doing
- * anything that could take an unpredictable amount of time. For example, anything which
- * might affect layout should be avoided. You should also avoid resolving or rejecting
- * Promises, since that would invoke the handler for that promise's resolution or rejection
- * as soon as your callback returns.
- */
+  // if we are already loaded a script via onIdle callback early exit
+  if (IdleLoadingCache.get(key)) {
+    return cb(false);
+  }
 
-// Handles onIdle strategy
-export async function loadScriptOnIdle(props: ScriptProps) {
-  if (document.readyState === 'complete') {
-    return requestIdleCallback((deadline) => {
-      return loadScript(props)
-        .then((script) => script)
-        .catch((error) => error);
-    });
+  /*
+    If we are not loading and have and exiting idle callback and
+    we are not reloading we mark it as loaded.
+    if we are forcing `reload` we can early exit and mark it as loaded.
+
+    Otherwise, we need to cancel the ongoing idle callback
+  */
+  if (IdleCallbackCache.has(key)) {
+    if (isReload) {
+      IdleCallbackCache.delete(key);
+      IdleLoadingCache.delete(key);
+      return loadScriptOnIdle(props, cb);
+    }
+    return cb(true);
   } else {
-    window.addEventListener('load', () => {
-      return requestIdleCallback((deadline) => {
-        console.log('requestIdleCallback:load');
-        return loadScript(props)
-          .then((script) => script)
-          .catch((error) => error);
+    if (document.readyState === 'complete') {
+      const idleCallback = requestIdleCallback(async (deadline) => {
+        // @ts-ignore - a cached cb handle exists on after the callback
+        cancelIdleCallback(IdleCallbackCache.get(key));
+        const response = await loadScript(props);
+
+        // script no longer loading e.g ready
+        IdleLoadingCache.set(key, false);
+        if (response?.status) {
+          cb(true);
+        } else {
+          cb(false);
+        }
       });
-    });
+      // set asset as loading and cache it
+      IdleLoadingCache.set(key, true);
+      // cache callback handle for this asset
+      IdleCallbackCache.set(key, idleCallback);
+      return cb(false);
+    } else {
+      window.addEventListener('load', () => {
+        return requestIdleCallback(() => {
+          return loadScript(props);
+        });
+      });
+    }
   }
 }

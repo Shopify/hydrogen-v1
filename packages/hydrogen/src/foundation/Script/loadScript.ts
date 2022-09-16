@@ -1,14 +1,3 @@
-/**
-  The `Script` component renders a <script /> tag
-**/
-/*
-  To test:
-  - strips out `async` or `defer` attributes if `src` is not present
-*/
-// #see: https://stackoverflow.com/questions/2920129/can-i-run-javascript-before-the-whole-page-is-loaded
-// @see: https://i.stack.imgur.com/FcAKu.png
-
-import {logScriptPerformance} from './logScriptPerformance.js';
 import {
   ScriptProps,
   ScriptTarget,
@@ -16,7 +5,7 @@ import {
   ScriptCacheProps,
 } from './types.js';
 
-// Don't spread these props in the <script />
+// Don't spread these props in the rendered <script />
 const ignoreProps = [
   'children',
   'dangerouslySetInnerHTML',
@@ -36,14 +25,16 @@ const DOMAttributeNames: Record<string, string> = {
   noModule: 'noModule',
 };
 
-export const StartTimeCache = new Map<string, number>(); // script load times cache
+// Caches
 export const PrevPathCache = new Map<string, string>(); // path
 export const LoadCache = new Set<string>(); // script loading/loaded cache
 export const ScriptCache = new Map<string, ScriptCacheProps>(); // script instances cache
 
 /*
-  Inject a <script /> in the DOM base on
-  afterHydration, beforeHydration and inWorker strategies
+  Injects a <script /> in the DOM based on one of these loading strategies:
+    - afterHydration,
+    - beforeHydration and
+    - inWorker
 */
 export async function loadScript(
   props: ScriptProps
@@ -56,7 +47,7 @@ export async function loadScript(
     onLoad,
     onReady = null,
     src,
-    load = 'afterHydration', // default load
+    load = 'afterHydration', // default loading strategy
     target = 'body',
     reload = false,
   } = props;
@@ -82,17 +73,12 @@ export async function loadScript(
     if (ScriptCache.has(key)) {
       const scriptCache = ScriptCache.get(key);
       if (scriptCache?.script) {
-        LoadCache.delete(key);
-        ScriptCache.delete(key);
-        StartTimeCache.delete(key);
         // remove script from the target on the next available frame
         requestAnimationFrame(removeScript(target, scriptCache.script));
+        LoadCache.delete(key);
+        ScriptCache.delete(key);
       }
     }
-  }
-
-  if (!StartTimeCache.has(key)) {
-    StartTimeCache.set(key, performance.now());
   }
 
   // a script with a src is already instantiated, load it
@@ -151,23 +137,20 @@ export async function loadScript(
 
   /*
     marks this script to be loaded by partytown inWorker
-    TDOD: should check if partytown is enabled
-    TODO: cli should manage partytown adding
-    TODO: partytown config should
   */
   if (load === 'inWorker') {
     script.setAttribute('type', 'text/partytown');
   }
 
-  // inline scripts have no load
+  // mark script as loaded
   if (src) {
-    script.setAttribute('data-load', load);
+    script.setAttribute('data-loaded', load);
   } else {
-    script.setAttribute('data-load', 'inline');
+    script.setAttribute('data-loaded', 'inline');
   }
 
   // A promise to track onLoad, onError events
-  const loadPromise = new Promise<ScriptResponse>((resolve, reject) => {
+  const loadPromise = new Promise<ScriptResponse>(function (resolve, reject) {
     // add event listeners
     script.onload = function (event) {
       if (onLoad) {
@@ -177,10 +160,6 @@ export async function loadScript(
       if (onReady) {
         onReady.call(this, event);
       }
-      // on dev, we warn users about slow scripts based on a 4G MB/s assumption
-      if (import.meta.env.DEV) {
-        logScriptPerformance(key, src);
-      }
       resolve({status: true, event});
     };
 
@@ -189,9 +168,6 @@ export async function loadScript(
     };
   }).catch(function (error) {
     // error handling
-    if (import.meta.env.DEV) {
-      logScriptPerformance(key, src);
-    }
     if (onError) {
       onError(error);
     }

@@ -1,53 +1,6 @@
 import React from 'react';
 import {BeforeHydrationProps} from './types.js';
 
-/*
-  Adds an inline <script> tag before react hydrates on the client.
-
-  This load strategy is helpful for adding global window variables
-  such window.dataLayer, window._learnq etc, or pre-hydration
-  event listeners, mutation observers, etc.
-
-  Because these scripts are executed before hydration, you should
-  avoid scripts that perform DOM manipulations as this will negatively impact
-  impact performance and create hydration mismatch errors.
-
-  Its also possible to inline external scripts via the `src` property,
-  but this is not recommended because the default script tag config
-  is render blocking as it defaults defer and async to false
-  in order to ensure that it runs before hydration.
-
-  For optimal performance most scripts should be loaded via the
-  `afterHydration` on `onIdle` strategies.
-
-  Usage examples:
-
-  // inline script via dangerouslySetInnerHTML
-  <Script
-    id="inline-dangerouslySetInnerHTML"
-    strategy="beforeHydration"
-    dangerouslySetInnerHTML={{
-      __html: `
-        console.log("🕰 Inline code inside <Script dangerouslySetInnerHTML/> works");
-        window._learnq = window._learnq || {};
-      `,
-    }}
-  />
-
-  // inline script via children
-  <Script id="beforeHydration-children" load="beforeHydration">
-    {`console.log('🎉 Inline code inside <Script children/> works');`}
-    {`window.dataLayer = window.dataLayer || [];`}
-  </Script>
-
-  // inline external script via src
-  <Script
-    src="/scripts/cdn?script=before-hydration-script.js"
-    id="inline-before-hydration-script"
-    load="beforeHydration"
-  />
-*/
-
 const ignoreProps = ['load', 'onReady', 'target'];
 
 type AllowedBeforeHydrationProps = Exclude<
@@ -55,6 +8,9 @@ type AllowedBeforeHydrationProps = Exclude<
   typeof ignoreProps
 >;
 
+/*
+  Adds an inline <script> tag before react hydrates on the client.
+*/
 export function ScriptBeforeHydration(
   passedProps: BeforeHydrationProps
 ): JSX.Element {
@@ -65,6 +21,7 @@ export function ScriptBeforeHydration(
   const props = Object.keys(passedProps).reduce<AllowedBeforeHydrationProps>(
     (acc, key) => {
       if (ignoreProps.includes(key)) {
+        // @ts-ignore - we know this is a valid key
         delete acc[key];
       }
       return acc;
@@ -88,14 +45,14 @@ export function ScriptBeforeHydration(
           ? props.children.join('')
           : '';
       delete props.children;
-    } else if (props.dangerouslySetInnerHTML) {
+    } else if (typeof props.dangerouslySetInnerHTML !== 'undefined') {
       js = props.dangerouslySetInnerHTML.__html.trim();
       delete props.dangerouslySetInnerHTML;
     }
 
     return (
+      // eslint-disable-next-line hydrogen/prefer-script-component
       <script
-        id={id}
         key={id + js.slice(0, 24)}
         {...props}
         suppressHydrationWarning
@@ -107,14 +64,16 @@ export function ScriptBeforeHydration(
 
   // src provided, default to async and defer false,
   // because this should happen before hydration
+  // Not recommended
   return (
+    // eslint-disable-next-line hydrogen/prefer-script-component
     <script
       {...props}
       key={(id ?? '') + (src ?? '')}
       id={id}
       src={src}
       async={false}
-      defer={false} // if the user wants defer or async they should use onIdle or afterHydration strategies
+      defer={false} // for async/defer force user to use onIdle or afterHydration strategies
       data-load="beforeHydration"
     />
   );
