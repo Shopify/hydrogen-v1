@@ -221,7 +221,7 @@ describe('<CartProviderV2 />', () => {
         true,
         {
           addedCartLines: cartInput.lines,
-          cart: cartFromGraphQL(CART_WITH_LINES),
+          cart: CART_WITH_LINES,
           prevCart: null,
         }
       );
@@ -475,7 +475,7 @@ describe('<CartProviderV2 />', () => {
           true,
           {
             addedCartLines: cartLinesInput,
-            cart: cartFromGraphQL(CART_WITH_LINES),
+            cart: CART_WITH_LINES,
             prevCart: cartFromGraphQL(CART),
           }
         );
@@ -601,7 +601,7 @@ describe('<CartProviderV2 />', () => {
           true,
           {
             updatedCartLines: cartLinesInput,
-            cart: cartFromGraphQL(CART_WITH_LINES),
+            cart: CART_WITH_LINES,
             prevCart: cartFromGraphQL(CART),
             oldCart: cartFromGraphQL(CART),
           }
@@ -717,7 +717,7 @@ describe('<CartProviderV2 />', () => {
           true,
           {
             removedCartLines: cartLineIds,
-            cart: cartFromGraphQL(CART),
+            cart: CART,
             prevCart: cartFromGraphQL(CART_WITH_LINES),
           }
         );
@@ -1065,7 +1065,7 @@ describe('<CartProviderV2 />', () => {
           true,
           {
             updatedDiscountCodes: discountCodes,
-            cart: cartFromGraphQL(cartWithDiscountCode),
+            cart: cartWithDiscountCode,
             prevCart: cartFromGraphQL(CART),
           }
         );
