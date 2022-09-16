@@ -31,22 +31,26 @@ function invokeCart(
         target: options?.resolveTarget || 'idle',
         actions: [
           assign({
+            prevCart: (context) => context?.cart,
             cart: (_, event) => event?.payload?.cart,
-            errors: (_, event) => undefined,
+            rawCartResult: (_, event) => event?.payload?.rawCartResult,
+            errors: (_) => undefined,
           }),
         ],
       },
       ERROR: {
         target: options?.errorTarget || 'error',
         actions: assign({
+          prevCart: (context) => context?.cart,
           errors: (_, event) => event?.payload?.errors,
         }),
       },
       CART_COMPLETED: {
         target: 'cartCompleted',
         actions: assign({
-          cart: (_, event) => undefined,
-          errors: (_, event) => undefined,
+          prevCart: (_) => undefined,
+          cart: (_) => undefined,
+          errors: (_) => undefined,
         }),
       },
     },
@@ -354,7 +358,11 @@ function eventFromFetchResult(
 
   return {
     type: 'RESOLVE',
-    payload: {cart: cartFromGraphQL(cart), cartActionEvent},
+    payload: {
+      cart: cartFromGraphQL(cart),
+      rawCartResult: cart,
+      cartActionEvent,
+    },
   };
 }
 

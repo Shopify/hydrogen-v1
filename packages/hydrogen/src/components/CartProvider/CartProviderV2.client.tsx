@@ -9,14 +9,21 @@ import {
 } from '../../storefront-api-types.js';
 import {CartContext} from './context.js';
 import {
+  CartCreateEvent,
+  CartLineAddEvent,
+  CartLineRemoveEvent,
+  CartLineUpdateEvent,
+  CartMachineContext,
   CartMachineEvent,
   CartMachineTypeState,
   CartWithActions,
+  DiscountCodesUpdateEvent,
 } from './types.js';
 import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.js';
 import {useCartActions} from './CartActions.client.js';
 import {useCartAPIStateMachine} from './useCartAPIStateMachine.client.js';
 import {CART_ID_STORAGE_KEY} from './constants.js';
+import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
 
 export function CartProviderV2({
   children,
@@ -114,12 +121,22 @@ export function CartProviderV2({
         case 'RESOLVE':
           switch (event.payload.cartActionEvent.type) {
             case 'CART_CREATE':
+              publishCreateAnalytics(context, event.payload.cartActionEvent);
               return onCreateComplete?.();
             case 'CARTLINE_ADD':
+              publishLineAddAnalytics(context, event.payload.cartActionEvent);
               return onLineAddComplete?.();
             case 'CARTLINE_REMOVE':
+              publishLineRemoveAnalytics(
+                context,
+                event.payload.cartActionEvent
+              );
               return onLineRemoveComplete?.();
             case 'CARTLINE_UPDATE':
+              publishLineUpdateAnalytics(
+                context,
+                event.payload.cartActionEvent
+              );
               return onLineUpdateComplete?.();
             case 'NOTE_UPDATE':
               return onNoteUpdateComplete?.();
@@ -128,6 +145,10 @@ export function CartProviderV2({
             case 'CART_ATTRIBUTES_UPDATE':
               return onAttributesUpdateComplete?.();
             case 'DISCOUNT_CODES_UPDATE':
+              publishDiscountCodesUpdateAnalytics(
+                context,
+                event.payload.cartActionEvent
+              );
               return onDiscountCodesUpdateComplete?.();
           }
       }
@@ -326,4 +347,65 @@ function storageAvailable(type: 'localStorage' | 'sessionStorage') {
       storage.length !== 0
     );
   }
+}
+
+// Cart Analytics
+function publishCreateAnalytics(
+  context: CartMachineContext,
+  event: CartCreateEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.ADD_TO_CART, true, {
+    addedCartLines: event.payload.lines,
+    cart: context.rawCartResult,
+    prevCart: null,
+  });
+}
+
+function publishLineAddAnalytics(
+  context: CartMachineContext,
+  event: CartLineAddEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.ADD_TO_CART, true, {
+    addedCartLines: event.payload.lines,
+    cart: context.rawCartResult,
+    prevCart: context.prevCart,
+  });
+}
+
+function publishLineUpdateAnalytics(
+  context: CartMachineContext,
+  event: CartLineUpdateEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.UPDATE_CART, true, {
+    updatedCartLines: event.payload.lines,
+    oldCart: context.prevCart,
+    cart: context.rawCartResult,
+    prevCart: context.prevCart,
+  });
+}
+
+function publishLineRemoveAnalytics(
+  context: CartMachineContext,
+  event: CartLineRemoveEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.REMOVE_FROM_CART, true, {
+    removedCartLines: event.payload.lines,
+    cart: context.rawCartResult,
+    prevCart: context.prevCart,
+  });
+}
+
+function publishDiscountCodesUpdateAnalytics(
+  context: CartMachineContext,
+  event: DiscountCodesUpdateEvent
+) {
+  ClientAnalytics.publish(
+    ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
+    true,
+    {
+      updatedDiscountCodes: event.payload.discountCodes,
+      cart: context.rawCartResult,
+      prevCart: context.prevCart,
+    }
+  );
 }
