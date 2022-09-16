@@ -3,15 +3,13 @@ import {getPrice} from '../../../utilities/tests/price.js';
 import {flattenConnection} from '../../../utilities/index.js';
 import type {CartWithActions} from '../types.js';
 import {defaultCartFragment} from '../cart-queries.js';
-import {CountryCode} from '../../../storefront-api-types.js';
+import {CartFragmentFragment} from '../graphql/CartFragment.js';
 
 export const CART = {
   id: 'abc',
   checkoutUrl: 'https://shopify.com/checkout',
   attributes: [],
-  buyerIdentity: {
-    countryCode: CountryCode.Us,
-  },
+  buyerIdentity: {},
   discountCodes: [],
   totalQuantity: 0,
   cost: {
@@ -22,6 +20,10 @@ export const CART = {
   },
   lines: {edges: []},
 };
+
+export function getCartMock(options?: Partial<CartFragmentFragment>) {
+  return {...CART, ...options};
+}
 
 export const CART_WITH_LINES = {
   ...CART,
