@@ -121,16 +121,22 @@ export function CartProviderV2({
         case 'RESOLVE':
           switch (event.payload.cartActionEvent.type) {
             case 'CART_CREATE':
-              onCreateAnalytics(context, event.payload.cartActionEvent);
+              publishCreateAnalytics(context, event.payload.cartActionEvent);
               return onCreateComplete?.();
             case 'CARTLINE_ADD':
-              onLineAddAnalytics(context, event.payload.cartActionEvent);
+              publishLineAddAnalytics(context, event.payload.cartActionEvent);
               return onLineAddComplete?.();
             case 'CARTLINE_REMOVE':
-              onLineRemoveAnalytics(context, event.payload.cartActionEvent);
+              publishLineRemoveAnalytics(
+                context,
+                event.payload.cartActionEvent
+              );
               return onLineRemoveComplete?.();
             case 'CARTLINE_UPDATE':
-              onLineUpdateAnalytics(context, event.payload.cartActionEvent);
+              publishLineUpdateAnalytics(
+                context,
+                event.payload.cartActionEvent
+              );
               return onLineUpdateComplete?.();
             case 'NOTE_UPDATE':
               return onNoteUpdateComplete?.();
@@ -139,7 +145,7 @@ export function CartProviderV2({
             case 'CART_ATTRIBUTES_UPDATE':
               return onAttributesUpdateComplete?.();
             case 'DISCOUNT_CODES_UPDATE':
-              onDiscountCodesUpdateAnalytics(
+              publishDiscountCodesUpdateAnalytics(
                 context,
                 event.payload.cartActionEvent
               );
@@ -344,7 +350,7 @@ function storageAvailable(type: 'localStorage' | 'sessionStorage') {
 }
 
 // Cart Analytics
-function onCreateAnalytics(
+function publishCreateAnalytics(
   context: CartMachineContext,
   event: CartCreateEvent
 ) {
@@ -355,7 +361,7 @@ function onCreateAnalytics(
   });
 }
 
-function onLineAddAnalytics(
+function publishLineAddAnalytics(
   context: CartMachineContext,
   event: CartLineAddEvent
 ) {
@@ -366,7 +372,7 @@ function onLineAddAnalytics(
   });
 }
 
-function onLineUpdateAnalytics(
+function publishLineUpdateAnalytics(
   context: CartMachineContext,
   event: CartLineUpdateEvent
 ) {
@@ -378,7 +384,7 @@ function onLineUpdateAnalytics(
   });
 }
 
-function onLineRemoveAnalytics(
+function publishLineRemoveAnalytics(
   context: CartMachineContext,
   event: CartLineRemoveEvent
 ) {
@@ -389,7 +395,7 @@ function onLineRemoveAnalytics(
   });
 }
 
-function onDiscountCodesUpdateAnalytics(
+function publishDiscountCodesUpdateAnalytics(
   context: CartMachineContext,
   event: DiscountCodesUpdateEvent
 ) {
