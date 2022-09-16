@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.0-unstable-20220916195136
+
+### Patch Changes
+
+- Important bug fix for backwards compatibility with old environment variables. Followup from the [change in 1.4.0](https://github.com/Shopify/hydrogen/releases/tag/%40shopify%2Fhydrogen%401.4.0) ([#2151](https://github.com/Shopify/hydrogen/pull/2151)) by [@blittle](https://github.com/blittle)
+
 ## 1.4.0
 
 ### Minor Changes
@@ -303,7 +309,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }
