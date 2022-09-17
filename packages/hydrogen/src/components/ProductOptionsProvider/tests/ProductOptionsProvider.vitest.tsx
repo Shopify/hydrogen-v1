@@ -1,6 +1,8 @@
 import React from 'react';
+import {render, screen} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import {ShopifyTestProviders} from '../../../utilities/tests/provider-helpers.js';
 import {ProductOptionsProvider} from '../ProductOptionsProvider.client.js';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 import {getProduct} from '../../../utilities/tests/product.js';
 import {useProductOptions} from '../../../hooks/useProductOptions/index.js';
 import {
@@ -11,18 +13,21 @@ import {
 
 describe('<ProductOptionsProvider />', () => {
   it('renders its children', () => {
-    const Children = () => null;
     const prod = getProduct();
-    const productOptionsProvider = mountWithProviders(
+
+    render(
       <ProductOptionsProvider data={prod} initialVariantId="">
-        <Children />
-      </ProductOptionsProvider>
+        Children
+      </ProductOptionsProvider>,
+      {
+        wrapper: ShopifyTestProviders,
+      }
     );
 
-    expect(productOptionsProvider).toContainReactComponent(Children);
+    expect(screen.getByText('Children')).toBeInTheDocument();
   });
 
-  it('returns a structured list of options and values', async () => {
+  it('returns a structured list of options and values', () => {
     function Component() {
       const {options} = useProductOptions();
       return <div>{JSON.stringify(options)}</div>;
@@ -30,27 +35,34 @@ describe('<ProductOptionsProvider />', () => {
 
     const prod = getProduct({variants: VARIANTS});
 
-    const wrapper = await mountWithProviders(
+    render(
       <ProductOptionsProvider data={prod} initialVariantId="">
         <Component />
-      </ProductOptionsProvider>
+      </ProductOptionsProvider>,
+      {
+        wrapper: ShopifyTestProviders,
+      }
     );
 
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify([
-        {
-          name: 'Color',
-          values: ['Black', 'White'],
-        },
-        {
-          name: 'Size',
-          values: ['Small', 'Large'],
-        },
-      ]),
-    });
+    expect(
+      screen.getByText(
+        JSON.stringify([
+          {
+            name: 'Color',
+            values: ['Black', 'White'],
+          },
+          {
+            name: 'Size',
+            values: ['Small', 'Large'],
+          },
+        ])
+      )
+    ).toBeInTheDocument();
   });
 
   it('provides setSelectedOption callback', async () => {
+    const user = userEvent.setup();
+
     function Component() {
       const {options, setSelectedOption, selectedOptions} = useProductOptions();
       return (
@@ -81,21 +93,21 @@ describe('<ProductOptionsProvider />', () => {
 
     const prod = getProduct({variants: VARIANTS});
 
-    const wrapper = await mountWithProviders(
+    render(
       <ProductOptionsProvider data={prod}>
         <Component />
       </ProductOptionsProvider>
     );
 
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify({Color: 'Black', Size: 'Small'}),
-    });
+    expect(
+      screen.getByText(JSON.stringify({Color: 'Black', Size: 'Small'}))
+    ).toBeInTheDocument();
 
-    await wrapper.find('button', {children: 'White'})?.trigger('onClick');
+    await user.click(screen.getByRole('button', {name: 'White'}));
 
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify({Color: 'White', Size: 'Small'}),
-    });
+    expect(
+      screen.getByText(JSON.stringify({Color: 'White', Size: 'Small'}))
+    ).toBeInTheDocument();
   });
 
   it('computes selected options based on initial selected variant', async () => {
@@ -108,18 +120,21 @@ describe('<ProductOptionsProvider />', () => {
       variants: VARIANTS,
     });
 
-    const wrapper = await mountWithProviders(
+    render(
       <ProductOptionsProvider
         data={prod}
         initialVariantId={VARIANTS.nodes?.[0]?.id}
       >
         <Component />
-      </ProductOptionsProvider>
+      </ProductOptionsProvider>,
+      {
+        wrapper: ShopifyTestProviders,
+      }
     );
 
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify({Color: 'Black', Size: 'Small'}),
-    });
+    expect(
+      screen.getByText(JSON.stringify({Color: 'Black', Size: 'Small'}))
+    ).toBeInTheDocument();
   });
 
   it('provides list of variants', async () => {
@@ -130,18 +145,23 @@ describe('<ProductOptionsProvider />', () => {
 
     const prod = getProduct({variants: VARIANTS});
 
-    const wrapper = await mountWithProviders(
+    render(
       <ProductOptionsProvider data={prod} initialVariantId="">
         <Component />
-      </ProductOptionsProvider>
+      </ProductOptionsProvider>,
+      {
+        wrapper: ShopifyTestProviders,
+      }
     );
 
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(VARIANTS.nodes),
-    });
+    expect(
+      screen.getByText(JSON.stringify(VARIANTS.nodes))
+    ).toBeInTheDocument();
   });
 
   it('provides setSelectedVariant callback', async () => {
+    const user = userEvent.setup();
+
     function Component() {
       const {variants, selectedVariant, setSelectedVariant} =
         useProductOptions();
@@ -173,26 +193,33 @@ describe('<ProductOptionsProvider />', () => {
 
     const prod = getProduct({variants: VARIANTS});
 
-    const wrapper = await mountWithProviders(
+    render(
       <ProductOptionsProvider data={prod}>
         <Component />
-      </ProductOptionsProvider>
+      </ProductOptionsProvider>,
+      {
+        wrapper: ShopifyTestProviders,
+      }
     );
 
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(VARIANTS.nodes?.[0]),
+    expect(
+      screen.getByText(JSON.stringify(VARIANTS.nodes?.[0]))
+    ).toBeInTheDocument();
+
+    const option = screen.getByRole('option', {
+      name: VARIANTS.nodes?.[1]?.title || '',
     });
 
-    await wrapper
-      .find('select', {name: 'variant'})
-      ?.trigger('onChange', {target: {value: VARIANTS.nodes?.[1]?.id}});
+    await user.selectOptions(screen.getByLabelText('Variant'), [option]);
 
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(VARIANTS.nodes?.[1]),
-    });
+    expect(
+      screen.getByText(JSON.stringify(VARIANTS.nodes?.[1]))
+    ).toBeInTheDocument();
   });
 
   it('allows setSelectedVariant to be called with null to deselect', async () => {
+    const user = userEvent.setup();
+
     function Component() {
       const {selectedVariant, setSelectedVariant} = useProductOptions();
 
@@ -200,29 +227,34 @@ describe('<ProductOptionsProvider />', () => {
         <>
           <label htmlFor="variant">Variant</label>
           <button onClick={() => setSelectedVariant(null)}>Unselect</button>
-          <div>{JSON.stringify(selectedVariant)}</div>
+          <div data-testid="selected-variant">
+            {JSON.stringify(selectedVariant)}
+          </div>
         </>
       );
     }
 
-    const wrapper = await mountWithProviders(
+    render(
       <ProductOptionsProvider data={getProduct({variants: VARIANTS})}>
         <Component />
-      </ProductOptionsProvider>
+      </ProductOptionsProvider>,
+      {
+        wrapper: ShopifyTestProviders,
+      }
     );
 
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(VARIANTS.nodes?.[0]),
-    });
+    expect(screen.getByTestId('selected-variant')).toHaveTextContent(
+      JSON.stringify(VARIANTS.nodes?.[0])
+    );
 
-    await wrapper.find('button')!.trigger('onClick');
+    await user.click(screen.getByRole('button'));
 
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(null),
-    });
+    expect(screen.getByTestId('selected-variant').textContent).toBe('null');
   });
 
   it('provides out of stock helper', async () => {
+    const user = userEvent.setup();
+
     function Component() {
       const {options, setSelectedOption, isOptionInStock} = useProductOptions();
 
@@ -257,27 +289,30 @@ describe('<ProductOptionsProvider />', () => {
 
     const prod = getProduct({variants: VARIANTS});
 
-    const wrapper = await mountWithProviders(
+    render(
       <ProductOptionsProvider data={prod} initialVariantId="">
         <Component />
-      </ProductOptionsProvider>
+      </ProductOptionsProvider>,
+      {
+        wrapper: ShopifyTestProviders,
+      }
     );
 
-    expect(wrapper).toContainReactComponentTimes('button', 1, {
-      children: 'White',
-    });
-    expect(wrapper).toContainReactComponentTimes('button', 0, {
-      children: 'White (out of stock)',
-    });
+    expect(screen.getByRole('button', {name: 'White'})).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', {name: 'White (out of stock)'})
+    ).not.toBeInTheDocument();
 
-    await wrapper.find('button', {children: 'Large'})!.trigger('onClick');
+    await user.click(screen.getByRole('button', {name: 'Large'}));
 
-    expect(wrapper).toContainReactComponentTimes('button', 1, {
-      children: 'White (out of stock)',
-    });
+    expect(
+      screen.getByRole('button', {name: 'White (out of stock)'})
+    ).toBeInTheDocument();
   });
 
   it('supports selecting a selling plan', async () => {
+    const user = userEvent.setup();
+
     function Component() {
       const {
         setSelectedSellingPlan,
@@ -310,12 +345,12 @@ describe('<ProductOptionsProvider />', () => {
             );
           })}
           {selectedSellingPlan ? (
-            <div id="selectedSellingPlan">
+            <div data-testid="selectedSellingPlan">
               {JSON.stringify(selectedSellingPlan)}
             </div>
           ) : null}
           {selectedSellingPlanAllocation ? (
-            <div id="selectedSellingPlanAllocation">
+            <div data-testid="selectedSellingPlanAllocation">
               {JSON.stringify(selectedSellingPlanAllocation)}
             </div>
           ) : null}
@@ -328,31 +363,28 @@ describe('<ProductOptionsProvider />', () => {
       sellingPlanGroups: SELLING_PLAN_GROUPS_CONNECTION,
     });
 
-    const wrapper = await mountWithProviders(
+    render(
       <ProductOptionsProvider
         data={prod}
         initialVariantId={VARIANTS_WITH_SELLING_PLANS.nodes?.[0]?.id}
       >
         <Component />
-      </ProductOptionsProvider>
+      </ProductOptionsProvider>,
+      {
+        wrapper: ShopifyTestProviders,
+      }
     );
 
-    expect(wrapper).toContainReactComponentTimes('div', 0, {
-      id: 'selectedSellingPlan',
-    });
-    expect(wrapper).toContainReactComponentTimes('div', 0, {
-      id: 'selectedSellingPlanAllocation',
-    });
+    expect(screen.queryByTestId('selectedSellingPlan')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('selectedSellingPlanAllocation')
+    ).not.toBeInTheDocument();
 
-    await wrapper
-      .find('button', {children: 'Deliver every week'})
-      ?.trigger('onClick');
+    await user.click(screen.getByRole('button', {name: 'Deliver every week'}));
 
-    expect(wrapper).toContainReactComponentTimes('div', 1, {
-      id: 'selectedSellingPlan',
-    });
-    expect(wrapper).toContainReactComponentTimes('div', 1, {
-      id: 'selectedSellingPlanAllocation',
-    });
+    expect(screen.getByTestId('selectedSellingPlan')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('selectedSellingPlanAllocation')
+    ).toBeInTheDocument();
   });
 });
