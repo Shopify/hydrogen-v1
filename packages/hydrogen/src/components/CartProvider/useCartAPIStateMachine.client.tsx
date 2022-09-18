@@ -3,60 +3,89 @@ import {createMachine, assign, StateMachine} from '@xstate/fsm';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
 import {
   Cart,
+  CartMachineActionEvent,
+  CartMachineActions,
   CartMachineContext,
   CartMachineEvent,
+  CartMachineFetchResultEvent,
   CartMachineTypeState,
 } from './types.js';
 import {flattenConnection} from '../../utilities/flattenConnection/index.js';
 import {useCartActions} from './CartActions.client.js';
 import {useMemo} from 'react';
+import {InitEvent} from '@xstate/fsm/lib/types.js';
+import {CountryCode} from '../../storefront-api-types.js';
 
 function invokeCart(
-  actions: [string],
-  options?: {resolveTarget?: string; errorTarget?: string}
+  action: keyof CartMachineActions,
+  options?: {
+    entryActions?: [keyof CartMachineActions];
+    resolveTarget?: CartMachineTypeState['value'];
+    errorTarget?: CartMachineTypeState['value'];
+    exitActions?: [keyof CartMachineActions];
+  }
 ): StateMachine.Config<CartMachineContext, CartMachineEvent>['states']['on'] {
   return {
-    entry: actions,
+    entry: [
+      ...(options?.entryActions || []),
+      'onCartActionEntry',
+      'onCartActionOptimisticUI',
+      action,
+    ],
     on: {
       RESOLVE: {
         target: options?.resolveTarget || 'idle',
         actions: [
           assign({
+            prevCart: (context) => context?.cart,
             cart: (_, event) => event?.payload?.cart,
-            errors: (_, event) => undefined,
+            rawCartResult: (_, event) => event?.payload?.rawCartResult,
+            errors: (_) => undefined,
           }),
         ],
       },
       ERROR: {
         target: options?.errorTarget || 'error',
-        actions: assign({
-          errors: (_, event) => event?.payload?.errors,
-        }),
+        actions: [
+          assign({
+            prevCart: (context) => context?.cart,
+            cart: (context, _) => context?.lastValidCart,
+            errors: (_, event) => event?.payload?.errors,
+          }),
+        ],
       },
       CART_COMPLETED: {
         target: 'cartCompleted',
         actions: assign({
-          cart: (_, event) => undefined,
-          errors: (_, event) => undefined,
+          prevCart: (_) => undefined,
+          cart: (_) => undefined,
+          lastValidCart: (_) => undefined,
+          errors: (_) => undefined,
         }),
       },
     },
+    exit: ['onCartActionComplete', ...(options?.exitActions || [])],
   };
 }
 
-const INITIALIZING_CART_EVENTS = {
+const INITIALIZING_CART_EVENTS: StateMachine.Machine<
+  CartMachineContext,
+  CartMachineEvent,
+  CartMachineTypeState
+>['config']['states']['uninitialized']['on'] = {
   CART_FETCH: {
     target: 'cartFetching',
   },
   CART_CREATE: {
     target: 'cartCreating',
   },
-  CARTLINE_ADD: {
-    target: 'cartCreating',
-  },
 };
 
-const UPDATING_CART_EVENTS = {
+const UPDATING_CART_EVENTS: StateMachine.Machine<
+  CartMachineContext,
+  CartMachineEvent,
+  CartMachineTypeState
+>['config']['states']['idle']['on'] = {
   CARTLINE_ADD: {
     target: 'cartLineAdding',
   },
@@ -103,33 +132,55 @@ const cartMachine = createMachine<
     error: {
       on: UPDATING_CART_EVENTS,
     },
-    cartFetching: invokeCart(['cartFetchAction'], {
+    cartFetching: invokeCart('cartFetchAction', {
       errorTarget: 'initializationError',
     }),
-    cartCreating: invokeCart(['cartCreateAction'], {
+    cartCreating: invokeCart('cartCreateAction', {
       errorTarget: 'initializationError',
     }),
-    cartLineRemoving: invokeCart(['cartLineRemoveAction']),
-    cartLineUpdating: invokeCart(['cartLineUpdateAction']),
-    cartLineAdding: invokeCart(['cartLineAddAction']),
-    noteUpdating: invokeCart(['noteUpdateAction']),
-    buyerIdentityUpdating: invokeCart(['buyerIdentityUpdateAction']),
-    cartAttributesUpdating: invokeCart(['cartAttributesUpdateAction']),
-    discountCodesUpdating: invokeCart(['discountCodesUpdateAction']),
+    cartLineRemoving: invokeCart('cartLineRemoveAction'),
+    cartLineUpdating: invokeCart('cartLineUpdateAction'),
+    cartLineAdding: invokeCart('cartLineAddAction'),
+    noteUpdating: invokeCart('noteUpdateAction'),
+    buyerIdentityUpdating: invokeCart('buyerIdentityUpdateAction'),
+    cartAttributesUpdating: invokeCart('cartAttributesUpdateAction'),
+    discountCodesUpdating: invokeCart('discountCodesUpdateAction'),
   },
 });
 
 export function useCartAPIStateMachine({
   numCartLines,
+  onCartActionEntry,
+  onCartActionOptimisticUI,
+  onCartActionComplete,
   data: cart,
   cartFragment,
+  countryCode,
 }: {
   /**  Maximum number of cart lines to fetch. Defaults to 250 cart lines. */
   numCartLines?: number;
+  /** A callback that is invoked just before a Cart API action executes. */
+  onCartActionEntry?: (
+    context: CartMachineContext,
+    event: CartMachineActionEvent
+  ) => void;
+  /** A callback that is invoked after executing the entry actions for optimistic UI changes.  */
+  onCartActionOptimisticUI?: (
+    context: CartMachineContext,
+    event: CartMachineEvent
+  ) => Partial<CartMachineContext>;
+  /** A callback that is invoked after a Cart API completes. */
+  onCartActionComplete?: (
+    context: CartMachineContext,
+    event: CartMachineFetchResultEvent
+  ) => void;
+  /** A callback that is invoked after a Cart API completes. */
   /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
   cartFragment?: string;
+  /** The ISO country code for i18n. */
+  countryCode?: CountryCode;
 }) {
   const {
     cartFetch,
@@ -144,190 +195,157 @@ export function useCartAPIStateMachine({
   } = useCartActions({
     numCartLines,
     cartFragment,
+    countryCode,
   });
 
   const [state, send, service] = useMachine(cartMachine, {
     actions: {
-      cartFetchAction: (_, event) => {
+      cartFetchAction: async (_, event): Promise<void> => {
         if (event.type !== 'CART_FETCH') return;
-        cartFetch(event?.payload?.cartId).then((res) => {
-          if (res?.errors) {
-            return send({type: 'ERROR', payload: {errors: res?.errors}});
-          }
 
-          if (!res?.data?.cart) {
-            return send({
-              type: 'CART_COMPLETED',
-            });
-          }
-
-          send({
-            type: 'RESOLVE',
-            payload: {cart: cartFromGraphQL(res.data.cart)},
-          });
-        });
+        const {data, errors} = await cartFetch(event?.payload?.cartId);
+        const resultEvent = eventFromFetchResult(event, data?.cart, errors);
+        send(resultEvent);
       },
-      cartCreateAction: (_, event) => {
-        if (event.type !== 'CART_CREATE' && event.type !== 'CARTLINE_ADD')
-          return;
+      cartCreateAction: async (_, event): Promise<void> => {
+        if (event.type !== 'CART_CREATE') return;
 
-        cartCreate(event?.payload).then((res) => {
-          if (res?.errors || !res.data?.cartCreate?.cart) {
-            return send({type: 'ERROR', payload: {errors: res?.errors}});
-          }
-
-          if (!res?.data?.cartCreate.cart) {
-            return send({
-              type: 'CART_COMPLETED',
-            });
-          }
-
-          send({
-            type: 'RESOLVE',
-            payload: {cart: cartFromGraphQL(res.data?.cartCreate.cart)},
-          });
-        });
+        const {data, errors} = await cartCreate(event?.payload);
+        const resultEvent = eventFromFetchResult(
+          event,
+          data?.cartCreate?.cart,
+          errors
+        );
+        send(resultEvent);
       },
-      cartLineAddAction: (context, event) => {
+      cartLineAddAction: async (context, event): Promise<void> => {
         if (event.type !== 'CARTLINE_ADD' || !context?.cart?.id) return;
 
-        cartLineAdd(context.cart.id, event.payload.lines).then((res) => {
-          if (res?.errors) {
-            return send({type: 'ERROR', payload: {errors: res?.errors}});
-          }
+        const {data, errors} = await cartLineAdd(
+          context.cart.id,
+          event.payload.lines
+        );
 
-          if (!res.data?.cartLinesAdd?.cart) {
-            return send({
-              type: 'CART_COMPLETED',
-            });
-          }
+        const resultEvent = eventFromFetchResult(
+          event,
+          data?.cartLinesAdd?.cart,
+          errors
+        );
 
-          send({
-            type: 'RESOLVE',
-            payload: {cart: cartFromGraphQL(res.data?.cartLinesAdd.cart)},
-          });
-        });
+        send(resultEvent);
       },
-      cartLineUpdateAction: (context, event) => {
+      cartLineUpdateAction: async (context, event): Promise<void> => {
         if (event.type !== 'CARTLINE_UPDATE' || !context?.cart?.id) return;
-        cartLineUpdate(context.cart.id, event.payload.lines).then((res) => {
-          if (res?.errors) {
-            return send({type: 'ERROR', payload: {errors: res?.errors}});
-          }
+        const {data, errors} = await cartLineUpdate(
+          context.cart.id,
+          event.payload.lines
+        );
 
-          if (!res.data?.cartLinesUpdate?.cart) {
-            return send({
-              type: 'CART_COMPLETED',
-            });
-          }
+        const resultEvent = eventFromFetchResult(
+          event,
+          data?.cartLinesUpdate?.cart,
+          errors
+        );
 
-          send({
-            type: 'RESOLVE',
-            payload: {cart: cartFromGraphQL(res.data?.cartLinesUpdate.cart)},
-          });
-        });
+        send(resultEvent);
       },
-      cartLineRemoveAction: (context, event) => {
+      cartLineRemoveAction: async (context, event): Promise<void> => {
         if (event.type !== 'CARTLINE_REMOVE' || !context?.cart?.id) return;
-        cartLineRemove(context.cart.id, event.payload.lines).then((res) => {
-          if (res?.errors) {
-            return send({type: 'ERROR', payload: {errors: res?.errors}});
-          }
+        const {data, errors} = await cartLineRemove(
+          context.cart.id,
+          event.payload.lines
+        );
 
-          if (!res.data?.cartLinesRemove?.cart) {
-            return send('CART_COMPLETED');
-          }
+        const resultEvent = eventFromFetchResult(
+          event,
+          data?.cartLinesRemove?.cart,
+          errors
+        );
 
-          send({
-            type: 'RESOLVE',
-            payload: {cart: cartFromGraphQL(res.data?.cartLinesRemove.cart)},
-          });
-        });
+        send(resultEvent);
       },
-      noteUpdateAction: (context, event) => {
+      noteUpdateAction: async (context, event): Promise<void> => {
         if (event.type !== 'NOTE_UPDATE' || !context?.cart?.id) return;
-        noteUpdate(context.cart.id, event.payload.note).then((res) => {
-          if (res?.errors) {
-            return send({type: 'ERROR', payload: {errors: res?.errors}});
-          }
+        const {data, errors} = await noteUpdate(
+          context.cart.id,
+          event.payload.note
+        );
 
-          if (!res.data?.cartNoteUpdate?.cart) {
-            return send('CART_COMPLETED');
-          }
+        const resultEvent = eventFromFetchResult(
+          event,
+          data?.cartNoteUpdate?.cart,
+          errors
+        );
 
-          send({
-            type: 'RESOLVE',
-            payload: {cart: cartFromGraphQL(res.data?.cartNoteUpdate.cart)},
-          });
-        });
+        send(resultEvent);
       },
-      buyerIdentityUpdateAction: (context, event) => {
+      buyerIdentityUpdateAction: async (context, event): Promise<void> => {
         if (event.type !== 'BUYER_IDENTITY_UPDATE' || !context?.cart?.id)
           return;
-        buyerIdentityUpdate(context.cart.id, event.payload.buyerIdentity).then(
-          (res) => {
-            if (res?.errors) {
-              return send({type: 'ERROR', payload: {errors: res?.errors}});
-            }
-
-            if (!res.data?.cartBuyerIdentityUpdate?.cart) {
-              return send('CART_COMPLETED');
-            }
-
-            send({
-              type: 'RESOLVE',
-              payload: {
-                cart: cartFromGraphQL(res.data?.cartBuyerIdentityUpdate.cart),
-              },
-            });
-          }
+        const {data, errors} = await buyerIdentityUpdate(
+          context.cart.id,
+          event.payload.buyerIdentity
         );
+
+        const resultEvent = eventFromFetchResult(
+          event,
+          data?.cartBuyerIdentityUpdate?.cart,
+          errors
+        );
+
+        send(resultEvent);
       },
-      cartAttributesUpdateAction: (context, event) => {
+      cartAttributesUpdateAction: async (context, event): Promise<void> => {
         if (event.type !== 'CART_ATTRIBUTES_UPDATE' || !context?.cart?.id)
           return;
-        cartAttributesUpdate(context.cart.id, event.payload.attributes).then(
-          (res) => {
-            if (res?.errors) {
-              return send({type: 'ERROR', payload: {errors: res?.errors}});
-            }
-
-            if (!res.data?.cartAttributesUpdate?.cart) {
-              return send('CART_COMPLETED');
-            }
-
-            send({
-              type: 'RESOLVE',
-              payload: {
-                cart: cartFromGraphQL(res.data?.cartAttributesUpdate.cart),
-              },
-            });
-          }
+        const {data, errors} = await cartAttributesUpdate(
+          context.cart.id,
+          event.payload.attributes
         );
+
+        const resultEvent = eventFromFetchResult(
+          event,
+          data?.cartAttributesUpdate?.cart,
+          errors
+        );
+
+        send(resultEvent);
       },
-      discountCodesUpdateAction: (context, event) => {
+      discountCodesUpdateAction: async (context, event): Promise<void> => {
         if (event.type !== 'DISCOUNT_CODES_UPDATE' || !context?.cart?.id)
           return;
-        discountCodesUpdate(context.cart.id, event.payload.discountCodes).then(
-          (res) => {
-            if (res?.errors) {
-              return send({type: 'ERROR', payload: {errors: res?.errors}});
-            }
-
-            if (!res.data?.cartDiscountCodesUpdate?.cart) {
-              return send('CART_COMPLETED');
-            }
-
-            send({
-              type: 'RESOLVE',
-              payload: {
-                cart: cartFromGraphQL(res.data?.cartDiscountCodesUpdate.cart),
-              },
-            });
-          }
+        const {data, errors} = await discountCodesUpdate(
+          context.cart.id,
+          event.payload.discountCodes
         );
+        const resultEvent = eventFromFetchResult(
+          event,
+          data?.cartDiscountCodesUpdate?.cart,
+          errors
+        );
+
+        send(resultEvent);
       },
-    },
+      ...(onCartActionEntry && {
+        onCartActionEntry: (context, event) => {
+          if (isCartActionEvent(event)) {
+            onCartActionEntry(context, event);
+          }
+        },
+      }),
+      ...(onCartActionOptimisticUI && {
+        onCartActionOptimisticUI: assign((context, event) => {
+          return onCartActionOptimisticUI(context, event);
+        }),
+      }),
+      ...(onCartActionComplete && {
+        onCartActionComplete: (context, event) => {
+          if (isCartFetchResultEvent(event)) {
+            onCartActionComplete(context, event);
+          }
+        },
+      }),
+    } as CartMachineActions,
   });
 
   return useMemo(() => [state, send, service] as const, [state, send, service]);
@@ -340,4 +358,57 @@ export function cartFromGraphQL(cart: CartFragmentFragment): Cart {
     lines: flattenConnection(cart.lines),
     note: cart.note ?? undefined,
   };
+}
+
+function eventFromFetchResult(
+  cartActionEvent: CartMachineActionEvent,
+  cart?: CartFragmentFragment | null,
+  errors?: any
+): CartMachineFetchResultEvent {
+  if (errors) {
+    return {type: 'ERROR', payload: {errors, cartActionEvent}};
+  }
+
+  if (!cart) {
+    return {
+      type: 'CART_COMPLETED',
+      payload: {
+        cartActionEvent,
+      },
+    };
+  }
+
+  return {
+    type: 'RESOLVE',
+    payload: {
+      cart: cartFromGraphQL(cart),
+      rawCartResult: cart,
+      cartActionEvent,
+    },
+  };
+}
+
+function isCartActionEvent(
+  event: CartMachineEvent | InitEvent
+): event is CartMachineActionEvent {
+  return (
+    event.type === 'CART_CREATE' ||
+    event.type === 'CARTLINE_ADD' ||
+    event.type === 'CARTLINE_UPDATE' ||
+    event.type === 'CARTLINE_REMOVE' ||
+    event.type === 'NOTE_UPDATE' ||
+    event.type === 'BUYER_IDENTITY_UPDATE' ||
+    event.type === 'CART_ATTRIBUTES_UPDATE' ||
+    event.type === 'DISCOUNT_CODES_UPDATE'
+  );
+}
+
+function isCartFetchResultEvent(
+  event: CartMachineEvent | InitEvent
+): event is CartMachineFetchResultEvent {
+  return (
+    event.type === 'RESOLVE' ||
+    event.type === 'ERROR' ||
+    event.type === 'CART_COMPLETED'
+  );
 }

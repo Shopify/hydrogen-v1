@@ -69,7 +69,7 @@
     "turbo": "^1.2.8",
     "type-fest": "^2.12.0",
     "typescript": "^4.8.2",
-    "vite": "^2.9.0",
+    "vite": "^2.9.13",
     "yorkie": "^2.0.0"
   },
   "gitHooks": {
@@ -89,10 +89,6 @@
     "*.md": [
       "prettier --write"
     ]
-  },
-  "resolutions": {
-    "unified": "9.2.2",
-    "@shopify/cli-kit": "3.6.1"
   },
   "version": "0.0.0"
 }

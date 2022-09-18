@@ -87,15 +87,5 @@ declare global {
 async function polyfillOxygenEnv(config: ResolvedConfig) {
   const env = await loadEnv(config.mode, config.root, '');
 
-  const publicPrefixes = Array.isArray(config.envPrefix)
-    ? config.envPrefix
-    : [config.envPrefix || ''];
-
-  for (const key of Object.keys(env)) {
-    if (publicPrefixes.some((prefix) => key.startsWith(prefix))) {
-      delete env[key];
-    }
-  }
-
   globalThis.Oxygen = {env};
 }

@@ -1,5 +1,5 @@
 import type {
-  ShopifyContextValue,
+  ShopifyContextServerValue,
   LocalizationContextValue,
 } from '../ShopifyProvider/types.js';
 import {getTime} from '../../utilities/timing.js';
@@ -69,7 +69,7 @@ export class HydrogenRequest extends Request {
     cache: Map<string, any>;
     head: HeadData;
     hydrogenConfig?: ResolvedHydrogenConfig;
-    shopifyConfig?: ShopifyContextValue;
+    shopifyConfig?: ShopifyContextServerValue;
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;
     preloadQueries: PreloadQueriesByURL;
@@ -82,6 +82,7 @@ export class HydrogenRequest extends Request {
     scopes: Map<string, Record<string, any>>;
     localization?: LocalizationContextValue;
     [key: string]: any;
+    throttledRequests: Record<string, any>;
   };
 
   constructor(input: any);
@@ -116,6 +117,7 @@ export class HydrogenRequest extends Request {
       preloadQueries: new Map(),
       scopes: new Map(),
       flashSession: {},
+      throttledRequests: {},
     };
     this.cookies = this.parseCookies();
   }

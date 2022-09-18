@@ -172,12 +172,20 @@ function queryShopBuilder(
       );
     }
 
-    const {storeDomain, storefrontApiVersion, storefrontToken} = shopifyConfig;
+    const {
+      storeDomain,
+      storefrontApiVersion,
+      storefrontToken,
+      privateStorefrontToken,
+      storefrontId,
+    } = shopifyConfig;
     const buyerIp = request.getBuyerIp();
 
     const extraHeaders = getStorefrontApiRequestHeaders({
       buyerIp,
-      storefrontToken,
+      publicStorefrontToken: storefrontToken,
+      privateStorefrontToken,
+      storefrontId,
     });
 
     const fetcher = fetchBuilder<T>(

@@ -46,6 +46,7 @@ export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/Shopif
 export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const.js';
 export {useSession} from './foundation/useSession/useSession.js';
 export {Cookie} from './foundation/Cookie/Cookie.js';
+export {useDelay} from './hooks/useDelay/useDelay.js';
 
 /**
  * Export server-only CartQuery here instead of `CartProvider.client` to prevent

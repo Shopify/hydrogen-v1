@@ -4,7 +4,7 @@ import type {PartialDeep} from 'type-fest';
 import {getPreviewImage} from './Image.test.helpers.js';
 
 export function getVideoData(
-  video: Partial<VideoType> = {}
+  video: PartialDeep<VideoType> = {}
 ): PartialDeep<VideoType> {
   return {
     id: video.id ?? faker.random.words(),

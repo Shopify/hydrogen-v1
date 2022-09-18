@@ -7,6 +7,7 @@ import {
   MutationCartAttributesUpdateArgs,
 } from '../../storefront-api-types.js';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
+import {StateMachine} from '@xstate/fsm';
 
 export type Status = State['status'];
 
@@ -82,7 +83,7 @@ export type CartAction =
   | {type: 'buyerIdentityUpdate'}
   | {type: 'cartAttributesUpdate'}
   | {type: 'discountCodesUpdate'}
-  | {type: 'resolve'; cart: Cart}
+  | {type: 'resolve'; cart: Cart; rawCartResult?: CartFragmentFragment}
   | {type: 'reject'; errors: any}
   | {type: 'resetCart'};
 
@@ -91,6 +92,9 @@ export type CartAction =
 // State Machine types
 export type CartMachineContext = {
   cart?: Cart;
+  lastValidCart?: Cart;
+  rawCartResult?: CartFragmentFragment;
+  prevCart?: Cart;
   errors?: any;
 };
 
@@ -155,7 +159,7 @@ export type DiscountCodesUpdateEvent = {
   };
 };
 
-export type CartMachineEvent =
+export type CartMachineActionEvent =
   | CartFetchEvent
   | CartCreateEvent
   | CartLineAddEvent
@@ -164,16 +168,34 @@ export type CartMachineEvent =
   | NoteUpdateEvent
   | BuyerIdentityUpdateEvent
   | CartAttributesUpdateEvent
-  | DiscountCodesUpdateEvent
-  | {type: 'CART_COMPLETED'}
-  | {type: 'RESOLVE'; payload: {cart: Cart}}
-  | {type: 'ERROR'; payload: {errors: any}};
+  | DiscountCodesUpdateEvent;
+
+export type CartMachineFetchResultEvent =
+  | {type: 'CART_COMPLETED'; payload: {cartActionEvent: CartMachineActionEvent}}
+  | {
+      type: 'RESOLVE';
+      payload: {
+        cartActionEvent: CartMachineActionEvent;
+        cart: Cart;
+        rawCartResult: CartFragmentFragment;
+      };
+    }
+  | {
+      type: 'ERROR';
+      payload: {cartActionEvent: CartMachineActionEvent; errors: any};
+    };
+
+export type CartMachineEvent =
+  | CartMachineActionEvent
+  | CartMachineFetchResultEvent;
 
 export type CartMachineTypeState =
   | {
       value: 'uninitialized';
       context: CartMachineContext & {
         cart: undefined;
+        lastValidCart: undefined;
+        prevCart: undefined;
         errors?: any;
       };
     }
@@ -181,6 +203,8 @@ export type CartMachineTypeState =
       value: 'initializationError';
       context: CartMachineContext & {
         cart: undefined;
+        lastValidCart: undefined;
+        prevCart: undefined;
         errors: any;
       };
     }
@@ -188,6 +212,8 @@ export type CartMachineTypeState =
       value: 'cartCompleted';
       context: CartMachineContext & {
         cart: undefined;
+        prevCart?: Cart;
+        lastValidCart: undefined;
         errors: any;
       };
     }
@@ -195,6 +221,8 @@ export type CartMachineTypeState =
       value: 'idle';
       context: CartMachineContext & {
         cart: Cart;
+        prevCart?: Cart;
+        lastValidCart?: Cart;
         errors?: any;
       };
     }
@@ -202,6 +230,8 @@ export type CartMachineTypeState =
       value: 'error';
       context: CartMachineContext & {
         cart?: Cart;
+        prevCart?: Cart;
+        lastValidCart?: Cart;
         errors: any;
       };
     }
@@ -214,3 +244,26 @@ export type CartMachineTypeState =
   | {value: 'buyerIdentityUpdating'; context: CartMachineContext}
   | {value: 'cartAttributesUpdating'; context: CartMachineContext}
   | {value: 'discountCodesUpdating'; context: CartMachineContext};
+
+export type CartMachineAction = StateMachine.ActionFunction<
+  CartMachineContext,
+  CartMachineEvent
+>;
+
+export type CartMachineActions = {
+  cartFetchAction: CartMachineAction;
+  cartCreateAction: CartMachineAction;
+  cartLineRemoveAction: CartMachineAction;
+  cartLineUpdateAction: CartMachineAction;
+  cartLineAddAction: CartMachineAction;
+  noteUpdateAction: CartMachineAction;
+  buyerIdentityUpdateAction: CartMachineAction;
+  cartAttributesUpdateAction: CartMachineAction;
+  discountCodesUpdateAction: CartMachineAction;
+  onCartActionEntry?: CartMachineAction;
+  onCartActionOptimisticUI?: StateMachine.AssignActionObject<
+    CartMachineContext,
+    CartMachineEvent
+  >;
+  onCartActionComplete?: CartMachineAction;
+};

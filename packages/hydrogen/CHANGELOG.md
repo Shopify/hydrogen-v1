@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.4.1
+
+### Patch Changes
+
+- Important bug fix for backwards compatibility with old environment variables. Followup from the [change in 1.4.0](https://github.com/Shopify/hydrogen/releases/tag/%40shopify%2Fhydrogen%401.4.0) ([#2151](https://github.com/Shopify/hydrogen/pull/2151)) by [@blittle](https://github.com/blittle)
+
+## 1.4.0
+
+### Minor Changes
+
+- Add the `useDelay` hook for artificial delays when rendering server components. This is useful to debug timing issues or building suspense boundary fallback UI. See the [`useDelay` documentation](https://shopify.dev/api/hydrogen/hooks/global/usedelay). ([#2109](https://github.com/Shopify/hydrogen/pull/2109)) by [@blittle](https://github.com/blittle)
+
+### Patch Changes
+
+- We've exposed the private server-to-server Storefront API token in the Hydrogen config file. This private token is required when deploying to production, otherwise the requests to the storefront API will be rate-limited. This change will make it easier to configure Hydrogen when deploying to non-Oxygen environments. We'll also display a warning in production mode if this token is not defined. ([#1998](https://github.com/Shopify/hydrogen/pull/1998)) by [@blittle](https://github.com/blittle)
+
+  We've also added the `storefrontId` property to the config. This enables Hydrogen data to display properly in the Shopify admin analytics dashboard.
+
+  Lastly, we've updated all Oxygen environment variables to a more consistent naming convention. The previous variables are still available, but are deprecated, and will be removed in the future. You’ll see a warning in your console if you use the old environment variables. You can update your variable references using this table:
+
+  | **Old Oxygen variable**             | **New Oxygen variable**      |
+  | ----------------------------------- | ---------------------------- |
+  | SHOPIFY_STORE_DOMAIN                | PUBLIC_STORE_DOMAIN          |
+  | SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN | PUBLIC_STOREFRONT_API_TOKEN  |
+  | SHOPIFY_STOREFRONT_API_SECRET_TOKEN | PRIVATE_STOREFRONT_API_TOKEN |
+  | SHOPIFY_STOREFRONT_ID               | PUBLIC_STOREFRONT_ID         |
+
+* Fixed dev-mode Hydrogen builds to properly show `PUBLIC_` prefixed environment variables ([#2142](https://github.com/Shopify/hydrogen/pull/2142)) by [@blittle](https://github.com/blittle)
+
+- An issue with previewing hydrogen in production has been fixed. Make sure that you upgrade both `@shopify/cli` and `@shopify/cli-hydrogen` to 3.12.0. ([#2144](https://github.com/Shopify/hydrogen/pull/2144)) by [@blittle](https://github.com/blittle)
+
 ## 1.3.2
 
 ### Patch Changes
@@ -278,7 +309,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }

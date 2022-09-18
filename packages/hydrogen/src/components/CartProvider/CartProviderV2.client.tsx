@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
 import {
   AttributeInput,
@@ -6,45 +6,236 @@ import {
   CartInput,
   CartLineInput,
   CartLineUpdateInput,
+  CountryCode,
 } from '../../storefront-api-types.js';
 import {CartContext} from './context.js';
 import {
+  BuyerIdentityUpdateEvent,
+  CartCreateEvent,
+  CartLineAddEvent,
+  CartLineRemoveEvent,
+  CartLineUpdateEvent,
+  CartMachineContext,
   CartMachineEvent,
   CartMachineTypeState,
   CartWithActions,
+  DiscountCodesUpdateEvent,
 } from './types.js';
 import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.js';
 import {useCartActions} from './CartActions.client.js';
 import {useCartAPIStateMachine} from './useCartAPIStateMachine.client.js';
 import {CART_ID_STORAGE_KEY} from './constants.js';
+import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
 
 export function CartProviderV2({
   children,
   numCartLines,
+  onCreate,
+  onLineAdd,
+  onLineRemove,
+  onLineUpdate,
+  onNoteUpdate,
+  onBuyerIdentityUpdate,
+  onAttributesUpdate,
+  onDiscountCodesUpdate,
+  onCreateComplete,
+  onLineAddComplete,
+  onLineRemoveComplete,
+  onLineUpdateComplete,
+  onNoteUpdateComplete,
+  onBuyerIdentityUpdateComplete,
+  onAttributesUpdateComplete,
+  onDiscountCodesUpdateComplete,
   data: cart,
   cartFragment,
+  customerAccessToken,
+  countryCode = CountryCode.Us,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
   /**  Maximum number of cart lines to fetch. Defaults to 250 cart lines. */
   numCartLines?: number;
+  /** A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API. */
+  onCreate?: () => void;
+  /** A callback that is invoked when the process to add a line item to the cart begins, but before the line item is added to the Storefront API. */
+  onLineAdd?: () => void;
+  /** A callback that is invoked when the process to remove a line item to the cart begins, but before the line item is removed from the Storefront API. */
+  onLineRemove?: () => void;
+  /** A callback that is invoked when the process to update a line item in the cart begins, but before the line item is updated in the Storefront API. */
+  onLineUpdate?: () => void;
+  /** A callback that is invoked when the process to add or update a note in the cart begins, but before the note is added or updated in the Storefront API. */
+  onNoteUpdate?: () => void;
+  /** A callback that is invoked when the process to update the buyer identity begins, but before the buyer identity is updated in the Storefront API. */
+  onBuyerIdentityUpdate?: () => void;
+  /** A callback that is invoked when the process to update the cart attributes begins, but before the attributes are updated in the Storefront API. */
+  onAttributesUpdate?: () => void;
+  /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
+  onDiscountCodesUpdate?: () => void;
+  /** A callback that is invoked when the process to create a cart completes */
+  onCreateComplete?: () => void;
+  /** A callback that is invoked when the process to add a line item to the cart completes */
+  onLineAddComplete?: () => void;
+  /** A callback that is invoked when the process to remove a line item to the cart completes */
+  onLineRemoveComplete?: () => void;
+  /** A callback that is invoked when the process to update a line item in the cart completes */
+  onLineUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to add or update a note in the cart completes */
+  onNoteUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to update the buyer identity completes */
+  onBuyerIdentityUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to update the cart attributes completes */
+  onAttributesUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to update the cart discount codes completes */
+  onDiscountCodesUpdateComplete?: () => void;
   /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
   cartFragment?: string;
+  /** A customer access token that's accessible on the server if there's a customer login. */
+  customerAccessToken?: CartBuyerIdentityInput['customerAccessToken'];
+  /** The ISO country code for i18n. */
+  countryCode?: CountryCode;
 }) {
+  if (countryCode) countryCode = countryCode.toUpperCase() as CountryCode;
+  const [prevCountryCode, setPrevCountryCode] = useState(countryCode);
+  const [prevCustomerAccessToken, setPrevCustomerAccessToken] =
+    useState(customerAccessToken);
+  const customerOverridesCountryCode = useRef(false);
+
+  if (
+    prevCountryCode !== countryCode ||
+    prevCustomerAccessToken !== customerAccessToken
+  ) {
+    setPrevCountryCode(countryCode);
+    setPrevCustomerAccessToken(customerAccessToken);
+    customerOverridesCountryCode.current = false;
+  }
+
   const {cartFragment: usedCartFragment} = useCartActions({
     numCartLines,
     cartFragment,
+    countryCode,
   });
 
   const [cartState, cartSend] = useCartAPIStateMachine({
     numCartLines,
     cartFragment,
+    onCartActionEntry(context, event) {
+      switch (event.type) {
+        case 'CART_CREATE':
+          return onCreate?.();
+        case 'CARTLINE_ADD':
+          return onLineAdd?.();
+        case 'CARTLINE_REMOVE':
+          return onLineRemove?.();
+        case 'CARTLINE_UPDATE':
+          return onLineUpdate?.();
+        case 'NOTE_UPDATE':
+          return onNoteUpdate?.();
+        case 'BUYER_IDENTITY_UPDATE':
+          return onBuyerIdentityUpdate?.();
+        case 'CART_ATTRIBUTES_UPDATE':
+          return onAttributesUpdate?.();
+        case 'DISCOUNT_CODES_UPDATE':
+          return onDiscountCodesUpdate?.();
+      }
+    },
+    onCartActionOptimisticUI(context, event) {
+      if (!context?.cart) return {cart: undefined};
+      switch (event.type) {
+        case 'CARTLINE_REMOVE':
+          return {
+            ...context,
+            lastValidCart: context.cart,
+            cart: {
+              ...context.cart,
+              lines: context?.cart?.lines.filter(
+                ({id}) => !event.payload.lines.includes(id)
+              ),
+            },
+          };
+        case 'CARTLINE_UPDATE':
+          return {
+            ...context,
+            lastValidCart: context.cart,
+            cart: {
+              ...context.cart,
+              lines: context.cart.lines.map((line) => {
+                const updatedLine = event.payload.lines.find(
+                  ({id}) => id === line.id
+                );
+
+                if (updatedLine && updatedLine.quantity) {
+                  return {
+                    ...line,
+                    quantity: updatedLine.quantity,
+                  };
+                }
+
+                return line;
+              }),
+            },
+          };
+      }
+      return {cart: context.cart ? {...context.cart} : undefined};
+    },
+    onCartActionComplete(context, event) {
+      const cartActionEvent = event.payload.cartActionEvent;
+      switch (event.type) {
+        case 'RESOLVE':
+          switch (cartActionEvent.type) {
+            case 'CART_CREATE':
+              publishCreateAnalytics(context, cartActionEvent);
+              return onCreateComplete?.();
+            case 'CARTLINE_ADD':
+              publishLineAddAnalytics(context, cartActionEvent);
+              return onLineAddComplete?.();
+            case 'CARTLINE_REMOVE':
+              publishLineRemoveAnalytics(context, cartActionEvent);
+              return onLineRemoveComplete?.();
+            case 'CARTLINE_UPDATE':
+              publishLineUpdateAnalytics(context, cartActionEvent);
+              return onLineUpdateComplete?.();
+            case 'NOTE_UPDATE':
+              return onNoteUpdateComplete?.();
+            case 'BUYER_IDENTITY_UPDATE':
+              if (countryCodeNotUpdated(context, cartActionEvent)) {
+                customerOverridesCountryCode.current = true;
+              }
+              return onBuyerIdentityUpdateComplete?.();
+            case 'CART_ATTRIBUTES_UPDATE':
+              return onAttributesUpdateComplete?.();
+            case 'DISCOUNT_CODES_UPDATE':
+              publishDiscountCodesUpdateAnalytics(context, cartActionEvent);
+              return onDiscountCodesUpdateComplete?.();
+          }
+      }
+    },
   });
 
   const [cartReady, setCartReady] = useState(false);
   const cartCompleted = cartState.matches('cartCompleted');
+
+  const countryChanged =
+    (cartState.value === 'idle' ||
+      cartState.value === 'error' ||
+      cartState.value === 'cartCompleted') &&
+    countryCode !== cartState?.context?.cart?.buyerIdentity?.countryCode &&
+    !cartState.context.errors;
+
+  useEffect(() => {
+    if (!countryChanged || customerOverridesCountryCode.current) return;
+    cartSend({
+      type: 'BUYER_IDENTITY_UPDATE',
+      payload: {buyerIdentity: {countryCode, customerAccessToken}},
+    });
+  }, [
+    countryCode,
+    customerAccessToken,
+    countryChanged,
+    customerOverridesCountryCode,
+    cartSend,
+  ]);
 
   // send cart events when ready
   const onCartReadySend = useCallback(
@@ -98,23 +289,48 @@ export function CartProviderV2({
     }
   }, [cartReady, cartSend]);
 
+  const cartCreate = useCallback(
+    (cartInput: CartInput) => {
+      if (countryCode && !cartInput.buyerIdentity?.countryCode) {
+        if (cartInput.buyerIdentity == null) {
+          cartInput.buyerIdentity = {};
+        }
+        cartInput.buyerIdentity.countryCode = countryCode;
+      }
+
+      if (
+        customerAccessToken &&
+        !cartInput.buyerIdentity?.customerAccessToken
+      ) {
+        if (cartInput.buyerIdentity == null) {
+          cartInput.buyerIdentity = {};
+        }
+        cartInput.buyerIdentity.customerAccessToken = customerAccessToken;
+      }
+      onCartReadySend({
+        type: 'CART_CREATE',
+        payload: cartInput,
+      });
+    },
+    [countryCode, customerAccessToken, onCartReadySend]
+  );
+
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
       ...(cartState?.context?.cart ?? {lines: [], attributes: []}),
-      status: tempTransposeStatus(cartState.value),
+      status: transposeStatus(cartState.value),
       error: cartState?.context?.errors,
       totalQuantity: cartState?.context?.cart?.totalQuantity ?? 0,
-      cartCreate(cartInput: CartInput) {
-        onCartReadySend({
-          type: 'CART_CREATE',
-          payload: cartInput,
-        });
-      },
+      cartCreate,
       linesAdd(lines: CartLineInput[]) {
-        onCartReadySend({
-          type: 'CARTLINE_ADD',
-          payload: {lines},
-        });
+        if (cartState?.context?.cart?.id) {
+          onCartReadySend({
+            type: 'CARTLINE_ADD',
+            payload: {lines},
+          });
+        } else {
+          cartCreate({lines});
+        }
       },
       linesRemove(lines: string[]) {
         onCartReadySend({
@@ -167,6 +383,7 @@ export function CartProviderV2({
       cartFragment: usedCartFragment,
     };
   }, [
+    cartCreate,
     cartState?.context?.cart,
     cartState?.context?.errors,
     cartState.value,
@@ -181,16 +398,16 @@ export function CartProviderV2({
   );
 }
 
-function tempTransposeStatus(
+function transposeStatus(
   status: CartMachineTypeState['value']
 ): CartWithActions['status'] {
   switch (status) {
     case 'uninitialized':
+    case 'initializationError':
       return 'uninitialized';
     case 'idle':
     case 'cartCompleted':
     case 'error':
-    case 'initializationError':
       return 'idle';
     case 'cartFetching':
       return 'fetching';
@@ -235,4 +452,76 @@ function storageAvailable(type: 'localStorage' | 'sessionStorage') {
       storage.length !== 0
     );
   }
+}
+
+function countryCodeNotUpdated(
+  context: CartMachineContext,
+  event: BuyerIdentityUpdateEvent
+) {
+  return (
+    event.payload.buyerIdentity.countryCode &&
+    context.cart?.buyerIdentity?.countryCode !==
+      event.payload.buyerIdentity.countryCode
+  );
+}
+
+// Cart Analytics
+function publishCreateAnalytics(
+  context: CartMachineContext,
+  event: CartCreateEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.ADD_TO_CART, true, {
+    addedCartLines: event.payload.lines,
+    cart: context.rawCartResult,
+    prevCart: null,
+  });
+}
+
+function publishLineAddAnalytics(
+  context: CartMachineContext,
+  event: CartLineAddEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.ADD_TO_CART, true, {
+    addedCartLines: event.payload.lines,
+    cart: context.rawCartResult,
+    prevCart: context.prevCart,
+  });
+}
+
+function publishLineUpdateAnalytics(
+  context: CartMachineContext,
+  event: CartLineUpdateEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.UPDATE_CART, true, {
+    updatedCartLines: event.payload.lines,
+    oldCart: context.prevCart,
+    cart: context.rawCartResult,
+    prevCart: context.prevCart,
+  });
+}
+
+function publishLineRemoveAnalytics(
+  context: CartMachineContext,
+  event: CartLineRemoveEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.REMOVE_FROM_CART, true, {
+    removedCartLines: event.payload.lines,
+    cart: context.rawCartResult,
+    prevCart: context.prevCart,
+  });
+}
+
+function publishDiscountCodesUpdateAnalytics(
+  context: CartMachineContext,
+  event: DiscountCodesUpdateEvent
+) {
+  ClientAnalytics.publish(
+    ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
+    true,
+    {
+      updatedDiscountCodes: event.payload.discountCodes,
+      cart: context.rawCartResult,
+      prevCart: context.prevCart,
+    }
+  );
 }
