@@ -66,5 +66,5 @@ The `useFlashSession` hook is best used for form validation in the [`Form`](http
 
 ## Related framework topics
 
-- [Forms](https://shopify.dev/api/hydrogen/components/framework/forms)
+- [`Forms`](https://shopify.dev/api/hydrogen/components/framework/form)
 - [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)

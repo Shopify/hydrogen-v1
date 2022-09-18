@@ -25,35 +25,40 @@ export function getStorefrontApiRequestHeaders({
 }) {
   const headers = {} as Record<string, any>;
 
-  if (!privateStorefrontToken && !secretTokenWarned) {
-    secretTokenWarned = true;
+  if (!privateStorefrontToken) {
     privateStorefrontToken = getOxygenVariable(
       OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE
     );
 
-    if (!privateStorefrontToken && !__HYDROGEN_DEV__) {
-      log.error(
-        'No secret Shopify storefront API token was defined. This means your app will be rate limited!\nSee how to add the token: '
-      );
-    } else if (privateStorefrontToken) {
-      log.warn(
-        'The private shopify storefront API token was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: '
-      );
+    if (!secretTokenWarned) {
+      secretTokenWarned = true;
+
+      if (!privateStorefrontToken && !__HYDROGEN_DEV__) {
+        log.error(
+          'No secret Shopify storefront API token was defined. This means your app will be rate limited!\nSee how to add the token: '
+        );
+      } else if (privateStorefrontToken) {
+        log.warn(
+          'The private shopify storefront API token was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: '
+        );
+      }
     }
   }
 
-  if (!storefrontId && !storefrontIdWarned) {
-    storefrontIdWarned = true;
+  if (!storefrontId) {
     storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
 
-    if (!storefrontId && !__HYDROGEN_DEV__) {
-      log.warn(
-        'No storefrontId was defined. This means the analytics on your admin dashboard will be broken!\nSee how to fix it: '
-      );
-    } else if (storefrontId) {
-      log.warn(
-        'The storefrontId was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: '
-      );
+    if (!storefrontIdWarned) {
+      storefrontIdWarned = true;
+      if (!storefrontId && !__HYDROGEN_DEV__) {
+        log.warn(
+          'No storefrontId was defined. This means the analytics on your admin dashboard will be broken!\nSee how to fix it: '
+        );
+      } else if (storefrontId) {
+        log.warn(
+          'The storefrontId was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: '
+        );
+      }
     }
   }
 

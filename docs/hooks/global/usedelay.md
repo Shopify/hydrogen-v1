@@ -1,13 +1,13 @@
 ---
 gid: 2efaf024-c436-4d4e-9130-cf0b0c9cb843
-title: delay
-description: Add an artifical within server components
+title: useDelay
+description: Add an artificial delay within server components.
 ---
 
-The `useDelay` hook adds an artificial delay within your server components. This is useful to debug timing issues, and to design fallback UI states at suspense boundaries.
+The `useDelay` hook adds an artificial delay within your server components. This is useful to debug timing issues and to design fallback UI states at suspense boundaries.
 
 > Note:
-> All artificial delays are removed in production mode
+> All artificial delays are removed in production.
 
 ## Example code
 
@@ -71,13 +71,13 @@ The `useDelay` hook takes the following arguments:
 | Key     | Required | Description                                                    |
 | ------- | -------- | -------------------------------------------------------------- |
 | `delay` | Yes      | A unique string or the result of either `useQuery` or `useShopQuery`. |
-| `time`  | Yes      | The amount of time in miliseconds to delay.                    |
+| `time`  | Yes      | The amount of time in milliseconds to delay.                    |
 
 ## Return value
 
-The `useDelay` hook returns the result of `useShopQuery` or `useQuery` after the specified delay.
+The `useDelay` hook returns the result of either `useShopQuery` or `useQuery` after the specified delay.
 
 ## Related hooks
 
-- [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
-- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
+- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery)
+- [`useQuery`](/api/hydrogen/hooks/global/usequery)
