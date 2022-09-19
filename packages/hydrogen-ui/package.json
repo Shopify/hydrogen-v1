@@ -2,7 +2,7 @@
   "name": "@shopify/hydrogen-ui-alpha",
   "version": "2022.7.4",
   "description": "Components for modern custom Shopify storefronts",
-  "homepage": "https://github.com/Shopify/hydrogen#readme",
+  "homepage": "https://github.com/Shopify/hydrogen/tree/main/packages/hydrogen-ui",
   "license": "MIT",
   "engines": {
     "node": ">=14"
@@ -101,5 +101,11 @@
     "@google/model-viewer": "^1.12.1",
     "graphql": "^16.6.0",
     "type-fest": "^2.19.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shopify/hydrogen.git",
+    "directory": "packages/hydrogen-ui"
+  },
+  "bugs": "https://github.com/shopify/hydrogen/issues"
 }
