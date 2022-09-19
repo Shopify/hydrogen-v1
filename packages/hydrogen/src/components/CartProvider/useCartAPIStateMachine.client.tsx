@@ -174,11 +174,10 @@ export function useCartAPIStateMachine({
     context: CartMachineContext,
     event: CartMachineFetchResultEvent
   ) => void;
-  /** A callback that is invoked after a Cart API completes. */
   /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
-  cartFragment?: string;
+  cartFragment: string;
   /** The ISO country code for i18n. */
   countryCode?: CountryCode;
 }) {

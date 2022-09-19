@@ -22,7 +22,6 @@ import {
   DiscountCodesUpdateEvent,
 } from './types.js';
 import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.js';
-import {useCartActions} from './CartActions.client.js';
 import {useCartAPIStateMachine} from './useCartAPIStateMachine.client.js';
 import {CART_ID_STORAGE_KEY} from './constants.js';
 import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
@@ -47,7 +46,7 @@ export function CartProviderV2({
   onAttributesUpdateComplete,
   onDiscountCodesUpdateComplete,
   data: cart,
-  cartFragment,
+  cartFragment = defaultCartFragment,
   customerAccessToken,
   countryCode = CountryCode.Us,
 }: {
@@ -110,12 +109,6 @@ export function CartProviderV2({
     setPrevCustomerAccessToken(customerAccessToken);
     customerOverridesCountryCode.current = false;
   }
-
-  const {cartFragment: usedCartFragment} = useCartActions({
-    numCartLines,
-    cartFragment,
-    countryCode,
-  });
 
   const [cartState, cartSend] = useCartAPIStateMachine({
     numCartLines,
@@ -380,15 +373,15 @@ export function CartProviderV2({
           },
         });
       },
-      cartFragment: usedCartFragment,
+      cartFragment,
     };
   }, [
     cartCreate,
+    cartFragment,
     cartState?.context?.cart,
     cartState?.context?.errors,
     cartState.value,
     onCartReadySend,
-    usedCartFragment,
   ]);
 
   return (
@@ -525,3 +518,104 @@ function publishDiscountCodesUpdateAnalytics(
     }
   );
 }
+
+export const defaultCartFragment = `
+fragment CartFragment on Cart {
+  id
+  checkoutUrl
+  totalQuantity
+  buyerIdentity {
+    countryCode
+    customer {
+      id
+      email
+      firstName
+      lastName
+      displayName
+    }
+    email
+    phone
+  }
+  lines(first: $numCartLines) {
+    edges {
+      node {
+        id
+        quantity
+        attributes {
+          key
+          value
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmountPerQuantity {
+            amount
+            currencyCode
+          }
+        }
+        merchandise {
+          ... on ProductVariant {
+            id
+            availableForSale
+            compareAtPriceV2 {
+              ...MoneyFragment
+            }
+            priceV2 {
+              ...MoneyFragment
+            }
+            requiresShipping
+            title
+            image {
+              ...ImageFragment
+            }
+            product {
+              handle
+              title
+            }
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+  cost {
+    subtotalAmount {
+      ...MoneyFragment
+    }
+    totalAmount {
+      ...MoneyFragment
+    }
+    totalDutyAmount {
+      ...MoneyFragment
+    }
+    totalTaxAmount {
+      ...MoneyFragment
+    }
+  }
+  note
+  attributes {
+    key
+    value
+  }
+  discountCodes {
+    code
+  }
+}
+
+fragment MoneyFragment on MoneyV2 {
+  currencyCode
+  amount
+}
+fragment ImageFragment on Image {
+  id
+  url
+  altText
+  width
+  height
+}
+`;
