@@ -84,7 +84,7 @@ describe('<ProductProvider />', () => {
     await user.click(screen.getByRole('button', {name: 'White'}));
 
     expect(
-      await screen.findByText(JSON.stringify({Color: 'White', Size: 'Small'}))
+      screen.getByText(JSON.stringify({Color: 'White', Size: 'Small'}))
     ).toBeInTheDocument();
   });
 
@@ -245,16 +245,16 @@ describe('<ProductProvider />', () => {
       </ProductProvider>
     );
 
-    expect(screen.getAllByRole('button', {name: 'White'}).length).toBe(1);
+    expect(screen.getByRole('button', {name: 'White'})).toBeInTheDocument();
     expect(
-      screen.queryAllByRole('button', {name: 'White (out of stock)'}).length
-    ).toBe(0);
+      screen.queryByRole('button', {name: 'White (out of stock)'})
+    ).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', {name: 'Large'}));
 
     expect(
-      screen.queryAllByRole('button', {name: 'White (out of stock)'}).length
-    ).toBe(1);
+      screen.queryByRole('button', {name: 'White (out of stock)'})
+    ).toBeInTheDocument();
   });
 
   it('supports selecting a selling plan', async () => {
@@ -296,12 +296,12 @@ describe('<ProductProvider />', () => {
             );
           })}
           {selectedSellingPlan ? (
-            <div id="selectedSellingPlan">
+            <div data-testid="selectedSellingPlan">
               {JSON.stringify(selectedSellingPlan)}
             </div>
           ) : null}
           {selectedSellingPlanAllocation ? (
-            <div id="selectedSellingPlanAllocation">
+            <div data-testid="selectedSellingPlanAllocation">
               {JSON.stringify(selectedSellingPlanAllocation)}
             </div>
           ) : null}
@@ -314,7 +314,7 @@ describe('<ProductProvider />', () => {
       sellingPlanGroups: SELLING_PLAN_GROUPS_CONNECTION,
     });
 
-    const {container} = render(
+    render(
       <ProductProvider
         data={prod}
         initialVariantId={VARIANTS_WITH_SELLING_PLANS.nodes?.[0]?.id}
@@ -323,18 +323,23 @@ describe('<ProductProvider />', () => {
       </ProductProvider>
     );
 
-    expect(container.querySelectorAll('#selectedSellingPlan').length).toBe(0);
+    expect(screen.queryByTestId('selectedSellingPlan')).not.toBeInTheDocument();
     expect(
-      container.querySelectorAll('#selectedSellingPlanAllocation').length
-    ).toBe(0);
+      screen.queryByTestId('selectedSellingPlanAllocation')
+    ).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', {name: 'Deliver every week'}));
 
-    expect(
-      container.querySelector('#selectedSellingPlan')
-    ).not.toBeEmptyDOMElement();
-    expect(
-      container.querySelector('#selectedSellingPlanAllocation')
-    ).not.toBeEmptyDOMElement();
+    const selectedSellingPlanElement = screen.getByTestId(
+      'selectedSellingPlan'
+    );
+    const selectedSellingPlanAllocationElement = screen.getByTestId(
+      'selectedSellingPlanAllocation'
+    );
+
+    expect(selectedSellingPlanElement).toBeInTheDocument();
+    expect(selectedSellingPlanElement).not.toBeEmptyDOMElement();
+    expect(selectedSellingPlanAllocationElement).toBeInTheDocument();
+    expect(selectedSellingPlanAllocationElement).not.toBeEmptyDOMElement();
   });
 });
