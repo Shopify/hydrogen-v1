@@ -11,10 +11,18 @@ describe(`createStorefrontClient`, () => {
   describe(`constructor`, () => {
     it(`defaults to "application/json" for the content-type`, () => {
       const client = createStorefrontClient(
-        generateConfig(generateConfig({privateStorefrontToken: 'privateToken'}))
+        generateConfig(
+          generateConfig({
+            privateStorefrontToken: 'privateToken',
+            publicStorefrontToken: 'public',
+          })
+        )
       );
 
       expect(client.getPrivateTokenHeaders()['content-type']).toBe(
+        'application/json'
+      );
+      expect(client.getPublicTokenHeaders()['content-type']).toBe(
         'application/json'
       );
     });
@@ -23,6 +31,7 @@ describe(`createStorefrontClient`, () => {
       const client = createStorefrontClient(
         generateConfig(
           generateConfig({
+            publicStorefrontToken: 'public',
             privateStorefrontToken: 'privateToken',
             contentType: 'graphql',
           })
@@ -30,6 +39,9 @@ describe(`createStorefrontClient`, () => {
       );
 
       expect(client.getPrivateTokenHeaders()['content-type']).toBe(
+        'application/graphql'
+      );
+      expect(client.getPublicTokenHeaders()['content-type']).toBe(
         'application/graphql'
       );
     });
