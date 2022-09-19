@@ -282,7 +282,8 @@ export async function renderApiRoute(
     logServerResponse(
       'api',
       request as HydrogenRequest,
-      (response as Response).status ?? 200
+      (response as Response).status ?? 200,
+      false
     );
   }
 
