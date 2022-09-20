@@ -113,6 +113,7 @@ export function CartProviderV2({
   const [cartState, cartSend] = useCartAPIStateMachine({
     numCartLines,
     cartFragment,
+    countryCode,
     onCartActionEntry(context, event) {
       switch (event.type) {
         case 'CART_CREATE':
