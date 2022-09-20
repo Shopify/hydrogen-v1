@@ -50,8 +50,33 @@ describe('<CartProviderV2 />', () => {
     vi.spyOn(window.localStorage, 'getItem').mockReturnValue('');
   });
 
+  describe('`data` prop', () => {
+    it('uses the `data` prop if provided to initialize the cart. Taking precedence over localStorage', async () => {
+      const cartFetchSpy = vi.fn(async () => ({
+        data: {cart: cartMock},
+      }));
+      vi.spyOn(window.localStorage, 'getItem').mockReturnValue('cart-id');
+
+      mockUseCartActions.mockReturnValue({
+        cartFetch: cartFetchSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider({
+          data: cartMock,
+        }),
+      });
+
+      expect(cartFetchSpy).not.toBeCalled();
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(cartMock),
+      });
+    });
+  });
+
   describe('local storage', () => {
-    it('fetches the cart with the cart id in local storage when initializing the app', async () => {
+    it('fetches the cart with the cart id in local storage when initializing the app if no `data` prop was given', async () => {
       const cartFetchSpy = vi.fn(async () => ({
         data: {cart: cartMock},
       }));

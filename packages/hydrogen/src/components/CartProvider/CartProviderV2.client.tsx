@@ -207,7 +207,7 @@ export function CartProviderV2({
     },
   });
 
-  const [cartReady, setCartReady] = useState(false);
+  const cartReady = useRef(false);
   const cartCompleted = cartState.matches('cartCompleted');
 
   const countryChanged =
@@ -217,6 +217,31 @@ export function CartProviderV2({
     countryCode !== cartState?.context?.cart?.buyerIdentity?.countryCode &&
     !cartState.context.errors;
 
+  /**
+   * Initializes cart with priority in this order:
+   * 1. cart props
+   * 2. localStorage cartId
+   */
+  useEffect(() => {
+    if (!cartReady.current) {
+      if (cart) {
+        cartSend({type: 'CART_SET', payload: {cart}});
+      } else if (storageAvailable('localStorage')) {
+        try {
+          const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
+          if (cartId) {
+            cartSend({type: 'CART_FETCH', payload: {cartId}});
+          }
+        } catch (error) {
+          console.warn('error fetching cartId');
+          console.warn(error);
+        }
+      }
+      cartReady.current = true;
+    }
+  }, [cart, cartReady, cartSend]);
+
+  // Update cart country code if cart and props countryCode's as different
   useEffect(() => {
     if (!countryChanged || customerOverridesCountryCode.current) return;
     cartSend({
@@ -234,12 +259,12 @@ export function CartProviderV2({
   // send cart events when ready
   const onCartReadySend = useCallback(
     (cartEvent: CartMachineEvent) => {
-      if (!cartReady) {
+      if (!cartReady.current) {
         return console.warn("Cart isn't ready yet");
       }
       cartSend(cartEvent);
     },
-    [cartReady, cartSend]
+    [cartSend]
   );
 
   // save cart id to local storage
@@ -266,22 +291,6 @@ export function CartProviderV2({
       }
     }
   }, [cartCompleted]);
-
-  // fetch cart from local storage if cart id present and set cart as ready for use
-  useEffect(() => {
-    if (!cartReady && storageAvailable('localStorage')) {
-      try {
-        const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
-        if (cartId) {
-          cartSend({type: 'CART_FETCH', payload: {cartId}});
-        }
-      } catch (error) {
-        console.warn('error fetching cartId');
-        console.warn(error);
-      }
-      setCartReady(true);
-    }
-  }, [cartReady, cartSend]);
 
   const cartCreate = useCallback(
     (cartInput: CartInput) => {

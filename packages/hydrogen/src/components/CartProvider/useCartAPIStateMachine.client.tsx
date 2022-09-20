@@ -79,6 +79,15 @@ const INITIALIZING_CART_EVENTS: StateMachine.Machine<
   CART_CREATE: {
     target: 'cartCreating',
   },
+  CART_SET: {
+    target: 'idle',
+    actions: [
+      assign({
+        rawCartResult: (_, event) => event.payload.cart,
+        cart: (_, event) => cartFromGraphQL(event.payload.cart),
+      }),
+    ],
+  },
 };
 
 const UPDATING_CART_EVENTS: StateMachine.Machine<
