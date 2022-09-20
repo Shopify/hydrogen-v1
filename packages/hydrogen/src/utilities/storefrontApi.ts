@@ -10,6 +10,7 @@ import {
 import {log} from './log/log.js';
 
 let secretTokenWarned = false;
+let storefrontIdWarned = false;
 
 export function getStorefrontApiRequestHeaders({
   buyerIp,
@@ -38,7 +39,7 @@ export function getStorefrontApiRequestHeaders({
         );
       } else if (privateStorefrontToken) {
         log.warn(
-          'The private shopify storefront API token was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: '
+          'The private shopify storefront API token was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config'
         );
       }
     }
@@ -46,6 +47,15 @@ export function getStorefrontApiRequestHeaders({
 
   if (!storefrontId) {
     storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
+
+    if (!storefrontIdWarned) {
+      storefrontIdWarned = true;
+      if (storefrontId) {
+        log.warn(
+          'The storefrontId was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config'
+        );
+      }
+    }
   }
 
   /**
