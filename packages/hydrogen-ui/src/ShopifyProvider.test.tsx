@@ -47,6 +47,23 @@ describe('<ShopifyProvider/>', () => {
 
     expect(result.current.storeDomain).toBe('notashop.myshopify.com');
   });
+
+  it(`'storefrontId' have a default value of '0'`, () => {
+    const {result} = renderHook(() => useShop(), {
+      wrapper: ({children}) => (
+        <ShopifyProvider
+          shopifyConfig={{
+            ...SHOPIFY_CONFIG,
+            storeDomain: 'https://notashop.myshopify.com',
+          }}
+        >
+          {children}
+        </ShopifyProvider>
+      ),
+    });
+
+    expect(result.current.storefrontId).toBe('0');
+  });
 });
 
 export function getShopifyConfig(

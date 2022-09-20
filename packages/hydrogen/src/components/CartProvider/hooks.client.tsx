@@ -37,7 +37,7 @@ export function useCartFetch() {
         [STOREFRONT_API_PUBLIC_TOKEN_HEADER]: storefrontToken,
       };
 
-      if (storefrontId) {
+      if (storefrontId !== '0') {
         headers[SHOPIFY_STOREFRONT_ID_HEADER] = storefrontId;
       }
 

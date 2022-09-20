@@ -10,7 +10,6 @@ import {
 import {log} from './log/log.js';
 
 let secretTokenWarned = false;
-let storefrontIdWarned = false;
 
 export function getStorefrontApiRequestHeaders({
   buyerIp,
@@ -47,19 +46,6 @@ export function getStorefrontApiRequestHeaders({
 
   if (!storefrontId) {
     storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
-
-    if (!storefrontIdWarned) {
-      storefrontIdWarned = true;
-      if (!storefrontId && !__HYDROGEN_DEV__) {
-        log.warn(
-          'No storefrontId was defined. This means the analytics on your admin dashboard will be broken!\nSee how to fix it: '
-        );
-      } else if (storefrontId) {
-        log.warn(
-          'The storefrontId was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: '
-        );
-      }
-    }
   }
 
   /**
