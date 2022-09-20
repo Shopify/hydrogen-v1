@@ -35,8 +35,7 @@ function makeShopifyContext(shopifyConfig: ShopifyConfig): {
   const languageCode = shopifyConfig.defaultLanguageCode ?? DEFAULT_LANGUAGE;
   const storefrontId =
     shopifyConfig.storefrontId ??
-    getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE) ??
-    '0';
+    getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
 
   const shopifyProviderServerValue = {
     defaultCountryCode: countryCode.toUpperCase() as `${CountryCode}`,

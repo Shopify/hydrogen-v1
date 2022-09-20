@@ -13,7 +13,6 @@ const ShopifyContext = createContext<ShopifyContextValue>({
     isoCode: 'EN',
   },
   locale: 'EN-US',
-  storefrontId: '0',
 });
 
 /**
