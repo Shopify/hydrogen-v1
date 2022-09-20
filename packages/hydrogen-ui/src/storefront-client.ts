@@ -33,13 +33,6 @@ export function createStorefrontClient({
     );
   }
 
-  // per Helen, this doesn't do anything yet, so let's not warn about it
-  // if (__HYDROGEN_DEV__ && !storefrontId) {
-  //   console.warn(
-  //     `StorefrontClient: No 'storefrontId' was defined. This means the analytics on your admin dashboard will be broken.`
-  //   );
-  // }
-
   return {
     getStorefrontApiUrl(overrideProps) {
       return `https://${

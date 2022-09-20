@@ -68,7 +68,7 @@ export function useShop() {
  */
 export type ShopifyContextValue = {
   /** The globally-unique identifier for the Shop */
-  storefrontId?: Shop['id'];
+  storefrontId?: string;
   /** The host name of the domain (eg: `{shop}.myshopify.com`). If a URL with a scheme (for example `https://`) is passed in, then the scheme is removed. */
   storeDomain: Shop['primaryDomain']['host'];
   /** The Storefront API public access token. Refer to the [authentication](https://shopify.dev/api/storefront#authentication) documentation for more details. */
