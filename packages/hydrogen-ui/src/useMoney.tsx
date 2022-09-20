@@ -59,6 +59,12 @@ export type UseMoneyValue = {
 export function useMoney(money: MoneyV2): UseMoneyValue {
   const {locale} = useShop();
 
+  if (!locale) {
+    throw new Error(
+      `useMoney(): Unable to get 'locale' from 'useShop()', which means that 'locale' was not passed to '<ShopifyProvider/>'. 'locale' is required for 'useMoney()' to work`
+    );
+  }
+
   const amount = parseFloat(money.amount);
 
   const options = useMemo(
