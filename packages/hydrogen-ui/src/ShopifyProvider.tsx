@@ -71,17 +71,17 @@ export type ShopifyContextValue = {
   storefrontId?: Shop['id'];
   /** The host name of the domain (eg: `{shop}.myshopify.com`). If a URL with a scheme (for example `https://`) is passed in, then the scheme is removed. */
   storeDomain: Shop['primaryDomain']['host'];
-  /** The Storefront API access token. Refer to the [authentication](https://shopify.dev/api/storefront#authentication) documentation for more details. */
+  /** The Storefront API public access token. Refer to the [authentication](https://shopify.dev/api/storefront#authentication) documentation for more details. */
   storefrontToken: string;
   /** The Storefront API version. This should almost always be the same as the version Hydrogen-UI was built for. Learn more about Shopify [API versioning](https://shopify.dev/api/usage/versioning) for more details.  */
   storefrontApiVersion: string;
-  country: {
+  country?: {
     /**
      * The code designating a country, which generally follows ISO 3166-1 alpha-2 guidelines. If a territory doesn't have a country code value in the `CountryCode` enum, it might be considered a subdivision of another country. For example, the territories associated with Spain are represented by the country code `ES`, and the territories associated with the United States of America are represented by the country code `US`.
      */
     isoCode: CountryCode;
   };
-  language: {
+  language?: {
     /**
      * `ISO 369` language codes supported by Shopify.
      */
@@ -90,5 +90,5 @@ export type ShopifyContextValue = {
   /**
    * The locale string based on `country` and `language`.
    */
-  locale: string;
+  locale?: string;
 };
