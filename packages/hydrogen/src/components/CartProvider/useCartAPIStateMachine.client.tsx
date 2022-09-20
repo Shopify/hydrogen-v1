@@ -136,10 +136,10 @@ const cartMachine = createMachine<
       on: INITIALIZING_CART_EVENTS,
     },
     idle: {
-      on: UPDATING_CART_EVENTS,
+      on: {...INITIALIZING_CART_EVENTS, ...UPDATING_CART_EVENTS},
     },
     error: {
-      on: UPDATING_CART_EVENTS,
+      on: {...INITIALIZING_CART_EVENTS, ...UPDATING_CART_EVENTS},
     },
     cartFetching: invokeCart('cartFetchAction', {
       errorTarget: 'initializationError',
