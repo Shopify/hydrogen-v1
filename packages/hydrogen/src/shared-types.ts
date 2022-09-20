@@ -36,5 +36,5 @@ export type ShopifyConfig = {
   storefrontToken: string;
   storefrontApiVersion: string;
   privateStorefrontToken?: string;
-  storefrontId: string;
+  storefrontId?: string;
 };
