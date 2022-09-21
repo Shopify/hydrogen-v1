@@ -441,6 +441,41 @@ export default async function testCases({
       // Full page refresh
       expect(await page.textContent('.count')).toBe('Count is 0');
     });
+
+    it('updates the contents when a CSS module file changes', async () => {
+      const redRgb = 'rgb(255, 0, 0)';
+      const darkredRbg = 'rgb(139, 0, 0)';
+      const fullPath = resolve(__dirname, '../', 'src/style.module.css');
+
+      await page.goto(getServerUrl() + '/css-modules');
+      expect(await page.textContent('h1')).toContain('CSS Modules');
+
+      const getElementColor = async (type) => {
+        const element = await page.waitForSelector(`[data-test=${type}]`);
+        return element.evaluate((el) =>
+          window.getComputedStyle(el).getPropertyValue('color')
+        );
+      };
+
+      expect(await page.textContent('.count')).toBe('Count is 0');
+      await page.click('.increase');
+      expect(await page.textContent('.count')).toBe('Count is 1');
+
+      expect(await getElementColor('server')).toEqual(redRgb);
+      expect(await getElementColor('client')).toEqual(redRgb);
+
+      await edit(
+        fullPath,
+        (code) => code.replace('color: red', 'color: darkred'),
+        () => untilUpdated(() => getElementColor('server'), redRgb),
+        async () => {
+          await untilUpdated(() => getElementColor('server'), darkredRbg);
+
+          // Only refreshes the CSS Module without changing input state
+          expect(await page.textContent('.count')).toBe('Count is 1');
+        }
+      );
+    });
   });
 
   describe('API Routing', () => {

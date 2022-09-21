@@ -1,5 +1,6 @@
 import {red} from '../style.module.css';
 import CssModulesClient from '../components/CssModules.client';
+import Counter from '../components/Counter.client';
 
 export default function CssModules() {
   return (
@@ -9,6 +10,8 @@ export default function CssModules() {
         something
       </div>
       <CssModulesClient />
+
+      <Counter />
     </>
   );
 }
