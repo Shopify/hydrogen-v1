@@ -18,7 +18,7 @@
     "lint:language": "alex {.,.changeset}",
     "lint:schema": "jsonlint --quiet packages/hydrogen/graphql.schema.json",
     "format": "prettier --write --ignore-unknown .",
-    "format:check": "prettier --check --ignore-unknown .",
+    "format:check": "prettier --check --ignore-unknown . .changeset",
     "test": "run-p test:base test:hydrogen:vite test:hydrogen-ui",
     "test:base": "jest",
     "test:coverage": "jest --coverage",
