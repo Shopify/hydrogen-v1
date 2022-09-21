@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.0.0-unstable-20220921160653
+
+### Patch Changes
+
+- Fix storefrontId from required to optional param ([#2162](https://github.com/Shopify/hydrogen/pull/2162)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+* We changed the default logging behavior to include the overall request outcome, either `ok` or an `error`. This is necessary because a streamed request might start with a 200 HTTP response code, and during the process of stream rendering an error is encountered. ([#2161](https://github.com/Shopify/hydrogen/pull/2161)) by [@blittle](https://github.com/blittle)
+
+- Expose CachingStrategy type ([#2159](https://github.com/Shopify/hydrogen/pull/2159)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
 ## 1.4.1
 
 ### Patch Changes
@@ -309,7 +319,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }

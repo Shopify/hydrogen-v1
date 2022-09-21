@@ -1,5 +1,34 @@
 # @shopify/hydrogen-ui-alpha
 
+## 0.0.0-unstable-20220921160653
+
+### Patch Changes
+
+- Updated `createStorefrontClient()`: ([#2172](https://github.com/Shopify/hydrogen/pull/2172)) by [@frehner](https://github.com/frehner)
+
+  - Completely remove `storefrontId`
+  - Add ability to customize `contentType` on every invocation of `getPublicTokenHeaders()` and `getPrivateTokenHeaders()`
+  - Fix and update TypeScript type explanations
+  - Update README docs
+
+  Also updated the README with additional docs on restarting the GraphQL server in your IDE.
+
+* Fix storefrontId from required to optional param ([#2162](https://github.com/Shopify/hydrogen/pull/2162)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+- Several updates and changes: ([#2171](https://github.com/Shopify/hydrogen/pull/2171)) by [@frehner](https://github.com/frehner)
+
+  - Migrate `<ProductPrice />` component, and the associated tests. Also create a story file
+  - Allow `<ShopifyProvider />`'s `data` prop to have more optional properties
+  - Fix issue with `<MediaFile />` not being exported
+
+* Updated the `createStorefrontClient()` helper: ([#2160](https://github.com/Shopify/hydrogen/pull/2160)) by [@frehner](https://github.com/frehner)
+
+  - Stopped warning on missing `storefrontId` for now
+  - You can now set the default `"content-type"` by passing in `createStorefrontClient({contentType: 'json' | 'graphql' })`. Defaults to `json` (previous default was `graphql`)
+  - Removed the ability to pass in the `buyerIp` when using `getPublicTokenHeaders()` as it's not used by the Storefront API
+
+  Also updated some fields in `package.json` to improve the experience when on `npmjs.com`.
+
 ## 2022.7.4
 
 ### Patch Changes
