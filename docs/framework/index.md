@@ -6,6 +6,7 @@ description: Learn about the architecture and framework of Hydrogen.
 
 Hydrogen includes a framework that offers a set of best practices and scaffolding for building a website. This guide provides an overview of Hydrogen's architecture and framework.
 
+{% unless feature_flags.hydrogen_ui %}
 ## What's the Hydrogen framework?
 
 Hydrogen is the approach you use to build a custom storefront. The Hydrogen framework includes a [Vite](https://vitejs.dev/) plugin that offers server-side rendering (SSR), hydration middleware, and client component code transformations.
@@ -13,8 +14,35 @@ Hydrogen is the approach you use to build a custom storefront. The Hydrogen fram
 ![A diagram that illustrates Vite's offering of server-side rendering (SSR) and hydration middleware, and client component code transformations](/assets/custom-storefronts/hydrogen/hydrogen-framework-overview.png)
 
 > Note:
-> The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), which affects SSR.
+> The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), which affects SSR.
 
+{% endunless %}
+{% if feature_flags.hydrogen_ui %}
+## What's the Hydrogen framework?
+
+Hydrogen is the approach you use to build a custom storefront. The Hydrogen framework is comprised of the following packages:
+
+- The [core framework](#core-framework)
+
+- [Hydrogen UI](#hydrogen-ui)
+
+Resources that are framework-agnostic are assigned to the `hydrogen-ui` package. You can use either package or both.
+
+### Core framework
+
+The core Hydrogen framework includes a [Vite](https://vitejs.dev/) plugin that offers server-side rendering (SSR), hydration middleware, and client component code transformations.
+
+![A diagram that illustrates Vite's offering of server-side rendering (SSR) and hydration middleware, and client component code transformations](/assets/custom-storefronts/hydrogen/hydrogen-framework-overview.png)
+
+> Note:
+> The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), which affects SSR.
+
+### Hydrogen UI
+
+Hydrogen UI is an unopinionated and performant library of React components, reusable functions, and utilities for interacting with the [Storefront API](https://shopify.dev/api/storefront). Hydrogen UI handles business logic, data processing, and state management. You can use Hydrogen UI in any React-based custom storefront.
+
+Learn more about Hydrogen UI.{% comment %}Will insert link here to the dedicated page on H-UI{% endcomment %}
+{% endif %}
 ## Hydrogen project structure
 
 Hydrogen offers different templates that provide paths to building Shopify custom storefronts:
