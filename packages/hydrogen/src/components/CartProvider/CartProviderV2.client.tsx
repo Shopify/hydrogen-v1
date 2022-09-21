@@ -115,23 +115,27 @@ export function CartProviderV2({
     cartFragment,
     countryCode,
     onCartActionEntry(context, event) {
-      switch (event.type) {
-        case 'CART_CREATE':
-          return onCreate?.();
-        case 'CARTLINE_ADD':
-          return onLineAdd?.();
-        case 'CARTLINE_REMOVE':
-          return onLineRemove?.();
-        case 'CARTLINE_UPDATE':
-          return onLineUpdate?.();
-        case 'NOTE_UPDATE':
-          return onNoteUpdate?.();
-        case 'BUYER_IDENTITY_UPDATE':
-          return onBuyerIdentityUpdate?.();
-        case 'CART_ATTRIBUTES_UPDATE':
-          return onAttributesUpdate?.();
-        case 'DISCOUNT_CODES_UPDATE':
-          return onDiscountCodesUpdate?.();
+      try {
+        switch (event.type) {
+          case 'CART_CREATE':
+            return onCreate?.();
+          case 'CARTLINE_ADD':
+            return onLineAdd?.();
+          case 'CARTLINE_REMOVE':
+            return onLineRemove?.();
+          case 'CARTLINE_UPDATE':
+            return onLineUpdate?.();
+          case 'NOTE_UPDATE':
+            return onNoteUpdate?.();
+          case 'BUYER_IDENTITY_UPDATE':
+            return onBuyerIdentityUpdate?.();
+          case 'CART_ATTRIBUTES_UPDATE':
+            return onAttributesUpdate?.();
+          case 'DISCOUNT_CODES_UPDATE':
+            return onDiscountCodesUpdate?.();
+        }
+      } catch (error) {
+        console.error('Cart entry action failed', error);
       }
     },
     onCartActionOptimisticUI(context, event) {
@@ -175,34 +179,38 @@ export function CartProviderV2({
     },
     onCartActionComplete(context, event) {
       const cartActionEvent = event.payload.cartActionEvent;
-      switch (event.type) {
-        case 'RESOLVE':
-          switch (cartActionEvent.type) {
-            case 'CART_CREATE':
-              publishCreateAnalytics(context, cartActionEvent);
-              return onCreateComplete?.();
-            case 'CARTLINE_ADD':
-              publishLineAddAnalytics(context, cartActionEvent);
-              return onLineAddComplete?.();
-            case 'CARTLINE_REMOVE':
-              publishLineRemoveAnalytics(context, cartActionEvent);
-              return onLineRemoveComplete?.();
-            case 'CARTLINE_UPDATE':
-              publishLineUpdateAnalytics(context, cartActionEvent);
-              return onLineUpdateComplete?.();
-            case 'NOTE_UPDATE':
-              return onNoteUpdateComplete?.();
-            case 'BUYER_IDENTITY_UPDATE':
-              if (countryCodeNotUpdated(context, cartActionEvent)) {
-                customerOverridesCountryCode.current = true;
-              }
-              return onBuyerIdentityUpdateComplete?.();
-            case 'CART_ATTRIBUTES_UPDATE':
-              return onAttributesUpdateComplete?.();
-            case 'DISCOUNT_CODES_UPDATE':
-              publishDiscountCodesUpdateAnalytics(context, cartActionEvent);
-              return onDiscountCodesUpdateComplete?.();
-          }
+      try {
+        switch (event.type) {
+          case 'RESOLVE':
+            switch (cartActionEvent.type) {
+              case 'CART_CREATE':
+                publishCreateAnalytics(context, cartActionEvent);
+                return onCreateComplete?.();
+              case 'CARTLINE_ADD':
+                publishLineAddAnalytics(context, cartActionEvent);
+                return onLineAddComplete?.();
+              case 'CARTLINE_REMOVE':
+                publishLineRemoveAnalytics(context, cartActionEvent);
+                return onLineRemoveComplete?.();
+              case 'CARTLINE_UPDATE':
+                publishLineUpdateAnalytics(context, cartActionEvent);
+                return onLineUpdateComplete?.();
+              case 'NOTE_UPDATE':
+                return onNoteUpdateComplete?.();
+              case 'BUYER_IDENTITY_UPDATE':
+                if (countryCodeNotUpdated(context, cartActionEvent)) {
+                  customerOverridesCountryCode.current = true;
+                }
+                return onBuyerIdentityUpdateComplete?.();
+              case 'CART_ATTRIBUTES_UPDATE':
+                return onAttributesUpdateComplete?.();
+              case 'DISCOUNT_CODES_UPDATE':
+                publishDiscountCodesUpdateAnalytics(context, cartActionEvent);
+                return onDiscountCodesUpdateComplete?.();
+            }
+        }
+      } catch (error) {
+        console.error('onCartActionComplete failed', error);
       }
     },
   });
