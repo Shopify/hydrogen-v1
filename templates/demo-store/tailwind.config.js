@@ -1,23 +1,13 @@
-/* We  */
 /* Tailwind Configuration Docs: https://tailwindcss.com/docs/configuration */
-
-function withOpacityValue(variable) {
-  return ({opacityValue}) => {
-    if (opacityValue === undefined) {
-      return `rgb(var(${variable}))`;
-    }
-    return `rgb(var(${variable}) / ${opacityValue})`;
-  };
-}
 
 module.exports = {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        primary: withOpacityValue('--color-primary'),
-        contrast: withOpacityValue('--color-contrast'),
-        notice: withOpacityValue('--color-accent'),
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+        contrast: 'rgb(var(--color-contrast) / <alpha-value>)',
+        notice: 'rgb(var(--color-notice) / <alpha-value>)',
       },
       screens: {
         sm: '32em',
