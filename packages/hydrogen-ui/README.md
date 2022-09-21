@@ -52,6 +52,8 @@ schema: node_modules/@shopify/hydrogen-ui/storefront.schema.json
 
 GraphQL autocompletion and validation will now work in `.graphql` files or in [`gql`](https://github.com/apollographql/graphql-tag) template literals!
 
+If you are having troubles getting it to work, try restarting the GraphQL server in your IDE. For example, in VSCode you can open the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette), type `graphql`, and select the option that says `VSCode GraphQL: Manual Restart`.
+
 ## Storefront Client
 
 To make it easier to query the Storefront API, Hydrogen-UI exposes a helper function called `createStorefrontClient()`. The client can take in either the [delegate access token](https://shopify.dev/api/storefront#authentication) as `privateStorefrontToken` - which is ideal for server-side requests to the Storefront API - or take in `publicAccessToken`. For example:
@@ -94,7 +96,21 @@ export async function getServerSideProps() {
 }
 ```
 
-If you're using TypeScript, refer to the [TypeScript](#typescript-types) section on how to improve the typing experience here as well!
+If you're using TypeScript, refer to the [TypeScript](#typescript-types) section on how to improve the typing experience here as well.
+
+### Content Type for the Storefront Client
+
+Note that the storefront client is configured to send the `"content-type": "application/json"` header by default, but you can change this default by doing:
+
+```ts
+createStorefrontClient({contentType: 'graphql', ...})
+```
+
+Alternativetly, each time you get the headers you can customize which `"content-type"` you want, just for that one invocation:
+
+```ts
+getPrivateTokenHeaders({contentType: 'graphql'});
+```
 
 ## TypeScript Types
 

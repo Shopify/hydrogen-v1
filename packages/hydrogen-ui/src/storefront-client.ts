@@ -9,7 +9,6 @@ export function createStorefrontClient({
   storeDomain,
   privateStorefrontToken,
   publicStorefrontToken,
-  storefrontId,
   storefrontApiVersion,
   contentType,
 }: StorefrontClientProps): StorefrontClientReturn {
@@ -54,23 +53,18 @@ export function createStorefrontClient({
         );
       }
 
+      const finalContentType = overrideProps?.contentType ?? contentType;
+
       return {
         // default to json
         'content-type':
-          contentType === 'graphql'
+          finalContentType === 'graphql'
             ? 'application/graphql'
             : 'application/json',
         'X-SDK-Variant': 'hydrogen-ui',
-        'X-SDK-Version':
-          overrideProps?.storefrontApiVersion ?? storefrontApiVersion,
+        'X-SDK-Version': storefrontApiVersion,
         'Shopify-Storefront-Private-Token':
           overrideProps?.privateStorefrontToken ?? privateStorefrontToken ?? '',
-        ...(overrideProps?.storefrontId || storefrontId
-          ? {
-              'Shopify-Storefront-Id':
-                overrideProps?.storefrontId ?? storefrontId,
-            }
-          : {}),
         ...(overrideProps?.buyerIp
           ? {'Shopify-Storefront-Buyer-IP': overrideProps.buyerIp}
           : {}),
@@ -83,23 +77,18 @@ export function createStorefrontClient({
         );
       }
 
+      const finalContentType = overrideProps?.contentType ?? contentType;
+
       return {
         // default to json
         'content-type':
-          contentType === 'graphql'
+          finalContentType === 'graphql'
             ? 'application/graphql'
             : 'application/json',
         'X-SDK-Variant': 'hydrogen-ui',
-        'X-SDK-Version':
-          overrideProps?.storefrontApiVersion ?? storefrontApiVersion,
+        'X-SDK-Version': storefrontApiVersion,
         'X-Shopify-Storefront-Access-Token':
           overrideProps?.publicStorefrontToken ?? publicStorefrontToken ?? '',
-        ...(overrideProps?.storefrontId || storefrontId
-          ? {
-              'Shopify-Storefront-Id':
-                overrideProps?.storefrontId ?? storefrontId,
-            }
-          : {}),
       };
     },
   };
@@ -112,26 +101,28 @@ type StorefrontClientProps = {
   privateStorefrontToken?: string;
   /** The Storefront API access token. Refer to the [authentication](https://shopify.dev/api/storefront#authentication) documentation for more details. */
   publicStorefrontToken?: string;
-  /** The globally-unique identifier for the Shop */
-  storefrontId?: string;
   /** The Storefront API version. This should almost always be the same as the version Hydrogen-UI was built for. Learn more about Shopify [API versioning](https://shopify.dev/api/usage/versioning) for more details.  */
   storefrontApiVersion: string;
-  /** Customizes which `"content-type"` header is added when using `getPrivateTokenHeaders()` and `getPublicTokenHeaders()`. Some platforms will only work with `"application/json"`, while others will only work with `"application/graphql"`. Defaults to `"json"` */
+  /**
+   * Customizes which `"content-type"` header is added when using `getPrivateTokenHeaders()` and `getPublicTokenHeaders()`. When fetching with a `JSON.stringify()`-ed `body`, use `"json"`. When fetching with a `body` that is a plain string, use `"graphql"`. Defaults to `"json"`
+   *
+   * Can also be customized on a call-by-call basis by passing in `'contentType'` to both `getPrivateTokenHeaders({...})` and `getPublicTokenHeaders({...})`, for example: `getPublicTokenHeaders({contentType: 'graphql'})`
+   */
   contentType?: 'json' | 'graphql';
 };
 
 type OverrideTokenHeaderProps = Partial<
-  Pick<
-    StorefrontClientProps,
-    'storeDomain' | 'storefrontId' | 'storefrontApiVersion'
-  >
+  Pick<StorefrontClientProps, 'contentType'>
 >;
 
 type StorefrontClientReturn = {
   /**
    * Creates the fully-qualified URL to your store's GraphQL endpoint.
    *
-   * By default, it will use the config you passed in when calling `createStorefrontClient()`. However, you can override any of those settings on any invocation of `getStorefrontApiUrl()` by passing in an optional prop with any customizations you need.
+   * By default, it will use the config you passed in when calling `createStorefrontClient()`. However, you can override the following settings on each invocation of `getStorefrontApiUrl({...})`:
+   *
+   * - `storeDomain`
+   * - `storefrontApiVersion`
    */
   getStorefrontApiUrl: (
     props?: Partial<
@@ -141,7 +132,13 @@ type StorefrontClientReturn = {
   /**
    * Returns an object that contains headers that are needed for each query to Storefront API GraphQL endpoint. This method uses the private Server-to-Server token which reduces the chance of throttling but must not be exposed to clients. Server-side calls should prefer using this over `getPublicTokenHeaders()`.
    *
-   * By default, it will use the config you passed in when calling `getPrivateTokenHeaders()`. However, you can override any of those settings on any invocation of `getStorefrontApiUrl()` by passing in an optional prop with any customizations you need.
+   * By default, it will use the config you passed in when calling `createStorefrontClient()`. However, you can override the following settings on each invocation of `getPrivateTokenHeaders({...})`:
+   *
+   * - `contentType`
+   * - `privateStorefrontToken`
+   * - `buyerIp`
+   *
+   * Note that `contentType` defaults to what you configured in `createStorefrontClient({...})` and defaults to `'json'`, but a specific call may require using `graphql`. When using `JSON.stringify()` on the `body`, use `'json'`; otherwise, use `'graphql'`.
    */
   getPrivateTokenHeaders: (
     props?: OverrideTokenHeaderProps &
@@ -153,9 +150,14 @@ type StorefrontClientReturn = {
       }
   ) => Record<string, string>;
   /**
-   * Returns an object that contains headers that are needed for each query to Storefront API GraphQL endpoint. This method uses a public token which has a higher chance of running into throttling errors, but can be exposed to clients. Server-side calls should prefer using `getPrivateTokenHeaders()` instead.
+   * Returns an object that contains headers that are needed for each query to Storefront API GraphQL endpoint. This method uses the private Server-to-Server token which reduces the chance of throttling but must not be exposed to clients. Server-side calls should prefer using this over `getPublicTokenHeaders()`.
    *
-   * By default, it will use the config you passed in when calling `getPrivateTokenHeaders()`. However, you can override any of those settings on any invocation of `getStorefrontApiUrl()` by passing in an optional prop with any customizations you need.
+   * By default, it will use the config you passed in when calling `createStorefrontClient()`. However, you can override the following settings on each invocation of `getPrivateTokenHeaders({...})`:
+   *
+   * - `contentType`
+   * - `publicStorefrontToken`
+   *
+   * Note that `contentType` defaults to what you configured in `createStorefrontClient({...})` and defaults to `'json'`, but a specific call may require using `graphql`. When using `JSON.stringify()` on the `body`, use `'json'`; otherwise, use `'graphql'`.
    */
   getPublicTokenHeaders: (
     props?: OverrideTokenHeaderProps &
