@@ -14,6 +14,7 @@ import {flattenConnection} from '../../utilities/flattenConnection/index.js';
 import {useCartActions} from './CartActions.client.js';
 import {useMemo} from 'react';
 import {InitEvent} from '@xstate/fsm/lib/types.js';
+import {CountryCode} from '../../storefront-api-types.js';
 
 function invokeCart(
   action: keyof CartMachineActions,
@@ -25,28 +26,41 @@ function invokeCart(
   }
 ): StateMachine.Config<CartMachineContext, CartMachineEvent>['states']['on'] {
   return {
-    entry: [...(options?.entryActions || []), 'onCartActionEntry', action],
+    entry: [
+      ...(options?.entryActions || []),
+      'onCartActionEntry',
+      'onCartActionOptimisticUI',
+      action,
+    ],
     on: {
       RESOLVE: {
         target: options?.resolveTarget || 'idle',
         actions: [
           assign({
+            prevCart: (context) => context?.cart,
             cart: (_, event) => event?.payload?.cart,
-            errors: (_, event) => undefined,
+            rawCartResult: (_, event) => event?.payload?.rawCartResult,
+            errors: (_) => undefined,
           }),
         ],
       },
       ERROR: {
         target: options?.errorTarget || 'error',
-        actions: assign({
-          errors: (_, event) => event?.payload?.errors,
-        }),
+        actions: [
+          assign({
+            prevCart: (context) => context?.cart,
+            cart: (context, _) => context?.lastValidCart,
+            errors: (_, event) => event?.payload?.errors,
+          }),
+        ],
       },
       CART_COMPLETED: {
         target: 'cartCompleted',
         actions: assign({
-          cart: (_, event) => undefined,
-          errors: (_, event) => undefined,
+          prevCart: (_) => undefined,
+          cart: (_) => undefined,
+          lastValidCart: (_) => undefined,
+          errors: (_) => undefined,
         }),
       },
     },
@@ -63,9 +77,6 @@ const INITIALIZING_CART_EVENTS: StateMachine.Machine<
     target: 'cartFetching',
   },
   CART_CREATE: {
-    target: 'cartCreating',
-  },
-  CARTLINE_ADD: {
     target: 'cartCreating',
   },
 };
@@ -140,9 +151,11 @@ const cartMachine = createMachine<
 export function useCartAPIStateMachine({
   numCartLines,
   onCartActionEntry,
+  onCartActionOptimisticUI,
   onCartActionComplete,
   data: cart,
   cartFragment,
+  countryCode,
 }: {
   /**  Maximum number of cart lines to fetch. Defaults to 250 cart lines. */
   numCartLines?: number;
@@ -151,15 +164,23 @@ export function useCartAPIStateMachine({
     context: CartMachineContext,
     event: CartMachineActionEvent
   ) => void;
+  /** A callback that is invoked after executing the entry actions for optimistic UI changes.  */
+  onCartActionOptimisticUI?: (
+    context: CartMachineContext,
+    event: CartMachineEvent
+  ) => Partial<CartMachineContext>;
   /** A callback that is invoked after a Cart API completes. */
   onCartActionComplete?: (
     context: CartMachineContext,
     event: CartMachineFetchResultEvent
   ) => void;
+  /** A callback that is invoked after a Cart API completes. */
   /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
   cartFragment?: string;
+  /** The ISO country code for i18n. */
+  countryCode?: CountryCode;
 }) {
   const {
     cartFetch,
@@ -174,6 +195,7 @@ export function useCartAPIStateMachine({
   } = useCartActions({
     numCartLines,
     cartFragment,
+    countryCode,
   });
 
   const [state, send, service] = useMachine(cartMachine, {
@@ -186,8 +208,7 @@ export function useCartAPIStateMachine({
         send(resultEvent);
       },
       cartCreateAction: async (_, event): Promise<void> => {
-        if (event.type !== 'CART_CREATE' && event.type !== 'CARTLINE_ADD')
-          return;
+        if (event.type !== 'CART_CREATE') return;
 
         const {data, errors} = await cartCreate(event?.payload);
         const resultEvent = eventFromFetchResult(
@@ -312,6 +333,11 @@ export function useCartAPIStateMachine({
           }
         },
       }),
+      ...(onCartActionOptimisticUI && {
+        onCartActionOptimisticUI: assign((context, event) => {
+          return onCartActionOptimisticUI(context, event);
+        }),
+      }),
       ...(onCartActionComplete && {
         onCartActionComplete: (context, event) => {
           if (isCartFetchResultEvent(event)) {
@@ -354,7 +380,11 @@ function eventFromFetchResult(
 
   return {
     type: 'RESOLVE',
-    payload: {cart: cartFromGraphQL(cart), cartActionEvent},
+    payload: {
+      cart: cartFromGraphQL(cart),
+      rawCartResult: cart,
+      cartActionEvent,
+    },
   };
 }
 

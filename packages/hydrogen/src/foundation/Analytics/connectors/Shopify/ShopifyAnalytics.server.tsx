@@ -12,7 +12,7 @@ import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
 import type {Shop} from '../../../../storefront-api-types.js';
 
 export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
-  const {storeDomain} = useShop();
+  const {storeDomain, storefrontId} = useShop();
   const request = useServerRequest();
   const cookies = parse(request.headers.get('Cookie') || '');
   const domain = cookieDomain || storeDomain;
@@ -34,7 +34,7 @@ export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
     shopify: {
       shopId: id,
       currency: currencyCode,
-      storefrontId: globalThis.Oxygen?.env?.SHOPIFY_STOREFRONT_ID || '0',
+      storefrontId,
       acceptedLanguage:
         request.headers.get('Accept-Language')?.replace(/-.*/, '') || 'en',
       isPersistentCookie: !!cookies[SHOPIFY_S] || !!cookies[SHOPIFY_Y],

@@ -61,7 +61,7 @@ export {fetchSync} from './foundation/fetchSync/server/fetchSync.js';
 
 export {type HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.js';
 export {type HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.js';
-export {type HydrogenRouteProps} from './types.js';
+export {type HydrogenRouteProps, type CachingStrategy} from './types.js';
 export {
   type ResourceGetter as HydrogenApiRoute,
   RequestOptions as HydrogenApiRouteOptions,

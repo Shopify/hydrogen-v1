@@ -32,14 +32,13 @@ export default defineConfig({
     storefrontToken: Oxygen?.env?.PUBLIC_STOREFRONT_API_TOKEN,
     /* Your app's private Storefront API server (delegate access) token. Authenticates server requests. */
     privateStorefrontToken: Oxygen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
-    /* The unique ID for the storefront. This prop is required on non-Oxygen runtimes to avoid breaking the analytics dashboard in the Shopify admin.*/
-    storefrontId: Oxygen?.env?.PUBLIC_STOREFRONT_ID,
     /* The Storefront API version that your app uses */
     storefrontApiVersion: '2022-07',
+    /* (Optional) The unique ID for the storefront. Only gets assigned by Oxygen */
+    storefrontId: Oxygen?.env?.PUBLIC_STOREFRONT_ID,
   },
   /* A path to a custom page to render when the server encounters an unhandled exception */
   serverErrorPage: '/src/Error.jsx',
-  storefrontId: '',
 });
 ```
 

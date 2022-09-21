@@ -124,7 +124,8 @@ const SERVER_RESPONSE_MAP: Record<string, string> = {
 export function logServerResponse(
   type: RenderType,
   request: HydrogenRequest,
-  responseStatus: number
+  responseStatus: number,
+  didError: boolean
 ) {
   const log = getLoggerWithContext(request);
   const coloredResponseStatus =
@@ -145,6 +146,8 @@ export function logServerResponse(
   const url = parseUrl(type, request.url);
 
   log.debug(
-    `${request.method} ${styledType} ${coloredResponseStatus} ${paddedTiming} ${url}`
+    `${request.method} ${styledType} ${coloredResponseStatus} ${
+      didError || responseStatus >= 400 ? red('error') : green('ok   ')
+    } ${paddedTiming} ${url}`
   );
 }
