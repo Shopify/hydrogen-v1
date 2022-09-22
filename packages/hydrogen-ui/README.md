@@ -35,7 +35,7 @@ You can improve the developer experience by adding the following:
 - [Autocompletion for the Storefront API](#enable-storefront-api-graphql-autocompletion)
 - [TypeScript types for Storefront API objects](#set-typescript-types)
 
-## Storefront client
+## Authenticating the Storefront client
 
 To make it easier to query the Storefront API, Hydrogen-UI exposes a helper function called `createStorefrontClient()`.
 
@@ -85,9 +85,9 @@ export async function getServerSideProps() {
 }
 ```
 
-### Content type for the Storefront client
+### Set the content type for the Storefront client
 
-The Storefront client is configured to send the `"content-type": "application/json"` header by default. You can change this header with the following:
+By default, the Storefront client sends the `"content-type": "application/json"` header. You can change this to `application/graphql` with the following:
 
 ```ts
 createStorefrontClient({contentType: 'graphql', ...})
