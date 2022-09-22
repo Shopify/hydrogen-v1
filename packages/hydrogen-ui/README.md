@@ -8,9 +8,11 @@ If you still want to test this package, ensure that you
 
 ## Versioning
 
-Hydrogen-UI **doesn't follow semantic versioning**, because the implementation is tied to specific versions of the [Shopify Storefront API](https://shopify.dev/api/storefront), which follow [calver](https://calver.org/). For example, if you're using Storefront API version `2022-07`, then Hydrogen-UI versions `2022.7.x` are fully compatible with the API.
+Hydrogen UI **doesn't follow semantic versioning**, because the implementation is tied to specific versions of the [Shopify Storefront API](https://shopify.dev/api/storefront), which follow [calver](https://calver.org/). For example, if you're using Storefront API version `2022-07`, then Hydrogen-UI versions `2022.7.x` are fully compatible with the API.
 
 If the Storefront API version update includes breaking changes, then Hydrogen-UI includes breaking changes. Because the API version is updated every three months, **breaking changes could occur every three months**.
+
+Learn more about API [release schedules and support](https://shopify.dev/api/usage/versioning#release-schedule) at Shopify.
 
 ## Getting started
 
@@ -30,12 +32,90 @@ yarn add @shopify/hydrogen-ui
 
 You can improve the developer experience by adding the following:
 
-- [Autocompletion for the Storefront API](#storefront-api-graphql-autocompletion)
-- [TypeScript types for Storefront API objects](#typescript-types)
+- [Autocompletion for the Storefront API](#enable-storefront-api-graphql-autocompletion)
+- [TypeScript types for Storefront API objects](#set-typescript-types)
 
-Learn more about API [release schedules and support](https://shopify.dev/api/usage/versioning#release-schedule) at Shopify.
+## Storefront client
 
-## Storefront API GraphQL autocompletion
+To make it easier to query the Storefront API, Hydrogen-UI exposes a helper function called `createStorefrontClient()`.
+
+The client can take in the following tokens:
+
+- The [delegate access token](https://shopify.dev/api/usage/authentication#getting-started-with-authenticated-access), as `privateStorefrontToken`. Used for requests from a server or other private contexts.
+
+- A public token, as `publicAccessToken`. Used for requests from a browser or public contexts.
+
+The following is an example:
+
+```ts
+// Filename: '/shopify-client.js'
+
+import {createStorefrontClient} from '@shopify/hydrogen-ui';
+
+const client = createStorefrontClient({
+  privateStorefrontToken: '...',
+  storeDomain: 'myshop',
+  storefrontApiVersion: '2022-07',
+});
+
+export const getStorefrontApiUrl = client.getStorefrontApiUrl;
+export const getPrivateTokenHeaders = client.getPrivateTokenHeaders;
+```
+
+You can then use this in your server-side queries. Here's an example of using it for [NextJS's `getServerSideProps`](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props):
+
+```ts
+// Filename: '/pages/index.js'
+
+import {
+  getStorefrontApiUrl,
+  getPrivateTokenHeaders,
+} from '../shopify-client.js';
+
+export async function getServerSideProps() {
+  const response = await fetch(getStorefrontApiUrl(), {
+    body: GRAPHQL_QUERY,
+    headers: getPrivateTokenHeaders(),
+    method: 'POST',
+  });
+
+  const json = await response.json();
+
+  return {props: json};
+}
+```
+
+### Content type for the Storefront client
+
+The Storefront client is configured to send the `"content-type": "application/json"` header by default. You can change this header with the following:
+
+```ts
+createStorefrontClient({contentType: 'graphql', ...})
+```
+
+Alternatively, each time you get the headers you can customize which `"content-type"` you want, just for that one invocation:
+
+```ts
+getPrivateTokenHeaders({contentType: 'graphql'});
+```
+
+If you're using TypeScript, then you can [improve the typing experience](#set-typescript-types).
+
+## Development and production bundles
+
+Hydrogen UI has a development and a production bundle. The development bundle has some warnings and messages that the production bundle doesn't.
+
+Depending on the bundler or runtime you're using, the correct bundle can be automatically chosen following the `package.json#exports` of Hydrogen-UI. If it's not automatic, then you might need to configure your bundler / runtime to use the `development` and `production` conditions to enable this feature.
+
+**Note:** The production bundle is used by default if your bundler / runtime doesn't understand the export conditions.
+
+## Hydrogen UI in the browser
+
+Hydrogen UI has a development and a production `umd` build. Both are meant to be used directly either by `<script src=""></script>` tags in HTML, or by `AMD`-compatible loaders.
+
+If you're using Hydrogen UI as a global through the `<script>` tag, then the components can be accessed through the `hydrogenui` global variable.
+
+## Enable Storefront API GraphQL autocompletion
 
 Enable GraphQL autocompletion for the Storefront API in your integrated development environment (IDE):
 
@@ -59,7 +139,7 @@ GraphQL autocompletion and validation will now work in `.graphql` files and in [
 
 If you're having trouble getting it to work, then consult our [troubleshooting section](#graphql-autocompletion).
 
-## TypeScript types
+## Set TypeScript types
 
 The following are options to help strongly-type your API responses from the Storefront API:
 
@@ -113,80 +193,6 @@ const productTitle: Pick<Product, 'title'> = '';
 
 const productExceptTitle: Omit<Product, 'title'> = {};
 ```
-
-## Storefront Client
-
-To make it easier to query the Storefront API, Hydrogen-UI exposes a helper function called `createStorefrontClient()`. The client can take in either the [delegate access token](https://shopify.dev/api/storefront#authentication) as `privateStorefrontToken` - which is ideal for server-side requests to the Storefront API - or take in `publicAccessToken`.
-
-The following is an For example:
-
-```ts
-// filename: '/shopify-client.js'
-
-import {createStorefrontClient} from '@shopify/hydrogen-ui';
-
-const client = createStorefrontClient({
-  privateStorefrontToken: '...',
-  storeDomain: 'myshop',
-  storefrontApiVersion: '2022-07',
-});
-
-export const getStorefrontApiUrl = client.getStorefrontApiUrl;
-export const getPrivateTokenHeaders = client.getPrivateTokenHeaders;
-```
-
-Then you can use this in your server-side queries. Here's an example of using it for [NextJS's `getServerSideProps`](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props):
-
-```ts
-// filename: '/pages/index.js'
-
-import {
-  getStorefrontApiUrl,
-  getPrivateTokenHeaders,
-} from '../shopify-client.js';
-
-export async function getServerSideProps() {
-  const response = await fetch(getStorefrontApiUrl(), {
-    body: GRAPHQL_QUERY,
-    headers: getPrivateTokenHeaders(),
-    method: 'POST',
-  });
-
-  const json = await response.json();
-
-  return {props: json};
-}
-```
-
-If you're using TypeScript, refer to the [TypeScript](#typescript-types) section on how to improve the typing experience here as well.
-
-### Content type for the Storefront client
-
-Note that the storefront client is configured to send the `"content-type": "application/json"` header by default, but you can change this default by doing:
-
-```ts
-createStorefrontClient({contentType: 'graphql', ...})
-```
-
-Alternatively, each time you get the headers you can customize which `"content-type"` you want, just for that one invocation:
-
-```ts
-getPrivateTokenHeaders({contentType: 'graphql'});
-```
-
-## Development and Production bundles
-
-Hydrogen-UI has a development and production bundle; the development bundle has additional warnings and messages that the production bundle does not have.
-
-Depending on the bundler or runtime you're using, it may automatically choose the correct bundle by following the `package.json#exports` of Hydrogen-UI. If it's not automatic, then you may need to configure your bundler / runtime to use the `development` and `production` conditions to enable this feature.
-
-The production bundle is used by default if your bundler / runtime doesn't understand the export conditions.
-
-## Hydrogen-UI in the Browser
-
-There are two `umd` builds (development and production) of Hydrogen-UI, meant to be used directly by `<script src=""></script>` tags in HTML, or by `AMD`-compatible loaders.
-
-If you're using Hydrogen-UI as a global through the `<script>` tag, then the components can be accessed through the `hydrogenui` global variable.
 
 ## Troubleshooting
 
