@@ -1154,7 +1154,8 @@ describe('<CartProviderV2 />', () => {
       // wait till idle
       await act(async () => {});
 
-      expect(cartCreateSpy).toBeCalledTimes(1);
+      // our setup function also is called once to create
+      expect(cartCreateSpy).toBeCalledTimes(2);
       expect(result.current).toMatchObject({
         status: 'idle',
         ...cartFromGraphQL(cartMock),
