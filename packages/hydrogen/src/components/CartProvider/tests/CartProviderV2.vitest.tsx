@@ -1108,6 +1108,58 @@ describe('<CartProviderV2 />', () => {
         );
       });
     });
+
+    it('deletes local storage on complete', async () => {
+      const cartLineAddSpy = vi.fn(async () => ({
+        data: {cartLinesAdd: {cart: null}},
+      }));
+
+      const spy = vi.spyOn(window.localStorage, 'removeItem');
+
+      const result = await useCartWithInitializedCart({
+        cartLineAdd: cartLineAddSpy,
+      });
+
+      act(() => {
+        result.current.linesAdd([
+          {
+            merchandiseId: '123',
+          },
+        ]);
+      });
+
+      // wait till idle
+      await act(async () => {});
+
+      expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
+    });
+  });
+
+  describe('creates cart', async () => {
+    it('resolves', async () => {
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartMock}},
+      }));
+
+      const result = await useCartWithInitializedCart({
+        cartCreate: cartCreateSpy,
+      });
+
+      act(() => {
+        result.current.cartCreate({});
+      });
+
+      expect(result.current.status).toEqual('creating');
+
+      // wait till idle
+      await act(async () => {});
+
+      expect(cartCreateSpy).toBeCalledTimes(1);
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(cartMock),
+      });
+    });
   });
 
   describe('error', () => {
