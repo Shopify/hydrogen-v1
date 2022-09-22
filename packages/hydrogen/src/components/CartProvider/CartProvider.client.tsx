@@ -1,232 +1,31 @@
-import React, {
-  useEffect,
-  useCallback,
-  useReducer,
-  useMemo,
-  useRef,
-} from 'react';
-import type {Reducer} from 'react';
-import {flattenConnection} from '../../utilities/flattenConnection/index.js';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {CartFragmentFragment} from './graphql/CartFragment.js';
 import {
-  CartCreateMutation,
-  CartCreateMutationVariables,
-} from './graphql/CartCreateMutation.js';
-import {Cart, CartAction, State} from './types.js';
-import {
-  CartLineAddMutation,
-  CartLineAddMutationVariables,
-} from './graphql/CartLineAddMutation.js';
-import {
-  CartLineAdd,
-  CartCreate,
-  CartLineRemove,
-  CartLineUpdate,
-  CartNoteUpdate,
-  CartBuyerIdentityUpdate,
-  CartAttributesUpdate,
-  CartDiscountCodesUpdate,
-  CartQuery,
-  defaultCartFragment,
-} from './cart-queries.js';
-import {
-  CartLineInput,
-  CartInput,
-  CartLineUpdateInput,
-  CartBuyerIdentityInput,
   AttributeInput,
+  CartBuyerIdentityInput,
+  CartInput,
+  CartLineInput,
+  CartLineUpdateInput,
   CountryCode,
 } from '../../storefront-api-types.js';
-import {useCartFetch} from './hooks.client.js';
 import {CartContext} from './context.js';
 import {
-  CartLineRemoveMutationVariables,
-  CartLineRemoveMutation,
-} from './graphql/CartLineRemoveMutation.js';
-import {
-  CartLineUpdateMutationVariables,
-  CartLineUpdateMutation,
-} from './graphql/CartLineUpdateMutation.js';
-import {
-  CartNoteUpdateMutationVariables,
-  CartNoteUpdateMutation,
-} from './graphql/CartNoteUpdateMutation.js';
-import {
-  CartBuyerIdentityUpdateMutationVariables,
-  CartBuyerIdentityUpdateMutation,
-} from './graphql/CartBuyerIdentityUpdateMutation.js';
-import {
-  CartDiscountCodesUpdateMutationVariables,
-  CartDiscountCodesUpdateMutation,
-} from './graphql/CartDiscountCodesUpdateMutation.js';
-
-import {
-  CartAttributesUpdateMutationVariables,
-  CartAttributesUpdateMutation,
-} from './graphql/CartAttributesUpdateMutation.js';
+  BuyerIdentityUpdateEvent,
+  CartCreateEvent,
+  CartLineAddEvent,
+  CartLineRemoveEvent,
+  CartLineUpdateEvent,
+  CartMachineContext,
+  CartMachineEvent,
+  CartMachineTypeState,
+  CartWithActions,
+  DiscountCodesUpdateEvent,
+} from './types.js';
+import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.js';
+import {useCartAPIStateMachine} from './useCartAPIStateMachine.client.js';
 import {CART_ID_STORAGE_KEY} from './constants.js';
-import {CartFragmentFragment} from './graphql/CartFragment.js';
-import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery.js';
-
-import type {CartWithActions} from './types.js';
 import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
 
-function cartReducer(state: State, action: CartAction): State {
-  switch (action.type) {
-    case 'cartFetch': {
-      if (state.status === 'uninitialized') {
-        return {
-          status: 'fetching',
-        };
-      }
-      break;
-    }
-    case 'cartCreate': {
-      if (state.status === 'uninitialized') {
-        return {
-          status: 'creating',
-        };
-      }
-      break;
-    }
-    case 'resolve': {
-      const resolvableStatuses = ['updating', 'fetching', 'creating'];
-      if (resolvableStatuses.includes(state.status)) {
-        return {
-          status: 'idle',
-          cart: action.cart,
-        };
-      }
-      break;
-    }
-    case 'reject': {
-      if (action.errors) {
-        console.group('%cCart Error:', 'color:red');
-        for (const [i, error] of action.errors.entries()) {
-          console.log(`%c${i + 1}. ` + error.message, 'color:red');
-        }
-        console.groupEnd();
-      }
-      if (state.status === 'fetching' || state.status === 'creating') {
-        return {status: 'uninitialized', error: action.errors};
-      } else if (state.status === 'updating') {
-        return {
-          status: 'idle',
-          cart: state.lastValidCart,
-          error: action.errors,
-        };
-      }
-      break;
-    }
-    case 'resetCart': {
-      if (state.status === 'fetching') {
-        return {status: 'uninitialized'};
-      }
-      break;
-    }
-    case 'addLineItem': {
-      if (state.status === 'idle') {
-        return {
-          status: 'updating',
-          cart: state.cart,
-          lastValidCart: state.cart,
-        };
-      }
-      break;
-    }
-    case 'removeLineItem': {
-      if (state.status === 'idle') {
-        return {
-          status: 'updating',
-          cart: {
-            ...state.cart,
-            lines: state.cart.lines.filter(
-              ({id}) => !action.lines.includes(id)
-            ),
-          },
-          lastValidCart: state.cart,
-        };
-      }
-      break;
-    }
-    case 'updateLineItem': {
-      if (state.status === 'idle') {
-        return {
-          status: 'updating',
-          cart: {
-            ...state.cart,
-            lines: state.cart.lines.map((line) => {
-              const updatedLine = action.lines.find(({id}) => id === line.id);
-
-              if (updatedLine && updatedLine.quantity) {
-                return {
-                  ...line,
-                  quantity: updatedLine.quantity,
-                };
-              }
-
-              return line;
-            }),
-          },
-          lastValidCart: state.cart,
-        };
-      }
-      break;
-    }
-    case 'noteUpdate': {
-      if (state.status === 'idle') {
-        return {
-          status: 'updating',
-          cart: state.cart,
-          lastValidCart: state.cart,
-        };
-      }
-      break;
-    }
-    case 'buyerIdentityUpdate': {
-      if (state.status === 'idle') {
-        return {
-          status: 'updating',
-          cart: state.cart,
-          lastValidCart: state.cart,
-        };
-      }
-      break;
-    }
-    case 'cartAttributesUpdate': {
-      if (state.status === 'idle') {
-        return {
-          status: 'updating',
-          cart: state.cart,
-          lastValidCart: state.cart,
-        };
-      }
-      break;
-    }
-    case 'discountCodesUpdate': {
-      if (state.status === 'idle') {
-        return {
-          status: 'updating',
-          cart: state.cart,
-          lastValidCart: state.cart,
-        };
-      }
-      break;
-    }
-  }
-  throw new Error(
-    `Cannot dispatch event (${action.type}) for current cart state (${state.status})`
-  );
-}
-
-/**
- * The `CartProvider` component creates a context for using a cart. It creates a cart object and callbacks
- * that can be accessed by any descendent component using the `useCart` hook and related hooks. It also carries out
- * any callback props when a relevant action is performed. For example, if a `onLineAdd` callback is provided,
- * then the callback will be called when a new line item is successfully added to the cart.
- *
- * The `CartProvider` component must be a descendent of the `ShopifyProvider` component.
- * You must use this component if you want to use the `useCart` hook or related hooks, or if you would like to use the `AddToCartButton` component.
- */
 export function CartProvider({
   children,
   numCartLines,
@@ -238,6 +37,14 @@ export function CartProvider({
   onBuyerIdentityUpdate,
   onAttributesUpdate,
   onDiscountCodesUpdate,
+  onCreateComplete,
+  onLineAddComplete,
+  onLineRemoveComplete,
+  onLineUpdateComplete,
+  onNoteUpdateComplete,
+  onBuyerIdentityUpdateComplete,
+  onAttributesUpdateComplete,
+  onDiscountCodesUpdateComplete,
   data: cart,
   cartFragment = defaultCartFragment,
   customerAccessToken,
@@ -245,6 +52,7 @@ export function CartProvider({
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
+  /**  Maximum number of cart lines to fetch. Defaults to 250 cart lines. */
   numCartLines?: number;
   /** A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API. */
   onCreate?: () => void;
@@ -262,6 +70,22 @@ export function CartProvider({
   onAttributesUpdate?: () => void;
   /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
+  /** A callback that is invoked when the process to create a cart completes */
+  onCreateComplete?: () => void;
+  /** A callback that is invoked when the process to add a line item to the cart completes */
+  onLineAddComplete?: () => void;
+  /** A callback that is invoked when the process to remove a line item to the cart completes */
+  onLineRemoveComplete?: () => void;
+  /** A callback that is invoked when the process to update a line item in the cart completes */
+  onLineUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to add or update a note in the cart completes */
+  onNoteUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to update the buyer identity completes */
+  onBuyerIdentityUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to update the cart attributes completes */
+  onAttributesUpdateComplete?: () => void;
+  /** A callback that is invoked when the process to update the cart discount codes completes */
+  onDiscountCodesUpdateComplete?: () => void;
   /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
@@ -272,498 +96,309 @@ export function CartProvider({
   countryCode?: CountryCode;
 }) {
   if (countryCode) countryCode = countryCode.toUpperCase() as CountryCode;
+  const [prevCountryCode, setPrevCountryCode] = useState(countryCode);
+  const [prevCustomerAccessToken, setPrevCustomerAccessToken] =
+    useState(customerAccessToken);
+  const customerOverridesCountryCode = useRef(false);
 
-  const initialStatus: State = cart
-    ? {status: 'idle', cart: cartFromGraphQL(cart)}
-    : {status: 'uninitialized'};
-  const [state, dispatch] = useReducer<Reducer<State, CartAction>>(
-    (state, dispatch) => cartReducer(state, dispatch),
-    initialStatus
-  );
-  const fetchCart = useCartFetch();
+  if (
+    prevCountryCode !== countryCode ||
+    prevCustomerAccessToken !== customerAccessToken
+  ) {
+    setPrevCountryCode(countryCode);
+    setPrevCustomerAccessToken(customerAccessToken);
+    customerOverridesCountryCode.current = false;
+  }
+
+  const [cartState, cartSend] = useCartAPIStateMachine({
+    numCartLines,
+    data: cart,
+    cartFragment,
+    countryCode,
+    onCartActionEntry(context, event) {
+      try {
+        switch (event.type) {
+          case 'CART_CREATE':
+            return onCreate?.();
+          case 'CARTLINE_ADD':
+            return onLineAdd?.();
+          case 'CARTLINE_REMOVE':
+            return onLineRemove?.();
+          case 'CARTLINE_UPDATE':
+            return onLineUpdate?.();
+          case 'NOTE_UPDATE':
+            return onNoteUpdate?.();
+          case 'BUYER_IDENTITY_UPDATE':
+            return onBuyerIdentityUpdate?.();
+          case 'CART_ATTRIBUTES_UPDATE':
+            return onAttributesUpdate?.();
+          case 'DISCOUNT_CODES_UPDATE':
+            return onDiscountCodesUpdate?.();
+        }
+      } catch (error) {
+        console.error('Cart entry action failed', error);
+      }
+    },
+    onCartActionOptimisticUI(context, event) {
+      if (!context?.cart) return {cart: undefined};
+      switch (event.type) {
+        case 'CARTLINE_REMOVE':
+          return {
+            ...context,
+            lastValidCart: context.cart,
+            cart: {
+              ...context.cart,
+              lines: context?.cart?.lines.filter(
+                ({id}) => !event.payload.lines.includes(id)
+              ),
+            },
+          };
+        case 'CARTLINE_UPDATE':
+          return {
+            ...context,
+            lastValidCart: context.cart,
+            cart: {
+              ...context.cart,
+              lines: context.cart.lines.map((line) => {
+                const updatedLine = event.payload.lines.find(
+                  ({id}) => id === line.id
+                );
+
+                if (updatedLine && updatedLine.quantity) {
+                  return {
+                    ...line,
+                    quantity: updatedLine.quantity,
+                  };
+                }
+
+                return line;
+              }),
+            },
+          };
+      }
+      return {cart: context.cart ? {...context.cart} : undefined};
+    },
+    onCartActionComplete(context, event) {
+      const cartActionEvent = event.payload.cartActionEvent;
+      try {
+        switch (event.type) {
+          case 'RESOLVE':
+            switch (cartActionEvent.type) {
+              case 'CART_CREATE':
+                publishCreateAnalytics(context, cartActionEvent);
+                return onCreateComplete?.();
+              case 'CARTLINE_ADD':
+                publishLineAddAnalytics(context, cartActionEvent);
+                return onLineAddComplete?.();
+              case 'CARTLINE_REMOVE':
+                publishLineRemoveAnalytics(context, cartActionEvent);
+                return onLineRemoveComplete?.();
+              case 'CARTLINE_UPDATE':
+                publishLineUpdateAnalytics(context, cartActionEvent);
+                return onLineUpdateComplete?.();
+              case 'NOTE_UPDATE':
+                return onNoteUpdateComplete?.();
+              case 'BUYER_IDENTITY_UPDATE':
+                if (countryCodeNotUpdated(context, cartActionEvent)) {
+                  customerOverridesCountryCode.current = true;
+                }
+                return onBuyerIdentityUpdateComplete?.();
+              case 'CART_ATTRIBUTES_UPDATE':
+                return onAttributesUpdateComplete?.();
+              case 'DISCOUNT_CODES_UPDATE':
+                publishDiscountCodesUpdateAnalytics(context, cartActionEvent);
+                return onDiscountCodesUpdateComplete?.();
+            }
+        }
+      } catch (error) {
+        console.error('onCartActionComplete failed', error);
+      }
+    },
+  });
+
+  const cartReady = useRef(false);
+  const cartCompleted = cartState.matches('cartCompleted');
 
   const countryChanged =
-    state.status === 'idle' &&
-    countryCode !== state?.cart?.buyerIdentity?.countryCode &&
-    !state.error;
+    (cartState.value === 'idle' ||
+      cartState.value === 'error' ||
+      cartState.value === 'cartCompleted') &&
+    countryCode !== cartState?.context?.cart?.buyerIdentity?.countryCode &&
+    !cartState.context.errors;
 
-  const cartFetch = useCallback(
-    async (cartId: string) => {
-      dispatch({type: 'cartFetch'});
-
-      const {data} = await fetchCart<CartQueryQueryVariables, CartQueryQuery>({
-        query: CartQuery(cartFragment),
-        variables: {
-          id: cartId,
-          numCartLines,
-          country: countryCode,
-        },
-      });
-
-      if (!data?.cart) {
-        window.localStorage.removeItem(CART_ID_STORAGE_KEY);
-        dispatch({type: 'resetCart'});
-        return;
-      }
-
-      dispatch({type: 'resolve', cart: cartFromGraphQL(data.cart)});
-    },
-    [fetchCart, cartFragment, numCartLines, countryCode]
-  );
-
-  const cartCreate = useCallback(
-    async (cart: CartInput) => {
-      dispatch({type: 'cartCreate'});
-
-      onCreate?.();
-
-      if (countryCode && !cart.buyerIdentity?.countryCode) {
-        if (cart.buyerIdentity == null) {
-          cart.buyerIdentity = {};
-        }
-        cart.buyerIdentity.countryCode = countryCode;
-      }
-
-      if (customerAccessToken && !cart.buyerIdentity?.customerAccessToken) {
-        if (cart.buyerIdentity == null) {
-          cart.buyerIdentity = {};
-        }
-        cart.buyerIdentity.customerAccessToken = customerAccessToken;
-      }
-
-      const {data, errors} = await fetchCart<
-        CartCreateMutationVariables,
-        CartCreateMutation
-      >({
-        query: CartCreate(cartFragment),
-        variables: {
-          input: cart,
-          numCartLines,
-          country: countryCode,
-        },
-      });
-
-      if (errors) {
-        dispatch({
-          type: 'reject',
-          errors,
-        });
-      }
-
-      if (data?.cartCreate?.cart) {
-        if (cart.lines) {
-          ClientAnalytics.publish(
-            ClientAnalytics.eventNames.ADD_TO_CART,
-            true,
-            {
-              addedCartLines: cart.lines,
-              cart: data.cartCreate.cart,
-              prevCart: null,
-            }
-          );
-        }
-        dispatch({
-          type: 'resolve',
-          cart: cartFromGraphQL(data.cartCreate.cart),
-        });
-
-        window.localStorage.setItem(
-          CART_ID_STORAGE_KEY,
-          data.cartCreate.cart.id
-        );
-      }
-    },
-    [
-      onCreate,
-      countryCode,
-      fetchCart,
-      cartFragment,
-      numCartLines,
-      customerAccessToken,
-    ]
-  );
-
-  const addLineItem = useCallback(
-    async (lines: CartLineInput[], state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'addLineItem'});
-        onLineAdd?.();
-        const {data, errors} = await fetchCart<
-          CartLineAddMutationVariables,
-          CartLineAddMutation
-        >({
-          query: CartLineAdd(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            lines,
-            numCartLines,
-            country: countryCode,
-          },
-        });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartLinesAdd?.cart) {
-          ClientAnalytics.publish(
-            ClientAnalytics.eventNames.ADD_TO_CART,
-            true,
-            {
-              addedCartLines: lines,
-              cart: data.cartLinesAdd.cart,
-              prevCart: state.cart,
-            }
-          );
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartLinesAdd.cart),
-          });
-        }
-      }
-    },
-    [onLineAdd, fetchCart, cartFragment, numCartLines, countryCode]
-  );
-
-  const removeLineItem = useCallback(
-    async (lines: string[], state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'removeLineItem', lines});
-
-        onLineRemove?.();
-
-        const {data, errors} = await fetchCart<
-          CartLineRemoveMutationVariables,
-          CartLineRemoveMutation
-        >({
-          query: CartLineRemove(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            lines,
-            numCartLines,
-            country: countryCode,
-          },
-        });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartLinesRemove?.cart) {
-          ClientAnalytics.publish(
-            ClientAnalytics.eventNames.REMOVE_FROM_CART,
-            true,
-            {
-              removedCartLines: lines,
-              cart: data.cartLinesRemove.cart,
-              prevCart: state.cart,
-            }
-          );
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartLinesRemove.cart),
-          });
-        }
-      }
-    },
-    [onLineRemove, fetchCart, cartFragment, numCartLines, countryCode]
-  );
-
-  const updateLineItem = useCallback(
-    async (lines: CartLineUpdateInput[], state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'updateLineItem', lines});
-
-        onLineUpdate?.();
-
-        const {data, errors} = await fetchCart<
-          CartLineUpdateMutationVariables,
-          CartLineUpdateMutation
-        >({
-          query: CartLineUpdate(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            lines,
-            numCartLines,
-            country: countryCode,
-          },
-        });
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartLinesUpdate?.cart) {
-          ClientAnalytics.publish(
-            ClientAnalytics.eventNames.UPDATE_CART,
-            true,
-            {
-              updatedCartLines: lines,
-              oldCart: state.cart,
-              cart: data.cartLinesUpdate.cart,
-              prevCart: state.cart,
-            }
-          );
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartLinesUpdate.cart),
-          });
-        }
-      }
-    },
-    [onLineUpdate, fetchCart, cartFragment, numCartLines, countryCode]
-  );
-
-  const noteUpdate = useCallback(
-    async (note: CartNoteUpdateMutationVariables['note'], state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'noteUpdate'});
-
-        onNoteUpdate?.();
-
-        const {data, errors} = await fetchCart<
-          CartNoteUpdateMutationVariables,
-          CartNoteUpdateMutation
-        >({
-          query: CartNoteUpdate(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            note,
-            numCartLines,
-            country: countryCode,
-          },
-        });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartNoteUpdate?.cart) {
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartNoteUpdate.cart),
-          });
-        }
-      }
-    },
-    [onNoteUpdate, fetchCart, cartFragment, numCartLines, countryCode]
-  );
-
-  const buyerIdentityUpdate = useCallback(
-    async (buyerIdentity: CartBuyerIdentityInput, state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'buyerIdentityUpdate'});
-
-        onBuyerIdentityUpdate?.();
-
-        const {data, errors} = await fetchCart<
-          CartBuyerIdentityUpdateMutationVariables,
-          CartBuyerIdentityUpdateMutation
-        >({
-          query: CartBuyerIdentityUpdate(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            buyerIdentity,
-            numCartLines,
-            country: countryCode,
-          },
-        });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartBuyerIdentityUpdate?.cart) {
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartBuyerIdentityUpdate.cart),
-          });
-        }
-      }
-    },
-    [onBuyerIdentityUpdate, fetchCart, cartFragment, numCartLines, countryCode]
-  );
-
-  const cartAttributesUpdate = useCallback(
-    async (attributes: AttributeInput[], state: State) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'cartAttributesUpdate'});
-
-        onAttributesUpdate?.();
-
-        const {data, errors} = await fetchCart<
-          CartAttributesUpdateMutationVariables,
-          CartAttributesUpdateMutation
-        >({
-          query: CartAttributesUpdate(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            attributes,
-            numCartLines,
-            country: countryCode,
-          },
-        });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartAttributesUpdate?.cart) {
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartAttributesUpdate.cart),
-          });
-        }
-      }
-    },
-    [onAttributesUpdate, fetchCart, cartFragment, numCartLines, countryCode]
-  );
-
-  const discountCodesUpdate = useCallback(
-    async (
-      discountCodes: CartDiscountCodesUpdateMutationVariables['discountCodes'],
-      state: State
-    ) => {
-      if (state.status === 'idle') {
-        dispatch({type: 'discountCodesUpdate'});
-
-        onDiscountCodesUpdate?.();
-
-        const {data, errors} = await fetchCart<
-          CartDiscountCodesUpdateMutationVariables,
-          CartDiscountCodesUpdateMutation
-        >({
-          query: CartDiscountCodesUpdate(cartFragment),
-          variables: {
-            cartId: state.cart.id!,
-            discountCodes,
-            numCartLines,
-            country: countryCode,
-          },
-        });
-
-        if (errors) {
-          dispatch({
-            type: 'reject',
-            errors,
-          });
-        }
-
-        if (data?.cartDiscountCodesUpdate?.cart) {
-          ClientAnalytics.publish(
-            ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
-            true,
-            {
-              updatedDiscountCodes: discountCodes,
-              cart: data.cartDiscountCodesUpdate.cart,
-              prevCart: state.cart,
-            }
-          );
-          dispatch({
-            type: 'resolve',
-            cart: cartFromGraphQL(data.cartDiscountCodesUpdate.cart),
-          });
-        }
-      }
-    },
-    [onDiscountCodesUpdate, fetchCart, cartFragment, numCartLines, countryCode]
-  );
-
-  const didFetchCart = useRef(false);
-
+  /**
+   * Initializes cart with priority in this order:
+   * 1. cart props
+   * 2. localStorage cartId
+   */
   useEffect(() => {
-    if (
-      localStorage.getItem(CART_ID_STORAGE_KEY) &&
-      state.status === 'uninitialized' &&
-      !didFetchCart.current
-    ) {
-      didFetchCart.current = true;
-      cartFetch(localStorage.getItem(CART_ID_STORAGE_KEY)!);
+    if (!cartReady.current) {
+      if (!cart && storageAvailable('localStorage')) {
+        try {
+          const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
+          if (cartId) {
+            cartSend({type: 'CART_FETCH', payload: {cartId}});
+          }
+        } catch (error) {
+          console.warn('error fetching cartId');
+          console.warn(error);
+        }
+      }
+      cartReady.current = true;
     }
-  }, [cartFetch, state]);
+  }, [cart, cartReady, cartSend]);
 
+  // Update cart country code if cart and props countryCode's as different
   useEffect(() => {
-    if (!countryChanged) return;
-    buyerIdentityUpdate({countryCode, customerAccessToken}, state);
+    if (!countryChanged || customerOverridesCountryCode.current) return;
+    cartSend({
+      type: 'BUYER_IDENTITY_UPDATE',
+      payload: {buyerIdentity: {countryCode, customerAccessToken}},
+    });
   }, [
-    state,
-    buyerIdentityUpdate,
     countryCode,
     customerAccessToken,
     countryChanged,
+    customerOverridesCountryCode,
+    cartSend,
   ]);
+
+  // send cart events when ready
+  const onCartReadySend = useCallback(
+    (cartEvent: CartMachineEvent) => {
+      if (!cartReady.current) {
+        return console.warn("Cart isn't ready yet");
+      }
+      cartSend(cartEvent);
+    },
+    [cartSend]
+  );
+
+  // save cart id to local storage
+  useEffect(() => {
+    if (cartState?.context?.cart?.id && storageAvailable('localStorage')) {
+      try {
+        window.localStorage.setItem(
+          CART_ID_STORAGE_KEY,
+          cartState.context.cart?.id
+        );
+      } catch (error) {
+        console.warn('Failed to save cartId to localStorage', error);
+      }
+    }
+  }, [cartState?.context?.cart?.id]);
+
+  // delete cart from local storage if cart fetched has been completed
+  useEffect(() => {
+    if (cartCompleted && storageAvailable('localStorage')) {
+      try {
+        window.localStorage.removeItem(CART_ID_STORAGE_KEY);
+      } catch (error) {
+        console.warn('Failed to delete cartId from localStorage', error);
+      }
+    }
+  }, [cartCompleted]);
+
+  const cartCreate = useCallback(
+    (cartInput: CartInput) => {
+      if (countryCode && !cartInput.buyerIdentity?.countryCode) {
+        if (cartInput.buyerIdentity == null) {
+          cartInput.buyerIdentity = {};
+        }
+        cartInput.buyerIdentity.countryCode = countryCode;
+      }
+
+      if (
+        customerAccessToken &&
+        !cartInput.buyerIdentity?.customerAccessToken
+      ) {
+        if (cartInput.buyerIdentity == null) {
+          cartInput.buyerIdentity = {};
+        }
+        cartInput.buyerIdentity.customerAccessToken = customerAccessToken;
+      }
+      onCartReadySend({
+        type: 'CART_CREATE',
+        payload: cartInput,
+      });
+    },
+    [countryCode, customerAccessToken, onCartReadySend]
+  );
 
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
-      ...('cart' in state
-        ? state.cart
-        : {
-            lines: [],
-            attributes: [],
-            ...(cart ? cartFromGraphQL(cart) : {}),
-          }),
-      status: state.status,
-      error: 'error' in state ? state.error : undefined,
-      totalQuantity: 'cart' in state ? state?.cart?.totalQuantity ?? 0 : 0,
+      ...(cartState?.context?.cart ?? {lines: [], attributes: []}),
+      status: transposeStatus(cartState.value),
+      error: cartState?.context?.errors,
+      totalQuantity: cartState?.context?.cart?.totalQuantity ?? 0,
       cartCreate,
       linesAdd(lines: CartLineInput[]) {
-        if ('cart' in state && state.cart.id) {
-          addLineItem(lines, state);
+        if (cartState?.context?.cart?.id) {
+          onCartReadySend({
+            type: 'CARTLINE_ADD',
+            payload: {lines},
+          });
         } else {
           cartCreate({lines});
         }
       },
       linesRemove(lines: string[]) {
-        removeLineItem(lines, state);
+        onCartReadySend({
+          type: 'CARTLINE_REMOVE',
+          payload: {
+            lines,
+          },
+        });
       },
       linesUpdate(lines: CartLineUpdateInput[]) {
-        updateLineItem(lines, state);
+        onCartReadySend({
+          type: 'CARTLINE_UPDATE',
+          payload: {
+            lines,
+          },
+        });
       },
       noteUpdate(note: CartNoteUpdateMutationVariables['note']) {
-        noteUpdate(note, state);
+        onCartReadySend({
+          type: 'NOTE_UPDATE',
+          payload: {
+            note,
+          },
+        });
       },
       buyerIdentityUpdate(buyerIdentity: CartBuyerIdentityInput) {
-        buyerIdentityUpdate(buyerIdentity, state);
+        onCartReadySend({
+          type: 'BUYER_IDENTITY_UPDATE',
+          payload: {
+            buyerIdentity,
+          },
+        });
       },
       cartAttributesUpdate(attributes: AttributeInput[]) {
-        cartAttributesUpdate(attributes, state);
+        onCartReadySend({
+          type: 'CART_ATTRIBUTES_UPDATE',
+          payload: {
+            attributes,
+          },
+        });
       },
-      discountCodesUpdate(
-        discountCodes: CartDiscountCodesUpdateMutationVariables['discountCodes']
-      ) {
-        discountCodesUpdate(discountCodes, state);
+      discountCodesUpdate(discountCodes: string[]) {
+        onCartReadySend({
+          type: 'DISCOUNT_CODES_UPDATE',
+          payload: {
+            discountCodes,
+          },
+        });
       },
       cartFragment,
     };
   }, [
-    state,
-    cart,
     cartCreate,
     cartFragment,
-    addLineItem,
-    removeLineItem,
-    updateLineItem,
-    noteUpdate,
-    buyerIdentityUpdate,
-    cartAttributesUpdate,
-    discountCodesUpdate,
+    cartState?.context?.cart,
+    cartState?.context?.errors,
+    cartState.value,
+    onCartReadySend,
   ]);
 
   return (
@@ -773,11 +408,231 @@ export function CartProvider({
   );
 }
 
-function cartFromGraphQL(cart: CartFragmentFragment): Cart {
-  return {
-    ...cart,
-    // @ts-expect-error While the cart still uses fragments, there will be a TS error here until we remove those fragments and get the type in-line
-    lines: flattenConnection(cart.lines),
-    note: cart.note ?? undefined,
-  };
+function transposeStatus(
+  status: CartMachineTypeState['value']
+): CartWithActions['status'] {
+  switch (status) {
+    case 'uninitialized':
+    case 'initializationError':
+      return 'uninitialized';
+    case 'idle':
+    case 'cartCompleted':
+    case 'error':
+      return 'idle';
+    case 'cartFetching':
+      return 'fetching';
+    case 'cartCreating':
+      return 'creating';
+    case 'cartLineAdding':
+    case 'cartLineRemoving':
+    case 'cartLineUpdating':
+    case 'noteUpdating':
+    case 'buyerIdentityUpdating':
+    case 'cartAttributesUpdating':
+    case 'discountCodesUpdating':
+      return 'updating';
+  }
 }
+
+/** Check for storage availability funciton obtained from
+ * https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
+ */
+function storageAvailable(type: 'localStorage' | 'sessionStorage') {
+  let storage;
+  try {
+    storage = window[type];
+    const x = '__storage_test__';
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  } catch (e) {
+    return (
+      e instanceof DOMException &&
+      // everything except Firefox
+      (e.code === 22 ||
+        // Firefox
+        e.code === 1014 ||
+        // test name field too, because code might not be present
+        // everything except Firefox
+        e.name === 'QuotaExceededError' ||
+        // Firefox
+        e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+      // acknowledge QuotaExceededError only if there's something already stored
+      storage &&
+      storage.length !== 0
+    );
+  }
+}
+
+function countryCodeNotUpdated(
+  context: CartMachineContext,
+  event: BuyerIdentityUpdateEvent
+) {
+  return (
+    event.payload.buyerIdentity.countryCode &&
+    context.cart?.buyerIdentity?.countryCode !==
+      event.payload.buyerIdentity.countryCode
+  );
+}
+
+// Cart Analytics
+function publishCreateAnalytics(
+  context: CartMachineContext,
+  event: CartCreateEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.ADD_TO_CART, true, {
+    addedCartLines: event.payload.lines,
+    cart: context.rawCartResult,
+    prevCart: null,
+  });
+}
+
+function publishLineAddAnalytics(
+  context: CartMachineContext,
+  event: CartLineAddEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.ADD_TO_CART, true, {
+    addedCartLines: event.payload.lines,
+    cart: context.rawCartResult,
+    prevCart: context.prevCart,
+  });
+}
+
+function publishLineUpdateAnalytics(
+  context: CartMachineContext,
+  event: CartLineUpdateEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.UPDATE_CART, true, {
+    updatedCartLines: event.payload.lines,
+    oldCart: context.prevCart,
+    cart: context.rawCartResult,
+    prevCart: context.prevCart,
+  });
+}
+
+function publishLineRemoveAnalytics(
+  context: CartMachineContext,
+  event: CartLineRemoveEvent
+) {
+  ClientAnalytics.publish(ClientAnalytics.eventNames.REMOVE_FROM_CART, true, {
+    removedCartLines: event.payload.lines,
+    cart: context.rawCartResult,
+    prevCart: context.prevCart,
+  });
+}
+
+function publishDiscountCodesUpdateAnalytics(
+  context: CartMachineContext,
+  event: DiscountCodesUpdateEvent
+) {
+  ClientAnalytics.publish(
+    ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
+    true,
+    {
+      updatedDiscountCodes: event.payload.discountCodes,
+      cart: context.rawCartResult,
+      prevCart: context.prevCart,
+    }
+  );
+}
+
+export const defaultCartFragment = `
+fragment CartFragment on Cart {
+  id
+  checkoutUrl
+  totalQuantity
+  buyerIdentity {
+    countryCode
+    customer {
+      id
+      email
+      firstName
+      lastName
+      displayName
+    }
+    email
+    phone
+  }
+  lines(first: $numCartLines) {
+    edges {
+      node {
+        id
+        quantity
+        attributes {
+          key
+          value
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmountPerQuantity {
+            amount
+            currencyCode
+          }
+        }
+        merchandise {
+          ... on ProductVariant {
+            id
+            availableForSale
+            compareAtPriceV2 {
+              ...MoneyFragment
+            }
+            priceV2 {
+              ...MoneyFragment
+            }
+            requiresShipping
+            title
+            image {
+              ...ImageFragment
+            }
+            product {
+              handle
+              title
+            }
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+  cost {
+    subtotalAmount {
+      ...MoneyFragment
+    }
+    totalAmount {
+      ...MoneyFragment
+    }
+    totalDutyAmount {
+      ...MoneyFragment
+    }
+    totalTaxAmount {
+      ...MoneyFragment
+    }
+  }
+  note
+  attributes {
+    key
+    value
+  }
+  discountCodes {
+    code
+  }
+}
+
+fragment MoneyFragment on MoneyV2 {
+  currencyCode
+  amount
+}
+fragment ImageFragment on Image {
+  id
+  url
+  altText
+  width
+  height
+}
+`;
