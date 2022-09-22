@@ -110,6 +110,13 @@ export type CartCreateEvent = {
   payload: CartInput;
 };
 
+export type CartSetEvent = {
+  type: 'CART_SET';
+  payload: {
+    cart: CartFragmentFragment;
+  };
+};
+
 export type CartLineAddEvent = {
   type: 'CARTLINE_ADD';
   payload: {
@@ -162,6 +169,7 @@ export type DiscountCodesUpdateEvent = {
 export type CartMachineActionEvent =
   | CartFetchEvent
   | CartCreateEvent
+  | CartSetEvent
   | CartLineAddEvent
   | CartLineRemoveEvent
   | CartLineUpdateEvent
