@@ -34,7 +34,7 @@ export default function Page() {
 const QUERY = gql`/** add your query here **/`;
 ```
 
-The `useDelay` hook is especially useful when testing suspense boundary fallbacks. The following is an example:
+The `useDelay` hook is useful when testing suspense boundary fallbacks. The following is an example:
 
 ```tsx
 import {useShopQuery, gql, useDelay} from '@shopify/hydrogen';
