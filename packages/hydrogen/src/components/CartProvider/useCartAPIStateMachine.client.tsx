@@ -118,44 +118,49 @@ const UPDATING_CART_EVENTS: StateMachine.Machine<
   },
 };
 
-const cartMachine = createMachine<
-  CartMachineContext,
-  CartMachineEvent,
-  CartMachineTypeState
->({
-  id: 'Cart',
-  initial: 'uninitialized',
-  states: {
-    uninitialized: {
-      on: INITIALIZING_CART_EVENTS,
+function createCartMachine(initialCart?: CartFragmentFragment) {
+  return createMachine<
+    CartMachineContext,
+    CartMachineEvent,
+    CartMachineTypeState
+  >({
+    id: 'Cart',
+    initial: initialCart ? 'idle' : 'uninitialized',
+    context: {
+      cart: initialCart && cartFromGraphQL(initialCart),
     },
-    cartCompleted: {
-      on: INITIALIZING_CART_EVENTS,
+    states: {
+      uninitialized: {
+        on: INITIALIZING_CART_EVENTS,
+      },
+      cartCompleted: {
+        on: INITIALIZING_CART_EVENTS,
+      },
+      initializationError: {
+        on: INITIALIZING_CART_EVENTS,
+      },
+      idle: {
+        on: {...INITIALIZING_CART_EVENTS, ...UPDATING_CART_EVENTS},
+      },
+      error: {
+        on: {...INITIALIZING_CART_EVENTS, ...UPDATING_CART_EVENTS},
+      },
+      cartFetching: invokeCart('cartFetchAction', {
+        errorTarget: 'initializationError',
+      }),
+      cartCreating: invokeCart('cartCreateAction', {
+        errorTarget: 'initializationError',
+      }),
+      cartLineRemoving: invokeCart('cartLineRemoveAction'),
+      cartLineUpdating: invokeCart('cartLineUpdateAction'),
+      cartLineAdding: invokeCart('cartLineAddAction'),
+      noteUpdating: invokeCart('noteUpdateAction'),
+      buyerIdentityUpdating: invokeCart('buyerIdentityUpdateAction'),
+      cartAttributesUpdating: invokeCart('cartAttributesUpdateAction'),
+      discountCodesUpdating: invokeCart('discountCodesUpdateAction'),
     },
-    initializationError: {
-      on: INITIALIZING_CART_EVENTS,
-    },
-    idle: {
-      on: {...INITIALIZING_CART_EVENTS, ...UPDATING_CART_EVENTS},
-    },
-    error: {
-      on: {...INITIALIZING_CART_EVENTS, ...UPDATING_CART_EVENTS},
-    },
-    cartFetching: invokeCart('cartFetchAction', {
-      errorTarget: 'initializationError',
-    }),
-    cartCreating: invokeCart('cartCreateAction', {
-      errorTarget: 'initializationError',
-    }),
-    cartLineRemoving: invokeCart('cartLineRemoveAction'),
-    cartLineUpdating: invokeCart('cartLineUpdateAction'),
-    cartLineAdding: invokeCart('cartLineAddAction'),
-    noteUpdating: invokeCart('noteUpdateAction'),
-    buyerIdentityUpdating: invokeCart('buyerIdentityUpdateAction'),
-    cartAttributesUpdating: invokeCart('cartAttributesUpdateAction'),
-    discountCodesUpdating: invokeCart('discountCodesUpdateAction'),
-  },
-});
+  });
+}
 
 export function useCartAPIStateMachine({
   numCartLines,
@@ -205,6 +210,8 @@ export function useCartAPIStateMachine({
     cartFragment,
     countryCode,
   });
+
+  const cartMachine = useMemo(() => createCartMachine(cart), [cart]);
 
   const [state, send, service] = useMachine(cartMachine, {
     actions: {
