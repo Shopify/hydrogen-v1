@@ -1,12 +1,20 @@
 # Hydrogen-UI
 
-## NOTICE
+## IMPORTANT
 
-⚠️ This is an alpha version of Hydrogen-UI. The name, components, and utilties are all likely to change as we get closer to release. DO NOT USE IN PRODUCTION, THERE WILL BE BREAKING CHANGES. This release is meant for testing. ⚠️
+⚠️ This is an alpha version of Hydrogen-UI and is only for testing. The name, components, and utilities are all likely to change as we get closer to release. DO NOT USE IN PRODUCTION, THERE WILL BE BREAKING CHANGES. ⚠️
 
-If you still want to test this package, be sure to use the name `@shopify/hydrogen-ui-alpha` instead of `@shopify/hydrogen-ui` in the documentation below.
+If you still want to test this package, ensure that you
+
+## Versioning
+
+Hydrogen-UI **doesn't follow semantic versioning**, because the implementation is tied to specific versions of the [Shopify Storefront API](https://shopify.dev/api/storefront), which follow [calver](https://calver.org/). For example, if you're using Storefront API version `2022-07`, then Hydrogen-UI versions `2022.7.x` are fully compatible with the API.
+
+If the Storefront API version update includes breaking changes, then Hydrogen-UI includes breaking changes. Because the API version is updated every three months, **breaking changes could occur every three months**.
 
 ## Getting started
+
+**Note:** Use `@shopify/hydrogen-ui-alpha` instead of `@shopify/hydrogen-ui` in the following commands.
 
 npm:
 
@@ -20,43 +28,97 @@ Yarn:
 yarn add @shopify/hydrogen-ui
 ```
 
-Improve the developer experience:
+You can improve the developer experience by adding the following:
 
-- [Add autocompletion for the Storefront API](#storefront-api-graphql-autocompletion)
-- [Add TypeScript types for Storefront API objects](#typescript-types)
+- [Autocompletion for the Storefront API](#storefront-api-graphql-autocompletion)
+- [TypeScript types for Storefront API objects](#typescript-types)
 
-## Versioning
-
-Hydrogen-UI **does not follow semantic versioning**, because the implementation is tied to [specific versions](https://shopify.dev/api/usage/versioning#release-schedule) of the [Shopify Storefront API](https://shopify.dev/api/storefront), which follow [calver](https://calver.org/).
-
-For example, if you are using Storefront API version `2022-07`, then Hydrogen-UI versions `2022.7.x` will all be fully compatible with that version.
-
-As the Storefront API is updated every four months with breaking changes, Hydrogen-UI will also have breaking changes every four months, which are only considered a "minor" version update in semantic versioning.
-
-For example, if you are on Hydrogen-UI version `2022.7.0`, then version `2022.10.0` **is a breaking change**.
+Learn more about API [release schedules and support](https://shopify.dev/api/usage/versioning#release-schedule) at Shopify.
 
 ## Storefront API GraphQL autocompletion
 
-To enable GraphQL autocompletion for the Storefront API in your IDE:
+Enable GraphQL autocompletion for the Storefront API in your integrated development environment (IDE):
 
-1. Add `graphql` and [GraphQL-config](https://www.graphql-config.com/docs/user/user-installation) by running `yarn add --dev graphql graphql-config`
-2. Create a [GraphQL config file](https://www.graphql-config.com/docs/user/user-usage) at the root of your code. For example, `.graphqlrc.yml`
-3. Add a [`schema`](https://www.graphql-config.com/docs/user/user-schema) and point it to Hydrogen-UI's bundled schema for the Storefront API. For example:
+1. Add `graphql` and [GraphQL-config](https://www.graphql-config.com/docs/user/user-installation) with the following command:
 
-```yml
-# .graphqlrc.yml
-schema: node_modules/@shopify/hydrogen-ui/storefront.schema.json
+   ```sh
+   yarn add --dev graphql graphql-config
+   ```
+
+1. Create a [GraphQL config file](https://www.graphql-config.com/docs/user/user-usage) at the root of your code. For example, `.graphqlrc.yml`.
+1. Add a [`schema`](https://www.graphql-config.com/docs/user/user-schema) and point it to Hydrogen-UI's bundled schema for the Storefront API. For example:
+
+   ```yml
+   # .graphqlrc.yml
+   schema: node_modules/@shopify/hydrogen-ui/storefront.schema.json
+   ```
+
+1. Install a GraphQL extension in your IDE, such as the [GraphQL extension for VSCode](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql).
+
+GraphQL autocompletion and validation will now work in `.graphql` files and in [`gql`](https://github.com/apollographql/graphql-tag) template literals!
+
+If you're having trouble getting it to work, then consult our [troubleshooting section](#graphql-autocompletion).
+
+## TypeScript types
+
+The following are options to help strongly-type your API responses from the Storefront API:
+
+### `StorefrontApiResponseError` and `StorefrontApiResponseOk` helpers
+
+The following is an example:
+
+```tsx
+import {
+  type StorefrontApiResponseError,
+  type StorefrontApiResponseOk,
+} from '@shopify/hydrogen-ui';
+
+async function FetchApi<DataGeneric>() {
+  const apiResponse = await fetch('...');
+
+  if (!apiResponse.ok) {
+    // 400 or 500 level error
+    return (await apiResponse.text()) as StorefrontApiResponseError; // or apiResponse.json()
+  }
+
+  const graphqlResponse: StorefrontApiResponseOk<DataGeneric> =
+    await apiResponse.json();
+
+  // You can now access 'graphqlResponse.data' and 'graphqlResponse.errors'
+}
 ```
 
-4. Install a GraphQL extension in your IDE; for example, the [GraphQL extension for VSCode](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql)
+### Use the `StorefrontApiResponse` helper
 
-GraphQL autocompletion and validation will now work in `.graphql` files or in [`gql`](https://github.com/apollographql/graphql-tag) template literals!
+If you're using a library that handles 400/500 level errors for you, then you can use `StorefrontApiResponse`. To add typing to objects that are trying to match a Storefront API object shape, you can import the shape.
 
-If you are having troubles getting it to work, try restarting the GraphQL server in your IDE. For example, in VSCode you can open the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette), type `graphql`, and select the option that says `VSCode GraphQL: Manual Restart`.
+The following is an example:
+
+```ts
+import type {Product} from '@shopify/hydrogen-ui/storefront-api-types';
+
+const product: Product = {};
+```
+
+### Use TypeScript's helpers
+
+To create your own object shapes, you can use TypeScript's built-in helpers:
+
+The following is an example:
+
+```ts
+const partialProduct: Partial<Product> = {};
+
+const productTitle: Pick<Product, 'title'> = '';
+
+const productExceptTitle: Omit<Product, 'title'> = {};
+```
 
 ## Storefront Client
 
-To make it easier to query the Storefront API, Hydrogen-UI exposes a helper function called `createStorefrontClient()`. The client can take in either the [delegate access token](https://shopify.dev/api/storefront#authentication) as `privateStorefrontToken` - which is ideal for server-side requests to the Storefront API - or take in `publicAccessToken`. For example:
+To make it easier to query the Storefront API, Hydrogen-UI exposes a helper function called `createStorefrontClient()`. The client can take in either the [delegate access token](https://shopify.dev/api/storefront#authentication) as `privateStorefrontToken` - which is ideal for server-side requests to the Storefront API - or take in `publicAccessToken`.
+
+The following is an For example:
 
 ```ts
 // filename: '/shopify-client.js'
@@ -98,7 +160,7 @@ export async function getServerSideProps() {
 
 If you're using TypeScript, refer to the [TypeScript](#typescript-types) section on how to improve the typing experience here as well.
 
-### Content Type for the Storefront Client
+### Content type for the Storefront client
 
 Note that the storefront client is configured to send the `"content-type": "application/json"` header by default, but you can change this default by doing:
 
@@ -106,55 +168,10 @@ Note that the storefront client is configured to send the `"content-type": "appl
 createStorefrontClient({contentType: 'graphql', ...})
 ```
 
-Alternativetly, each time you get the headers you can customize which `"content-type"` you want, just for that one invocation:
+Alternatively, each time you get the headers you can customize which `"content-type"` you want, just for that one invocation:
 
 ```ts
 getPrivateTokenHeaders({contentType: 'graphql'});
-```
-
-## TypeScript Types
-
-To help strongly-type your API responses from the Storefront API, you can use the `StorefrontApiResponseOk` and `StorefrontApiResponseError` helpers:
-
-```tsx
-import {
-  type StorefrontApiResponseError,
-  type StorefrontApiResponseOk,
-} from '@shopify/hydrogen-ui';
-
-async function FetchApi<DataGeneric>() {
-  const apiResponse = await fetch('...');
-
-  if (!apiResponse.ok) {
-    // 400 or 500 level error
-    return (await apiResponse.text()) as StorefrontApiResponseError; // or apiResponse.json()
-  }
-
-  const graphqlResponse: StorefrontApiResponseOk<DataGeneric> =
-    await apiResponse.json();
-
-  // can now access 'graphqlResponse.data' and 'graphqlResponse.errors'
-}
-```
-
-Or if you are using a library that handles 400/500 level errors for you, you can use `StorefrontApiResponse` instead.
-
-To add typing to objects that are trying to match a Storefront API object shape, you can import the shape like the following examples:
-
-```ts
-import type {Product} from '@shopify/hydrogen-ui/storefront-api-types';
-
-const product: Product = {};
-```
-
-You may also want to use TypeScript's built-in helpers for creating your own object shapes, depending on needs. For example:
-
-```ts
-const partialProduct: Partial<Product> = {};
-
-const productTitle: Pick<Product, 'title'> = '';
-
-const productExceptTitle: Omit<Product, 'title'> = {};
 ```
 
 ## Development and Production bundles
@@ -171,18 +188,30 @@ There are two `umd` builds (development and production) of Hydrogen-UI, meant to
 
 If you're using Hydrogen-UI as a global through the `<script>` tag, then the components can be accessed through the `hydrogenui` global variable.
 
-## Common Problems
+## Troubleshooting
+
+The following will help you troubleshoot common problems in this version of Hydrogen UI.
+
+### GraphQL autocompletion
+
+If you can't get [GraphQL autocompletion](<(#storefront-api-graphql-autocompletion)>) to work, then try restarting the GraphQL server in your IDE.
+
+For example, in VSCode do the following:
+
+1. Open the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette).
+1. Type `graphql`.
+1. Select `VSCode GraphQL: Manual Restart`.
 
 ### jsx-runtime
 
-If you’re using Vite and not using our Hydrogen plugin, and there is an error that says something like `Uncaught ReferenceError: module is not defined`, it’s likely because of an issue with [Vite and react/jsx-runtime](https://github.com/vitejs/vite/issues/6215).
+If you’re using Vite and not using our Hydrogen plugin, and you see an error like `Uncaught ReferenceError: module is not defined`, then it’s likely because of an issue with [Vite and react/jsx-runtime](https://github.com/vitejs/vite/issues/6215).
 
-The solution is to add `'react/jsx-runtime'` to your Vite config's `optimizeDeps.include` array.
+- Add `'react/jsx-runtime'` to your Vite config's `optimizeDeps.include` array.
 
 ### Jest
 
 Until [Jest can correctly resolve package.exports](https://github.com/facebook/jest/issues/9771), here's a workaround:
 
-- Add the [`enhanced-resolve`](https://www.npmjs.com/package/enhanced-resolve) npm package
-- Add a new file and copy the code found in the `_export_map_resolver.js` file [here](https://github.com/ceramicnetwork/js-dag-jose/commit/51750b4266bc57ae56af05e0899acf38c519799b#diff-3f698d0dc0e17487612dbe228105aa820683a2eb38343929c1c45d9a8aa479f8)
-- Add the `resolver` field to your Jest config, and point it to that file you just created. [Here's](https://github.com/ceramicnetwork/js-dag-jose/commit/51750b4266bc57ae56af05e0899acf38c519799b#diff-7ae45ad102eab3b6d7e7896acd08c427a9b25b346470d7bc6507b6481575d519R55) an example
+1. Add the [`enhanced-resolve`](https://www.npmjs.com/package/enhanced-resolve) npm package.
+1. Add a new file and copy the code in the [`_export_map_resolver.js` file](https://github.com/ceramicnetwork/js-dag-jose/commit/51750b4266bc57ae56af05e0899acf38c519799b#diff-3f698d0dc0e17487612dbe228105aa820683a2eb38343929c1c45d9a8aa479f8).
+1. Add the `resolver` field to your Jest config, and point it to the file that you created. [Refer to an example](https://github.com/ceramicnetwork/js-dag-jose/commit/51750b4266bc57ae56af05e0899acf38c519799b#diff-7ae45ad102eab3b6d7e7896acd08c427a9b25b346470d7bc6507b6481575d519R55).
