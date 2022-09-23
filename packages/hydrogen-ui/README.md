@@ -6,6 +6,17 @@
 
 This is an alpha version of Hydrogen-UI. It's only for testing purposes. The name, components, and utilities are all likely to change as we get closer to release.
 
+This document contains the following topics:
+
+- [Versioning](#versioning)
+- [Getting started with Hydrogen UI](#getting-started)
+- [Authenticating the Storefront API client](#authenticating-the-storefront-client)
+- [Development and production bundles](#development-and-production-bundles)
+- [Hydrogen UI in the browser](#hydrogen-ui-in-the-browser)
+- [Enabling autocompletion for the Storefront API](#enable-storefront-api-graphql-autocompletion)
+- [Setting TypeScript types for Storefront API objects](#set-typescript-types)
+- [Troubleshooting](#troubleshooting)
+
 ## Versioning
 
 **Hydrogen UI doesn't follow semantic versioning**.
@@ -33,11 +44,6 @@ Learn more about API [release schedules](https://shopify.dev/api/usage/versionin
   ```bash
   yarn add @shopify/hydrogen-ui-alpha
   ```
-
-You can improve the developer experience by adding the following:
-
-- [Autocompletion for the Storefront API](#enable-storefront-api-graphql-autocompletion)
-- [TypeScript types for Storefront API objects](#set-typescript-types)
 
 ## Authenticating the Storefront client
 
@@ -135,7 +141,7 @@ To improve your development experience, enable GraphQL autocompletion for the St
    For example:
 
    ```yml
-   # .graphqlrc.yml
+   # Filename: .graphqlrc.yml
    schema: node_modules/@shopify/hydrogen-ui/storefront.schema.json
    ```
 
@@ -214,16 +220,10 @@ For example, in VSCode do the following:
 1. Type `graphql`.
 1. Select `VSCode GraphQL: Manual Restart`.
 
+<!--- commenting out as this might have been fixed: https://github.com/Shopify/hydrogen/pull/2186/files#r978104641
 ### jsx-runtime
 
 If you’re using Vite and not using our Hydrogen plugin, and you see an error like `Uncaught ReferenceError: module is not defined`, then it’s likely because of an issue with [Vite and react/jsx-runtime](https://github.com/vitejs/vite/issues/6215).
 
 - Add `'react/jsx-runtime'` to your Vite config's `optimizeDeps.include` array.
-
-### Jest
-
-Until [Jest can correctly resolve package.exports](https://github.com/facebook/jest/issues/9771), the following is a workaround:
-
-1. Add the [`enhanced-resolve`](https://www.npmjs.com/package/enhanced-resolve) npm package.
-1. Add a new file and copy the code in the [`_export_map_resolver.js` file](https://github.com/ceramicnetwork/js-dag-jose/commit/51750b4266bc57ae56af05e0899acf38c519799b#diff-3f698d0dc0e17487612dbe228105aa820683a2eb38343929c1c45d9a8aa479f8).
-1. Add the `resolver` field to your Jest config, and point it to the file that you created. [Refer to an example](https://github.com/ceramicnetwork/js-dag-jose/commit/51750b4266bc57ae56af05e0899acf38c519799b#diff-7ae45ad102eab3b6d7e7896acd08c427a9b25b346470d7bc6507b6481575d519R55).
+--->
