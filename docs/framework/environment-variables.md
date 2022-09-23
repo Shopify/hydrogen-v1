@@ -127,7 +127,7 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-With public access, your requests are [throttled](/api/storefront#authentication) by the IP that the request is from. Requests from the server are made from a single IP. If these requests use a public access token, then they might be throttled due to the volume of requests. Because private variables aren't visible on the browser or client, they aren't subject to the same security controls as public tokens such as rate limiting.
+With [public access](https://shopify.dev/api/usage/authentication#getting-started-with-public-access), your requests are throttled by the IP that the request is from. With [authenticated access](https://shopify.dev/api/usage/authentication#getting-started-with-authenticated-access), your requests are throttled at the shop level and optionally by a forwarded IP. This is advantageous because your server needs a much larger capacity for making requests for many buyers. The app throttle scales with the Shopify platform and isn't fixed. Under high load, such as for flash sales, both the platform and the throttle scale to support more requests.
 
 You only need one delegate access token for a custom storefront, unless you need to rotate the token or change the access scopes available to the token.
 

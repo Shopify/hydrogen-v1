@@ -22,7 +22,6 @@ import {
   DiscountCodesUpdateEvent,
 } from './types.js';
 import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.js';
-import {useCartActions} from './CartActions.client.js';
 import {useCartAPIStateMachine} from './useCartAPIStateMachine.client.js';
 import {CART_ID_STORAGE_KEY} from './constants.js';
 import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
@@ -47,7 +46,7 @@ export function CartProviderV2({
   onAttributesUpdateComplete,
   onDiscountCodesUpdateComplete,
   data: cart,
-  cartFragment,
+  cartFragment = defaultCartFragment,
   customerAccessToken,
   countryCode = CountryCode.Us,
 }: {
@@ -111,33 +110,32 @@ export function CartProviderV2({
     customerOverridesCountryCode.current = false;
   }
 
-  const {cartFragment: usedCartFragment} = useCartActions({
-    numCartLines,
-    cartFragment,
-    countryCode,
-  });
-
   const [cartState, cartSend] = useCartAPIStateMachine({
     numCartLines,
     cartFragment,
+    countryCode,
     onCartActionEntry(context, event) {
-      switch (event.type) {
-        case 'CART_CREATE':
-          return onCreate?.();
-        case 'CARTLINE_ADD':
-          return onLineAdd?.();
-        case 'CARTLINE_REMOVE':
-          return onLineRemove?.();
-        case 'CARTLINE_UPDATE':
-          return onLineUpdate?.();
-        case 'NOTE_UPDATE':
-          return onNoteUpdate?.();
-        case 'BUYER_IDENTITY_UPDATE':
-          return onBuyerIdentityUpdate?.();
-        case 'CART_ATTRIBUTES_UPDATE':
-          return onAttributesUpdate?.();
-        case 'DISCOUNT_CODES_UPDATE':
-          return onDiscountCodesUpdate?.();
+      try {
+        switch (event.type) {
+          case 'CART_CREATE':
+            return onCreate?.();
+          case 'CARTLINE_ADD':
+            return onLineAdd?.();
+          case 'CARTLINE_REMOVE':
+            return onLineRemove?.();
+          case 'CARTLINE_UPDATE':
+            return onLineUpdate?.();
+          case 'NOTE_UPDATE':
+            return onNoteUpdate?.();
+          case 'BUYER_IDENTITY_UPDATE':
+            return onBuyerIdentityUpdate?.();
+          case 'CART_ATTRIBUTES_UPDATE':
+            return onAttributesUpdate?.();
+          case 'DISCOUNT_CODES_UPDATE':
+            return onDiscountCodesUpdate?.();
+        }
+      } catch (error) {
+        console.error('Cart entry action failed', error);
       }
     },
     onCartActionOptimisticUI(context, event) {
@@ -181,39 +179,43 @@ export function CartProviderV2({
     },
     onCartActionComplete(context, event) {
       const cartActionEvent = event.payload.cartActionEvent;
-      switch (event.type) {
-        case 'RESOLVE':
-          switch (cartActionEvent.type) {
-            case 'CART_CREATE':
-              publishCreateAnalytics(context, cartActionEvent);
-              return onCreateComplete?.();
-            case 'CARTLINE_ADD':
-              publishLineAddAnalytics(context, cartActionEvent);
-              return onLineAddComplete?.();
-            case 'CARTLINE_REMOVE':
-              publishLineRemoveAnalytics(context, cartActionEvent);
-              return onLineRemoveComplete?.();
-            case 'CARTLINE_UPDATE':
-              publishLineUpdateAnalytics(context, cartActionEvent);
-              return onLineUpdateComplete?.();
-            case 'NOTE_UPDATE':
-              return onNoteUpdateComplete?.();
-            case 'BUYER_IDENTITY_UPDATE':
-              if (countryCodeNotUpdated(context, cartActionEvent)) {
-                customerOverridesCountryCode.current = true;
-              }
-              return onBuyerIdentityUpdateComplete?.();
-            case 'CART_ATTRIBUTES_UPDATE':
-              return onAttributesUpdateComplete?.();
-            case 'DISCOUNT_CODES_UPDATE':
-              publishDiscountCodesUpdateAnalytics(context, cartActionEvent);
-              return onDiscountCodesUpdateComplete?.();
-          }
+      try {
+        switch (event.type) {
+          case 'RESOLVE':
+            switch (cartActionEvent.type) {
+              case 'CART_CREATE':
+                publishCreateAnalytics(context, cartActionEvent);
+                return onCreateComplete?.();
+              case 'CARTLINE_ADD':
+                publishLineAddAnalytics(context, cartActionEvent);
+                return onLineAddComplete?.();
+              case 'CARTLINE_REMOVE':
+                publishLineRemoveAnalytics(context, cartActionEvent);
+                return onLineRemoveComplete?.();
+              case 'CARTLINE_UPDATE':
+                publishLineUpdateAnalytics(context, cartActionEvent);
+                return onLineUpdateComplete?.();
+              case 'NOTE_UPDATE':
+                return onNoteUpdateComplete?.();
+              case 'BUYER_IDENTITY_UPDATE':
+                if (countryCodeNotUpdated(context, cartActionEvent)) {
+                  customerOverridesCountryCode.current = true;
+                }
+                return onBuyerIdentityUpdateComplete?.();
+              case 'CART_ATTRIBUTES_UPDATE':
+                return onAttributesUpdateComplete?.();
+              case 'DISCOUNT_CODES_UPDATE':
+                publishDiscountCodesUpdateAnalytics(context, cartActionEvent);
+                return onDiscountCodesUpdateComplete?.();
+            }
+        }
+      } catch (error) {
+        console.error('onCartActionComplete failed', error);
       }
     },
   });
 
-  const [cartReady, setCartReady] = useState(false);
+  const cartReady = useRef(false);
   const cartCompleted = cartState.matches('cartCompleted');
 
   const countryChanged =
@@ -223,6 +225,31 @@ export function CartProviderV2({
     countryCode !== cartState?.context?.cart?.buyerIdentity?.countryCode &&
     !cartState.context.errors;
 
+  /**
+   * Initializes cart with priority in this order:
+   * 1. cart props
+   * 2. localStorage cartId
+   */
+  useEffect(() => {
+    if (!cartReady.current) {
+      if (cart) {
+        cartSend({type: 'CART_SET', payload: {cart}});
+      } else if (storageAvailable('localStorage')) {
+        try {
+          const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
+          if (cartId) {
+            cartSend({type: 'CART_FETCH', payload: {cartId}});
+          }
+        } catch (error) {
+          console.warn('error fetching cartId');
+          console.warn(error);
+        }
+      }
+      cartReady.current = true;
+    }
+  }, [cart, cartReady, cartSend]);
+
+  // Update cart country code if cart and props countryCode's as different
   useEffect(() => {
     if (!countryChanged || customerOverridesCountryCode.current) return;
     cartSend({
@@ -240,12 +267,12 @@ export function CartProviderV2({
   // send cart events when ready
   const onCartReadySend = useCallback(
     (cartEvent: CartMachineEvent) => {
-      if (!cartReady) {
+      if (!cartReady.current) {
         return console.warn("Cart isn't ready yet");
       }
       cartSend(cartEvent);
     },
-    [cartReady, cartSend]
+    [cartSend]
   );
 
   // save cart id to local storage
@@ -272,22 +299,6 @@ export function CartProviderV2({
       }
     }
   }, [cartCompleted]);
-
-  // fetch cart from local storage if cart id present and set cart as ready for use
-  useEffect(() => {
-    if (!cartReady && storageAvailable('localStorage')) {
-      try {
-        const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
-        if (cartId) {
-          cartSend({type: 'CART_FETCH', payload: {cartId}});
-        }
-      } catch (error) {
-        console.warn('error fetching cartId');
-        console.warn(error);
-      }
-      setCartReady(true);
-    }
-  }, [cartReady, cartSend]);
 
   const cartCreate = useCallback(
     (cartInput: CartInput) => {
@@ -380,15 +391,15 @@ export function CartProviderV2({
           },
         });
       },
-      cartFragment: usedCartFragment,
+      cartFragment,
     };
   }, [
     cartCreate,
+    cartFragment,
     cartState?.context?.cart,
     cartState?.context?.errors,
     cartState.value,
     onCartReadySend,
-    usedCartFragment,
   ]);
 
   return (
@@ -525,3 +536,104 @@ function publishDiscountCodesUpdateAnalytics(
     }
   );
 }
+
+export const defaultCartFragment = `
+fragment CartFragment on Cart {
+  id
+  checkoutUrl
+  totalQuantity
+  buyerIdentity {
+    countryCode
+    customer {
+      id
+      email
+      firstName
+      lastName
+      displayName
+    }
+    email
+    phone
+  }
+  lines(first: $numCartLines) {
+    edges {
+      node {
+        id
+        quantity
+        attributes {
+          key
+          value
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmountPerQuantity {
+            amount
+            currencyCode
+          }
+        }
+        merchandise {
+          ... on ProductVariant {
+            id
+            availableForSale
+            compareAtPriceV2 {
+              ...MoneyFragment
+            }
+            priceV2 {
+              ...MoneyFragment
+            }
+            requiresShipping
+            title
+            image {
+              ...ImageFragment
+            }
+            product {
+              handle
+              title
+            }
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+  cost {
+    subtotalAmount {
+      ...MoneyFragment
+    }
+    totalAmount {
+      ...MoneyFragment
+    }
+    totalDutyAmount {
+      ...MoneyFragment
+    }
+    totalTaxAmount {
+      ...MoneyFragment
+    }
+  }
+  note
+  attributes {
+    key
+    value
+  }
+  discountCodes {
+    code
+  }
+}
+
+fragment MoneyFragment on MoneyV2 {
+  currencyCode
+  amount
+}
+fragment ImageFragment on Image {
+  id
+  url
+  altText
+  width
+  height
+}
+`;
