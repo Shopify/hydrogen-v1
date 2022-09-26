@@ -4,7 +4,7 @@ title: Environment variables
 description: Learn how to store sensitive information in your Hydrogen project.
 ---
 
-Environment variables allow you to load different values in your app depending on the running environment. This guide describes how to store environment variables in your Hydrogen project.
+Environment variables enable you to load different values in your app depending on the running environment. This guide describes how to store environment variables in your Hydrogen project.
 
 ## How environment variables work
 
@@ -22,7 +22,7 @@ MY_SECRET_API_TOKEN="topsecret"
 
 Environment variables are available within server components with the global object `Hydrogen.env`:
 
-{% codeblock file, filename: 'Component.server.jsx' %}
+{% codeblock file, filename: 'component.server.jsx' %}
 
 ```js
 export default ServerComponent() {
@@ -33,9 +33,9 @@ export default ServerComponent() {
 
 {% endcodeblock %}
 
-Environment variables are unavailable within client components. If you need to access an environment variable within a client component, pass the variable as a prop from a server component to the client component:
+Environment variables aren't available in client components. To access an environment variable within a client component, pass the variable as a prop from a server component to the client component. The following is an example:
 
-{% codeblock file, filename: 'Component.server.jsx' %}
+{% codeblock file, filename: 'component.server.jsx' %}
 
 ```js
 export default ServerComponent() {
@@ -46,7 +46,8 @@ export default ServerComponent() {
 
 {% endcodeblock %}
 
-Note: Make sure that you *never* pass secret environment variables to client components.
+> Caution: 
+> Never pass secret environment variables to client components.
 
 ### Files for specific environments
 
