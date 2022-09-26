@@ -47,7 +47,7 @@ export default ServerComponent() {
 {% endcodeblock %}
 
 > Caution: 
-> Never pass secret environment variables to client components.
+> Never pass secret environment variables to client components. Secret tokens, like `PRIVATE_STOREFRONT_API_TOKEN`, are private, and introduce security vulnerabilities if passed to client components.
 
 ### Files for specific environments
 
