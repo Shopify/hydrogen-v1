@@ -17,6 +17,7 @@ import {
   CartLineUpdateEvent,
   CartMachineContext,
   CartMachineEvent,
+  CartMachineFetchResultEvent,
   CartMachineTypeState,
   CartWithActions,
   DiscountCodesUpdateEvent,
@@ -110,12 +111,8 @@ export function CartProvider({
     customerOverridesCountryCode.current = false;
   }
 
-  const [cartState, cartSend] = useCartAPIStateMachine({
-    numCartLines,
-    data: cart,
-    cartFragment,
-    countryCode,
-    onCartActionEntry(context, event) {
+  const onCartActionEntry = useCallback(
+    (context: CartMachineContext, event: CartMachineEvent) => {
       try {
         switch (event.type) {
           case 'CART_CREATE':
@@ -139,7 +136,20 @@ export function CartProvider({
         console.error('Cart entry action failed', error);
       }
     },
-    onCartActionOptimisticUI(context, event) {
+    [
+      onAttributesUpdate,
+      onBuyerIdentityUpdate,
+      onCreate,
+      onDiscountCodesUpdate,
+      onLineAdd,
+      onLineRemove,
+      onLineUpdate,
+      onNoteUpdate,
+    ]
+  );
+
+  const onCartActionOptimisticUI = useCallback(
+    (context: CartMachineContext, event: CartMachineEvent) => {
       if (!context?.cart) return {cart: undefined};
       switch (event.type) {
         case 'CARTLINE_REMOVE':
@@ -178,7 +188,11 @@ export function CartProvider({
       }
       return {cart: context.cart ? {...context.cart} : undefined};
     },
-    onCartActionComplete(context, event) {
+    []
+  );
+
+  const onCartActionComplete = useCallback(
+    (context: CartMachineContext, event: CartMachineFetchResultEvent) => {
       const cartActionEvent = event.payload.cartActionEvent;
       try {
         switch (event.type) {
@@ -214,6 +228,26 @@ export function CartProvider({
         console.error('onCartActionComplete failed', error);
       }
     },
+    [
+      onAttributesUpdateComplete,
+      onBuyerIdentityUpdateComplete,
+      onCreateComplete,
+      onDiscountCodesUpdateComplete,
+      onLineAddComplete,
+      onLineRemoveComplete,
+      onLineUpdateComplete,
+      onNoteUpdateComplete,
+    ]
+  );
+
+  const [cartState, cartSend] = useCartAPIStateMachine({
+    numCartLines,
+    data: cart,
+    cartFragment,
+    countryCode,
+    onCartActionEntry,
+    onCartActionOptimisticUI,
+    onCartActionComplete,
   });
 
   const cartReady = useRef(false);
