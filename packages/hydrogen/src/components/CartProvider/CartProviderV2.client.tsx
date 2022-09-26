@@ -112,6 +112,7 @@ export function CartProviderV2({
 
   const [cartState, cartSend] = useCartAPIStateMachine({
     numCartLines,
+    data: cart,
     cartFragment,
     countryCode,
     onCartActionEntry(context, event) {
@@ -232,9 +233,7 @@ export function CartProviderV2({
    */
   useEffect(() => {
     if (!cartReady.current) {
-      if (cart) {
-        cartSend({type: 'CART_SET', payload: {cart}});
-      } else if (storageAvailable('localStorage')) {
+      if (!cart && storageAvailable('localStorage')) {
         try {
           const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
           if (cartId) {
