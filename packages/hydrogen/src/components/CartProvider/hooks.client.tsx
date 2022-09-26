@@ -105,10 +105,49 @@ export function useInstantCheckout() {
           note: dataCart.note ?? undefined,
         });
         updateCheckoutUrl(dataCart.checkoutUrl);
+        prefetchCheckoutAssets(dataCart.checkoutUrl);
       }
     },
     [fetch]
   );
 
   return {cart, checkoutUrl, error, createInstantCheckout};
+}
+
+/** Prefetch static subresources from the checkout page */
+async function prefetchCheckout(url: string) {
+  const res = await fetch(url, {
+    headers: {
+      'accept': 'text/html',
+    }
+  });
+  const html = await res.text();
+  const resolve = url => new URL(url, res.url).href;
+  // parse the HTML to grab scripts + stylesheets:
+  const dom = new DOMParser().parseFromString(html, 'text/html');
+  let scripts = [].slice.call(dom.querySelectorAll('script[src]'));
+  let styles = [].slice.call(dom.querySelectorAll('link[rel="stylesheet"][href]'));
+  // prefetch all of them:
+  const isScript = s => /javascript|^module$|^$/i.test(s.type);
+  await Promise.all([
+    ...scripts.map((s) => isScript(s) && prefetch(resolve(s.getAttribute('src')), 'script', s.crossOrigin)),
+    ...styles.map((s) => prefetch(resolve(s.getAttribute('href')), 'style', s.crossOrigin)),
+  ]);
+}
+
+/**
+ * Prefetch a subresource with the given type.
+ * @note: relies on cross-origin prefetch, which is not implemented in Safari
+ */
+function prefetch(url, as, crossOrigin) {
+  return new Promise((resolve) => {
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.fetchPriority = 'high';
+    link.as = as;
+    // link.crossOrigin = crossOrigin; // tbd
+    link.href = url;
+    link.onload = link.onerror = resolve;
+    document.head.appendChild(link);
+  });
 }
