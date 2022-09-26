@@ -70,6 +70,29 @@ import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery.js';
 import type {CartWithActions} from './types.js';
 import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
 
+function getLocalStoragePolyfill() {
+  const storage: Record<string, string> = {};
+  return {
+    removeItem(key: string) {
+      delete storage[key];
+    },
+    setItem(key: string, value: string) {
+      storage[key] = value;
+    },
+    getItem(key: string): string {
+      return storage[key];
+    },
+  };
+}
+
+const localStorage = (function () {
+  try {
+    return window.localStorage || getLocalStoragePolyfill();
+  } catch (e: unknown) {
+    return getLocalStoragePolyfill();
+  }
+})();
+
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
     case 'cartFetch': {
@@ -301,7 +324,7 @@ export function CartProvider({
       });
 
       if (!data?.cart) {
-        window.localStorage.removeItem(CART_ID_STORAGE_KEY);
+        localStorage.removeItem(CART_ID_STORAGE_KEY);
         dispatch({type: 'resetCart'});
         return;
       }
@@ -367,10 +390,7 @@ export function CartProvider({
           cart: cartFromGraphQL(data.cartCreate.cart),
         });
 
-        window.localStorage.setItem(
-          CART_ID_STORAGE_KEY,
-          data.cartCreate.cart.id
-        );
+        localStorage.setItem(CART_ID_STORAGE_KEY, data.cartCreate.cart.id);
       }
     },
     [
