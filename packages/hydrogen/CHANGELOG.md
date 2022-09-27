@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.0-unstable-20220927001835
+
+### Patch Changes
+
+- Critical fix for the CartProvider to remove an error when Cookies are disabled by the browser. ([#2190](https://github.com/Shopify/hydrogen/pull/2190)) by [@blittle](https://github.com/blittle)
+
 ## 1.4.2
 
 ### Patch Changes
@@ -319,7 +325,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }
