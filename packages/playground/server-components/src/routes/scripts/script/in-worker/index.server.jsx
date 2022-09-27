@@ -44,6 +44,7 @@ export default function ScriptsInWorker() {
       </div>
 
       {/* Test forwarded function from worker  */}
+      {/* eslint-disable-next-line hydrogen/scripts-in-layout-components */}
       <Script id="beforeHydration-children" load="beforeHydration">
         {`console.log('⚙️ Inline <Script beforeHydration children/> executing worker forwardedTestFn');`}
         {`setTimeout(()=>forwardedTestFn(Math.random() * 10), 1500);`}
@@ -97,6 +98,7 @@ export default function ScriptsInWorker() {
         `}
       </Script>
 
+      {/* eslint-disable-next-line hydrogen/scripts-in-layout-components */}
       <Script
         load="inWorker"
         src="/scripts/cdn?script=in-worker-script.js"
@@ -104,18 +106,21 @@ export default function ScriptsInWorker() {
       />
 
       {/*  actual third party scripts loaded via webworker  */}
+      {/* eslint-disable-next-line hydrogen/scripts-in-layout-components */}
       <Script
         load="inWorker"
         id="inWorker-analytics-head"
         src="https://www.google-analytics.com/analytics.js?cors=true"
       />
 
+      {/* eslint-disable-next-line hydrogen/scripts-in-layout-components */}
       <Script
         load="inWorker"
         id="inWorker-gtm"
         src="https://www.googletagmanager.com/gtm.js?id=GTM-N5D3D8Q"
       />
 
+      {/* eslint-disable-next-line hydrogen/scripts-in-layout-components */}
       <Script
         id="inWorker-benchmark"
         load="inWorker"

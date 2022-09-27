@@ -20,6 +20,7 @@ export default function ScriptsBeforeHydration() {
         <hr />
       </Link>
 
+      {/* eslint-disable-next-line hydrogen/prefer-script-component */}
       <script
         dangerouslySetInnerHTML={{
           __html: `
@@ -28,6 +29,7 @@ export default function ScriptsBeforeHydration() {
         }}
       />
 
+      {/* eslint-disable-next-line hydrogen/scripts-in-layout-components */}
       <Script
         id="beforeHydration-dangerouslySetInnerHTML"
         load="beforeHydration"
@@ -39,16 +41,18 @@ export default function ScriptsBeforeHydration() {
         }}
       />
 
+      {/* eslint-disable-next-line hydrogen/scripts-in-layout-components */}
       <Script id="beforeHydration-children" load="beforeHydration">
         {`console.log('💨 Inline <Script beforeHydration children/> injected window.dataLayer');`}
         {`window.dataLayer = window.dataLayer || [];`}
       </Script>
 
-      {/* <Script
+      {/* eslint-disable-next-line hydrogen/scripts-in-layout-components */}
+      <Script
         load="beforeHydration"
         id="beforeHydration-src"
         src="/scripts/cdn?script=before-hydration-script.js"
-      /> */}
+      />
     </div>
   );
 }
