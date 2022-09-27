@@ -99,6 +99,8 @@ These scripts are loaded, injected and executed after react has finished hydrati
 
 {% codeblock file, filename: 'Component.client.jsx' %}
 ```jsx
+import {Script} from '@shopify/hydrogen';
+
 function Component() {
   return (
     <>
@@ -153,6 +155,8 @@ These scripts are loaded, injected and executed when the main thread is idle (vi
 
 {% codeblock file, filename: 'Component.client.jsx' %}
 ```jsx
+import {Script} from '@shopify/hydrogen';
+
 function Component() {
   return (
     <>
@@ -231,7 +235,8 @@ yarn add @builder.io/partytown
 
 {% codeblock file, filename: 'App.server.tsx' %}
 ```jsx
-import {Partytown} from '@builder.io/partytown/react';
+import {Script} from '@shopify/hydrogen';
+import {partytownSnippet} from '@builder.io/partytown/integration';
 
 /*
   Set the required response headers to enable partytown atomics
@@ -248,27 +253,26 @@ export default function App({request, response}) {
   return (
     <>
       // Initialize and configure partytown
-      <Partytown
-        id="partytown-snippet"
-        forward={['dataLayer.push']} // GTM example
-        debug={true}
-        resolveUrl={(url, location, type) => {
-          // Some 3rd party libs/resources like https://www.googletagmanager.com/gtm.js
-          // require a reverse proxy to handle CORS via when loaded via Web Worker
-          const isScriptReq = type === 'script';
-          const isProxyReq = url.href.includes('/reverse-proxy');
-          const isCorsReq = url.href.includes('cors=true');
+      <Script id="partytown-snippet" load="onIdle">
+        {partytownSnippet({
+          forward: ['forwardedTestFn'],
+          resolveUrl(url, location, type) {
+            // Some 3rd party libs/resources like https://www.googletagmanager.com/gtm.js
+            // require a reverse proxy to handle CORS via when loaded via Web Worker
+            const isScriptReq = type === 'script';
+            const isProxyReq = url.href.includes('/reverse-proxy');
+            const isCorsReq =
+              url.href.includes('cors=true') || url.href.includes('gtm.js');
 
-          if (isScriptReq && isCorsReq && !isProxyReq) {
-            // Load partytown script via CORS reverse proxy
-            const proxyUrl = new URL(location.origin + '/reverse-proxy');
-            url.searchParams.delete('cors');
-            proxyUrl.searchParams.append('libUrl', url.href);
-            return proxyUrl;
-          }
-          return url;
-        }}
-      />
+            if (isScriptReq && isCorsReq && !isProxyReq) {
+              const proxyUrl = new URL(location.origin + '/reverse-proxy');
+              proxyUrl.searchParams.append('libUrl', url.href);
+              return proxyUrl;
+            }
+            return url;
+          },
+        })}
+      </Script>
       <ShopifyProvider countryCode={countryCode}>
         ....
     </>
