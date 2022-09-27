@@ -79,7 +79,7 @@ function getLocalStoragePolyfill() {
     setItem(key: string, value: string) {
       storage[key] = value;
     },
-    getItem(key: string): string {
+    getItem(key: string): string | undefined {
       return storage[key];
     },
   };
