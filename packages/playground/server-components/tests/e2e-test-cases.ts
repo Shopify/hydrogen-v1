@@ -950,7 +950,7 @@ export default async function testCases({
     });
   });
 
-  describe.only('<Script />', () => {
+  describe('<Script />', () => {
     /*
       general tests
     */
@@ -1311,7 +1311,7 @@ export default async function testCases({
     });
   });
 
-  describe.only('useScript', () => {
+  describe('useScript', () => {
     it('useScript load="afterHydration" src on first load', async () => {
       const logs = getLogs(page);
       await page.goto(getServerUrl() + '/scripts/use-script', {
