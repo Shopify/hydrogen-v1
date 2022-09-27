@@ -9,6 +9,15 @@ const INJECT_STYLES_COMMENT = '<!--__INJECT_STYLES__-->';
 // across client <> server builds.
 let clientBuildPath: string;
 
+/* -- Plugin notes:
+ * This plugin collects all the CSS imported in both client and server components and
+ * extracts it in a single stylesheet that is added to the <head>. It does this by:
+ * 1. Removing all the CSS generated during the client build. The client build CSS is a sub-set of the
+ * server build CSS because it can only find CSS imported in client components. This avoids duplicates.
+ * 2. Force Vite to collect CSS in every file during the server build, and emit it as a chunk.
+ * 3. Move the generated CSS chunk in the server build to the client build output as an asset, and link to it in `index.html`.
+ */
+
 export default function cssRsc() {
   let config: ResolvedConfig;
 

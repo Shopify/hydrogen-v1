@@ -5,30 +5,24 @@ import {
 import type {CachingStrategy} from '../../types.js';
 import Redirect from '../Redirect/Redirect.client.js';
 import React from 'react';
+import {log} from '../../utilities/log/log.js';
 
 export class HydrogenResponse extends Response {
   private wait = false;
+  private sent = false;
   private cacheOptions: CachingStrategy = CacheShort();
 
-  private proxy = Object.defineProperties(Object.create(null), {
-    // Default values:
-    status: {value: 200, writable: true},
-    statusText: {value: '', writable: true},
-  });
+  public status = 200;
+  public statusText = '';
+  public url;
 
-  // @ts-ignore
-  public status: number;
-  // @ts-ignore
-  public statusText: string;
+  constructor(url: string, body: any, init: any) {
+    super(body, init);
+    this.url = url;
+  }
 
-  constructor(...args: ConstructorParameters<typeof Response>) {
-    super(...args);
-
-    return new Proxy(this, {
-      get: (target, key) => target.proxy[key] ?? Reflect.get(target, key),
-      set: (target, key, value) =>
-        Reflect.set(key in target.proxy ? target.proxy : target, key, value),
-    });
+  markAsSent() {
+    this.sent = true;
   }
 
   /**
@@ -36,7 +30,13 @@ export class HydrogenResponse extends Response {
    * and prevent it from streaming back early.
    */
   doNotStream() {
-    this.wait = true;
+    if (!this.sent) {
+      this.wait = true;
+    } else {
+      log.warn(
+        `response.doNotStream() failed, the stream has already started on: ${this.url}\nDisabling streaming should always be the first thing in your route server component.`
+      );
+    }
   }
 
   canStream() {

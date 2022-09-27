@@ -7,7 +7,7 @@
   "engines": {
     "node": ">=14"
   },
-  "version": "1.2.0",
+  "version": "1.4.3",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
@@ -89,9 +89,9 @@
     "@graphql-codegen/typescript-operations": "2.3.2",
     "@graphql-typed-document-node/core": "^3.1.0",
     "@rollup/plugin-graphql": "^1.0.0",
-    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^14.3.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/body-parser": "^1.19.2",
     "@types/connect": "^3.4.34",
     "@types/graphql": "^14.5.0",
@@ -111,7 +111,7 @@
     "postcss": "^8",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
-    "vitest": "^0.19.1"
+    "vitest": "^0.22.1"
   },
   "peerDependencies": {
     "body-parser": "^1.20.0",
@@ -119,7 +119,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "serve-static": "^1.14.1",
-    "vite": "^2.9.0"
+    "vite": "^2.9.0 || ^3.0.0"
   },
   "peerDependenciesMeta": {
     "body-parser": {
@@ -134,6 +134,8 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "^1.3.0",
+    "@xstate/fsm": "^2.0.0",
+    "@xstate/react": "^3.0.0",
     "abort-controller": "^3.0.0",
     "body-parser": "^1.20.0",
     "compression": "^1.7.4",
@@ -151,7 +153,7 @@
     "react-helmet-async": "^1.3.0",
     "serve-static": "^1.15.0",
     "set-cookie-parser": "^2.5.0",
-    "undici": "^5.5.1",
+    "undici": "^5.8.2",
     "uuid": "^8.3.2",
     "vite-plugin-inspect": "^0.3.6",
     "web-streams-polyfill": "^3.2.0",

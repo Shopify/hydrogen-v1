@@ -1,5 +1,54 @@
 # Changelog
 
+## 1.4.3
+
+## 1.4.2
+
+### Patch Changes
+
+- The `sitemap.xml` was crashing when a product didn't contain `featuredImage` in the API data. To replicate the fix in your app, have a look at the latest version of the [`sitemap.xml.server.ts` in our demo store](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/templates/demo-store/src/routes/sitemap.xml.server.ts). ([#2168](https://github.com/Shopify/hydrogen/pull/2168)) by [@frandiox](https://github.com/frandiox)
+
+## 1.4.1
+
+## 1.4.0
+
+### Patch Changes
+
+- If the demo store e2e tests are sometimes failing, update your `vite.config.js` to make sure that tests only execute on one thread: ([#2144](https://github.com/Shopify/hydrogen/pull/2144)) by [@blittle](https://github.com/blittle)
+
+  ```diff
+  export default defineConfig({
+    plugins: [hydrogen()],
+    resolve: {
+      alias: [{find: /^~\/(.*)/, replacement: '/src/$1'}],
+    },
+    optimizeDeps: {
+      include: ['@headlessui/react', 'clsx', 'react-use', 'typographic-base'],
+    },
+    test: {
+      globals: true,
+      testTimeout: 10000,
+      hookTimeout: 10000,
+  +    maxThreads: 1,
+  +    minThreads: 1,
+    },
+  });
+  ```
+
+* Fix the demostore e2e tests to be more stable ([#2006](https://github.com/Shopify/hydrogen/pull/2006)) by [@blittle](https://github.com/blittle)
+
+## 1.3.2
+
+## 1.3.1
+
+## 1.3.0
+
+### Patch Changes
+
+- Update links to Stackblitz for starter templates ([#1966](https://github.com/Shopify/hydrogen/pull/1966)) by [@blittle](https://github.com/blittle)
+
+* Update templates to use the latest CLI and have a minimum node version ([#1911](https://github.com/Shopify/hydrogen/pull/1911)) by [@blittle](https://github.com/blittle)
+
 ## 1.2.0
 
 ## 1.1.0

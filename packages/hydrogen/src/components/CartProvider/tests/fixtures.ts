@@ -3,6 +3,7 @@ import {getPrice} from '../../../utilities/tests/price.js';
 import {flattenConnection} from '../../../utilities/index.js';
 import type {CartWithActions} from '../types.js';
 import {defaultCartFragment} from '../cart-queries.js';
+import {CartFragmentFragment} from '../graphql/CartFragment.js';
 
 export const CART = {
   id: 'abc',
@@ -19,6 +20,10 @@ export const CART = {
   },
   lines: {edges: []},
 };
+
+export function getCartMock(options?: Partial<CartFragmentFragment>) {
+  return {...CART, ...options};
+}
 
 export const CART_WITH_LINES = {
   ...CART,

@@ -1,16 +1,18 @@
 import {parseJSON} from '../../utilities/parse.js';
 import {log} from '../../utilities/log/index.js';
 
-type ResponseSyncInit = [string, ResponseInit];
+type ResponseSyncInit = [string, ResponseInit, string];
 
 export class ResponseSync extends Response {
   bodyUsed = true;
   #text: string;
   #json: any;
+  url: string;
 
   constructor(init: ResponseSyncInit) {
-    super(...init);
+    super(init[0], init[1]);
     this.#text = init[0];
+    this.url = init[2];
   }
 
   // @ts-expect-error Changing inherited types
@@ -19,7 +21,15 @@ export class ResponseSync extends Response {
   }
 
   json() {
-    return (this.#json ??= parseJSON(this.#text));
+    try {
+      return (this.#json ??= parseJSON(this.#text));
+    } catch (e: any) {
+      if (!this.ok) {
+        throw new Error(
+          `Request to ${this.url} failed with ${this.status} and the response body is not parseable.\nMake sure to handle the error state when using fetchSync.`
+        );
+      } else throw e;
+    }
   }
 
   /**
@@ -44,6 +54,7 @@ export class ResponseSync extends Response {
         statusText: response.statusText,
         headers: Array.from(response.headers.entries()),
       },
+      response.url,
     ] as ResponseSyncInit;
   }
 }

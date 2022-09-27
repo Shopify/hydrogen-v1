@@ -8,6 +8,7 @@ import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenRespo
 import type {Metafield} from './storefront-api-types.js';
 import type {SessionStorageAdapter} from './foundation/session/session-types.js';
 import type {PartialDeep, JsonValue} from 'type-fest';
+import type {TemplateParts} from './utilities/template.js';
 
 export type AssembleHtmlParams = {
   ssrHtml: string;
@@ -25,7 +26,7 @@ export type RunSsrParams = {
   response: HydrogenResponse;
   log: Logger;
   dev?: boolean;
-  template: string;
+  template: TemplateParts;
   nonce?: string;
   nodeResponse?: ServerResponse;
   revalidate?: Boolean;

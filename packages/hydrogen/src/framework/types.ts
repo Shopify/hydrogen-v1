@@ -3,6 +3,7 @@ export interface HydrogenVitePluginOptions {
   purgeQueryCacheOnBuild?: boolean;
   configPath?: string;
   optimizeBoundaries?: boolean | 'build';
+  assetHashVersion?: string;
   /**
    * Experimental features
    */

@@ -53,6 +53,22 @@ $ HYDROGEN_ASSET_BASE_URL=https://mycdn.example/path/to/folder yarn build
 > Note:
 > Make sure to check the `dist/client/index.html` file to verify that the URLs point to the provided URL.
 
+## Asset Versioning
+If asset content hasn't changed but you want to regenerate the already-compiled assets, then you can use the following configuration:
+
+{% codeblock terminal %}
+
+```js
+// vite.config.js
+export default {
+  plugins: [hydrogen({assetHashVersion: 'v2'})]
+}
+```
+
+{% endcodeblock %}
+
+The configuration adds an optional string to force all files to be recompiled with a new hash. This can be helpful when the asset is cached but you want to change the behavior of your cache or the response headers that are currently cached, such as in a CDN or user's browser.
+
 ## Considerations and limitations
 
 You should only import assets, such as styles or images, from [client components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components#component-types). Any static assets that are referenced in server components, or shared components that are rendered from server components, won't display in the browser.

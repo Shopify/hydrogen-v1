@@ -70,6 +70,29 @@ import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery.js';
 import type {CartWithActions} from './types.js';
 import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
 
+function getLocalStoragePolyfill() {
+  const storage: Record<string, string> = {};
+  return {
+    removeItem(key: string) {
+      delete storage[key];
+    },
+    setItem(key: string, value: string) {
+      storage[key] = value;
+    },
+    getItem(key: string): string | undefined {
+      return storage[key];
+    },
+  };
+}
+
+const localStorage = (function () {
+  try {
+    return window.localStorage || getLocalStoragePolyfill();
+  } catch (e: unknown) {
+    return getLocalStoragePolyfill();
+  }
+})();
+
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
     case 'cartFetch': {
@@ -301,7 +324,7 @@ export function CartProvider({
       });
 
       if (!data?.cart) {
-        window.localStorage.removeItem(CART_ID_STORAGE_KEY);
+        localStorage.removeItem(CART_ID_STORAGE_KEY);
         dispatch({type: 'resetCart'});
         return;
       }
@@ -358,6 +381,7 @@ export function CartProvider({
             {
               addedCartLines: cart.lines,
               cart: data.cartCreate.cart,
+              prevCart: null,
             }
           );
         }
@@ -366,10 +390,7 @@ export function CartProvider({
           cart: cartFromGraphQL(data.cartCreate.cart),
         });
 
-        window.localStorage.setItem(
-          CART_ID_STORAGE_KEY,
-          data.cartCreate.cart.id
-        );
+        localStorage.setItem(CART_ID_STORAGE_KEY, data.cartCreate.cart.id);
       }
     },
     [
@@ -414,6 +435,7 @@ export function CartProvider({
             {
               addedCartLines: lines,
               cart: data.cartLinesAdd.cart,
+              prevCart: state.cart,
             }
           );
           dispatch({
@@ -460,6 +482,7 @@ export function CartProvider({
             {
               removedCartLines: lines,
               cart: data.cartLinesRemove.cart,
+              prevCart: state.cart,
             }
           );
           dispatch({
@@ -505,6 +528,8 @@ export function CartProvider({
             {
               updatedCartLines: lines,
               oldCart: state.cart,
+              cart: data.cartLinesUpdate.cart,
+              prevCart: state.cart,
             }
           );
           dispatch({
@@ -668,6 +693,7 @@ export function CartProvider({
             {
               updatedDiscountCodes: discountCodes,
               cart: data.cartDiscountCodesUpdate.cart,
+              prevCart: state.cart,
             }
           );
           dispatch({

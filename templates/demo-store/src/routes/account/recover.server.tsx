@@ -36,7 +36,7 @@ export async function api(
 ) {
   const jsonBody = await request.json();
 
-  if (!jsonBody.email || jsonBody.email === '') {
+  if (!jsonBody.email) {
     return new Response(JSON.stringify({error: 'Email required'}), {
       status: 400,
     });

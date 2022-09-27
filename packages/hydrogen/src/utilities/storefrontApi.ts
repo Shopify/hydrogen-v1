@@ -7,28 +7,64 @@ import {
   SHOPIFY_STOREFRONT_ID_VARIABLE,
   SHOPIFY_STOREFRONT_ID_HEADER,
 } from '../constants.js';
+import {log} from './log/log.js';
+
+let secretTokenWarned = false;
+let storefrontIdWarned = false;
 
 export function getStorefrontApiRequestHeaders({
   buyerIp,
-  storefrontToken,
+  publicStorefrontToken,
+  privateStorefrontToken,
+  storefrontId,
 }: {
   buyerIp?: string | null;
-  storefrontToken: string;
+  publicStorefrontToken: string;
+  privateStorefrontToken: string | undefined;
+  storefrontId: string | undefined;
 }) {
   const headers = {} as Record<string, any>;
 
-  const secretToken = getOxygenVariable(
-    OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE
-  );
-  const storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
+  if (!privateStorefrontToken) {
+    privateStorefrontToken = getOxygenVariable(
+      OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE
+    );
+
+    if (!secretTokenWarned) {
+      secretTokenWarned = true;
+
+      if (!privateStorefrontToken && !__HYDROGEN_DEV__) {
+        log.error(
+          'No secret Shopify storefront API token was defined. This means your app will be rate limited!\nSee how to add the token: '
+        );
+      } else if (privateStorefrontToken) {
+        log.warn(
+          'The private shopify storefront API token was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config'
+        );
+      }
+    }
+  }
+
+  if (!storefrontId) {
+    storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
+
+    if (!storefrontIdWarned) {
+      storefrontIdWarned = true;
+      if (storefrontId) {
+        log.warn(
+          'The storefrontId was loaded implicitly by an environment variable. This is deprecated, and instead the variable should be defined directly in the Hydrogen Config.\nFor more information: https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config'
+        );
+      }
+    }
+  }
 
   /**
    * Only pass one type of storefront token at a time.
    */
-  if (secretToken) {
-    headers[STOREFRONT_API_SECRET_TOKEN_HEADER] = secretToken;
+  if (privateStorefrontToken) {
+    headers[STOREFRONT_API_SECRET_TOKEN_HEADER] = privateStorefrontToken;
   } else {
-    headers[STOREFRONT_API_PUBLIC_TOKEN_HEADER] = storefrontToken;
+    headers[STOREFRONT_API_PUBLIC_TOKEN_HEADER] = publicStorefrontToken;
   }
 
   if (buyerIp) {

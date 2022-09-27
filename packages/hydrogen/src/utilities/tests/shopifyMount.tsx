@@ -64,6 +64,5 @@ export function getShopifyConfig(config: Partial<ShopifyConfig> = {}) {
     storeDomain: config.storeDomain ?? 'notashop.myshopify.io',
     storefrontToken: config.storefrontToken ?? 'abc123',
     storefrontApiVersion: config.storefrontApiVersion ?? '2022-07',
-    multipassSecret: config.multipassSecret,
   };
 }

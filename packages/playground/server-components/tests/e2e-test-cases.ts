@@ -155,6 +155,21 @@ export default async function testCases({
     expect(body).toContain('>footer!<');
   });
 
+  it('streams if server component calls doNotStream after stream has already started', async () => {
+    const response = await fetch(getServerUrl() + '/midwaynostream');
+    const streamedChunks = [];
+
+    // This fetch response is not standard but a node-fetch polyfill.
+    // Therefore, the body is not a ReadableStream but a Node Readable.
+    // @ts-ignore
+    for await (const chunk of response.body) {
+      streamedChunks.push(chunk.toString());
+    }
+
+    const body = streamedChunks.join('');
+    expect(body).toContain('Call doNotStream after stream has already begun');
+  });
+
   it('buffers HTML for bots', async () => {
     const response = await fetch(getServerUrl() + '/stream?_bot');
     const streamedChunks = [];
@@ -354,6 +369,28 @@ export default async function testCases({
         new RegExp(`\\.${className}\\s*{\\s*color:\\s*red;?\\s*}`, 'm')
       );
     });
+
+    if (isBuild) {
+      it('preloads stylesheets', async () => {
+        const response = await page.request.get(
+          getServerUrl() + '/css-modules'
+        );
+        const html = await response.text();
+        const {link} = response.headers();
+
+        expect(link).toMatch(
+          /<\/assets\/style.[\w\d]+.css>; rel=preload; as=style/
+        );
+
+        const assets = (html.match(/<link[^<>]+?>/gim) || [])
+          .filter((linkTag) => linkTag.includes('rel="stylesheet"'))
+          .map((linkTag) => linkTag.match(/href="([^"]+)"/)?.[1] || '');
+
+        for (const asset of assets) {
+          expect(link).toMatch(asset);
+        }
+      });
+    }
   });
 
   describe('HMR', () => {

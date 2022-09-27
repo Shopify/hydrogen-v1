@@ -14,5 +14,6 @@ export default defineConfig({
   define: {
     __HYDROGEN_DEV__: true,
     __HYDROGEN_TEST__: true,
+    __HYDROGEN_CACHE_ID__: '"__QUERY_CACHE_ID__"',
   },
 });

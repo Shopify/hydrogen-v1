@@ -1,5 +1,210 @@
 # Changelog
 
+## 1.4.3
+
+### Patch Changes
+
+- Critical fix for the CartProvider to remove an error when Cookies are disabled by the browser. ([#2190](https://github.com/Shopify/hydrogen/pull/2190)) by [@blittle](https://github.com/blittle)
+
+## 1.4.2
+
+### Patch Changes
+
+- Fix storefrontId from required to optional param ([#2162](https://github.com/Shopify/hydrogen/pull/2162)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+* We changed the default logging behavior to include the overall request outcome, either `ok` or an `error`. This is necessary because a streamed request might start with a 200 HTTP response code, and during the process of stream rendering an error is encountered. ([#2161](https://github.com/Shopify/hydrogen/pull/2161)) by [@blittle](https://github.com/blittle)
+
+- Expose CachingStrategy type ([#2159](https://github.com/Shopify/hydrogen/pull/2159)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+## 1.4.1
+
+### Patch Changes
+
+- Important bug fix for backwards compatibility with old environment variables. Followup from the [change in 1.4.0](https://github.com/Shopify/hydrogen/releases/tag/%40shopify%2Fhydrogen%401.4.0) ([#2151](https://github.com/Shopify/hydrogen/pull/2151)) by [@blittle](https://github.com/blittle)
+
+## 1.4.0
+
+### Minor Changes
+
+- Add the `useDelay` hook for artificial delays when rendering server components. This is useful to debug timing issues or building suspense boundary fallback UI. See the [`useDelay` documentation](https://shopify.dev/api/hydrogen/hooks/global/usedelay). ([#2109](https://github.com/Shopify/hydrogen/pull/2109)) by [@blittle](https://github.com/blittle)
+
+### Patch Changes
+
+- We've exposed the private server-to-server Storefront API token in the Hydrogen config file. This private token is required when deploying to production, otherwise the requests to the storefront API will be rate-limited. This change will make it easier to configure Hydrogen when deploying to non-Oxygen environments. We'll also display a warning in production mode if this token is not defined. ([#1998](https://github.com/Shopify/hydrogen/pull/1998)) by [@blittle](https://github.com/blittle)
+
+  We've also added the `storefrontId` property to the config. This enables Hydrogen data to display properly in the Shopify admin analytics dashboard.
+
+  Lastly, we've updated all Oxygen environment variables to a more consistent naming convention. The previous variables are still available, but are deprecated, and will be removed in the future. You’ll see a warning in your console if you use the old environment variables. You can update your variable references using this table:
+
+  | **Old Oxygen variable**             | **New Oxygen variable**      |
+  | ----------------------------------- | ---------------------------- |
+  | SHOPIFY_STORE_DOMAIN                | PUBLIC_STORE_DOMAIN          |
+  | SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN | PUBLIC_STOREFRONT_API_TOKEN  |
+  | SHOPIFY_STOREFRONT_API_SECRET_TOKEN | PRIVATE_STOREFRONT_API_TOKEN |
+  | SHOPIFY_STOREFRONT_ID               | PUBLIC_STOREFRONT_ID         |
+
+* Fixed dev-mode Hydrogen builds to properly show `PUBLIC_` prefixed environment variables ([#2142](https://github.com/Shopify/hydrogen/pull/2142)) by [@blittle](https://github.com/blittle)
+
+- An issue with previewing hydrogen in production has been fixed. Make sure that you upgrade both `@shopify/cli` and `@shopify/cli-hydrogen` to 3.12.0. ([#2144](https://github.com/Shopify/hydrogen/pull/2144)) by [@blittle](https://github.com/blittle)
+
+## 1.3.2
+
+### Patch Changes
+
+- Whenever using `fetchSync`, make sure to handle the error state. Though we've made changes to the error thrown by the JSON parser to also tell you that the request was unsuccessful: ([#2070](https://github.com/Shopify/hydrogen/pull/2070)) by [@blittle](https://github.com/blittle)
+
+  ```ts
+  function MyComponent() {
+    const response = fetchSync('/api');
+
+    // Make sure the error state is handled!
+    if (!response.ok) {
+      console.error(
+        `Unable to load ${response.url} returned ${response.status}`,
+      );
+      return <div>Error. Please try again</div>;
+    }
+
+    // Check `response.ok` before parsing the response
+    const json = response.json();
+
+    return ...
+  ```
+
+* Update undici to the latest ([#2015](https://github.com/Shopify/hydrogen/pull/2015)) by [@dependabot](https://github.com/apps/dependabot)
+
+- Added experimental support for Vite 3. By default, Hydrogen will still use Vite 2. However, it is possible to upgrade apps to Vite 3 by changing `devDependencies` in the app `package.json`. Beware that this is experimental and it might break. ([#1992](https://github.com/Shopify/hydrogen/pull/1992)) by [@frandiox](https://github.com/frandiox)
+
+* Hydrogen responses now contain a `Link` header to preload stylesheets. ([#2075](https://github.com/Shopify/hydrogen/pull/2075)) by [@frandiox](https://github.com/frandiox)
+
+- Improvements and fixes to hydrogen logging: ([#2084](https://github.com/Shopify/hydrogen/pull/2084)) by [@blittle](https://github.com/blittle)
+
+  1. API Routes are now passed a reference to the logger bound to the current request:
+
+  ```ts
+  export async function api(request, {log}) {
+    log.warn("Here's a warning!");
+    return new Request('Hello World');
+  }
+  ```
+
+  2. If you define a custom logging implementation within your Hydrogen config, we'll now warn you when your logging implementation itself errors.
+
+* When a route is rendering, if Hydrogen has already started streaming, it is invalid to call `response.doNotStream()`. Disabling streaming should always happen before any async operation in your route server component. This change fixes Hydrogen to warn if you try to disable streaming after the stream has already begun. ([#2081](https://github.com/Shopify/hydrogen/pull/2081)) by [@frandiox](https://github.com/frandiox)
+
+## 1.3.1
+
+### Patch Changes
+
+- `<ExternalVideo/>` now has a default prop of `loading="lazy"` to improve performance of the rendered `<iframe>`. ([#2044](https://github.com/Shopify/hydrogen/pull/2044)) by [@frehner](https://github.com/frehner)
+
+  If you're using `<ExternalVideo/>` above the fold, then we recommend setting this prop to `eager`.
+
+* Improve error handling: ([#2049](https://github.com/Shopify/hydrogen/pull/2049)) by [@blittle](https://github.com/blittle)
+
+  1. Improve how errors are default presented in the logs.
+  1. Make sure that when useShopQuery fails, that an Error object is propagated.
+
+  If you have implemented your own logging handler, it is recommended that you only print strings, as printing objects (including Error objects) will result in unhelpful logs in many runtimes (Oxygen included):
+
+  ```js
+  // Example custom logging for errors
+  export default defineConfig({
+    logger: {
+      error: (context, error) => {
+        const url = context ? ` ${context.url}` : '';
+
+        if (error instanceof Error) {
+          // Do NOT directly just print the error, instead
+          // print the error.messag or error.stack
+          console.error(`Error:${url}\n${error.stack}`);
+        } else {
+          console.error(`Error:${url} ${error}`);
+        }
+      },
+    },
+  });
+  ```
+
+## 1.3.0
+
+### Minor Changes
+
+- Add the experimental `useFlashSession` hook. This hook reads and clears a session value. It is useful for request validation within the experimental `<Form>` component: ([#1878](https://github.com/Shopify/hydrogen/pull/1878)) by [@blittle](https://github.com/blittle)
+
+  ```ts
+  import {Form, useFlashSession} from '@shopify/hydrogen/experimental';
+
+  export default function Login() {
+    const loginError = useFlashSession('loginError');
+
+    return (
+      <Form action="/login">
+        {loginError ? <div>Invalid user!</div> : null}
+        <input type="text" name="username" />
+        <input type="password" name="password" />
+        <button type="submit">Login</button>
+      </Form>
+    );
+  }
+
+  export async function api(request, {session}) {
+    const data = await request.formData();
+    const username = data.get('username');
+    const password = data.get('password');
+
+    const userId = await getUser(username, password);
+
+    if (!userId) {
+      await session.set('loginError', 'INVALID_USER');
+      return new Request('/login');
+    } else {
+      await session.set('userId', userId);
+      return new Request('/account');
+    }
+  }
+  ```
+
+  Note, `useFlashSession` is experimental, and subject to change at any time.
+
+### Patch Changes
+
+- Pass root to all Vite instances to support building projects from different directories. ([#1987](https://github.com/Shopify/hydrogen/pull/1987)) by [@frandiox](https://github.com/frandiox)
+
+* Added a new option `assetHashVersion` to the Hydrogen plugin in `vite.config.js`. This option can be used to manually change the assets file hash. ([#2000](https://github.com/Shopify/hydrogen/pull/2000)) by [@frandiox](https://github.com/frandiox)
+
+  ```js
+  // vite.config.js
+  export default {
+    plugins: [hydrogen({assetHashVersion: 'v2'})],
+  };
+  ```
+
+- Fix accessing `Oxygen.env` in `hydrogen.config.js` file in production. ([#1977](https://github.com/Shopify/hydrogen/pull/1977)) by [@frandiox](https://github.com/frandiox)
+
+* Add null check for `runtime.waitUntil` ([#1958](https://github.com/Shopify/hydrogen/pull/1958)) by [@ascorbic](https://github.com/ascorbic)
+
+- `<Image/>` now sets the attribute `decoding='async'` by default, to potentially improve performance. ([#1969](https://github.com/Shopify/hydrogen/pull/1969)) by [@sanjaiyan-dev](https://github.com/sanjaiyan-dev)
+
+* Fix stale while revalidate when custom cache value is supplied ([#1967](https://github.com/Shopify/hydrogen/pull/1967)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+- The Typescript types for the `<Image/>` component are now available to import directly from Hydrogen. ([#1913](https://github.com/Shopify/hydrogen/pull/1913)) by [@frehner](https://github.com/frehner)
+
+  ```ts
+  import {
+    type ShopifyImageProps,
+    type ExternalImageProps,
+  } from '@shopify/hydrogen';
+  ```
+
+* Change how the RSC plugin communicates with other plugins to support `vanilla-extract`. ([#1944](https://github.com/Shopify/hydrogen/pull/1944)) by [@frandiox](https://github.com/frandiox)
+
+- Adds `merchandise.product.id` to cart line items query ([#1988](https://github.com/Shopify/hydrogen/pull/1988)) by [@juanpprieto](https://github.com/juanpprieto)
+
+* Fix \_\_rsc requests to have a cache-control header ([#2010](https://github.com/Shopify/hydrogen/pull/2010)) by [@blittle](https://github.com/blittle)
+
+- Adds `prevCart` to cart event payloads ([#1982](https://github.com/Shopify/hydrogen/pull/1982)) by [@juanpprieto](https://github.com/juanpprieto)
+
 ## 1.2.0
 
 ### Minor Changes
@@ -120,7 +325,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }

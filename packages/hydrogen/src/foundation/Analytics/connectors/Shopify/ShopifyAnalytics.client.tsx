@@ -92,7 +92,9 @@ function getCookieDomain(cookieDomain: string): string {
 function trackPageView(payload: any): void {
   microSessionCount += 1;
   try {
-    sendToServer(storefrontPageViewSchema(payload));
+    payload &&
+      payload.shopify &&
+      sendToServer(storefrontPageViewSchema(payload));
   } catch (error) {
     console.error(
       `Error Shopify analytics: ${ClientAnalytics.eventNames.PAGE_VIEW}`,
@@ -116,7 +118,7 @@ function buildStorefrontPageViewPayload(payload: any): any {
   const shopify = payload.shopify;
   let formattedData = {
     appClientId: '6167201',
-    hydrogenSubchannelId: shopify.storefrontId,
+    hydrogenSubchannelId: shopify.storefrontId || '0',
 
     isPersistentCookie: shopify.isPersistentCookie,
     uniqToken: shopify.userId,

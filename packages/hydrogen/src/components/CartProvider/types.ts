@@ -7,6 +7,7 @@ import {
   MutationCartAttributesUpdateArgs,
 } from '../../storefront-api-types.js';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
+import {StateMachine} from '@xstate/fsm';
 
 export type Status = State['status'];
 
@@ -82,6 +83,195 @@ export type CartAction =
   | {type: 'buyerIdentityUpdate'}
   | {type: 'cartAttributesUpdate'}
   | {type: 'discountCodesUpdate'}
-  | {type: 'resolve'; cart: Cart}
+  | {type: 'resolve'; cart: Cart; rawCartResult?: CartFragmentFragment}
   | {type: 'reject'; errors: any}
   | {type: 'resetCart'};
+
+// CartProvider V2
+
+// State Machine types
+export type CartMachineContext = {
+  cart?: Cart;
+  lastValidCart?: Cart;
+  rawCartResult?: CartFragmentFragment;
+  prevCart?: Cart;
+  errors?: any;
+};
+
+export type CartFetchEvent = {
+  type: 'CART_FETCH';
+  payload: {
+    cartId: string;
+  };
+};
+
+export type CartCreateEvent = {
+  type: 'CART_CREATE';
+  payload: CartInput;
+};
+
+export type CartSetEvent = {
+  type: 'CART_SET';
+  payload: {
+    cart: CartFragmentFragment;
+  };
+};
+
+export type CartLineAddEvent = {
+  type: 'CARTLINE_ADD';
+  payload: {
+    lines: CartLineInput[];
+  };
+};
+
+export type CartLineRemoveEvent = {
+  type: 'CARTLINE_REMOVE';
+  payload: {
+    lines: string[];
+  };
+};
+
+export type CartLineUpdateEvent = {
+  type: 'CARTLINE_UPDATE';
+  payload: {
+    lines: CartLineUpdateInput[];
+  };
+};
+
+export type NoteUpdateEvent = {
+  type: 'NOTE_UPDATE';
+  payload: {
+    note: MutationCartNoteUpdateArgs['note'];
+  };
+};
+
+export type BuyerIdentityUpdateEvent = {
+  type: 'BUYER_IDENTITY_UPDATE';
+  payload: {
+    buyerIdentity: CartBuyerIdentityInput;
+  };
+};
+
+export type CartAttributesUpdateEvent = {
+  type: 'CART_ATTRIBUTES_UPDATE';
+  payload: {
+    attributes: MutationCartAttributesUpdateArgs['attributes'];
+  };
+};
+
+export type DiscountCodesUpdateEvent = {
+  type: 'DISCOUNT_CODES_UPDATE';
+  payload: {
+    discountCodes: string[];
+  };
+};
+
+export type CartMachineActionEvent =
+  | CartFetchEvent
+  | CartCreateEvent
+  | CartSetEvent
+  | CartLineAddEvent
+  | CartLineRemoveEvent
+  | CartLineUpdateEvent
+  | NoteUpdateEvent
+  | BuyerIdentityUpdateEvent
+  | CartAttributesUpdateEvent
+  | DiscountCodesUpdateEvent;
+
+export type CartMachineFetchResultEvent =
+  | {type: 'CART_COMPLETED'; payload: {cartActionEvent: CartMachineActionEvent}}
+  | {
+      type: 'RESOLVE';
+      payload: {
+        cartActionEvent: CartMachineActionEvent;
+        cart: Cart;
+        rawCartResult: CartFragmentFragment;
+      };
+    }
+  | {
+      type: 'ERROR';
+      payload: {cartActionEvent: CartMachineActionEvent; errors: any};
+    };
+
+export type CartMachineEvent =
+  | CartMachineActionEvent
+  | CartMachineFetchResultEvent;
+
+export type CartMachineTypeState =
+  | {
+      value: 'uninitialized';
+      context: CartMachineContext & {
+        cart: undefined;
+        lastValidCart: undefined;
+        prevCart: undefined;
+        errors?: any;
+      };
+    }
+  | {
+      value: 'initializationError';
+      context: CartMachineContext & {
+        cart: undefined;
+        lastValidCart: undefined;
+        prevCart: undefined;
+        errors: any;
+      };
+    }
+  | {
+      value: 'cartCompleted';
+      context: CartMachineContext & {
+        cart: undefined;
+        prevCart?: Cart;
+        lastValidCart: undefined;
+        errors: any;
+      };
+    }
+  | {
+      value: 'idle';
+      context: CartMachineContext & {
+        cart: Cart;
+        prevCart?: Cart;
+        lastValidCart?: Cart;
+        errors?: any;
+      };
+    }
+  | {
+      value: 'error';
+      context: CartMachineContext & {
+        cart?: Cart;
+        prevCart?: Cart;
+        lastValidCart?: Cart;
+        errors: any;
+      };
+    }
+  | {value: 'cartFetching'; context: CartMachineContext}
+  | {value: 'cartCreating'; context: CartMachineContext}
+  | {value: 'cartLineRemoving'; context: CartMachineContext}
+  | {value: 'cartLineUpdating'; context: CartMachineContext}
+  | {value: 'cartLineAdding'; context: CartMachineContext}
+  | {value: 'noteUpdating'; context: CartMachineContext}
+  | {value: 'buyerIdentityUpdating'; context: CartMachineContext}
+  | {value: 'cartAttributesUpdating'; context: CartMachineContext}
+  | {value: 'discountCodesUpdating'; context: CartMachineContext};
+
+export type CartMachineAction = StateMachine.ActionFunction<
+  CartMachineContext,
+  CartMachineEvent
+>;
+
+export type CartMachineActions = {
+  cartFetchAction: CartMachineAction;
+  cartCreateAction: CartMachineAction;
+  cartLineRemoveAction: CartMachineAction;
+  cartLineUpdateAction: CartMachineAction;
+  cartLineAddAction: CartMachineAction;
+  noteUpdateAction: CartMachineAction;
+  buyerIdentityUpdateAction: CartMachineAction;
+  cartAttributesUpdateAction: CartMachineAction;
+  discountCodesUpdateAction: CartMachineAction;
+  onCartActionEntry?: CartMachineAction;
+  onCartActionOptimisticUI?: StateMachine.AssignActionObject<
+    CartMachineContext,
+    CartMachineEvent
+  >;
+  onCartActionComplete?: CartMachineAction;
+};

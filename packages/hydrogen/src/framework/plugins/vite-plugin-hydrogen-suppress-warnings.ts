@@ -1,5 +1,11 @@
 import {Plugin} from 'vite';
 
+/* -- Plugin notes:
+ * Vite prints some warnings automatically are not important and
+ * not actionable. We hide them here to prevent confusing devs when
+ * real warnings or errors appear.
+ */
+
 export default () => {
   return {
     name: 'hydrogen:suppress-warnings',

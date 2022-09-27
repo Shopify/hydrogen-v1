@@ -11,8 +11,7 @@ import {
   ShopifyProvider,
   CartProvider,
 } from '@shopify/hydrogen';
-
-import {HeaderFallback} from '~/components';
+import {HeaderFallback, EventsListener} from '~/components';
 import type {CountryCode} from '@shopify/hydrogen/storefront-api-types';
 import {DefaultSeo, NotFound} from '~/components/index.server';
 
@@ -25,6 +24,7 @@ function App({request}: HydrogenRouteProps) {
 
   return (
     <Suspense fallback={<HeaderFallback isHome={isHome} />}>
+      <EventsListener />
       <ShopifyProvider countryCode={countryCode}>
         <CartProvider countryCode={countryCode}>
           <Suspense>
@@ -39,7 +39,7 @@ function App({request}: HydrogenRouteProps) {
         </CartProvider>
         <PerformanceMetrics />
         {import.meta.env.DEV && <PerformanceMetricsDebug />}
-        <ShopifyAnalytics />
+        <ShopifyAnalytics cookieDomain="hydrogen.shop" />
       </ShopifyProvider>
     </Suspense>
   );

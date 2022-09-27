@@ -100,13 +100,13 @@ describe('log', () => {
       url: 'http://localhost:3000/',
       time: 1000,
     } as HydrogenRequest;
-    logServerResponse('str', request, 500);
+    logServerResponse('str', request, 500, true);
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
     expect(
       stripColors(mockedLogger.debug.mock.calls[0][1])
     ).toMatchInlineSnapshot(
-      '"GET streaming SSR     500 1100.00 ms http://localhost:3000/"'
+      '"GET streaming SSR     500 error 1100.00 ms http://localhost:3000/"'
     );
   });
 
@@ -116,13 +116,29 @@ describe('log', () => {
       url: 'http://localhost:3000/',
       time: 1000,
     } as HydrogenRequest;
-    logServerResponse('str', request, 200);
+    logServerResponse('str', request, 200, false);
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
     expect(
       stripColors(mockedLogger.debug.mock.calls[0][1])
     ).toMatchInlineSnapshot(
-      '"GET streaming SSR     200 1100.00 ms http://localhost:3000/"'
+      '"GET streaming SSR     200 ok    1100.00 ms http://localhost:3000/"'
+    );
+  });
+
+  it('should log 200 server response with error', () => {
+    const request = {
+      method: 'GET',
+      url: 'http://localhost:3000/',
+      time: 1000,
+    } as HydrogenRequest;
+    logServerResponse('str', request, 200, true);
+    expect(mockedLogger.debug).toHaveBeenCalled();
+    expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
+    expect(
+      stripColors(mockedLogger.debug.mock.calls[0][1])
+    ).toMatchInlineSnapshot(
+      '"GET streaming SSR     200 error 1100.00 ms http://localhost:3000/"'
     );
   });
 
@@ -132,13 +148,13 @@ describe('log', () => {
       url: 'http://localhost:3000/',
       time: 1000,
     } as HydrogenRequest;
-    logServerResponse('str', request, 301);
+    logServerResponse('str', request, 301, false);
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
     expect(
       stripColors(mockedLogger.debug.mock.calls[0][1])
     ).toMatchInlineSnapshot(
-      '"GET streaming SSR     301 1100.00 ms http://localhost:3000/"'
+      '"GET streaming SSR     301 ok    1100.00 ms http://localhost:3000/"'
     );
   });
 
@@ -148,13 +164,13 @@ describe('log', () => {
       url: 'http://localhost:3000/',
       time: 1000,
     } as HydrogenRequest;
-    logServerResponse('str', request, 404);
+    logServerResponse('str', request, 404, false);
     expect(mockedLogger.debug).toHaveBeenCalled();
     expect(mockedLogger.debug.mock.calls[0][0]).toEqual(request);
     expect(
       stripColors(mockedLogger.debug.mock.calls[0][1])
     ).toMatchInlineSnapshot(
-      '"GET streaming SSR     404 1100.00 ms http://localhost:3000/"'
+      '"GET streaming SSR     404 error 1100.00 ms http://localhost:3000/"'
     );
   });
 

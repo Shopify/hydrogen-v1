@@ -4,20 +4,25 @@
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "declaration": true,
-    "declarationDir": "./dist",
+    "declarationDir": "./dist/types",
     "jsx": "react-jsx",
-    "outDir": "dist"
+    "typeRoots": ["globals.d.ts"]
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.test.tsx"]
+  "include": ["src/**/*", "globals.d.ts"],
+  "exclude": [
+    "src/**/*.test.tsx",
+    "src/**/*.test.ts",
+    "src/**/*.stories.tsx",
+    "src/**/*.test.helpers.ts"
+  ]
 }

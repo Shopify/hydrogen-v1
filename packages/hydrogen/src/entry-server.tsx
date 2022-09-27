@@ -26,7 +26,6 @@ import {
   ServerRequestProvider,
 } from './foundation/ServerRequestProvider/index.js';
 import type {ServerResponse} from 'http';
-import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
   renderApiRoute,
@@ -42,7 +41,7 @@ import {
   createFromReadableStream,
   bufferReadableStream,
 } from './streaming.server.js';
-import {stripScriptsFromTemplate} from './utilities/template.js';
+import {getTemplate} from './utilities/template.js';
 import {Analytics} from './foundation/Analytics/Analytics.server.js';
 import {DevTools} from './foundation/DevTools/DevTools.server.js';
 import {getSyncSessionApi} from './foundation/session/session.js';
@@ -58,6 +57,15 @@ import {
 import {CacheShort, NO_STORE} from './foundation/Cache/strategies/index.js';
 import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes.js';
 import {FORM_REDIRECT_COOKIE} from './constants.js';
+
+// Importing 'stream' directly breaks Vite resolve
+// when building for workers, even though this code
+// does not run in a worker. Looks like tree-shaking
+// kicks in after the import analysis/bundle.
+// @ts-ignore
+import stream from 'virtual__stream';
+import type {PassThrough as PassThroughType} from 'stream';
+const PassThrough = stream.PassThrough as typeof PassThroughType;
 
 declare global {
   // This is provided by a Vite plugin
@@ -79,10 +87,13 @@ export const renderHydrogen = (App: any) => {
 
     let sessionApi = options.sessionApi;
 
-    const {default: inlineHydrogenConfig} = await import(
+    const {default: importedConfig} = await import(
       // @ts-ignore
       'virtual__hydrogen.config.ts'
     );
+
+    const inlineHydrogenConfig =
+      typeof importedConfig === 'function' ? importedConfig() : importedConfig;
 
     const {default: hydrogenRoutes} = await import(
       // @ts-ignore
@@ -100,7 +111,7 @@ export const renderHydrogen = (App: any) => {
     setLogger(hydrogenConfig.logger);
     const log = getLoggerWithContext(request);
 
-    const response = new HydrogenResponse(null, {
+    const response = new HydrogenResponse(request.url, null, {
       headers: headers || {},
     });
 
@@ -184,20 +195,22 @@ export const renderHydrogen = (App: any) => {
                 hydrogenConfig,
                 true
               );
+
+              response.markAsSent();
             } catch (e: any) {
               log.error('Cache revalidate error', e);
             }
           });
 
           // Asynchronously wait for it in workers
-          request.ctx.runtime?.waitUntil(staleWhileRevalidatePromise);
+          request.ctx.runtime?.waitUntil?.(staleWhileRevalidatePromise);
         }
 
         return cachedResponse;
       }
     }
 
-    return processRequest(
+    const result = await processRequest(
       handleRequest,
       App,
       url,
@@ -207,6 +220,9 @@ export const renderHydrogen = (App: any) => {
       response,
       hydrogenConfig
     );
+
+    response.markAsSent();
+    return result;
   };
 
   if (__HYDROGEN_WORKER__) return handleRequest;
@@ -267,8 +283,19 @@ async function processRequest(
 
   if (isRSCRequest) {
     const buffered = await bufferReadableStream(rsc.readable.getReader());
-    postRequestTasks('rsc', 200, request, response);
-    cacheResponse(response, request, [buffered], revalidate);
+    const rscDidError = !!rsc.didError();
+    postRequestTasks(
+      'rsc',
+      rscDidError ? 500 : 200,
+      request,
+      response,
+      rscDidError
+    );
+
+    if (rscDidError) {
+      response.headers.set('cache-control', response.cacheControlHeader);
+      cacheResponse(response, request, [buffered], revalidate);
+    }
 
     return new Response(buffered, {
       headers: response.headers,
@@ -288,27 +315,9 @@ async function processRequest(
     request,
     response,
     nodeResponse,
-    template: await getTemplate(indexTemplate, url),
     revalidate,
+    template: await getTemplate(indexTemplate, url),
   });
-}
-
-async function getTemplate(
-  indexTemplate:
-    | string
-    | ((url: string) => Promise<string | {default: string}>),
-  url: URL
-) {
-  let template =
-    typeof indexTemplate === 'function'
-      ? await indexTemplate(url.toString())
-      : indexTemplate;
-
-  if (template && typeof template !== 'string') {
-    template = template.default;
-  }
-
-  return template;
 }
 
 function getApiRoute(url: URL, routes: ResolvedHydrogenRoutes) {
@@ -346,11 +355,17 @@ async function runSSR({
   request,
   response,
   nodeResponse,
-  template,
   nonce,
   dev,
   log,
   revalidate,
+  template: {
+    raw: template,
+    noScriptTemplate,
+    bootstrapModules,
+    bootstrapScripts,
+    linkHeader,
+  },
 }: RunSsrParams) {
   let ssrDidError: Error | undefined;
   const didError = () => rsc.didError() ?? ssrDidError;
@@ -358,9 +373,6 @@ async function runSSR({
   const [rscReadableForFizz, rscReadableForFlight] = rsc.readable.tee();
   const rscResponse = createFromReadableStream(rscReadableForFizz);
   const RscConsumer = () => rscResponse.readRoot();
-
-  const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
-    stripScriptsFromTemplate(template);
 
   const AppSSR = (
     <Html
@@ -380,6 +392,14 @@ async function runSSR({
       </ServerRequestProvider>
     </Html>
   );
+
+  if (linkHeader) {
+    const existingLinkHeader = response.headers.get('Link');
+    response.headers.set(
+      'Link',
+      existingLinkHeader ? existingLinkHeader + ', ' + linkHeader : linkHeader
+    );
+  }
 
   log.trace('start ssr');
 
@@ -522,7 +542,13 @@ async function runSSR({
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => {
           writable.close();
-          postRequestTasks('str', responseOptions.status, request, response);
+          postRequestTasks(
+            'str',
+            responseOptions.status,
+            request,
+            response,
+            !!didError()
+          );
           response.status = responseOptions.status;
           cacheResponse(response, request, savedChunks, revalidate);
         }, 0);
@@ -530,7 +556,13 @@ async function runSSR({
     } else {
       // Redirects do not write body
       writable.close();
-      postRequestTasks('str', responseOptions.status, request, response);
+      postRequestTasks(
+        'str',
+        responseOptions.status,
+        request,
+        response,
+        !!didError()
+      );
     }
 
     if (response.canStream()) {
@@ -590,7 +622,13 @@ async function runSSR({
           !revalidate &&
           (response.canStream() || nodeResponse.writableEnded)
         ) {
-          postRequestTasks('str', nodeResponse.statusCode, request, response);
+          postRequestTasks(
+            'str',
+            nodeResponse.statusCode,
+            request,
+            response,
+            !!didError()
+          );
           return;
         }
 
@@ -601,7 +639,7 @@ async function runSSR({
           return nodeResponse.end();
         }
 
-        const bufferedResponse = await createNodeWriter();
+        const bufferedResponse = new PassThrough();
         const bufferedRscPromise = bufferReadableStream(
           rscReadable.getReader()
         );
@@ -619,8 +657,15 @@ async function runSSR({
 
           if (!error) {
             html = assembleHtml({ssrHtml, rscPayload, request, template});
-            postRequestTasks('ssr', nodeResponse.statusCode, request, response);
           }
+
+          postRequestTasks(
+            'ssr',
+            nodeResponse.statusCode,
+            request,
+            response,
+            !!didError()
+          );
 
           if (!nodeResponse.writableEnded) {
             nodeResponse.write(html);
@@ -779,16 +824,6 @@ function isRedirect(response: {status?: number; statusCode?: number}) {
   return status >= 300 && status < 400;
 }
 
-async function createNodeWriter() {
-  // Importing 'stream' directly breaks Vite resolve
-  // when building for workers, even though this code
-  // does not run in a worker. Looks like tree-shaking
-  // kicks in after the import analysis/bundle.
-  const streamImport = __HYDROGEN_WORKER__ ? '' : 'stream';
-  const {PassThrough} = await import(streamImport);
-  return new PassThrough() as InstanceType<typeof PassThroughType>;
-}
-
 function flightContainer(chunk: string) {
   return `<meta data-flight="${htmlEncode(chunk)}" />`;
 }
@@ -797,9 +832,10 @@ function postRequestTasks(
   type: RenderType,
   status: number,
   request: HydrogenRequest,
-  response: HydrogenResponse
+  response: HydrogenResponse,
+  didError: boolean
 ) {
-  logServerResponse(type, request, status);
+  logServerResponse(type, request, status, didError);
   logCacheControlHeaders(type, request, response);
   logQueryTimings(type, request);
   request.savePreloadQueries();
@@ -906,7 +942,7 @@ async function cacheResponse(
       const cachePutPromise = Promise.resolve(true).then(() =>
         saveCacheResponse(response, request, chunks)
       );
-      request.ctx.runtime?.waitUntil(cachePutPromise);
+      request.ctx.runtime?.waitUntil?.(cachePutPromise);
     }
   }
 }

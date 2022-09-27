@@ -20,6 +20,7 @@ const config: Config.InitialOptions = {
   globals: {
     __HYDROGEN_DEV__: true,
     __HYDROGEN_TEST__: true,
+    __HYDROGEN_CACHE_ID__: '"__QUERY_CACHE_ID__"',
     'ts-jest': {
       tsconfig: './packages/hydrogen/tsconfig.json',
     },

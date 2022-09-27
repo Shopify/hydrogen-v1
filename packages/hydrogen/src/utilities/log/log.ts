@@ -41,8 +41,14 @@ const defaultLogger: Logger = {
   warn(context, ...args) {
     console.warn(yellow('WARN: '), ...args);
   },
-  error(context, ...args) {
-    console.error(red('ERROR: '), ...args);
+  error(context, error, ...extra) {
+    const url = context ? ` ${context.url}` : '';
+
+    if (error instanceof Error) {
+      console.error(red(`Error processing route:${url}\n${error.stack}`));
+    } else {
+      console.error(red(`Error:${url} ${error}`));
+    }
   },
   fatal(context, ...args) {
     console.error(red('FATAL: '), ...args);
@@ -57,9 +63,23 @@ function doLog(
   request: Partial<HydrogenRequest>,
   ...args: any[]
 ) {
-  const maybePromise = currentLogger[method](request, ...args);
-  if (maybePromise instanceof Promise) {
-    request?.ctx?.runtime?.waitUntil?.(maybePromise);
+  try {
+    const maybePromise = currentLogger[method](request, ...args);
+    if (maybePromise instanceof Promise) {
+      request?.ctx?.runtime?.waitUntil?.(
+        maybePromise.catch((e) => {
+          const message = e instanceof Error ? e.stack : e;
+          defaultLogger.error(
+            `Promise error from the custom logging implementation for logger.${method} failed:\n${message}`
+          );
+        })
+      );
+    }
+  } catch (e) {
+    const message = e instanceof Error ? e.stack : e;
+    defaultLogger.error(
+      `The custom logging implementation for logger.${method} failed:\n${message}`
+    );
   }
 }
 
@@ -104,7 +124,8 @@ const SERVER_RESPONSE_MAP: Record<string, string> = {
 export function logServerResponse(
   type: RenderType,
   request: HydrogenRequest,
-  responseStatus: number
+  responseStatus: number,
+  didError: boolean
 ) {
   const log = getLoggerWithContext(request);
   const coloredResponseStatus =
@@ -125,6 +146,8 @@ export function logServerResponse(
   const url = parseUrl(type, request.url);
 
   log.debug(
-    `${request.method} ${styledType} ${coloredResponseStatus} ${paddedTiming} ${url}`
+    `${request.method} ${styledType} ${coloredResponseStatus} ${
+      didError || responseStatus >= 400 ? red('error') : green('ok   ')
+    } ${paddedTiming} ${url}`
   );
 }
