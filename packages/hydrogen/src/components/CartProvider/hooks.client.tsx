@@ -115,34 +115,53 @@ export function useInstantCheckout() {
 }
 
 /** Prefetch static subresources from the checkout page */
-async function prefetchCheckout(url: string) {
+export async function prefetchCheckoutAssets(url: string) {
   const res = await fetch(url, {
     headers: {
-      'accept': 'text/html',
-    }
+      accept: 'text/html',
+    },
   });
   const html = await res.text();
-  const resolve = url => new URL(url, res.url).href;
+  const resolve = (url: string) => new URL(url, res.url).href;
   // parse the HTML to grab scripts + stylesheets:
   const dom = new DOMParser().parseFromString(html, 'text/html');
-  let scripts = [].slice.call(dom.querySelectorAll('script[src]'));
-  let styles = [].slice.call(dom.querySelectorAll('link[rel="stylesheet"][href]'));
+  const scripts = [].slice.call(
+    dom.querySelectorAll('script[src]')
+  ) as HTMLScriptElement[];
+  const styles = [].slice.call(
+    dom.querySelectorAll('link[rel="stylesheet"][href]')
+  );
   // prefetch all of them:
-  const isScript = s => /javascript|^module$|^$/i.test(s.type);
+  const isScript = (s: HTMLScriptElement) =>
+    /javascript|^module$|^$/i.test(s.type);
   await Promise.all([
-    ...scripts.map((s) => isScript(s) && prefetch(resolve(s.getAttribute('src')), 'script', s.crossOrigin)),
-    ...styles.map((s) => prefetch(resolve(s.getAttribute('href')), 'style', s.crossOrigin)),
+    ...scripts.map(
+      (s: HTMLScriptElement) =>
+        isScript(s) &&
+        s.getAttribute('src') &&
+        prefetch(resolve(s.getAttribute('src')!), 'script', s.crossOrigin)
+    ),
+    ...styles.map(
+      (s: HTMLLinkElement) =>
+        s.getAttribute('href') &&
+        prefetch(resolve(s.getAttribute('href')!), 'style', s.crossOrigin)
+    ),
   ]);
 }
 
 /**
  * Prefetch a subresource with the given type.
- * @note: relies on cross-origin prefetch, which is not implemented in Safari
+ * @remarks relies on cross-origin prefetch, which is not implemented in Safari
  */
-function prefetch(url, as, crossOrigin) {
+function prefetch(
+  url: HTMLLinkElement['href'],
+  as: HTMLLinkElement['as'],
+  crossOrigin: HTMLLinkElement['crossOrigin']
+) {
   return new Promise((resolve) => {
     const link = document.createElement('link');
     link.rel = 'prefetch';
+    // @ts-expect-error
     link.fetchPriority = 'high';
     link.as = as;
     // link.crossOrigin = crossOrigin; // tbd

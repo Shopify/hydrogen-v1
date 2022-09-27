@@ -36,7 +36,7 @@ import {
   AttributeInput,
   CountryCode,
 } from '../../storefront-api-types.js';
-import {useCartFetch} from './hooks.client.js';
+import {prefetchCheckoutAssets, useCartFetch} from './hooks.client.js';
 import {CartContext} from './context.js';
 import {
   CartLineRemoveMutationVariables,
@@ -306,6 +306,8 @@ export function CartProvider({
         return;
       }
 
+      prefetchCheckoutAssets(data.cart.checkoutUrl);
+
       dispatch({type: 'resolve', cart: cartFromGraphQL(data.cart)});
     },
     [fetchCart, cartFragment, numCartLines, countryCode]
@@ -366,6 +368,8 @@ export function CartProvider({
           type: 'resolve',
           cart: cartFromGraphQL(data.cartCreate.cart),
         });
+
+        prefetchCheckoutAssets(data.cartCreate.cart.checkoutUrl);
 
         window.localStorage.setItem(
           CART_ID_STORAGE_KEY,
