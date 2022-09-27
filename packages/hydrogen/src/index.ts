@@ -45,6 +45,7 @@ export {useServerAnalytics} from './foundation/Analytics/hook.js';
 export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server.js';
 export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const.js';
 export {useSession} from './foundation/useSession/useSession.js';
+export {Script} from './components/Script/Script.client.js';
 export {Cookie} from './foundation/Cookie/Cookie.js';
 
 /**
