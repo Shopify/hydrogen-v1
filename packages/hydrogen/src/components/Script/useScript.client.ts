@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {useUrl} from '../useUrl/useUrl.js';
+import {useUrl} from '../../foundation/useUrl/useUrl.js';
 import {loadScript, PrevPathCache} from './loadScript.js';
 import {loadScriptOnIdle} from './loadScriptOnIdle.js';
 import {ScriptState, UseScriptProps} from './types.js';
