@@ -6,12 +6,12 @@ export default function ScriptsBeforeHydration() {
     <div className="ScriptsBeforeHydration">
       <h1>beforeHydration scripts</h1>
       <p>
-        {`<Scripts load="beforeHydration"/>`} are executed if rendered on the
-        initial page load (like regular {`<script />`} tags).
+        {`<Scripts load="beforeHydration"/>`} are run if rendered at the initial
+        page load (like regular {`<script />`} tags).
       </p>
       <p>
         For this reason, these should be included inside shared components like{' '}
-        {`\"layouts\"`} and {`\"App.server.tsx.\"`}
+        {`"layouts"`} and {`"App.server.tsx."`}
       </p>
 
       <Link to="/scripts">
