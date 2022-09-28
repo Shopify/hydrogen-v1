@@ -29,10 +29,12 @@ export function HomePageSeo({
       <Head defaultTitle={title ?? ''} titleTemplate={titleTemplate ?? `%s`}>
         <meta property="og:url" content={url} />
 
+        {/* eslint-disable-next-line hydrogen/prefer-script-component */}
         <script type="application/ld+json">
           {JSON.stringify(organizationSchema)}
         </script>
 
+        {/* eslint-disable-next-line hydrogen/prefer-script-component */}
         <script type="application/ld+json">
           {JSON.stringify(webSiteSchema)}
         </script>
