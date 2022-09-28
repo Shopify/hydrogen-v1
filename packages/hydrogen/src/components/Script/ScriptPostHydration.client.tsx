@@ -15,13 +15,11 @@ export function ScriptPostHydration(props: PostHydrationProps): null {
 
   // Load script based on delayed loading load
   useEffect(() => {
-    (async () => {
-      if (load === 'afterHydration' || load === 'inWorker') {
-        await loadScript(props);
-      } else if (load === 'onIdle') {
-        loadScriptOnIdle(props);
-      }
-    })();
+    if (load === 'afterHydration' || load === 'inWorker') {
+      loadScript(props);
+    } else if (load === 'onIdle') {
+      loadScriptOnIdle(props);
+    }
   }, [props, load]);
 
   // keep track or url changes to know when to reload scripts
