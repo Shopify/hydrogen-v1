@@ -19,8 +19,8 @@ export const scriptsInLayoutComponents = createRule({
       recommended: 'warn',
     },
     messages: {
-      moveBeforeHydrationScript: `Scripts loaded with \`${LOAD.beforeHydration}\` strategy should be placed inside ${ROOT_FILENAME}. This ensures that the script is executed in all routes.`,
-      moveInWorkerScript: `Scripts loaded with \`${LOAD.inWorker}\` strategy should be located inside ${ROOT_FILENAME}. This ensures that the script is executed in all routes.`,
+      moveBeforeHydrationScript: `Scripts loaded with \`${LOAD.beforeHydration}\` strategy should be placed inside ${ROOT_FILENAME}. This ensures that the script is run at any initial route.`,
+      moveInWorkerScript: `Scripts loaded with \`${LOAD.inWorker}\` strategy should be located inside ${ROOT_FILENAME}. This ensures that the script is run at any initial routes.`,
     },
     hasSuggestions: true,
   },

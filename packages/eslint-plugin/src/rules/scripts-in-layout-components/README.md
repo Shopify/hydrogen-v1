@@ -1,11 +1,10 @@
 # Ensure that `<Script load="beforeHydration | inWorker" />` tags are only allowed in App.server.tsx
 
-Scripts with these loading strategies are executed only on the first render. If a Script is placed on a route component, then it will only be loaded if the user first navigates to that particular route.
+Scripts with these loading strategies are run only on the first render. If a Script is placed on a route component, then it will only be loaded if the user first navigates to that particular route.
 
 ## Rule details
 
-This rule prevents using the `Script` tag with "beforeHydration" or "inWorker" loading strategies on files other than App.server.tsx to ensure the scripts are
-executed in all routes.
+This rule prevents using the `Script` tag with "beforeHydration" or "inWorker" loading strategies on files other than App.server.tsx to ensure the scripts run in any initial route.
 
 ### Incorrect code
 

@@ -45,16 +45,16 @@ You can customize the behavior of the component with the following props
 | `children` | <code>string \| string[]</code> | Any valid javascript code |
 | `load`          | <code>"beforeHydration" \| "afterHydration" (default) \| "inWorker" \| "onIdle"</code>| The loading strategy. See Loading strategies for more info. |
 | `reload`         | <code>boolean (default false)</code> | Scripts rendered with this option will be reloaded after every page navigation (if available on the next route). This option is only available in "afterHydration" and "onIdle" loading strategies. |
-| `onLoad`       | <code>(script) => void</code> | A callback that is executed when a script is loaded. This callback is only available in "afterHydration" and "onIdle" loading strategies |
-| `onReady`         | <code>(script) => void</code> | A callback that is executed when a script is successfully loaded and executed. This callback is only available in "afterHydration" and "onIdle" loading strategies  |
-| `onError`         | <code>(script) => void</code> | A callback that is executed when the script is failed to load. This callback is only available in "afterHydration" and "onIdle" loading strategies |
+| `onLoad`       | <code>(script) => void</code> | A callback that fires when a script is loaded. This callback is only available in "afterHydration" and "onIdle" loading strategies |
+| `onReady`         | <code>(script) => void</code> | A callback that fires when a script is successfully loaded and run. This callback is only available in "afterHydration" and "onIdle" loading strategies  |
+| `onError`         | <code>(script) => void</code> | A callback that fires when a script fail to load. This callback is only available in "afterHydration" and "onIdle" loading strategies |
 
 
 ## Loading strategies
 
 ### `beforeHydration`
 
-These scripts are executed inline and are considered render-blocking. This strategy is mainly recommended for scripts aiming to set global `window` properties, configurations or event listeners. These scripts can only be included in `App.server.tsx`. This ensures that they are executed on any initial route.
+These scripts are inlined and hence considered render-blocking. This strategy is mainly recommended for scripts aiming to set global `window` properties, configurations or event listeners. These scripts can only be included in `App.server.tsx`. This ensures that they are run on any initial route.
 
 {% codeblock file, filename: 'App.server.jsx' %}
 ```jsx
@@ -95,7 +95,7 @@ export default function App() {
 
 ### `afterHydration`
 
-These scripts are loaded, injected and executed after react has finished hydrating on the client (via a useEffect). In addition, these scripts include additional props to further customize their behavior `target`, `reload`, `onLoad`, `onReady` and `onError` callbacks.
+These scripts are loaded, injected and run after react has finished hydrating on the client (via a useEffect). In addition, these scripts include additional props to further customize their behavior `target`, `reload`, `onLoad`, `onReady` and `onError` callbacks.
 
 {% codeblock file, filename: 'Component.client.jsx' %}
 ```jsx
@@ -151,7 +151,7 @@ function Component() {
 
 ### `onIdle`
 
-These scripts are loaded, injected and executed when the main thread is idle (via requestIdleCallback). In addition, these scripts include additional props to further customize their behavior `target`, `reload`, `onLoad`, `onReady` and `onError` callbacks.
+These scripts are loaded, injected and run when the main thread is idle (via requestIdleCallback). In addition, these scripts include additional props to further customize their behavior `target`, `reload`, `onLoad`, `onReady` and `onError` callbacks.
 
 {% codeblock file, filename: 'Component.client.jsx' %}
 ```jsx
@@ -207,7 +207,7 @@ function Component() {
 
 ### `inWorker`
 
-These scripts are executed off the main thread by leveraging web workers thanks to [Partytown](https://partytown.builder.io/). To enable support for this strategy follow these steps:
+These scripts are run outside the main thread by leveraging a [Partytown](https://partytown.builder.io/) web worker. To enable support for this strategy follow these steps:
 
 ##### 1. Install partytown
 
