@@ -13,10 +13,7 @@
   "main": "dist/esnext/index.js",
   "exports": {
     ".": "./dist/esnext/index.js",
-    "./experimental": {
-      "import": "./dist/esnext/experimental.js",
-      "require": "./dist/node/experimental.js"
-    },
+    "./experimental": "./dist/esnext/experimental.js",
     "./plugin": {
       "import": "./dist/esnext/framework/plugin.js",
       "require": "./dist/node/framework/plugin.js"
