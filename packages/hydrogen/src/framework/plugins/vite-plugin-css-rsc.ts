@@ -1,9 +1,42 @@
 import path from 'path';
 import MagicString from 'magic-string';
-import {normalizePath, HtmlTagDescriptor, Plugin, ResolvedConfig} from 'vite';
+import {
+  normalizePath,
+  type HtmlTagDescriptor,
+  type Plugin,
+  type ResolvedConfig,
+  type ViteDevServer,
+} from 'vite';
 
 const VITE_CSS_CHUNK_NAME = 'style.css';
 const INJECT_STYLES_COMMENT = '<!--__INJECT_STYLES__-->';
+
+const CSS_EXTENSIONS_RE = /\.(css|sass|scss|stylus|less)(\.|\?|$)/;
+const CSS_MODULES_EXTENSIONS_RE = /\.module\.(css|sass|scss|stylus|less)(\?|$)/;
+
+const EVENT_CSS_IMPORT = 'hydrogen-css-modules-update-imports';
+const EVENT_CSS_CLASSES = 'hydrogen-css-modules-update-classes';
+const CSS_MODULES_HMR_INJECT = `
+import {createHotContext, injectQuery} from "/@vite/client";
+
+if (!import.meta.hot) {
+  import.meta.hot = createHotContext("/index.html");
+}
+
+import.meta.hot.on('${EVENT_CSS_IMPORT}', ({ids, timestamp}) => {
+  ids.forEach((id) => {
+    import(injectQuery(id, 't=' + timestamp));
+  });
+});
+
+import.meta.hot.on('${EVENT_CSS_CLASSES}', ({replacements}) => {
+  replacements.forEach(([oldClass, newClass]) => {
+    document.querySelectorAll('.' + oldClass).forEach(node => {
+      node.classList.replace(oldClass, newClass);
+    })
+  });
+});
+`;
 
 // Keep this in the outer scope to share it
 // across client <> server builds.
@@ -20,6 +53,10 @@ let clientBuildPath: string;
 
 export default function cssRsc() {
   let config: ResolvedConfig;
+  let server: ViteDevServer;
+  let isUsingCssModules = false;
+  const hmrCssCopy = new Map<string, string>();
+  const hmrCssQueue = new Set<string>();
 
   return {
     name: 'hydrogen:css-rsc',
@@ -32,6 +69,9 @@ export default function cssRsc() {
     configResolved(_config) {
       config = _config;
     },
+    configureServer(_server) {
+      server = _server;
+    },
     transform(code, id, options) {
       if (options?.ssr && id.includes('index.html?raw')) {
         // Mark the client build index.html to inject styles later
@@ -43,11 +83,67 @@ export default function cssRsc() {
           map: s.generateMap({file: id, source: id}),
         };
       }
+
+      // Manual HMR for CSS Modules
+      if (server && CSS_MODULES_EXTENSIONS_RE.test(id)) {
+        isUsingCssModules = true;
+        const file = id.split('?')[0];
+
+        // Note: this "CSS" file is actually JavaScript code.
+        // Get a copy of how this CSS was before the current update
+        const oldCode = hmrCssCopy.get(file);
+        // Save a copy of the current CSS for future updates
+        hmrCssCopy.set(file, code);
+
+        if (!oldCode || !hmrCssQueue.has(file)) return;
+        hmrCssQueue.delete(file);
+
+        // Diff old code with new code and use the exported class names as a reference
+        // to find out how the resulting CSS classes are renamed.  With this, we can
+        // update classes in the DOM without requesting a full rendering from the server.
+        // Example:
+        // Previous code => export const red = ".red_k3tz4_module";
+        // New code      => export const red = ".red_t93kw_module";
+        const classRE = /export const (.+?) = "(.+?)"/g;
+        const oldClasses = [...oldCode.matchAll(classRE)];
+        const replacements = [] as Array<[string, string]>;
+
+        for (const [, newKey, newClass] of code.matchAll(classRE)) {
+          const oldClass = oldClasses.find(
+            ([, oldKey]) => oldKey === newKey
+          )?.[2];
+
+          if (oldClass && oldClass !== newClass) {
+            replacements.push([oldClass, newClass]);
+          }
+        }
+
+        if (replacements.length > 0) {
+          // This event asks the browser to replace old
+          // hash-based CSS classes with new ones.
+          // Example: from `.red_k3tz4_module` to `.red_t93kw_module`
+          server.ws.send({
+            type: 'custom',
+            event: EVENT_CSS_CLASSES,
+            data: {replacements},
+          });
+        }
+      }
     },
     transformIndexHtml(html, {server}) {
       // Add discovered styles during dev
       if (server) {
-        const tags = [] as HtmlTagDescriptor[];
+        const tags = (
+          isUsingCssModules
+            ? [
+                {
+                  tag: 'script',
+                  attrs: {type: 'module'},
+                  children: CSS_MODULES_HMR_INJECT,
+                },
+              ]
+            : []
+        ) as HtmlTagDescriptor[];
 
         const foundCssFiles = new Set<string>();
 
@@ -55,9 +151,7 @@ export default function cssRsc() {
           if (
             // Note: Some CSS-in-JS libraries use `.css.js`
             // extension and we should match it here:
-            /\.(css|sass|scss|stylus|less)(\.|\?|$)/.test(
-              normalizePath(key).split('/').pop()!
-            )
+            CSS_EXTENSIONS_RE.test(normalizePath(key).split('/').pop()!)
           ) {
             let {url, file, lastHMRTimestamp, importers} = value;
 
@@ -167,6 +261,28 @@ export default function cssRsc() {
             ''
           );
         }
+      }
+    },
+    async handleHotUpdate({modules, server}) {
+      if (modules.every((m) => CSS_MODULES_EXTENSIONS_RE.test(m.file || ''))) {
+        // Opt-out of Vite's default HMR for CSS Modules, we'll handle this manually
+
+        const file = modules[0].file!;
+        hmrCssQueue.add(file);
+
+        // This event asks the browser to download fresh CSS files.
+        // Fetching these fresh CSS files will trigger another event
+        // from the `transform` hook to replace classes in the DOM.
+        server.ws.send({
+          type: 'custom',
+          event: EVENT_CSS_IMPORT,
+          data: {
+            ids: modules.map((m) => m.id!),
+            timestamp: modules[0].lastHMRTimestamp || Date.now(),
+          },
+        });
+
+        return [];
       }
     },
   } as Plugin;
