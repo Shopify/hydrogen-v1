@@ -3,11 +3,11 @@ import {CartFragmentFragment} from './graphql/CartFragment.js';
 import {
   AttributeInput,
   CartBuyerIdentityInput,
-  CartInput,
   CartLineInput,
   CartLineUpdateInput,
   CountryCode,
 } from '../../storefront-api-types.js';
+import {CartInputWithoutSource} from './cartInputWithoutSource';
 import {CartContext} from './context.js';
 import {
   BuyerIdentityUpdateEvent,
@@ -300,7 +300,7 @@ export function CartProviderV2({
   }, [cartCompleted]);
 
   const cartCreate = useCallback(
-    (cartInput: CartInput) => {
+    (cartInput: CartInputWithoutSource) => {
       if (countryCode && !cartInput.buyerIdentity?.countryCode) {
         if (cartInput.buyerIdentity == null) {
           cartInput.buyerIdentity = {};

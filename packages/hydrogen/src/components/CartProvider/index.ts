@@ -8,3 +8,6 @@ export type {
   CartWithActions,
   CartAction,
 } from './types.js';
+export type {
+  CartInputWithoutSource
+} from './cartInputWithoutSource';

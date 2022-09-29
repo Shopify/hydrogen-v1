@@ -2,11 +2,11 @@ import {useCallback, useMemo} from 'react';
 import {
   AttributeInput,
   CartBuyerIdentityInput,
-  CartInput,
   CartLineInput,
   CartLineUpdateInput,
   CountryCode,
 } from '../../storefront-api-types.js';
+import {CartInputWithoutSource} from './cartInputWithoutSource';
 import {
   CartAttributesUpdate,
   CartBuyerIdentityUpdate,
@@ -87,11 +87,14 @@ export function useCartActions({
   );
 
   const cartCreate = useCallback(
-    (cart: CartInput) => {
+    (cart: CartInputWithoutSource) => {
       return fetchCart<CartCreateMutationVariables, CartCreateMutation>({
         query: CartCreate(cartFragment),
         variables: {
-          input: cart,
+          input: {
+            sourceName: 'hydrogen',
+            ...cart
+          },
           numCartLines,
           country: countryCode,
         },

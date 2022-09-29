@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {useShop} from '../../foundation/index.js';
 import {flattenConnection} from '../../utilities/index.js';
-import {CartInput} from '../../storefront-api-types.js';
 import {CartCreate, defaultCartFragment} from './cart-queries.js';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
 } from './graphql/CartCreateMutation.js';
 import {Cart} from './types.js';
+import {CartInputWithoutSource} from './cartInputWithoutSource';
 import {
   SHOPIFY_STOREFRONT_ID_HEADER,
   STOREFRONT_API_PUBLIC_TOKEN_HEADER,
@@ -79,14 +79,17 @@ export function useInstantCheckout() {
   const fetch = useCartFetch();
 
   const createInstantCheckout = React.useCallback(
-    async (cartInput: CartInput) => {
+    async (cartInput: CartInputWithoutSource) => {
       const {data, errors} = await fetch<
         CartCreateMutationVariables,
         CartCreateMutation
       >({
         query: CartCreate(defaultCartFragment),
         variables: {
-          input: cartInput,
+          input: {
+            sourceName: 'hydrogen',
+            ...cartInput
+          },
         },
       });
 

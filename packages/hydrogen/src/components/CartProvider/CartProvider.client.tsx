@@ -12,6 +12,7 @@ import {
   CartCreateMutationVariables,
 } from './graphql/CartCreateMutation.js';
 import {Cart, CartAction, State} from './types.js';
+import {CartInputWithoutSource} from './cartInputWithoutSource';
 import {
   CartLineAddMutation,
   CartLineAddMutationVariables,
@@ -30,7 +31,6 @@ import {
 } from './cart-queries.js';
 import {
   CartLineInput,
-  CartInput,
   CartLineUpdateInput,
   CartBuyerIdentityInput,
   AttributeInput,
@@ -335,7 +335,7 @@ export function CartProvider({
   );
 
   const cartCreate = useCallback(
-    async (cart: CartInput) => {
+    async (cart: CartInputWithoutSource) => {
       dispatch({type: 'cartCreate'});
 
       onCreate?.();
@@ -360,7 +360,10 @@ export function CartProvider({
       >({
         query: CartCreate(cartFragment),
         variables: {
-          input: cart,
+          input: {
+            sourceName: 'hydrogen',
+            ...cart
+          },
           numCartLines,
           country: countryCode,
         },
