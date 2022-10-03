@@ -4,7 +4,7 @@
 
 Updated the Storefront API version of Hydrogen to the `2022-10` release.
 
-**This is a backwards-compatible change**; if you are still on the `2022-07` version, you may remain on that version without any issues. However, it is still recommended that you upgrade to `2022-10` as soon as possible.
+**This is a backwards-compatible change**; if you are still on the `2022-07` version, you may stay on that version without any issues. However, it is still recommended that you upgrade to `2022-10` as soon as possible.
 
 For more information about the Storefront API, refer to:
 
