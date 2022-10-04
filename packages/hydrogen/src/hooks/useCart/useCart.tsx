@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useDeferredValue} from 'react';
 import {CartContext} from '../../components/CartProvider/context.js';
 
 /**
@@ -11,5 +11,7 @@ export function useCart() {
     throw new Error('Expected a Cart Context, but no Cart Context was found');
   }
 
-  return context;
+  const currentContext = useDeferredValue(context);
+
+  return currentContext;
 }

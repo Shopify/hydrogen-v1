@@ -1,11 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
 import {
   AttributeInput,
@@ -24,7 +17,6 @@ import {
   CartLineUpdateEvent,
   CartMachineContext,
   CartMachineEvent,
-  CartMachineFetchResultEvent,
   CartMachineTypeState,
   CartWithActions,
   DiscountCodesUpdateEvent,
@@ -34,7 +26,7 @@ import {useCartAPIStateMachine} from './useCartAPIStateMachine.client.js';
 import {CART_ID_STORAGE_KEY} from './constants.js';
 import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
 
-export function CartProvider({
+export function CartProviderV2({
   children,
   numCartLines,
   onCreate,
@@ -118,8 +110,12 @@ export function CartProvider({
     customerOverridesCountryCode.current = false;
   }
 
-  const onCartActionEntry = useCallback(
-    (context: CartMachineContext, event: CartMachineEvent) => {
+  const [cartState, cartSend] = useCartAPIStateMachine({
+    numCartLines,
+    data: cart,
+    cartFragment,
+    countryCode,
+    onCartActionEntry(context, event) {
       try {
         switch (event.type) {
           case 'CART_CREATE':
@@ -143,20 +139,7 @@ export function CartProvider({
         console.error('Cart entry action failed', error);
       }
     },
-    [
-      onAttributesUpdate,
-      onBuyerIdentityUpdate,
-      onCreate,
-      onDiscountCodesUpdate,
-      onLineAdd,
-      onLineRemove,
-      onLineUpdate,
-      onNoteUpdate,
-    ]
-  );
-
-  const onCartActionOptimisticUI = useCallback(
-    (context: CartMachineContext, event: CartMachineEvent) => {
+    onCartActionOptimisticUI(context, event) {
       if (!context?.cart) return {cart: undefined};
       switch (event.type) {
         case 'CARTLINE_REMOVE':
@@ -195,11 +178,7 @@ export function CartProvider({
       }
       return {cart: context.cart ? {...context.cart} : undefined};
     },
-    []
-  );
-
-  const onCartActionComplete = useCallback(
-    (context: CartMachineContext, event: CartMachineFetchResultEvent) => {
+    onCartActionComplete(context, event) {
       const cartActionEvent = event.payload.cartActionEvent;
       try {
         switch (event.type) {
@@ -235,26 +214,6 @@ export function CartProvider({
         console.error('onCartActionComplete failed', error);
       }
     },
-    [
-      onAttributesUpdateComplete,
-      onBuyerIdentityUpdateComplete,
-      onCreateComplete,
-      onDiscountCodesUpdateComplete,
-      onLineAddComplete,
-      onLineRemoveComplete,
-      onLineUpdateComplete,
-      onNoteUpdateComplete,
-    ]
-  );
-
-  const [cartState, cartSend] = useCartAPIStateMachine({
-    numCartLines,
-    data: cart,
-    cartFragment,
-    countryCode,
-    onCartActionEntry,
-    onCartActionOptimisticUI,
-    onCartActionComplete,
   });
 
   const cartReady = useRef(false);
@@ -267,32 +226,25 @@ export function CartProvider({
     countryCode !== cartState?.context?.cart?.buyerIdentity?.countryCode &&
     !cartState.context.errors;
 
-  const fetchingFromStorage = useRef(false);
-
-  const [_, startTransition] = useTransition();
-
   /**
    * Initializes cart with priority in this order:
    * 1. cart props
    * 2. localStorage cartId
    */
   useEffect(() => {
-    if (!cartReady.current && !fetchingFromStorage.current) {
-      fetchingFromStorage.current = true;
+    if (!cartReady.current) {
+      console.log('running');
       if (!cart && storageAvailable('localStorage')) {
-        try {
-          const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
-          startTransition(() => {
-            if (cartId) {
-              cartSend({type: 'CART_FETCH', payload: {cartId}});
-            }
-          });
-        } catch (error) {
-          console.warn('error fetching cartId');
-          console.warn(error);
-        }
+        // try {
+        //   const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
+        //   if (cartId) {
+        //     cartSend({type: 'CART_FETCH', payload: {cartId}});
+        //   }
+        // } catch (error) {
+        //   console.warn('error fetching cartId');
+        //   console.warn(error);
+        // }
       }
-      fetchingFromStorage.current = false;
       cartReady.current = true;
     }
   }, [cart, cartReady, cartSend]);

@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import {useDeferredValue, useRef} from 'react';
 import {useScroll} from 'react-use';
 import {
   Link,
@@ -17,7 +17,8 @@ export function CartDetails({
   layout: 'drawer' | 'page';
   onClose?: () => void;
 }) {
-  const {lines} = useCart();
+  const {lines: currentLines} = useCart();
+  const lines = useDeferredValue(currentLines);
   const scrollRef = useRef(null);
   const {y} = useScroll(scrollRef);
 
