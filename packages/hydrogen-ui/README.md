@@ -85,7 +85,7 @@ import {
 export async function getServerSideProps() {
   const response = await fetch(getStorefrontApiUrl(), {
     body: GRAPHQL_QUERY,
-    headers: getPrivateTokenHeaders(),
+    headers: getPrivateTokenHeaders({buyerIp: "..."}),
     method: 'POST',
   });
 
