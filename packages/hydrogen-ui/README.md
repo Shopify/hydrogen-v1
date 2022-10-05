@@ -53,7 +53,7 @@ The client can take in the following tokens:
 
 - **[Delegate access](https://shopify.dev/api/usage/authentication#getting-started-with-authenticated-access)**: Used for requests from a server or other private context. Set as `privateStorefrontToken`.
 
-- **[Public](https://shopify.dev/api/usage/authentication#getting-started-with-public-access)**: Used for requests from a browser or other public context. Set as `publicAccessToken`.
+- **[Public](https://shopify.dev/api/usage/authentication#getting-started-with-public-access)**: Used for requests from a browser or other public context. Set as `publicStorefrontToken`.
 
 The following is an example:
 
