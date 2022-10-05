@@ -16,6 +16,7 @@ import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants.js';
 import type {SessionSyncApi} from '../session/session-types.js';
 import {parseJSON} from '../../utilities/parse.js';
+import {generateUUID} from '../../utilities/random.js';
 
 export type PreloadQueryEntry = {
   key: QueryKey;
@@ -29,15 +30,6 @@ export type RouterContextData = {
   serverProps: Record<string, any>;
   routeParams: Record<string, string>;
 };
-
-let reqCounter = 0; // For debugging
-const generateId =
-  typeof crypto !== 'undefined' &&
-  // @ts-ignore
-  !!crypto.randomUUID
-    ? // @ts-ignore
-      () => crypto.randomUUID() as string
-    : () => `req${++reqCounter}`;
 
 // Stores queries by url or '*'
 const preloadCache: AllPreloadQueries = new Map();
@@ -81,6 +73,7 @@ export class HydrogenRequest extends Request {
     runtime?: RuntimeContext;
     scopes: Map<string, Record<string, any>>;
     localization?: LocalizationContextValue;
+    requestGroupID?: string;
     [key: string]: any;
     throttledRequests: Record<string, any>;
   };
@@ -95,7 +88,7 @@ export class HydrogenRequest extends Request {
     }
 
     this.time = getTime();
-    this.id = generateId();
+    this.id = generateUUID();
     this.normalizedUrl = decodeURIComponent(
       this.isRscRequest() ? normalizeUrl(this.url) : this.url
     );

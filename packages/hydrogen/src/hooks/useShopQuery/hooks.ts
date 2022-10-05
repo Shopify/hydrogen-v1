@@ -224,6 +224,16 @@ function useCreateShopRequest(body: string) {
   const request = useServerRequest();
   const buyerIp = request.getBuyerIp();
 
+  let headers: Record<string, string> = {
+    'X-SDK-Variant': 'hydrogen',
+    'X-SDK-Version': storefrontApiVersion,
+    'content-type': 'application/json',
+  };
+
+  if (request.ctx.requestGroupID) {
+    headers['Custom-Storefront-Request-Group-ID'] = request.ctx.requestGroupID;
+  }
+
   const extraHeaders = getStorefrontApiRequestHeaders({
     buyerIp,
     publicStorefrontToken: storefrontToken,
@@ -231,18 +241,15 @@ function useCreateShopRequest(body: string) {
     storefrontId,
   });
 
+  headers = {...headers, ...extraHeaders};
+
   return {
     key: [storeDomain, storefrontApiVersion, body],
     url: `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
     requestInit: {
       body,
       method: 'POST',
-      headers: {
-        'X-SDK-Variant': 'hydrogen',
-        'X-SDK-Version': storefrontApiVersion,
-        'content-type': 'application/json',
-        ...extraHeaders,
-      },
+      headers,
     },
   };
 }
