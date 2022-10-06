@@ -450,26 +450,11 @@ function transposeStatus(
 
 /**
  * Delays a state update until hydration finishes. Useful for preventing suspense boundaries errors when updating a context
- * @remarks this uses startTransition and window load event. Waits for the first startTransition to finish.
+ * @remarks this uses startTransition and waits for it to finish.
  */
 function useDelayedStateUntilHydration<T>(state: T) {
   const [isPending, startTransition] = useTransition();
   const [delayedState, setDelayedState] = useState(state);
-
-  const isWindowLoaded = useRef(false);
-
-  const onPageLoad = useCallback(() => {
-    isWindowLoaded.current = true;
-  }, []);
-
-  useEffect(() => {
-    if (document.readyState === 'complete') {
-      onPageLoad();
-    } else {
-      window.addEventListener('load', onPageLoad);
-      return () => window.removeEventListener('load', onPageLoad);
-    }
-  }, [onPageLoad]);
 
   const firstTimePending = useRef(false);
   if (isPending) {
@@ -489,10 +474,7 @@ function useDelayedStateUntilHydration<T>(state: T) {
     });
   }, [state]);
 
-  const displayState =
-    isWindowLoaded.current && firstTimePendingFinished.current
-      ? state
-      : delayedState;
+  const displayState = firstTimePendingFinished.current ? state : delayedState;
 
   return displayState;
 }
