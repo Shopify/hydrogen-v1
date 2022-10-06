@@ -1,4 +1,11 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from 'react';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
 import {
   AttributeInput,
@@ -328,15 +335,19 @@ export function CartProviderV2({
     [countryCode, customerAccessToken, onCartReadySend]
   );
 
+  // Delays the cart state in the context if the page is hydrating
+  // preventing suspense boundary errors.
+  const cartDisplayState = useDelayedStateUntilHydration(cartState);
+
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
-      ...(cartState?.context?.cart ?? {lines: [], attributes: []}),
-      status: transposeStatus(cartState.value),
-      error: cartState?.context?.errors,
-      totalQuantity: cartState?.context?.cart?.totalQuantity ?? 0,
+      ...(cartDisplayState?.context?.cart ?? {lines: [], attributes: []}),
+      status: transposeStatus(cartDisplayState.value),
+      error: cartDisplayState?.context?.errors,
+      totalQuantity: cartDisplayState?.context?.cart?.totalQuantity ?? 0,
       cartCreate,
       linesAdd(lines: CartLineInput[]) {
-        if (cartState?.context?.cart?.id) {
+        if (cartDisplayState?.context?.cart?.id) {
           onCartReadySend({
             type: 'CARTLINE_ADD',
             payload: {lines},
@@ -397,10 +408,10 @@ export function CartProviderV2({
     };
   }, [
     cartCreate,
+    cartDisplayState?.context?.cart,
+    cartDisplayState?.context?.errors,
+    cartDisplayState.value,
     cartFragment,
-    cartState?.context?.cart,
-    cartState?.context?.errors,
-    cartState.value,
     onCartReadySend,
   ]);
 
@@ -435,6 +446,55 @@ function transposeStatus(
     case 'discountCodesUpdating':
       return 'updating';
   }
+}
+
+/**
+ * Delays a state update until hydration finishes. Useful for preventing suspense boundaries errors when updating a context
+ * @remarks this uses startTransition and window load event. Waits for the first startTransition to finish.
+ */
+function useDelayedStateUntilHydration<T>(state: T) {
+  const [isPending, startTransition] = useTransition();
+  const [delayedState, setDelayedState] = useState(state);
+
+  const isWindowLoaded = useRef(false);
+
+  const onPageLoad = useCallback(() => {
+    isWindowLoaded.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (document.readyState === 'complete') {
+      onPageLoad();
+    } else {
+      window.addEventListener('load', onPageLoad);
+      return () => window.removeEventListener('load', onPageLoad);
+    }
+  }, [onPageLoad]);
+
+  const firstTimePending = useRef(false);
+  if (isPending) {
+    firstTimePending.current = true;
+  }
+
+  const firstTimePendingFinished = useRef(false);
+  if (!isPending && firstTimePending.current) {
+    firstTimePendingFinished.current = true;
+  }
+
+  useEffect(() => {
+    startTransition(() => {
+      if (!firstTimePendingFinished.current) {
+        setDelayedState(state);
+      }
+    });
+  }, [state]);
+
+  const displayState =
+    isWindowLoaded.current && firstTimePendingFinished.current
+      ? state
+      : delayedState;
+
+  return displayState;
 }
 
 /** Check for storage availability funciton obtained from
