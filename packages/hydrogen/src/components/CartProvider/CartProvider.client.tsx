@@ -260,14 +260,17 @@ export function CartProvider({
     countryCode !== cartState?.context?.cart?.buyerIdentity?.countryCode &&
     !cartState.context.errors;
 
+  const fetchingFromStorage = useRef(false);
+
   /**
    * Initializes cart with priority in this order:
    * 1. cart props
    * 2. localStorage cartId
    */
   useEffect(() => {
-    if (!cartReady.current) {
+    if (!cartReady.current && !fetchingFromStorage.current) {
       if (!cart && storageAvailable('localStorage')) {
+        fetchingFromStorage.current = true;
         try {
           const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
           if (cartId) {
