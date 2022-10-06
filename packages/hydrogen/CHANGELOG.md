@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.4
+
+### Patch Changes
+
+- Prevent unhandled errors when `location.hash` is not a valid element selector for scrolling. ([#2209](https://github.com/Shopify/hydrogen/pull/2209)) by [@potench](https://github.com/potench)
+
+* Changing the content of a CSS Module should now trigger HMR instead of a full page refresh when using `global` CSS mode. ([#2175](https://github.com/Shopify/hydrogen/pull/2175)) by [@frandiox](https://github.com/frandiox)
+
+- Fix imports from `@shopify/hydrogen/experimental` at build time. Previously, importing from this path would end up in unresolved client components. ([#2198](https://github.com/Shopify/hydrogen/pull/2198)) by [@frandiox](https://github.com/frandiox)
+
 ## 1.4.3
 
 ### Patch Changes
