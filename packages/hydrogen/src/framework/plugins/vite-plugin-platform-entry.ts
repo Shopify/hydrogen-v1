@@ -68,7 +68,7 @@ export default () => {
       if (
         config.command === 'build' &&
         options?.ssr &&
-        /@shopify\/hydrogen\/.+platforms\/virtual\./.test(normalizePath(id))
+        /\/hydrogen\/.+platforms\/virtual\./.test(normalizePath(id))
       ) {
         const ms = new MagicString(code);
 

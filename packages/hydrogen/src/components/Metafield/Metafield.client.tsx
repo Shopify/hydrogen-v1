@@ -2,7 +2,7 @@ import React, {type ElementType, useMemo} from 'react';
 import type {Props} from '../types.js';
 import {useLocalization} from '../../hooks/useLocalization/useLocalization.js';
 import {getMeasurementAsString} from '../../utilities/measurement.js';
-import type {Measurement, Rating} from '../../types.js';
+import type {Measurement, ParsedMetafield, Rating} from '../../types.js';
 import {Image} from '../Image/index.js';
 import type {
   MediaImage,
@@ -37,7 +37,10 @@ export function Metafield<TTag extends ElementType>(
   const {data, children, as, ...passthroughProps} = props;
   const {locale} = useLocalization();
 
-  const parsedMetafield = useMemo(() => parseMetafield(data), [data]);
+  const parsedMetafield = useMemo<PartialDeep<ParsedMetafield> | null>(
+    () => parseMetafield(data),
+    [data]
+  );
 
   if (!parsedMetafield) {
     if (__HYDROGEN_DEV__) {
@@ -142,10 +145,8 @@ export function Metafield<TTag extends ElementType>(
     }
     case 'list.single_line_text_field': {
       const Wrapper = as ?? 'ul';
-      // @ts-expect-error references currently only exists on 'unstable' SFAPI, but as soon as it does exist we can remove this ts-expect-error because I believe 'list.single_line_text_field' will also only be availabe in the same setting and we also handle if it doesn't exist
       const refArray = parsedMetafield.references
-        ? // @ts-expect-error references currently only exists on 'unstable' SFAPI, but as soon as it does exist we can remove this ts-expect-error
-          (flattenConnection(parsedMetafield.references) as string[])
+        ? (flattenConnection(parsedMetafield.references) as string[])
         : [];
       return (
         <Wrapper {...passthroughProps}>

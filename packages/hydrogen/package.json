@@ -7,20 +7,14 @@
   "engines": {
     "node": ">=14"
   },
-  "version": "1.4.2",
+  "version": "1.4.4",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
   "exports": {
     ".": "./dist/esnext/index.js",
-    "./experimental": {
-      "import": "./dist/esnext/experimental.js",
-      "require": "./dist/node/experimental.js"
-    },
-    "./testing": {
-      "import": "./dist/esnext/testing.js",
-      "require": "./dist/node/testing.js"
-    },
+    "./testing": "./dist/esnext/testing.js",
+    "./experimental": "./dist/esnext/experimental.js",
     "./plugin": {
       "import": "./dist/esnext/framework/plugin.js",
       "require": "./dist/node/framework/plugin.js"

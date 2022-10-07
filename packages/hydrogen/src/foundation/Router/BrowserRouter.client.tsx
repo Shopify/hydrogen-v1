@@ -177,7 +177,12 @@ function useScrollRestoration({
 
     // If there is a location hash, scroll to it
     if (location.hash) {
-      const element = document.querySelector(location.hash);
+      let element;
+      try {
+        element = document.querySelector(location.hash);
+      } catch (err) {
+        // Do nothing, hash may not be a valid selector
+      }
       if (element) {
         element.scrollIntoView();
         onFinishNavigating();
