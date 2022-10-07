@@ -2,7 +2,9 @@
 '@shopify/hydrogen': minor
 ---
 
-Add `ServerRequestProvider` mock for testing server components:
+Special thank you to @kcarra for adding new mocked Providers for making testing easier!
+
+1. Add `ServerRequestProvider` mock for testing server components:
 
 ```ts
 import useServerHook from './useServerHook.server'; // Server hook to test
@@ -26,7 +28,7 @@ describe('useServerHook', () => {
 });
 ```
 
-Add `ShopifyTestProviders` mock for easier testing client components and using client components in other contexts, like Storybook:
+2. Add `ShopifyTestProviders` mock for easier testing client components and using client components in other contexts, like Storybook:
 
 ```ts
 import {ComponentMeta, ComponentStory} from '@storybook/react';
