@@ -56,7 +56,7 @@ Pages that require authentication shouldn't be indexed by bots. For example, bot
 
 ## Next steps
 
-- Learn how to [manage customer accounts](https://shopify.dev/api/examples/customer-accounts) with the Storefront API.
+- Learn how to [manage customer accounts](https://shopify.dev/custom-storefronts/customer-accounts) with the Storefront API.
 - Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
 - Learn about the Hydrogen framework's built-in support for [session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
 - Learn how to customize the output of [SEO-related tags](https://shopify.dev/custom-storefronts/hydrogen/framework/seo) in your Hydrogen client and server components.

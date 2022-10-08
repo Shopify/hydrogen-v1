@@ -8,6 +8,45 @@ describe(`createStorefrontClient`, () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
+  describe(`constructor`, () => {
+    it(`defaults to "application/json" for the content-type`, () => {
+      const client = createStorefrontClient(
+        generateConfig(
+          generateConfig({
+            privateStorefrontToken: 'privateToken',
+            publicStorefrontToken: 'public',
+          })
+        )
+      );
+
+      expect(client.getPrivateTokenHeaders()['content-type']).toBe(
+        'application/json'
+      );
+      expect(client.getPublicTokenHeaders()['content-type']).toBe(
+        'application/json'
+      );
+    });
+
+    it(`allows override for content-type`, () => {
+      const client = createStorefrontClient(
+        generateConfig(
+          generateConfig({
+            publicStorefrontToken: 'public',
+            privateStorefrontToken: 'privateToken',
+            contentType: 'graphql',
+          })
+        )
+      );
+
+      expect(client.getPrivateTokenHeaders()['content-type']).toBe(
+        'application/graphql'
+      );
+      expect(client.getPublicTokenHeaders()['content-type']).toBe(
+        'application/graphql'
+      );
+    });
+  });
+
   describe(`getStorefrontApiUrl`, () => {
     it(`generates a URL`, () => {
       const client = createStorefrontClient(generateConfig());
@@ -39,7 +78,7 @@ describe(`createStorefrontClient`, () => {
         'Shopify-Storefront-Private-Token': 'privateToken',
         'X-SDK-Variant': 'hydrogen-ui',
         'X-SDK-Version': '2022-07',
-        'content-type': 'application/graphql',
+        'content-type': 'application/json',
       });
     });
 
@@ -51,14 +90,14 @@ describe(`createStorefrontClient`, () => {
       expect(
         client.getPrivateTokenHeaders({
           privateStorefrontToken: 'newPrivate',
-          storefrontApiVersion: '2000-01',
           buyerIp: '1.1.1.1',
+          contentType: 'graphql',
         })
       ).toEqual({
         'Shopify-Storefront-Buyer-IP': '1.1.1.1',
         'Shopify-Storefront-Private-Token': 'newPrivate',
         'X-SDK-Variant': 'hydrogen-ui',
-        'X-SDK-Version': '2000-01',
+        'X-SDK-Version': '2022-07',
         'content-type': 'application/graphql',
       });
     });
@@ -72,9 +111,9 @@ describe(`createStorefrontClient`, () => {
 
       expect(client.getPublicTokenHeaders()).toEqual({
         'X-Shopify-Storefront-Access-Token': 'publicToken',
-        'X-SDK-Variant': 'hydrogen-ui',
         'X-SDK-Version': '2022-07',
-        'content-type': 'application/graphql',
+        'X-SDK-Variant': 'hydrogen-ui',
+        'content-type': 'application/json',
       });
     });
 
@@ -86,14 +125,12 @@ describe(`createStorefrontClient`, () => {
       expect(
         client.getPublicTokenHeaders({
           publicStorefrontToken: 'newPublic',
-          storefrontApiVersion: '2000-01',
-          buyerIp: '1.1.1.1',
+          contentType: 'graphql',
         })
       ).toEqual({
-        'Shopify-Storefront-Buyer-IP': '1.1.1.1',
         'X-Shopify-Storefront-Access-Token': 'newPublic',
+        'X-SDK-Version': '2022-07',
         'X-SDK-Variant': 'hydrogen-ui',
-        'X-SDK-Version': '2000-01',
         'content-type': 'application/graphql',
       });
     });

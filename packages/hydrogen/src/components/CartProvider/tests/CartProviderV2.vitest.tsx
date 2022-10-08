@@ -11,6 +11,12 @@ vi.mock('../CartActions.client.js', () => ({
   useCartActions: mockUseCartActions,
 }));
 
+const mockUseCartFetch = vi.fn();
+
+vi.mock('../hooks.client.js', () => ({
+  useCartFetch: mockUseCartFetch,
+}));
+
 import {CartProviderV2} from '../CartProviderV2.client.js';
 import {cartFromGraphQL} from '../useCartAPIStateMachine.client.js';
 import {CountryCode} from '../../../storefront-api-types.js';
@@ -40,11 +46,37 @@ const cartMockWithLine = {
 describe('<CartProviderV2 />', () => {
   beforeEach(() => {
     mockUseCartActions.mockClear();
+    mockUseCartFetch.mockClear();
     vi.spyOn(window.localStorage, 'getItem').mockReturnValue('');
   });
 
+  describe('`data` prop', () => {
+    it('uses the `data` prop if provided to initialize the cart. Taking precedence over localStorage', async () => {
+      const cartFetchSpy = vi.fn(async () => ({
+        data: {cart: cartMock},
+      }));
+      vi.spyOn(window.localStorage, 'getItem').mockReturnValue('cart-id');
+
+      mockUseCartActions.mockReturnValue({
+        cartFetch: cartFetchSpy,
+      });
+
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider({
+          data: cartMock,
+        }),
+      });
+
+      expect(cartFetchSpy).not.toBeCalled();
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(cartMock),
+      });
+    });
+  });
+
   describe('local storage', () => {
-    it('fetches the cart with the cart id in local storage when initializing the app', async () => {
+    it('fetches the cart with the cart id in local storage when initializing the app if no `data` prop was given', async () => {
       const cartFetchSpy = vi.fn(async () => ({
         data: {cart: cartMock},
       }));
@@ -1076,6 +1108,59 @@ describe('<CartProviderV2 />', () => {
         );
       });
     });
+
+    it('deletes local storage on complete', async () => {
+      const cartLineAddSpy = vi.fn(async () => ({
+        data: {cartLinesAdd: {cart: null}},
+      }));
+
+      const spy = vi.spyOn(window.localStorage, 'removeItem');
+
+      const result = await useCartWithInitializedCart({
+        cartLineAdd: cartLineAddSpy,
+      });
+
+      act(() => {
+        result.current.linesAdd([
+          {
+            merchandiseId: '123',
+          },
+        ]);
+      });
+
+      // wait till idle
+      await act(async () => {});
+
+      expect(spy).toHaveBeenCalledWith(CART_ID_STORAGE_KEY);
+    });
+  });
+
+  describe('creates cart', async () => {
+    it('resolves', async () => {
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartMock}},
+      }));
+
+      const result = await useCartWithInitializedCart({
+        cartCreate: cartCreateSpy,
+      });
+
+      act(() => {
+        result.current.cartCreate({});
+      });
+
+      expect(result.current.status).toEqual('creating');
+
+      // wait till idle
+      await act(async () => {});
+
+      // our setup function also is called once to create
+      expect(cartCreateSpy).toBeCalledTimes(2);
+      expect(result.current).toMatchObject({
+        status: 'idle',
+        ...cartFromGraphQL(cartMock),
+      });
+    });
   });
 
   describe('error', () => {
@@ -1222,6 +1307,7 @@ describe('<CartProviderV2 />', () => {
         cartCreate: cartCreateSpy,
         buyerIdentityUpdate: buyerIdentityUpdateSpy,
       });
+
       const {result} = renderHook(() => useCart(), {
         wrapper: ShopifyCartProvider({
           countryCode: mockCountryCodeServerProps,
@@ -1505,6 +1591,37 @@ describe('<CartProviderV2 />', () => {
         error: errorMock,
       });
     });
+  });
+
+  it('uses `cartFragment` prop when fetching data', async () => {
+    const cartFragmentMock = 'fragment CartFragment on Cart { foo }';
+
+    const fetchCartSpy = vi.fn(() => ({
+      data: {cartCreate: {cart: cartMock}},
+    }));
+
+    mockUseCartFetch.mockReturnValue(fetchCartSpy);
+
+    const cartActions = await vi.importActual('../CartActions.client.js');
+
+    // @ts-ignore
+    mockUseCartActions.mockImplementation(cartActions.useCartActions);
+
+    const {result} = renderHook(() => useCart(), {
+      wrapper: ShopifyCartProvider({cartFragment: cartFragmentMock}),
+    });
+
+    act(() => {
+      result.current.cartCreate({});
+    });
+
+    await act(async () => {});
+
+    expect(fetchCartSpy).toBeCalledWith(
+      expect.objectContaining({
+        query: expect.stringContaining(cartFragmentMock),
+      })
+    );
   });
 });
 

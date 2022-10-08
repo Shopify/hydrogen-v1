@@ -1,4 +1,11 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from 'react';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
 import {
   AttributeInput,
@@ -22,7 +29,6 @@ import {
   DiscountCodesUpdateEvent,
 } from './types.js';
 import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.js';
-import {useCartActions} from './CartActions.client.js';
 import {useCartAPIStateMachine} from './useCartAPIStateMachine.client.js';
 import {CART_ID_STORAGE_KEY} from './constants.js';
 import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
@@ -47,7 +53,7 @@ export function CartProviderV2({
   onAttributesUpdateComplete,
   onDiscountCodesUpdateComplete,
   data: cart,
-  cartFragment,
+  cartFragment = defaultCartFragment,
   customerAccessToken,
   countryCode = CountryCode.Us,
 }: {
@@ -111,33 +117,33 @@ export function CartProviderV2({
     customerOverridesCountryCode.current = false;
   }
 
-  const {cartFragment: usedCartFragment} = useCartActions({
-    numCartLines,
-    cartFragment,
-    countryCode,
-  });
-
   const [cartState, cartSend] = useCartAPIStateMachine({
     numCartLines,
+    data: cart,
     cartFragment,
+    countryCode,
     onCartActionEntry(context, event) {
-      switch (event.type) {
-        case 'CART_CREATE':
-          return onCreate?.();
-        case 'CARTLINE_ADD':
-          return onLineAdd?.();
-        case 'CARTLINE_REMOVE':
-          return onLineRemove?.();
-        case 'CARTLINE_UPDATE':
-          return onLineUpdate?.();
-        case 'NOTE_UPDATE':
-          return onNoteUpdate?.();
-        case 'BUYER_IDENTITY_UPDATE':
-          return onBuyerIdentityUpdate?.();
-        case 'CART_ATTRIBUTES_UPDATE':
-          return onAttributesUpdate?.();
-        case 'DISCOUNT_CODES_UPDATE':
-          return onDiscountCodesUpdate?.();
+      try {
+        switch (event.type) {
+          case 'CART_CREATE':
+            return onCreate?.();
+          case 'CARTLINE_ADD':
+            return onLineAdd?.();
+          case 'CARTLINE_REMOVE':
+            return onLineRemove?.();
+          case 'CARTLINE_UPDATE':
+            return onLineUpdate?.();
+          case 'NOTE_UPDATE':
+            return onNoteUpdate?.();
+          case 'BUYER_IDENTITY_UPDATE':
+            return onBuyerIdentityUpdate?.();
+          case 'CART_ATTRIBUTES_UPDATE':
+            return onAttributesUpdate?.();
+          case 'DISCOUNT_CODES_UPDATE':
+            return onDiscountCodesUpdate?.();
+        }
+      } catch (error) {
+        console.error('Cart entry action failed', error);
       }
     },
     onCartActionOptimisticUI(context, event) {
@@ -181,39 +187,43 @@ export function CartProviderV2({
     },
     onCartActionComplete(context, event) {
       const cartActionEvent = event.payload.cartActionEvent;
-      switch (event.type) {
-        case 'RESOLVE':
-          switch (cartActionEvent.type) {
-            case 'CART_CREATE':
-              publishCreateAnalytics(context, cartActionEvent);
-              return onCreateComplete?.();
-            case 'CARTLINE_ADD':
-              publishLineAddAnalytics(context, cartActionEvent);
-              return onLineAddComplete?.();
-            case 'CARTLINE_REMOVE':
-              publishLineRemoveAnalytics(context, cartActionEvent);
-              return onLineRemoveComplete?.();
-            case 'CARTLINE_UPDATE':
-              publishLineUpdateAnalytics(context, cartActionEvent);
-              return onLineUpdateComplete?.();
-            case 'NOTE_UPDATE':
-              return onNoteUpdateComplete?.();
-            case 'BUYER_IDENTITY_UPDATE':
-              if (countryCodeNotUpdated(context, cartActionEvent)) {
-                customerOverridesCountryCode.current = true;
-              }
-              return onBuyerIdentityUpdateComplete?.();
-            case 'CART_ATTRIBUTES_UPDATE':
-              return onAttributesUpdateComplete?.();
-            case 'DISCOUNT_CODES_UPDATE':
-              publishDiscountCodesUpdateAnalytics(context, cartActionEvent);
-              return onDiscountCodesUpdateComplete?.();
-          }
+      try {
+        switch (event.type) {
+          case 'RESOLVE':
+            switch (cartActionEvent.type) {
+              case 'CART_CREATE':
+                publishCreateAnalytics(context, cartActionEvent);
+                return onCreateComplete?.();
+              case 'CARTLINE_ADD':
+                publishLineAddAnalytics(context, cartActionEvent);
+                return onLineAddComplete?.();
+              case 'CARTLINE_REMOVE':
+                publishLineRemoveAnalytics(context, cartActionEvent);
+                return onLineRemoveComplete?.();
+              case 'CARTLINE_UPDATE':
+                publishLineUpdateAnalytics(context, cartActionEvent);
+                return onLineUpdateComplete?.();
+              case 'NOTE_UPDATE':
+                return onNoteUpdateComplete?.();
+              case 'BUYER_IDENTITY_UPDATE':
+                if (countryCodeNotUpdated(context, cartActionEvent)) {
+                  customerOverridesCountryCode.current = true;
+                }
+                return onBuyerIdentityUpdateComplete?.();
+              case 'CART_ATTRIBUTES_UPDATE':
+                return onAttributesUpdateComplete?.();
+              case 'DISCOUNT_CODES_UPDATE':
+                publishDiscountCodesUpdateAnalytics(context, cartActionEvent);
+                return onDiscountCodesUpdateComplete?.();
+            }
+        }
+      } catch (error) {
+        console.error('onCartActionComplete failed', error);
       }
     },
   });
 
-  const [cartReady, setCartReady] = useState(false);
+  const cartReady = useRef(false);
   const cartCompleted = cartState.matches('cartCompleted');
 
   const countryChanged =
@@ -223,6 +233,32 @@ export function CartProviderV2({
     countryCode !== cartState?.context?.cart?.buyerIdentity?.countryCode &&
     !cartState.context.errors;
 
+  const fetchingFromStorage = useRef(false);
+
+  /**
+   * Initializes cart with priority in this order:
+   * 1. cart props
+   * 2. localStorage cartId
+   */
+  useEffect(() => {
+    if (!cartReady.current && !fetchingFromStorage.current) {
+      if (!cart && storageAvailable('localStorage')) {
+        fetchingFromStorage.current = true;
+        try {
+          const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
+          if (cartId) {
+            cartSend({type: 'CART_FETCH', payload: {cartId}});
+          }
+        } catch (error) {
+          console.warn('error fetching cartId');
+          console.warn(error);
+        }
+      }
+      cartReady.current = true;
+    }
+  }, [cart, cartReady, cartSend]);
+
+  // Update cart country code if cart and props countryCode's as different
   useEffect(() => {
     if (!countryChanged || customerOverridesCountryCode.current) return;
     cartSend({
@@ -240,12 +276,12 @@ export function CartProviderV2({
   // send cart events when ready
   const onCartReadySend = useCallback(
     (cartEvent: CartMachineEvent) => {
-      if (!cartReady) {
+      if (!cartReady.current) {
         return console.warn("Cart isn't ready yet");
       }
       cartSend(cartEvent);
     },
-    [cartReady, cartSend]
+    [cartSend]
   );
 
   // save cart id to local storage
@@ -273,22 +309,6 @@ export function CartProviderV2({
     }
   }, [cartCompleted]);
 
-  // fetch cart from local storage if cart id present and set cart as ready for use
-  useEffect(() => {
-    if (!cartReady && storageAvailable('localStorage')) {
-      try {
-        const cartId = window.localStorage.getItem(CART_ID_STORAGE_KEY);
-        if (cartId) {
-          cartSend({type: 'CART_FETCH', payload: {cartId}});
-        }
-      } catch (error) {
-        console.warn('error fetching cartId');
-        console.warn(error);
-      }
-      setCartReady(true);
-    }
-  }, [cartReady, cartSend]);
-
   const cartCreate = useCallback(
     (cartInput: CartInput) => {
       if (countryCode && !cartInput.buyerIdentity?.countryCode) {
@@ -315,15 +335,19 @@ export function CartProviderV2({
     [countryCode, customerAccessToken, onCartReadySend]
   );
 
+  // Delays the cart state in the context if the page is hydrating
+  // preventing suspense boundary errors.
+  const cartDisplayState = useDelayedStateUntilHydration(cartState);
+
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
-      ...(cartState?.context?.cart ?? {lines: [], attributes: []}),
-      status: transposeStatus(cartState.value),
-      error: cartState?.context?.errors,
-      totalQuantity: cartState?.context?.cart?.totalQuantity ?? 0,
+      ...(cartDisplayState?.context?.cart ?? {lines: [], attributes: []}),
+      status: transposeStatus(cartDisplayState.value),
+      error: cartDisplayState?.context?.errors,
+      totalQuantity: cartDisplayState?.context?.cart?.totalQuantity ?? 0,
       cartCreate,
       linesAdd(lines: CartLineInput[]) {
-        if (cartState?.context?.cart?.id) {
+        if (cartDisplayState?.context?.cart?.id) {
           onCartReadySend({
             type: 'CARTLINE_ADD',
             payload: {lines},
@@ -380,15 +404,15 @@ export function CartProviderV2({
           },
         });
       },
-      cartFragment: usedCartFragment,
+      cartFragment,
     };
   }, [
     cartCreate,
-    cartState?.context?.cart,
-    cartState?.context?.errors,
-    cartState.value,
+    cartDisplayState?.context?.cart,
+    cartDisplayState?.context?.errors,
+    cartDisplayState.value,
+    cartFragment,
     onCartReadySend,
-    usedCartFragment,
   ]);
 
   return (
@@ -422,6 +446,37 @@ function transposeStatus(
     case 'discountCodesUpdating':
       return 'updating';
   }
+}
+
+/**
+ * Delays a state update until hydration finishes. Useful for preventing suspense boundaries errors when updating a context
+ * @remarks this uses startTransition and waits for it to finish.
+ */
+function useDelayedStateUntilHydration<T>(state: T) {
+  const [isPending, startTransition] = useTransition();
+  const [delayedState, setDelayedState] = useState(state);
+
+  const firstTimePending = useRef(false);
+  if (isPending) {
+    firstTimePending.current = true;
+  }
+
+  const firstTimePendingFinished = useRef(false);
+  if (!isPending && firstTimePending.current) {
+    firstTimePendingFinished.current = true;
+  }
+
+  useEffect(() => {
+    startTransition(() => {
+      if (!firstTimePendingFinished.current) {
+        setDelayedState(state);
+      }
+    });
+  }, [state]);
+
+  const displayState = firstTimePendingFinished.current ? state : delayedState;
+
+  return displayState;
 }
 
 /** Check for storage availability funciton obtained from
@@ -525,3 +580,104 @@ function publishDiscountCodesUpdateAnalytics(
     }
   );
 }
+
+export const defaultCartFragment = `
+fragment CartFragment on Cart {
+  id
+  checkoutUrl
+  totalQuantity
+  buyerIdentity {
+    countryCode
+    customer {
+      id
+      email
+      firstName
+      lastName
+      displayName
+    }
+    email
+    phone
+  }
+  lines(first: $numCartLines) {
+    edges {
+      node {
+        id
+        quantity
+        attributes {
+          key
+          value
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmountPerQuantity {
+            amount
+            currencyCode
+          }
+        }
+        merchandise {
+          ... on ProductVariant {
+            id
+            availableForSale
+            compareAtPriceV2 {
+              ...MoneyFragment
+            }
+            priceV2 {
+              ...MoneyFragment
+            }
+            requiresShipping
+            title
+            image {
+              ...ImageFragment
+            }
+            product {
+              handle
+              title
+            }
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+  cost {
+    subtotalAmount {
+      ...MoneyFragment
+    }
+    totalAmount {
+      ...MoneyFragment
+    }
+    totalDutyAmount {
+      ...MoneyFragment
+    }
+    totalTaxAmount {
+      ...MoneyFragment
+    }
+  }
+  note
+  attributes {
+    key
+    value
+  }
+  discountCodes {
+    code
+  }
+}
+
+fragment MoneyFragment on MoneyV2 {
+  currencyCode
+  amount
+}
+fragment ImageFragment on Image {
+  id
+  url
+  altText
+  width
+  height
+}
+`;

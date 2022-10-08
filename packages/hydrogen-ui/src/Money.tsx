@@ -19,7 +19,7 @@ interface CustomProps<ComponentGeneric extends React.ElementType> {
 }
 
 // This article helps understand the typing here https://www.benmvp.com/blog/polymorphic-react-components-typescript/ Ben is the best :)
-type MoneyProps<ComponentGeneric extends React.ElementType> =
+export type MoneyProps<ComponentGeneric extends React.ElementType> =
   CustomProps<ComponentGeneric> &
     Omit<
       React.ComponentPropsWithoutRef<ComponentGeneric>,
@@ -31,7 +31,7 @@ type MoneyProps<ComponentGeneric extends React.ElementType> =
  * [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) according to the
  * `locale` in the `ShopifyProvider` component.
  */
-export function Money<TTag extends React.ElementType>({
+export function Money<ComponentGeneric extends React.ElementType>({
   data,
   as,
   withoutCurrency,
@@ -39,7 +39,7 @@ export function Money<TTag extends React.ElementType>({
   measurement,
   measurementSeparator = '/',
   ...passthroughProps
-}: MoneyProps<TTag>) {
+}: MoneyProps<ComponentGeneric>) {
   if (!isMoney(data)) {
     throw new Error(
       `<Money/> needs a valid 'data' prop that has 'amount' and 'currencyCode'`

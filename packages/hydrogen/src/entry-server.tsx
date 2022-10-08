@@ -284,10 +284,19 @@ async function processRequest(
 
   if (isRSCRequest) {
     const buffered = await bufferReadableStream(rsc.readable.getReader());
-    postRequestTasks('rsc', 200, request, response);
+    const rscDidError = !!rsc.didError();
+    postRequestTasks(
+      'rsc',
+      rscDidError ? 500 : 200,
+      request,
+      response,
+      rscDidError
+    );
 
-    response.headers.set('cache-control', response.cacheControlHeader);
-    cacheResponse(response, request, [buffered], revalidate);
+    if (rscDidError) {
+      response.headers.set('cache-control', response.cacheControlHeader);
+      cacheResponse(response, request, [buffered], revalidate);
+    }
 
     return new Response(buffered, {
       headers: response.headers,
@@ -534,7 +543,13 @@ async function runSSR({
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => {
           writable.close();
-          postRequestTasks('str', responseOptions.status, request, response);
+          postRequestTasks(
+            'str',
+            responseOptions.status,
+            request,
+            response,
+            !!didError()
+          );
           response.status = responseOptions.status;
           cacheResponse(response, request, savedChunks, revalidate);
         }, 0);
@@ -542,7 +557,13 @@ async function runSSR({
     } else {
       // Redirects do not write body
       writable.close();
-      postRequestTasks('str', responseOptions.status, request, response);
+      postRequestTasks(
+        'str',
+        responseOptions.status,
+        request,
+        response,
+        !!didError()
+      );
     }
 
     if (response.canStream()) {
@@ -602,7 +623,13 @@ async function runSSR({
           !revalidate &&
           (response.canStream() || nodeResponse.writableEnded)
         ) {
-          postRequestTasks('str', nodeResponse.statusCode, request, response);
+          postRequestTasks(
+            'str',
+            nodeResponse.statusCode,
+            request,
+            response,
+            !!didError()
+          );
           return;
         }
 
@@ -631,8 +658,15 @@ async function runSSR({
 
           if (!error) {
             html = assembleHtml({ssrHtml, rscPayload, request, template});
-            postRequestTasks('ssr', nodeResponse.statusCode, request, response);
           }
+
+          postRequestTasks(
+            'ssr',
+            nodeResponse.statusCode,
+            request,
+            response,
+            !!didError()
+          );
 
           if (!nodeResponse.writableEnded) {
             nodeResponse.write(html);
@@ -799,9 +833,10 @@ function postRequestTasks(
   type: RenderType,
   status: number,
   request: HydrogenRequest,
-  response: HydrogenResponse
+  response: HydrogenResponse,
+  didError: boolean
 ) {
-  logServerResponse(type, request, status);
+  logServerResponse(type, request, status, didError);
   logCacheControlHeaders(type, request, response);
   logQueryTimings(type, request);
   request.savePreloadQueries();
