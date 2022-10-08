@@ -46,6 +46,7 @@ export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/Shopif
 export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const.js';
 export {useSession} from './foundation/useSession/useSession.js';
 export {Cookie} from './foundation/Cookie/Cookie.js';
+export {useDelay} from './hooks/useDelay/useDelay.js';
 
 /**
  * Export server-only CartQuery here instead of `CartProvider.client` to prevent
@@ -60,7 +61,7 @@ export {fetchSync} from './foundation/fetchSync/server/fetchSync.js';
 
 export {type HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.js';
 export {type HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.js';
-export {type HydrogenRouteProps} from './types.js';
+export {type HydrogenRouteProps, type CachingStrategy} from './types.js';
 export {
   type ResourceGetter as HydrogenApiRoute,
   RequestOptions as HydrogenApiRouteOptions,

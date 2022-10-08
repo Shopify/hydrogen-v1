@@ -8,7 +8,9 @@ You can deploy a Hydrogen storefront to most [Worker and Node.js runtimes](https
 
 ## Requirements
 
-You're using the [most recent version of Hydrogen](https://github.com/Shopify/hydrogen/releases). The latest release gives you the benefits of performance enhancements, new components, and other best practices.
+- You're using the [most recent version of Hydrogen](https://github.com/Shopify/hydrogen/releases). The latest release gives you the benefits of performance enhancements, new components, and other best practices.
+
+- If you're deploying to a non-Oxygen runtime, then you've retrieved a [delegate access token for server requests](#avoid-rate-limiting-in-production) and stored it in a private variable.
 
 ## Deploy to Oxygen
 
@@ -202,7 +204,7 @@ You can deploy your project to any platform that supports Docker-based hosting, 
 
     {% endcodeblock %}
 
-3. Run Docker inside your app directory by executing the following commands:
+1. Run Docker inside your app directory by executing the following commands:
 
     {% codeblock terminal %}
 
@@ -229,7 +231,7 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 
 1. [Create a Hydrogen storefront locally](https://shopify.dev/custom-storefronts/hydrogen/getting-started/quickstart).
 
-2. Create a `wrangler.toml` file in the root of your project.
+1. Create a `wrangler.toml` file in the root of your project.
 
     For more information about the configurable properties in the `wrangler.toml` file, refer to Cloudflare's [configuration](https://developers.cloudflare.com/workers/cli-wrangler/configuration) and [compatibility dates](https://developers.cloudflare.com/workers/platform/compatibility-dates) documentation.
 
@@ -255,13 +257,13 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 
     Your static files are now uploaded to Workers KV.
 
-3. Install Cloudflare's KV asset handler:
+1. Install Cloudflare's KV asset handler:
 
     ```bash
     npm install @cloudflare/kv-asset-handler
     ```
 
-4. Create a new Worker entry file (for example, `worker.js`) in your project:
+1. Create a new Worker entry file (for example, `worker.js`) in your project:
 
     {% codeblock file, filename: 'worker.js' %}
 
@@ -324,7 +326,7 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 
     {% endcodeblock %}
 
-5. Update `package.json` to specify the new Worker entry point. If the entry point is in `<root>/worker.js`, then the changes look like the following:
+1. Update `package.json` to specify the new Worker entry point. If the entry point is in `<root>/worker.js`, then the changes look like the following:
 
     ```json
 
@@ -335,8 +337,34 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
     + "build": "shopify hydrogen build --entry worker",
     ```
 
-6. Deploy your project with [Wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install-update):
+1. Deploy your project with [Wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install-update):
 
     ```bash
     CF_ACCOUNT_ID=<YOUR_CLOUDFLARE_ACCT_ID> wrangler publish
     ```
+
+## Avoid rate limiting in production
+
+If you're deploying to a non-Oxygen runtime, then this is a necessary step to avoid rate-limiting in production. [Learn more](https://shopify.dev/custom-storefronts/hydrogen/framework/environment-variables#use-storefront-api-server-tokens) about why it's required.
+
+> Note:
+> In the following example, environment variables are stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
+
+1. Create a [delegate access token](https://shopify.dev/apps/auth/oauth/delegate-access-tokens) for the Storefront API.
+
+1. [Store the token](https://vitejs.dev/guide/env-and-mode.html#env-files) in a private environment variable called `PRIVATE_STOREFRONT_API_TOKEN`.
+
+1. In the Hydrogen configuration file, set the private token using the variable `PRIVATE_STOREFRONT_API_TOKEN`.
+
+    {% codeblock file, filename: 'hydrogen.config.ts' %}
+
+    ```tsx
+    export default defineConfig({
+      privateStorefrontToken:
+      /* In this example, the environment variable is stored in `Oxygen.env`.
+         If you're not deploying to Oxygen, then you can choose a different storage location.*/
+        Oxygen?.env?.PRIVATE_STOREFRONT_API_TOKEN,
+    });
+    ```
+
+    {% endcodeblock %}

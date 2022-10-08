@@ -1,19 +1,12 @@
 import * as React from 'react';
 import {parseMetafieldValue, Metafield, type Rating} from './Metafield.js';
-import {faker} from '@faker-js/faker';
-import type {
-  MediaImage,
-  Page,
-  Product,
-  ProductVariant,
-} from './storefront-api-types.js';
-import type {PartialDeep} from 'type-fest';
-import {getPreviewImage} from './Image.test.js';
+import type {Page, Product, ProductVariant} from './storefront-api-types.js';
 import {vi} from 'vitest';
 import {render, screen} from '@testing-library/react';
 import {ShopifyProvider} from './ShopifyProvider.js';
 import {getShopifyConfig} from './ShopifyProvider.test.js';
-import {getRawMetafield} from './metafield-test-helpers.js';
+import {getRawMetafield} from './Metafield.test.helpers.js';
+import {getMediaImage} from './MediaFile.test.helpers.js';
 
 const TEST_ID = 'metafields_test_id';
 
@@ -1028,13 +1021,3 @@ describe(`parseMetafieldValue()`, () => {
     expect(parseMetafieldValue(null)).toBeNull();
   });
 });
-
-export function getMediaImage(
-  image: PartialDeep<MediaImage> = {}
-): PartialDeep<MediaImage> {
-  return {
-    id: image.id ?? faker.random.words(),
-    mediaContentType: 'IMAGE',
-    image: getPreviewImage(image.previewImage ?? undefined),
-  };
-}

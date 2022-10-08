@@ -1,8 +1,8 @@
 {
   "name": "@shopify/hydrogen-ui-alpha",
-  "version": "2022.7.3",
+  "version": "2022.7.5",
   "description": "Components for modern custom Shopify storefronts",
-  "homepage": "https://github.com/Shopify/hydrogen#readme",
+  "homepage": "https://github.com/Shopify/hydrogen/tree/main/packages/hydrogen-ui",
   "license": "MIT",
   "engines": {
     "node": ">=14"
@@ -14,11 +14,6 @@
   "type": "module",
   "exports": {
     ".": {
-      "browser": {
-        "development": "./dist/umd/hydrogen-ui.dev.js",
-        "production": "./dist/umd/hydrogen-ui.prod.js",
-        "default": "./dist/umd/hydrogen-ui.prod.js"
-      },
       "module": {
         "types": "./dist/types/index.d.ts",
         "development": "./dist/dev/index.js",
@@ -45,8 +40,9 @@
   },
   "main": "./dist/prod/index.cjs",
   "module": "./dist/prod/index.js",
-  "browser": "./dist/umd/hydrogen-ui.prod.js",
   "types": "./dist/types/index.d.ts",
+  "unpkg": "./dist/umd/hydrogen-ui.prod.js",
+  "jsdelivr": "./dist/umd/hydrogen-ui.prod.js",
   "typesVersions": {
     "*": {
       "/index.js": [
@@ -83,25 +79,33 @@
     "@faker-js/faker": "^7.5.0",
     "@graphql-codegen/cli": "^2.12.0",
     "@graphql-codegen/typescript": "^2.7.3",
-    "@ladle/react": "^2.4.2",
+    "@ladle/react": "^2.4.3",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
+    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
-    "@vitejs/plugin-react": "^2.0.1",
-    "@vitest/coverage-c8": "^0.22.1",
+    "@vitejs/plugin-react": "^2.1.0",
+    "@vitest/coverage-c8": "^0.23.4",
     "c8": "^7.12.0",
     "cpy-cli": "^4.2.0",
     "graphql": "^16.6.0",
     "happy-dom": "^6.0.4",
     "prettier": "^2.7.1",
-    "vite": "^3.0.9",
-    "vitest": "^0.22.1"
+    "vite": "^3.1.3",
+    "vitest": "^0.23.4"
   },
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "@google/model-viewer": "^1.12.1",
+    "graphql": "^16.6.0",
     "type-fest": "^2.19.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shopify/hydrogen.git",
+    "directory": "packages/hydrogen-ui"
+  },
+  "bugs": "https://github.com/shopify/hydrogen/issues"
 }

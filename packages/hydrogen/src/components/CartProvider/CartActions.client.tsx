@@ -60,12 +60,15 @@ import {useCartFetch} from './hooks.client.js';
  */
 export function useCartActions({
   numCartLines,
-  cartFragment = defaultCartFragment,
+  cartFragment,
+  countryCode = CountryCode.Us,
 }: {
   /**  Maximum number of cart lines to fetch. Defaults to 250 cart lines. */
   numCartLines?: number;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
-  cartFragment?: string;
+  cartFragment: string;
+  /** The ISO country code for i18n. */
+  countryCode?: CountryCode;
 }) {
   const fetchCart = useCartFetch();
 
@@ -76,11 +79,11 @@ export function useCartActions({
         variables: {
           id: cartId,
           numCartLines,
-          country: CountryCode.Us,
+          country: countryCode,
         },
       });
     },
-    [fetchCart, cartFragment, numCartLines]
+    [fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const cartCreate = useCallback(
@@ -90,11 +93,11 @@ export function useCartActions({
         variables: {
           input: cart,
           numCartLines,
-          country: CountryCode.Us,
+          country: countryCode,
         },
       });
     },
-    [cartFragment, fetchCart, numCartLines]
+    [cartFragment, countryCode, fetchCart, numCartLines]
   );
 
   const cartLineAdd = useCallback(
@@ -105,11 +108,11 @@ export function useCartActions({
           cartId,
           lines,
           numCartLines,
-          country: CountryCode.Us,
+          country: countryCode,
         },
       });
     },
-    [cartFragment, fetchCart, numCartLines]
+    [cartFragment, countryCode, fetchCart, numCartLines]
   );
 
   const cartLineUpdate = useCallback(
@@ -121,12 +124,12 @@ export function useCartActions({
             cartId,
             lines,
             numCartLines,
-            country: CountryCode.Us,
+            country: countryCode,
           },
         }
       );
     },
-    [cartFragment, fetchCart, numCartLines]
+    [cartFragment, countryCode, fetchCart, numCartLines]
   );
 
   const cartLineRemove = useCallback(
@@ -138,12 +141,12 @@ export function useCartActions({
             cartId,
             lines,
             numCartLines,
-            country: CountryCode.Us,
+            country: countryCode,
           },
         }
       );
     },
-    [cartFragment, fetchCart, numCartLines]
+    [cartFragment, countryCode, fetchCart, numCartLines]
   );
 
   const noteUpdate = useCallback(
@@ -155,12 +158,12 @@ export function useCartActions({
             cartId,
             note,
             numCartLines,
-            country: CountryCode.Us,
+            country: countryCode,
           },
         }
       );
     },
-    [fetchCart, cartFragment, numCartLines]
+    [fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const buyerIdentityUpdate = useCallback(
@@ -174,11 +177,11 @@ export function useCartActions({
           cartId,
           buyerIdentity,
           numCartLines,
-          country: CountryCode.Us,
+          country: countryCode,
         },
       });
     },
-    [cartFragment, fetchCart, numCartLines]
+    [cartFragment, countryCode, fetchCart, numCartLines]
   );
 
   const cartAttributesUpdate = useCallback(
@@ -192,11 +195,11 @@ export function useCartActions({
           cartId,
           attributes,
           numCartLines,
-          country: CountryCode.Us,
+          country: countryCode,
         },
       });
     },
-    [cartFragment, fetchCart, numCartLines]
+    [cartFragment, countryCode, fetchCart, numCartLines]
   );
 
   const discountCodesUpdate = useCallback(
@@ -213,11 +216,11 @@ export function useCartActions({
           cartId,
           discountCodes,
           numCartLines,
-          country: CountryCode.Us,
+          country: countryCode,
         },
       });
     },
-    [cartFragment, fetchCart, numCartLines]
+    [cartFragment, countryCode, fetchCart, numCartLines]
   );
 
   return useMemo(
@@ -247,104 +250,3 @@ export function useCartActions({
     ]
   );
 }
-
-export const defaultCartFragment = `
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  totalQuantity
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        cost {
-          totalAmount {
-            amount
-            currencyCode
-          }
-          compareAtAmountPerQuantity {
-            amount
-            currencyCode
-          }
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  cost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
-`;

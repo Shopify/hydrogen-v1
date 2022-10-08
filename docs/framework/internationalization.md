@@ -17,7 +17,7 @@ Hydrogen includes the following components and hooks for localization:
 - **[`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization)**: A hook that returns the locale, country, and language of the current page.
 
 > Note:
-> Any descendents of `ShopifyProvider` can use the `useLocalization` hook. The `isoCode` of the `country` can be used in the Storefront API's [`@inContext` directive](https://shopify.dev/api/examples/international-pricing) as the `country` value.
+> Any descendants of `ShopifyProvider` can use the `useLocalization` hook. The `isoCode` of the `country` can be used in the Storefront API's [`@inContext` directive](https://shopify.dev/custom-storefronts/internationalization/international-pricing) as the `country` value.
 
 ### Default configuration
 

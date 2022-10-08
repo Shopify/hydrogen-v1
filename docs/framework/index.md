@@ -6,6 +6,7 @@ description: Learn about the architecture and framework of Hydrogen.
 
 Hydrogen includes a framework that offers a set of best practices and scaffolding for building a website. This guide provides an overview of Hydrogen's architecture and framework.
 
+{% include /hydrogen/hydro-ui-use-when.md prop='shopify/hydrogen' %}
 ## What's the Hydrogen framework?
 
 Hydrogen is the approach you use to build a custom storefront. The Hydrogen framework includes a [Vite](https://vitejs.dev/) plugin that offers server-side rendering (SSR), hydration middleware, and client component code transformations.

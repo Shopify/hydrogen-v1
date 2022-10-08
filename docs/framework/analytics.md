@@ -311,7 +311,7 @@ To send analytics data from the server-side, complete the following steps:
 
     {% endcodeblock %}
 
-    {% codeblock file, filename: 'hydrogen.config.js' %}
+    {% codeblock file, filename: 'hydrogen.config.ts' %}
 
     ```js
     import * as MyServerAnalyticsConnector from '/components/MyServerAnalyticsConnector.jsx'

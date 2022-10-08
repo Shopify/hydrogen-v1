@@ -53,7 +53,7 @@ export function merge<
   T extends object,
   R extends F & T = F & T
 >(from: F, to: T): R {
-  const mergedInto = deepCopy(to) as R;
+  const mergedInto = deepCopy(to) as unknown as R;
   for (const key in from) {
     const curKey = key as unknown as keyof R;
     const hasKey = mergedInto.hasOwnProperty(key);

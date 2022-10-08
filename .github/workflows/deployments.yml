@@ -83,10 +83,7 @@ jobs:
       - name: Build for Netlify Functions
         working-directory: ./templates/demo-store
         run: |
-          yarn vite build --outDir dist/client --manifest
-          WORKER=true yarn vite build --ssr @netlify/hydrogen-platform/handler
-          # TODO: Add support for ssrOutDir to the Shopify Hydrogen CLI
-          # yarn shopify hydrogen build --target worker --entry @netlify/hydrogen-platform/handler --ssrOutDir .netlify/edge-functions/handler
+          yarn shopify hydrogen build
 
       - name: Install Netlify CLI
         run: |

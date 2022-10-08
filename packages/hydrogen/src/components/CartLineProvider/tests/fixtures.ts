@@ -1,4 +1,5 @@
 import {CurrencyCode} from '../../../storefront-api-types.js';
+import {CartFragmentFragment} from '../../CartProvider/graphql/CartFragment.js';
 
 export const CART_LINE = {
   attributes: [{key: 'color', value: 'red'}],
@@ -30,3 +31,9 @@ export const CART_LINE = {
     },
   },
 };
+
+export function getCartLineMock(
+  options?: Partial<CartFragmentFragment['lines']['edges'][0]['node']>
+) {
+  return {...CART_LINE, ...options};
+}

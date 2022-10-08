@@ -67,7 +67,7 @@ export default {
 
 {% endcodeblock %}
 
-The configuration adds an optional string to force all files to be recompiled with a new hash. This can be helpful when the asset is cached but you want to change the behaviour of your cache or the response headers that are currently cached, such as in a CDN or user's browser.
+The configuration adds an optional string to force all files to be recompiled with a new hash. This can be helpful when the asset is cached but you want to change the behavior of your cache or the response headers that are currently cached, such as in a CDN or user's browser.
 
 ## Considerations and limitations
 
