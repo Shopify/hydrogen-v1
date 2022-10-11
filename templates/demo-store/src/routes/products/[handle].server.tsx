@@ -1,5 +1,6 @@
 import {Suspense} from 'react';
 import {
+  ClientAnalytics,
   gql,
   ProductOptionsProvider,
   Seo,
@@ -45,15 +46,32 @@ export default function Product() {
     return <NotFound type="product" />;
   }
 
+  const {media, title, vendor, descriptionHtml, id, productType} = product;
+  const {shippingPolicy, refundPolicy} = shop;
+  const {
+    priceV2,
+    id: variantId,
+    sku,
+    title: variantTitle,
+  } = product.variants.nodes[0];
+
   useServerAnalytics({
     shopify: {
       pageType: ShopifyAnalyticsConstants.pageType.product,
-      resourceId: product.id,
+      resourceId: id,
+      products: [
+        {
+          product_gid: id,
+          variant_gid: variantId,
+          name: `${title} - ${variantTitle}`,
+          brand: vendor,
+          category: productType,
+          price: priceV2.amount,
+          sku,
+        },
+      ],
     },
   });
-
-  const {media, title, vendor, descriptionHtml, id} = product;
-  const {shippingPolicy, refundPolicy} = shop;
 
   return (
     <Layout>
@@ -129,6 +147,7 @@ const PRODUCT_QUERY = gql`
           ...Media
         }
       }
+      productType
       variants(first: 100) {
         nodes {
           id

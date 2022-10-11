@@ -9,23 +9,28 @@ import {useShopQuery} from '../../../../hooks/useShopQuery/index.js';
 import {CacheLong} from '../../../Cache/strategies/index.js';
 import {gql} from '../../../../utilities/graphql-tag.js';
 import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
-import type {Shop} from '../../../../storefront-api-types.js';
+import type {Localization, Shop} from '../../../../storefront-api-types.js';
+import {useLocalization} from '../../../../hooks/useLocalization/useLocalization.js';
 
 export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
   const {storeDomain, storefrontId} = useShop();
   const request = useServerRequest();
   const cookies = parse(request.headers.get('Cookie') || '');
   const domain = cookieDomain || storeDomain;
+  const {country} = useLocalization();
 
   const {
     data: {
-      shop: {
-        id,
-        paymentSettings: {currencyCode},
+      shop: {id},
+      localization: {
+        country: {currency},
       },
     },
-  } = useShopQuery<{shop: Shop}>({
+  } = useShopQuery<{shop: Shop; localization: Localization}>({
     query: SHOP_QUERY,
+    variables: {
+      country: country.isoCode,
+    },
     cache: CacheLong(),
     preload: '*',
   });
@@ -33,7 +38,7 @@ export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
   useServerAnalytics({
     shopify: {
       shopId: id,
-      currency: currencyCode,
+      currency: currency.isoCode,
       storefrontId,
       acceptedLanguage:
         request.headers.get('Accept-Language')?.replace(/-.*/, '') || 'en',
@@ -49,11 +54,16 @@ export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
 }
 
 const SHOP_QUERY = gql`
-  query shopAnalyticsInfo {
+  query shopAnalyticsInfo($country: CountryCode = ZZ)
+  @inContext(country: $country) {
     shop {
       id
-      paymentSettings {
-        currencyCode
+    }
+    localization {
+      country {
+        currency {
+          isoCode
+        }
       }
     }
   }

@@ -45,6 +45,7 @@ export default function Collection({params}: HydrogenRouteProps) {
     shopify: {
       pageType: ShopifyAnalyticsConstants.pageType.collection,
       resourceId: collection.id,
+      collectionHandle: handle,
     },
   });
 
