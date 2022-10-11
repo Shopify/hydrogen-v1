@@ -1,5 +1,83 @@
 # Changelog
 
+## 1.5.0
+
+### Minor Changes
+
+- Special thank you to @kcarra for adding new mocked Providers for making testing easier! ([#2224](https://github.com/Shopify/hydrogen/pull/2224)) by [@blittle](https://github.com/blittle)
+
+  1. Add `ServerRequestProvider` mock for testing server components:
+
+  ```ts
+  import useServerHook from './useServerHook.server'; // Server hook to test
+  import {test, vi} from 'vitest';
+  import {renderHook} from '@testing-library/react-hooks';
+  import {ShopifyProvider} from '@shopify/hydrogen';
+  import {MockedServerRequestProvider} from '@shopify/hydrogen/testing';
+
+  describe('useServerHook', () => {
+    test('mocked ServerRequest Context', () => {
+      const wrapper = ({children}: {children: React.ReactElement}) => (
+        <MockedServerRequestProvider>
+          <ShopifyProvider shopifyConfig={mockShopifyConfig}>
+            {children}
+          </ShopifyProvider>
+        </MockedServerRequestProvider>
+      );
+      const {result} = renderHook(() => useServerHook(), {wrapper});
+      expect(result.current).toEqual({status: 'active'});
+    });
+  });
+  ```
+
+  2. Add `ShopifyTestProviders` mock for easier testing client components and using client components in other contexts, like Storybook:
+
+  ```ts
+  import {ComponentMeta, ComponentStory} from '@storybook/react';
+  import React from 'react';
+  import BoxCardUI from './BoxCard.ui';
+  import {ShopifyTestProviders} from '@shopify/hydrogen/testing';
+
+  export default {
+    title: 'Components/BoxCard',
+    component: BoxCardUI,
+    decorators: [],
+  } as ComponentMeta<typeof BoxCardUI>;
+
+  const Template: ComponentStory<typeof BoxCardUI> = (args) => {
+    return (
+      <ShopifyTestProviders>
+        <BoxCardUI {...args} /> // This component imports import{' '}
+        {(Image, Link, Money)} from '@shopify/hydrogen'
+      </ShopifyTestProviders>
+    );
+  };
+
+  export const BoxCard = Template.bind({});
+  BoxCard.args = mockShopifyProduct;
+  ```
+
+* Updated the Storefront API version of Hydrogen to the `2022-10` release. ([#2208](https://github.com/Shopify/hydrogen/pull/2208)) by [@frehner](https://github.com/frehner)
+
+  **This is a backwards-compatible change**; if you are still on the `2022-07` version, you may stay on that version without any issues. However, it is still recommended that you upgrade to `2022-10` as soon as possible.
+
+  For more information about the Storefront API, refer to:
+
+  - The [versioning documentation](https://shopify.dev/api/usage/versioning)
+  - The [`2022-10` release notes](https://shopify.dev/api/release-notes/2022-10#graphql-storefont-api-changes). Take note that Hydrogen never used the `Money` fields internally, so the breaking change listed there does not affect Hydrogen.
+
+### Patch Changes
+
+- Experimental version of a new cart provider is ready for beta testing. ([#2219](https://github.com/Shopify/hydrogen/pull/2219)) by [@lordofthecactus](https://github.com/lordofthecactus)
+
+  `CartProviderV2` fixes race conditions with our current cart provider. After beta, `CartProviderV2` will become `CartProvider` requiring no code changes.
+
+  To try this new cart provider:
+
+  ```
+  import {CartProviderV2} from '@shopify/hydrogen/experimental';
+  ```
+
 ## 1.4.4
 
 ### Patch Changes
@@ -335,7 +413,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }
