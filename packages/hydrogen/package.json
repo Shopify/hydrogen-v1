@@ -7,13 +7,14 @@
   "engines": {
     "node": ">=14"
   },
-  "version": "1.4.4",
+  "version": "1.5.0",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
   "exports": {
     ".": "./dist/esnext/index.js",
     "./experimental": "./dist/esnext/experimental.js",
+    "./testing": "./dist/esnext/testing.js",
     "./plugin": {
       "import": "./dist/esnext/framework/plugin.js",
       "require": "./dist/node/framework/plugin.js"
