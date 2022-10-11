@@ -2,4 +2,4 @@
 '@shopify/hydrogen': minor
 ---
 
-Removed undeclared dependancy on faker from ShopifyTestProviders
+Added missing dependancy for faker to hydrogen package
