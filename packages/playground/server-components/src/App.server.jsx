@@ -22,6 +22,8 @@ export default renderHydrogen(({request, response}) => {
 
   return (
     <Suspense fallback={'Loading...'}>
+      {/* Add to App.server.jsx */}
+
       <ShopifyProvider>
         <Router>
           <Route path="/custom1" page={<Custom1 />} />

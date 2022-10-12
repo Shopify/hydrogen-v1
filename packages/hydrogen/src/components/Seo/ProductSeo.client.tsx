@@ -95,6 +95,7 @@ export function ProductSeo({
           />
         )}
 
+        {/* eslint-disable-next-line hydrogen/prefer-script-component */}
         <script type="application/ld+json">
           {JSON.stringify(productSchema)}
         </script>

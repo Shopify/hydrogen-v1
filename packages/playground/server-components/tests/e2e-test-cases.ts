@@ -901,7 +901,7 @@ export default async function testCases({
     });
   });
 
-  describe('Load 3rd-party scripts', () => {
+  describe('Load 3rd-party scripts (legacy loadScript)', () => {
     it('should load script in the body', async () => {
       await page.goto(getServerUrl() + '/loadscript/body', {
         waitUntil: 'networkidle',
@@ -951,7 +951,7 @@ export default async function testCases({
     });
   });
 
-  describe('Custom error apge', () => {
+  describe('Custom error page', () => {
     beforeEach(() => {
       jest.spyOn(console, 'error').mockImplementation(() => {});
     });

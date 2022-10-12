@@ -1590,6 +1590,11 @@
   resolved "https://registry.yarnpkg.com/@bugsnag/safe-json-stringify/-/safe-json-stringify-6.0.0.tgz#22abdcd83e008c369902976730c34c150148a758"
   integrity sha512-htzFO1Zc57S8kgdRK9mLcPVTW1BY2ijfH7Dk2CeZmspTWKdKqSo1iwmqrq2WtRjFlo8aRZYgLX0wFrDXF/9DLA==
 
+"@builder.io/partytown@^0.6.4":
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/@builder.io/partytown/-/partytown-0.6.4.tgz#8610c9e73cc52a95b963c1878760ebe628eee048"
+  integrity sha512-W6C7O0eSg6YNujHYZozXK5iJ+V69QVLLLRv+NlmYh1vFe0PUJ3kmAhRCx7rUqI3XAA/KpdyfdxLoopBg3GlfVA==
+
 "@changesets/apply-release-plan@^6.0.0":
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@changesets/apply-release-plan/-/apply-release-plan-6.0.0.tgz#6c663ff99d919bba3902343d76c35cbbbb046520"
