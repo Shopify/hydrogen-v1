@@ -36,6 +36,7 @@ export function trackCustomerPageView(
       customerEventSchema(payload, PRODUCT_PAGE_RENDERED_EVENT_NAME, {
         products: formatProductsJSON(shopify.products),
         canonical_url: canonicalUrl,
+        total_value: parseFloat(shopify.products[0].price),
       })
     );
   }
@@ -62,10 +63,12 @@ export function trackCustomerAddToCart(
   payload: any,
   sendToServer: (payload: any) => void
 ) {
-  console.log('cart token', payload.cart.id, stripId(payload.cart.id));
+  const {totalValue, addedProducts} = getAddedProducts(payload);
+
   sendToServer(
     customerEventSchema(payload, PRODUCT_ADDED_TO_CART_EVENT_NAME, {
-      products: formatProductsJSON(getAddedProduct(payload)),
+      total_value: totalValue,
+      products: formatProductsJSON(addedProducts),
       cart_token: stripId(payload.cart.id),
     })
   );
@@ -136,16 +139,24 @@ function formatProductsJSON(products: any[]) {
   return formattedProducts;
 }
 
-function getAddedProduct(payload: any) {
+function getAddedProducts(payload: any) {
   const addedLines = payload.addedCartLines as CartLineInput[];
   const cartLines = formatCartLinesByProductVariant(payload.cart.lines);
+  let totalValue = 0;
 
-  return addedLines.map((line) => {
+  const addedProducts = addedLines.map((line) => {
+    const item = cartLines[line.merchandiseId];
+    totalValue += parseFloat(item.price) * (line.quantity || 0);
     return {
-      ...cartLines[line.merchandiseId],
+      ...item,
       quantity: line.quantity,
     };
   });
+
+  return {
+    totalValue,
+    addedProducts,
+  };
 }
 
 function formatCartLinesByProductVariant(lines: any) {
