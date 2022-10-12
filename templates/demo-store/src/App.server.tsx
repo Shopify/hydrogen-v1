@@ -14,6 +14,7 @@ import {
 import {HeaderFallback, EventsListener} from '~/components';
 import type {CountryCode} from '@shopify/hydrogen/storefront-api-types';
 import {DefaultSeo, NotFound} from '~/components/index.server';
+import {CART_FRAGMENT} from './lib/fragments';
 
 function App({request}: HydrogenRouteProps) {
   const pathname = new URL(request.normalizedUrl).pathname;
@@ -26,7 +27,7 @@ function App({request}: HydrogenRouteProps) {
     <Suspense fallback={<HeaderFallback isHome={isHome} />}>
       <EventsListener />
       <ShopifyProvider countryCode={countryCode}>
-        <CartProvider countryCode={countryCode}>
+        <CartProvider countryCode={countryCode} cartFragment={CART_FRAGMENT}>
           <Suspense>
             <DefaultSeo />
           </Suspense>

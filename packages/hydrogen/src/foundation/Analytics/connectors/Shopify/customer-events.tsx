@@ -1,0 +1,171 @@
+import {
+  buildUUID,
+  addDataIf,
+  getNavigationType,
+  stripGId,
+  stripId,
+} from './utils.js';
+import {
+  ShopifyAnalyticsConstants,
+  PAGE_RENDERED_EVENT_NAME,
+  COLLECTION_PAGE_RENDERED_EVENT_NAME,
+  PRODUCT_PAGE_RENDERED_EVENT_NAME,
+  PRODUCT_ADDED_TO_CART_EVENT_NAME,
+  SEARCH_SUBMITTED_EVENT_NAME,
+} from './const.js';
+import {flattenConnection} from '../../../../utilities/flattenConnection/index.js';
+import {CartLine, CartLineInput} from '../../../../storefront-api-types.js';
+
+export function trackCustomerPageView(
+  payload: any,
+  sendToServer: (payload: any) => void
+) {
+  const shopify = payload.shopify;
+  sendToServer(
+    customerEventSchema(payload, PAGE_RENDERED_EVENT_NAME, {
+      canonical_url: shopify.canonicalUrl || location.href,
+    })
+  );
+
+  if (shopify.pageType === ShopifyAnalyticsConstants.pageType.product) {
+    sendToServer(
+      customerEventSchema(payload, PRODUCT_PAGE_RENDERED_EVENT_NAME, {
+        products: formatProductsJSON(shopify.products),
+        canonical_url: shopify.canonicalUrl || location.href,
+      })
+    );
+  }
+
+  if (shopify.pageType === ShopifyAnalyticsConstants.pageType.collection) {
+    sendToServer(
+      customerEventSchema(payload, COLLECTION_PAGE_RENDERED_EVENT_NAME, {
+        collection_name: shopify.collectionHandle,
+        canonical_url: shopify.canonicalUrl || location.href,
+      })
+    );
+  }
+}
+
+export function trackCustomerAddToCart(
+  payload: any,
+  sendToServer: (payload: any) => void
+) {
+  console.log('cart token', payload.cart.id, stripId(payload.cart.id));
+  sendToServer(
+    customerEventSchema(payload, PRODUCT_ADDED_TO_CART_EVENT_NAME, {
+      products: formatProductsJSON(getAddedProduct(payload)),
+      cart_token: stripId(payload.cart.id),
+    })
+  );
+}
+
+function customerEventSchema(
+  payload: any,
+  eventName: string,
+  extraData?: any
+): any {
+  return {
+    schema_id: 'custom_storefront_customer_tracking/1.0',
+    payload: {
+      ...buildCustomerPayload(payload, extraData),
+      event_name: eventName,
+    },
+    metadata: {
+      event_created_at_ms: Date.now(),
+    },
+  };
+}
+
+function buildCustomerPayload(payload: any, extraData: any = {}): any {
+  const location = document.location;
+  const shopify = payload.shopify;
+  const [navigation_type, navigation_api] = getNavigationType();
+  let formattedData = {
+    source: 'hydrogen',
+    shopId: stripGId(shopify.shopId),
+    hydrogenSubchannelId: shopify.storefrontId || '0',
+
+    event_time: Date.now(),
+    event_id: buildUUID(),
+    unique_token: shopify.userId,
+    is_persistent_cookie: shopify.isPersistentCookie,
+
+    referrer: document.referrer,
+    event_source_url: location.href,
+
+    user_agent: navigator.userAgent,
+    navigation_type,
+    navigation_api,
+
+    currency: shopify.currency,
+  };
+
+  formattedData = addDataIf(
+    {
+      customer_id: shopify.customerId,
+    },
+    formattedData
+  );
+
+  formattedData = addDataIf(extraData, formattedData);
+
+  return formattedData;
+}
+
+function formatProductsJSON(products: any[]) {
+  // brand: "Living Forest"
+  // category: ""
+  // name: "Dandelion - Seeds form - S"
+  // price: 10
+  // product_gid: "gid://shopify/Product/4680704786491"
+  // product_id: 4680704786491
+  // quantity: 1
+  // sku: ""
+  // variant: "S"
+  // variant_id: 34181807734843
+
+  const formattedProducts = products.map((p) => {
+    return JSON.stringify({
+      ...p,
+      product_id: stripGId(p.product_gid),
+      variant_id: stripGId(p.variant_gid),
+      quantity: Number(p.quantity || 0),
+    });
+  });
+  return formattedProducts;
+}
+
+function getAddedProduct(payload: any) {
+  const addedLines = payload.addedCartLines as CartLineInput[];
+  const cartLines = formatCartLinesByProductVariant(payload.cart.lines);
+
+  return addedLines.map((line) => {
+    return {
+      ...cartLines[line.merchandiseId],
+      quantity: line.quantity,
+    };
+  });
+}
+
+function formatCartLinesByProductVariant(lines: any) {
+  const cartLines = flattenConnection(lines) as CartLine[];
+  const cartItems: Record<string, any> = {};
+
+  cartLines.forEach((line) => {
+    const product = line.merchandise.product;
+    const variant = line.merchandise;
+
+    cartItems[line.merchandise.id] = {
+      product_gid: product.id,
+      variant_gid: variant.id,
+      name: product.title,
+      variant: variant.title,
+      brand: product.vendor,
+      category: product.productType,
+      price: variant.priceV2.amount,
+      sku: variant.sku,
+    };
+  });
+
+  return cartItems;
+}

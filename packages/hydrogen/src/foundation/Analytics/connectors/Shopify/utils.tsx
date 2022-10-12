@@ -54,6 +54,14 @@ export function hexTime(): string {
   return zeros.substr(0, 8 - output.length) + output;
 }
 
+export function stripGId(text = ''): number {
+  return parseInt(stripId(text));
+}
+
+export function stripId(text = ''): string {
+  return text.substring(text.lastIndexOf('/') + 1);
+}
+
 export function addDataIf(
   keyValuePairs: Record<string, string | number | Boolean>,
   formattedData: any

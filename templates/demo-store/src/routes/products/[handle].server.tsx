@@ -63,7 +63,8 @@ export default function Product() {
         {
           product_gid: id,
           variant_gid: variantId,
-          name: `${title} - ${variantTitle}`,
+          variant: variantTitle,
+          name: title,
           brand: vendor,
           category: productType,
           price: priceV2.amount,

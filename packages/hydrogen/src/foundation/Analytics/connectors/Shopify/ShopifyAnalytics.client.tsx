@@ -2,8 +2,11 @@ import {useEffect} from 'react';
 import {parse, stringify} from 'worktop/cookie';
 import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
 import {ClientAnalytics} from '../../ClientAnalytics.js';
-import {ShopifyAnalyticsConstants} from './const.js';
-import {buildUUID, addDataIf, getNavigationType} from './utils.js';
+import {
+  trackCustomerAddToCart,
+  trackCustomerPageView,
+} from './customer-events.js';
+import {buildUUID, addDataIf, stripGId} from './utils.js';
 
 const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry
 const shortTermLength = 60 * 30; // 30 mins
@@ -45,6 +48,7 @@ export function ShopifyAnalyticsClient({cookieDomain}: {cookieDomain: string}) {
         const eventNames = ClientAnalytics.eventNames;
 
         ClientAnalytics.subscribe(eventNames.PAGE_VIEW, trackPageView);
+        ClientAnalytics.subscribe(eventNames.ADD_TO_CART, trackAddToCart);
 
         // On a slow network, the pageview event could be already fired before
         // we subscribed to the pageview event
@@ -97,21 +101,7 @@ function trackPageView(payload: any): void {
     const shopify = payload.shopify;
     if (payload && shopify) {
       sendToServer(storefrontPageViewSchema(payload));
-      // sendToServer(customerEventSchema(payload, PAGE_RENDERED_EVENT_NAME));
-      console.log(customerEventSchema(payload, PAGE_RENDERED_EVENT_NAME));
-
-      if (shopify.pageType === ShopifyAnalyticsConstants.pageType.product) {
-        trackProductView(payload);
-      }
-
-      if (shopify.pageType === ShopifyAnalyticsConstants.pageType.collection) {
-        // sendToServer(customerEventSchema(payload, COLLECTION_PAGE_RENDERED_EVENT_NAME));
-        console.log(
-          customerEventSchema(payload, COLLECTION_PAGE_RENDERED_EVENT_NAME, {
-            collection_name: shopify.collectionHandle,
-          })
-        );
-      }
+      trackCustomerPageView(payload, sendToServer);
     }
   } catch (error) {
     console.error(
@@ -181,109 +171,19 @@ function buildStorefrontPageViewPayload(payload: any): any {
   return formattedData;
 }
 
-const PAGE_RENDERED_EVENT_NAME = 'page_rendered';
-const COLLECTION_PAGE_RENDERED_EVENT_NAME = 'collection_page_rendered';
-const PRODUCT_PAGE_RENDERED_EVENT_NAME = 'product_page_rendered';
-const PRODUCT_ADDED_TO_CART_EVENT_NAME = 'product_added_to_cart';
-const SEARCH_SUBMITTED_EVENT_NAME = 'search_submitted';
+function trackAddToCart(payload: any): void {
+  microSessionCount += 1;
 
-function customerEventSchema(
-  payload: any,
-  eventName: string,
-  extraData?: any
-): any {
-  return {
-    schema_id: 'custom_storefront_customer_tracking/1.0',
-    payload: {
-      ...buildCustomerPageViewPayload(payload, extraData),
-      event_name: eventName,
-    },
-    metadata: {
-      event_created_at_ms: Date.now(),
-    },
-  };
-}
-
-function buildCustomerPageViewPayload(payload: any, extraData: any = {}): any {
-  const location = document.location;
-  const shopify = payload.shopify;
-  const [navigation_type, navigation_api] = getNavigationType();
-  let formattedData = {
-    source: 'hydrogen',
-    shopId: stripGId(shopify.shopId),
-    hydrogenSubchannelId: shopify.storefrontId || '0',
-
-    event_time: Date.now(),
-    event_id: buildUUID(),
-    unique_token: shopify.userId,
-    is_persistent_cookie: shopify.isPersistentCookie,
-
-    canonical_url: shopify.canonicalUrl || location.href,
-    referrer: document.referrer,
-    event_source_url: location.href,
-
-    user_agent: navigator.userAgent,
-    navigation_type,
-    navigation_api,
-
-    currency: shopify.currency,
-  };
-
-  formattedData = addDataIf(
-    {
-      cart_token: shopify.cartToken,
-      customer_id: shopify.customerId,
-      search_string: location.search,
-    },
-    formattedData
-  );
-
-  formattedData = addDataIf(extraData, formattedData);
-
-  return formattedData;
-}
-
-function trackProductView(payload: any): void {
-  const shopify = payload.shopify;
   try {
     if (payload && payload.shopify) {
-      // sendToServer(customerEventSchema(payload, PRODUCT_PAGE_RENDERED_EVENT_NAME));
-      console.log(
-        customerEventSchema(payload, PRODUCT_PAGE_RENDERED_EVENT_NAME, {
-          products: formatProductsJSON(shopify.products),
-        })
-      );
+      trackCustomerAddToCart(payload, sendToServer);
     }
   } catch (error) {
     console.error(
-      `Error Shopify analytics: ${ClientAnalytics.eventNames.PAGE_VIEW}`,
+      `Error Shopify analytics: ${ClientAnalytics.eventNames.ADD_TO_CART}`,
       error
     );
   }
-}
-
-function formatProductsJSON(products: any[]) {
-  // brand: "Living Forest"
-  // category: ""
-  // name: "Dandelion - Seeds form - S"
-  // price: 10
-  // product_gid: "gid://shopify/Product/4680704786491"
-  // product_id: 4680704786491
-  // quantity: 1
-  // sku: ""
-  // variant: "S"
-  // variant_id: 34181807734843
-
-  const formattedProducts = products.map((p) => {
-    return JSON.stringify({
-      ...p,
-      product_id: stripGId(p.product_gid),
-      variant_id: stripGId(p.variant_gid),
-      quantity: Number(p.quantity || 0),
-    });
-  });
-  console.log(formattedProducts);
-  return formattedProducts;
 }
 
 function isMerchantRequest(): Boolean {
@@ -292,10 +192,6 @@ function isMerchantRequest(): Boolean {
     return true;
   }
   return false;
-}
-
-function stripGId(text = ''): number {
-  return parseInt(text.substring(text.lastIndexOf('/') + 1));
 }
 
 function getResourceType(text = ''): string {
