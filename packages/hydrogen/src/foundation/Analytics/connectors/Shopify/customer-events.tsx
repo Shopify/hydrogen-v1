@@ -21,9 +21,13 @@ export function trackCustomerPageView(
   sendToServer: (payload: any) => void
 ) {
   const shopify = payload.shopify;
+  const canonicalUrl = shopify.canonicalPath
+    ? `${location.origin}${shopify.canonicalPath}`
+    : location.href;
+
   sendToServer(
     customerEventSchema(payload, PAGE_RENDERED_EVENT_NAME, {
-      canonical_url: shopify.canonicalUrl || location.href,
+      canonical_url: canonicalUrl,
     })
   );
 
@@ -31,7 +35,7 @@ export function trackCustomerPageView(
     sendToServer(
       customerEventSchema(payload, PRODUCT_PAGE_RENDERED_EVENT_NAME, {
         products: formatProductsJSON(shopify.products),
-        canonical_url: shopify.canonicalUrl || location.href,
+        canonical_url: canonicalUrl,
       })
     );
   }
@@ -40,7 +44,15 @@ export function trackCustomerPageView(
     sendToServer(
       customerEventSchema(payload, COLLECTION_PAGE_RENDERED_EVENT_NAME, {
         collection_name: shopify.collectionHandle,
-        canonical_url: shopify.canonicalUrl || location.href,
+        canonical_url: canonicalUrl,
+      })
+    );
+  }
+
+  if (shopify.pageType === ShopifyAnalyticsConstants.pageType.search) {
+    sendToServer(
+      customerEventSchema(payload, SEARCH_SUBMITTED_EVENT_NAME, {
+        search_string: shopify.searchTerm,
       })
     );
   }
@@ -113,17 +125,6 @@ function buildCustomerPayload(payload: any, extraData: any = {}): any {
 }
 
 function formatProductsJSON(products: any[]) {
-  // brand: "Living Forest"
-  // category: ""
-  // name: "Dandelion - Seeds form - S"
-  // price: 10
-  // product_gid: "gid://shopify/Product/4680704786491"
-  // product_id: 4680704786491
-  // quantity: 1
-  // sku: ""
-  // variant: "S"
-  // variant_id: 34181807734843
-
   const formattedProducts = products.map((p) => {
     return JSON.stringify({
       ...p,

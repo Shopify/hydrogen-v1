@@ -57,6 +57,7 @@ export default function Product() {
 
   useServerAnalytics({
     shopify: {
+      canonicalPath: `/products/${handle}`,
       pageType: ShopifyAnalyticsConstants.pageType.product,
       resourceId: id,
       products: [

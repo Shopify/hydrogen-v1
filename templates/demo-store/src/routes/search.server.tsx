@@ -6,6 +6,8 @@ import {
   useLocalization,
   useShopQuery,
   useUrl,
+  ShopifyAnalyticsConstants,
+  useServerAnalytics,
 } from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
@@ -42,6 +44,14 @@ export default function Search({
       searchTerm,
     },
     preload: true,
+  });
+
+  useServerAnalytics({
+    shopify: {
+      canonicalPath: '/search',
+      pageType: ShopifyAnalyticsConstants.pageType.search,
+      searchTerm,
+    },
   });
 
   const products = data?.products;

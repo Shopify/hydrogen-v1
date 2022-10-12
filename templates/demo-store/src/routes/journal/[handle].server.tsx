@@ -6,6 +6,8 @@ import {
   Image,
   CacheLong,
   type HydrogenRouteProps,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
 } from '@shopify/hydrogen';
 import type {Blog} from '@shopify/hydrogen/storefront-api-types';
 import {Suspense} from 'react';
@@ -32,6 +34,13 @@ export default function Post({params, response}: HydrogenRouteProps) {
       language: languageCode,
       blogHandle: BLOG_HANDLE,
       articleHandle: handle,
+    },
+  });
+
+  useServerAnalytics({
+    shopify: {
+      canonicalPath: `/${BLOG_HANDLE}/${handle}`,
+      pageType: ShopifyAnalyticsConstants.pageType.article,
     },
   });
 

@@ -43,6 +43,7 @@ export default function Collection({params}: HydrogenRouteProps) {
 
   useServerAnalytics({
     shopify: {
+      canonicalPath: `/collections/${handle}`,
       pageType: ShopifyAnalyticsConstants.pageType.collection,
       resourceId: collection.id,
       collectionHandle: handle,
