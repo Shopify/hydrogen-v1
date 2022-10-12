@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-extraneous-import
 import faker from 'faker';
 import type {Metafield} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
