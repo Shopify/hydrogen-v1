@@ -168,7 +168,8 @@ export default function Product() {
 {% codeblock file, filename: 'src/routes/search.server.jsx' %}
 
 ```jsx
-export default function Collection() {
+export default function Search() {
+  ...
   const {searchParams} = useUrl();
   const searchTerm = searchParams.get('q');
   ...
