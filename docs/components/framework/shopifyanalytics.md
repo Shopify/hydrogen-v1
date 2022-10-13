@@ -6,9 +6,6 @@ description: The ShopifyAnalytics component sends commerce-related analytics to 
 
 The `ShopifyAnalytics` component sends commerce-related analytics to Shopify. By adding the `ShopifyAnalytics` component to your Hydrogen storefront, you can view key sales, orders, and online store visitor data from the [Analytics dashboard in your Shopify admin](https://help.shopify.com/en/manual/reports-and-analytics/shopify-reports/overview-dashboard).
 
-> Note:
-> Currently, only Online Store page view and session-related analytic reports can be configured with the `ShopifyAnalytics` component. Additional analytics functionality will be available in the coming weeks.
-
 ## Configuration
 
 Add the `ShopifyAnalytics` component in `App.server.jsx`:
@@ -43,6 +40,24 @@ the `ShopifyAnalytics` component so that cookies persists for your root domain:
 
 If you're not using custom domains or sub-domains, then the `ShopifyAnalytics` component uses the `storeDomain` value in the Hydrogen configuration file as the default cookie domain or leaves it blank when the specified cookie domain doesn't match `window.location.hostname`.
 
+If you have customer login, make sure `customerAccessToken` is passed to the `<CartProvider>`
+
+{% codeblock file, filename: 'App.server.jsx' %}
+
+```jsx
+const {customerAccessToken} = useSession();
+
+return (
+  <Suspense fallback={<HeaderFallback isHome={isHome} />}>
+    ...
+      <CartProvider
+        countryCode={countryCode}
+        customerAccessToken={customerAccessToken}
+      >
+```
+
+{% endcodeblock %}
+
 ### Connecting Hydrogen analytics with Shopify checkout
 
 Analytic cookies must be set at the first-party domain. This means that when a buyer navigates from your Hydrogen storefront to Shopify checkout, the domain name must stay the same.
@@ -60,10 +75,133 @@ You can achieve this by assigning a sub-domain to your online store. For example
 
 Provide the following data to `useServerAnalytics` to view information from the Analytics dashboard in your Shopify admin:
 
-| Prop     |  Description         | Example code       |
-| -------- | ------------------- | ------------------- |
-| pageType? | The page template type for your routes. For a list of valid values, refer to [ShopifyAnalytics constants](#shopifyanalytics-constants). | [collections/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/collections/%5Bhandle%5D.server.jsx) |
-| resourceId? | The ID of the page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. | [products/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/products/%5Bhandle%5D.server.jsx) |
+| Prop     |  Description        |
+| -------- | ------------------- |
+| canonicalPath? | Url path without localization. If you have the following url scheme `/page`, `/en-CA/page`, `/en-GB/page` that represents the same localized pages, let Shopify know how we can aggregate these events by setting the canonical path. |
+| pageType? | The page template type for your routes. For a list of valid values, refer to [ShopifyAnalytics constants](#shopifyanalytics-constants). |
+| resourceId? | The ID of the page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. |
+| collectionHandle? | The collection page handle |
+| products? | An array of products |
+| searchTerm? | The search term |
+| customerId? | The customer id |
+
+| Product Prop     |  Description        | Example |
+| product_gid | Shopify product id | `gid://shopify/Product/6730943955000` |
+| variant_gid | Shopify variant id | `gid://shopify/ProductVariant/41007290712120` |
+| name | Product title | `The H2 Snowboard` |
+| variant | Variant title | `154cm / Reactive Blue` |
+| brand | Product vendor | `Snowdevil` |
+| price | Variant price | `629.95` |
+| category? | Product type | `Snowboards` |
+| sku? | Variant sku | `123` |
+
+
+### Home page
+
+{% codeblock file, filename: 'src/routes/index.server.jsx' %}
+
+```jsx
+export default function Homepage() {
+  useServerAnalytics({
+    shopify: {
+      canonicalPath: '/',
+      pageType: ShopifyAnalyticsConstants.pageType.home,
+    },
+  });
+```
+
+{% endcodeblock %}
+
+### Collection page
+
+{% codeblock file, filename: 'src/routes/collections/[handle].server.jsx' %}
+
+```jsx
+export default function Collection() {
+  const {handle} = useRouteParams();
+  ...
+  useServerAnalytics({
+    shopify: {
+      canonicalPath: `/collections/${handle}`,
+      pageType: ShopifyAnalyticsConstants.pageType.collection,
+      resourceId: collection.id,
+      collectionHandle: handle,
+    },
+  });
+```
+
+{% endcodeblock %}
+
+### Product page
+
+{% codeblock file, filename: 'src/routes/products/[handle].server.jsx' %}
+
+```jsx
+export default function Product() {
+  const {handle} = useRouteParams();
+  ...
+  useServerAnalytics({
+    shopify: {
+      canonicalPath: `/products/${handle}`,
+      pageType: ShopifyAnalyticsConstants.pageType.product,
+      resourceId: id,
+      products: [
+        {
+          product_gid: id,
+          variant_gid: variantId,
+          variant: variantTitle,
+          name: title,
+          brand: vendor,
+          category: productType,
+          price: priceV2.amount,
+          sku,
+        },
+      ],
+    },
+  });
+```
+
+{% endcodeblock %}
+
+### Search page
+
+{% codeblock file, filename: 'src/routes/search.server.jsx' %}
+
+```jsx
+export default function Collection() {
+  const {searchParams} = useUrl();
+  const searchTerm = searchParams.get('q');
+  ...
+  useServerAnalytics({
+    shopify: {
+      canonicalPath: '/search',
+      pageType: ShopifyAnalyticsConstants.pageType.search,
+      searchTerm,
+    },
+  });
+```
+
+{% endcodeblock %}
+
+### Account index page
+
+{% codeblock file, filename: 'src/routes/account/index.server.jsx' %}
+
+```jsx
+export default function Account({response}: HydrogenRouteProps) {
+  ...
+  if (!customer) return response.redirect('/account/login');
+
+  // logged in analytics state
+  useServerAnalytics({
+    shopify: {
+      customerId: customer.id,
+    },
+  });
+```
+
+{% endcodeblock %}
+
 
 ### `ShopifyAnalytics` constants
 
