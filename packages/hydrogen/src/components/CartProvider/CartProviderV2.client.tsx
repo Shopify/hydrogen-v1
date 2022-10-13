@@ -108,6 +108,14 @@ export function CartProviderV2({
     useState(customerAccessToken);
   const customerOverridesCountryCode = useRef(false);
 
+  useEffect(() => {
+    ClientAnalytics.pushToPageAnalyticsData({
+      shopify: {
+        isLoggedIn: !!customerAccessToken,
+      },
+    });
+  });
+
   if (
     prevCountryCode !== countryCode ||
     prevCustomerAccessToken !== customerAccessToken

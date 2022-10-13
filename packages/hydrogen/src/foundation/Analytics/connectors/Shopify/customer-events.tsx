@@ -16,6 +16,8 @@ import {
 import {flattenConnection} from '../../../../utilities/flattenConnection/index.js';
 import {CartLine, CartLineInput} from '../../../../storefront-api-types.js';
 
+let customerId: string | undefined = undefined;
+
 export function trackCustomerPageView(
   payload: any,
   sendToServer: (payload: any) => void
@@ -24,6 +26,12 @@ export function trackCustomerPageView(
   const canonicalUrl = shopify.canonicalPath
     ? `${location.origin}${shopify.canonicalPath}`
     : location.href;
+
+  // Only /account/index route sets customerId, so we will persist this value when available
+  // and append to analytics events only when customer is in the logged in state (provided by CartProvider)
+  if (payload.shopify.customerId) {
+    customerId = payload.shopify.customerId;
+  }
 
   sendToServer(
     customerEventSchema(payload, PAGE_RENDERED_EVENT_NAME, {
@@ -117,7 +125,7 @@ function buildCustomerPayload(payload: any, extraData: any = {}): any {
 
   formattedData = addDataIf(
     {
-      customer_id: shopify.customerId,
+      customer_id: shopify.isLoggedIn && stripGId(customerId),
     },
     formattedData
   );

@@ -10,6 +10,7 @@ import {
   ShopifyAnalytics,
   ShopifyProvider,
   CartProvider,
+  useSession,
 } from '@shopify/hydrogen';
 import {HeaderFallback, EventsListener} from '~/components';
 import type {CountryCode} from '@shopify/hydrogen/storefront-api-types';
@@ -23,11 +24,17 @@ function App({request}: HydrogenRouteProps) {
 
   const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
 
+  const {customerAccessToken} = useSession();
+
   return (
     <Suspense fallback={<HeaderFallback isHome={isHome} />}>
       <EventsListener />
       <ShopifyProvider countryCode={countryCode}>
-        <CartProvider countryCode={countryCode} cartFragment={CART_FRAGMENT}>
+        <CartProvider
+          countryCode={countryCode}
+          cartFragment={CART_FRAGMENT}
+          customerAccessToken={customerAccessToken}
+        >
           <Suspense>
             <DefaultSeo />
           </Suspense>

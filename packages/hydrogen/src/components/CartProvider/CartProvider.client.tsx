@@ -296,6 +296,14 @@ export function CartProvider({
 }) {
   if (countryCode) countryCode = countryCode.toUpperCase() as CountryCode;
 
+  useEffect(() => {
+    ClientAnalytics.pushToPageAnalyticsData({
+      shopify: {
+        isLoggedIn: !!customerAccessToken,
+      },
+    });
+  });
+
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
     : {status: 'uninitialized'};
