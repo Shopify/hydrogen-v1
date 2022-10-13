@@ -53,8 +53,7 @@ export function ShopifyAnalyticsClient({cookieDomain}: {cookieDomain: string}) {
         // On a slow network, the pageview event could be already fired before
         // we subscribed to the pageview event
         if (ClientAnalytics.hasSentFirstPageView()) {
-          const analyticsData = ClientAnalytics.getPageAnalyticsData();
-          trackPageView(analyticsData);
+          trackPageView(ClientAnalytics.getPageAnalyticsData());
         }
       }
     } catch (err) {
@@ -98,8 +97,7 @@ function getCookieDomain(cookieDomain: string): string {
 function trackPageView(payload: any): void {
   microSessionCount += 1;
   try {
-    const shopify = payload.shopify;
-    if (payload && shopify) {
+    if (payload && payload.shopify) {
       sendToServer(storefrontPageViewSchema(payload));
       trackCustomerPageView(payload, sendToServer);
     }
