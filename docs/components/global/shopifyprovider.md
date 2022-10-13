@@ -6,12 +6,13 @@ description: The ShopifyProvider component wraps your entire app and provides su
 
 The `ShopifyProvider` component wraps your entire app and provides functionality for many components, hooks, and utilities. The `ShopifyProvider` component also provides localization data for the app. You should place it in your app's entry point component.
 
-## ShopifyProvider in Hydrogen Framework
+{% if feature_flags.hydrogen_ui_beta%}
+## `ShopifyProvider` in the Hydrogen framework
 
-If you're using the [Hydrogen framework](/custom-storefronts/hydrogen/framework), you need to import `ShopifyProvider` from the `@shopify/hydrogen` package and use it in `App.server.jsx`.
+If you're using the [Hydrogen framework](/custom-storefronts/hydrogen/framework), then you need to import `ShopifyProvider` from the `@shopify/hydrogen` package and use it in `App.server.jsx`.
+{% endif %}
 
 The default localization data is defined within your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). You can change the active country and language at runtime by passing in the `countryCode` and `languageCode` props.
-
 
 ### Example code
 
@@ -36,16 +37,17 @@ export default function App() {
 
 The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
-
 ### Considerations
 
-- This version of `ShopifyProvider` is specific to Hydrogen and currently doesn't work in Next.js or other frameworks. See below for details on how to use `ShopifyProvider` with other frameworks.
+{% if feature_flags.hydrogen_ui_beta %}
+- This version of `ShopifyProvider` is specific to Hydrogen and currently doesn't work in Next.js or other frameworks. Learn how to use `ShopifyProvider` [with other frameworks](#shopify-provider-in-alternate-frameworks).
+{% endif %}
 - You can't have multiple instances of `ShopifyProvider` within your app. Because it's not using `Context` (which isn't currently supported in server components), all `<ShopifyProvider>` instances share the same configuration for each request.
 - You can dynamically define the Shopify connection information for each request to the server by providing a function in [the Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#shopify). This is useful for aggregating multiple storefronts with a single Hydrogen app.
 
+{% if feature_flags.hydrogen_ui_beta %}
+## `ShopifyProvider` in alternate frameworks
 
-
-## ShopifyProvider in alternate frameworks
 If you're using a third-party framework, such as Next.js, you should import `ShopifyProvider` from Hydrogen UI via the `@hydrogen/react` package.
 
 > Note:
@@ -68,12 +70,10 @@ export default function App() {
 | shopifyConfig? | <code>ShopifyConfig &#124; ShopifyConfigFetcher</code> | Shopify connection information. Defaults to [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). |
 | countryCode?   | <code>string</code>                                    | The [code](https://shopify.dev/api/storefront/latest/enums/CountryCode) designating a country or region, which generally follows ISO 3166-1 alpha-2 guidelines.                   |
 | languageCode?  | <code>string</code>                                    | The ISO 639-1 [language codes](https://shopify.dev/api/storefront/latest/enums/LanguageCode) supported by Shopify.                                                                |
-| children?      | <code>React</code>                                     | Any `ReactNode` elements.                                                                                                                 
+| children?      | <code>React</code>                                     | Any `ReactNode` elements.
 
-
+{% endif %}
 ## Related framework topics
 
 - [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
 - [Internationalization](https://shopify.dev/custom-storefronts/hydrogen/framework/internationalization)
-
-
