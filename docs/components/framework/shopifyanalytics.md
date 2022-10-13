@@ -202,6 +202,30 @@ export default function Account({response}: HydrogenRouteProps) {
 
 {% endcodeblock %}
 
+### Cart Fragment
+
+If you are overriding `CartProvider`'s `cartFragment` prop, make sure your new cart fragment contains the following:
+
+```gql
+merchandise {
+  ... on ProductVariant {
+    id
+    priceV2 {
+      ...MoneyFragment
+    }
+    title
+    product {
+      id
+      handle
+      title
+      vendor
+      productType
+    }
+    sku
+  }
+}
+```
+
 
 ### `ShopifyAnalytics` constants
 
