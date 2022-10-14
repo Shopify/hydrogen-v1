@@ -211,7 +211,7 @@ export default function Account({response}: HydrogenRouteProps) {
 
 ### Cart Fragment
 
-If you are overriding `CartProvider`'s `cartFragment` prop, make sure your new cart fragment contains the following:
+If you're overriding the `CartProvider`'s `cartFragment` prop, then ensure that your new cart fragment contains the following data shape:
 
 ```gql
 merchandise {
