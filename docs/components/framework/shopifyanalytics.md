@@ -98,7 +98,7 @@ Provide the following data to `useServerAnalytics` to view information from the 
 | variant | The variant title | `154cm / Reactive Blue` |
 | brand | The product vendor | `Snowdevil` |
 | price | The variant price | `629.95` |
-| category? | Product type | `Snowboards` |
+| category? | The product type | `Snowboards` |
 | sku? | Variant sku | `123` |
 
 
