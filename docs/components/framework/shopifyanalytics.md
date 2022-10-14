@@ -99,7 +99,7 @@ Provide the following data to `useServerAnalytics` to view information from the 
 | brand | The product vendor | `Snowdevil` |
 | price | The variant price | `629.95` |
 | category? | The product type | `Snowboards` |
-| sku? | Variant sku | `123` |
+| sku? | The variant SKU | `123` |
 
 
 ### Home page
