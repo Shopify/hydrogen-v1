@@ -4,7 +4,7 @@
 
 Updates `CartProvider` to use the new `CartProviderV2`. No code changes are necessary.
 
-Adds as well `onComplete` call backs:
+Also adds the following `onComplete` callbacks:
 | Name | Type | Description |
 | ---------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | onCreateComplete? | <code>() => void</code> | Invoked when the process to create a cart completes successfully |
