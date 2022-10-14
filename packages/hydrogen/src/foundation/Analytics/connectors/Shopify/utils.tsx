@@ -90,7 +90,7 @@ function getNavigationTypeExperimental() {
       return navType;
     }
   } catch (err) {
-    // do nothing
+    // Do nothing
   }
   return undefined;
 }
