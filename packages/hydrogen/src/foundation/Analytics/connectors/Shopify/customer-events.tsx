@@ -243,7 +243,7 @@ function validateProductData(
   requiredProductFields.forEach((field) => {
     if (!product[field.column] || product[field.column] === '') {
       throw Error(
-        `\nMake sure ${source} returns "${field[requireKey]}"\nMore details at ${docLink}`
+        `Make sure ${source} returns "${field[requireKey]}"\n More details at ${docLink}\n`
       );
     }
   });

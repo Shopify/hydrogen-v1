@@ -103,7 +103,7 @@ function trackPageView(payload: any): void {
     }
   } catch (error) {
     console.error(
-      `Error Shopify analytics: ${ClientAnalytics.eventNames.PAGE_VIEW}`,
+      `Error Shopify analytics: ${ClientAnalytics.eventNames.PAGE_VIEW}\n`,
       error
     );
   }
@@ -178,7 +178,7 @@ function trackAddToCart(payload: any): void {
     }
   } catch (error) {
     console.error(
-      `Error Shopify analytics: ${ClientAnalytics.eventNames.ADD_TO_CART}`,
+      `Error Shopify analytics: ${ClientAnalytics.eventNames.ADD_TO_CART}\n`,
       error
     );
   }
