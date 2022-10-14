@@ -3,4 +3,4 @@
 ---
 
 Add Shopify analytics instrumentation for customer events.
-See [updated doc on `<ShopifyAnalytic />`](https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics)
+See the [updated doc] (https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics) on `<ShopifyAnalytics />`.
