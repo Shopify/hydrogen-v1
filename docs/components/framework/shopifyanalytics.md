@@ -95,7 +95,7 @@ Provide the following data to `useServerAnalytics` to view information from the 
 | product_gid | Shopify product id | `gid://shopify/Product/6730943955000` |
 | variant_gid | Shopify variant id | `gid://shopify/ProductVariant/41007290712120` |
 | name | The product title | `The H2 Snowboard` |
-| variant | Variant title | `154cm / Reactive Blue` |
+| variant | The variant title | `154cm / Reactive Blue` |
 | brand | Product vendor | `Snowdevil` |
 | price | Variant price | `629.95` |
 | category? | Product type | `Snowboards` |
