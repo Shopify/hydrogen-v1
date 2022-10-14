@@ -16,7 +16,7 @@ import {
 import {flattenConnection} from '../../../../utilities/flattenConnection/index.js';
 import {CartLine, CartLineInput} from '../../../../storefront-api-types.js';
 
-let customerId: string | undefined = undefined;
+let customerId = '';
 
 export function trackCustomerPageView(
   payload: any,

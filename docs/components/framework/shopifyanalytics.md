@@ -47,6 +47,12 @@ If you have customer login, make sure `customerAccessToken` is passed to the `<C
 ```jsx
 const {customerAccessToken} = useSession();
 
+useServerAnalytics({
+  shopify: {
+    isLoggedIn: !!customerAccessToken,
+  },
+});
+
 return (
   <Suspense fallback={<HeaderFallback isHome={isHome} />}>
     ...
