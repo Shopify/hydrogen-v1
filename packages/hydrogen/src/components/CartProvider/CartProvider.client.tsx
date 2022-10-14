@@ -78,7 +78,7 @@ export function CartProvider({
   onAttributesUpdate?: () => void;
   /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
-  /** A callback that is invoked when the process to create a cart completes */
+  /** A callback that is invoked when the process to create a cart completes successfully */
   onCreateComplete?: () => void;
   /** A callback that is invoked when the process to add a line item to the cart completes successfully */
   onLineAddComplete?: () => void;
