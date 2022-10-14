@@ -63,7 +63,7 @@ export default function Account({response}: HydrogenRouteProps) {
 
   if (!customer) return response.redirect('/account/login');
 
-  // logged in analytics state
+  // The logged-in analytics state.
   useServerAnalytics({
     shopify: {
       customerId: customer.id,
