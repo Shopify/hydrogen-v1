@@ -14,4 +14,4 @@ Adds as well `onComplete` call backs:
 | onNoteUpdateComplete? | <code>() => void</code> | A callback that is invoked when the process to add or update a note in the cart completes successfully |
 | onBuyerIdentityUpdateComplete? | <code>() => void</code> | A callback that is invoked when the process to update the buyer identity completes successfully |
 | onAttributesUpdateComplete? | <code>() => void</code> | A callback that is invoked when the process to update the cart attributes completes successfully |
-| onDiscountCodesUpdateComplete? | <code>() => void</code> | A callback that is invoked when the process to update the cart discount codes completes successfully |
+| onDiscountCodesUpdateComplete? | <code>() => void</code> | Invoked when the process to update the cart discount codes completes successfully |
