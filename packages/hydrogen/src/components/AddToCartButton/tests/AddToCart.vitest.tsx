@@ -1,7 +1,7 @@
 import React from 'react';
 import {vi} from 'vitest';
 import {CartProvider} from '../../CartProvider/index.js';
-import {render, screen} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import {ProductOptionsProvider} from '../../ProductOptionsProvider/index.js';
 import {AddToCartButton} from '../AddToCartButton.client.js';
 import {getProduct, getVariant} from '../../../utilities/tests/product.js';
@@ -201,9 +201,11 @@ describe('<AddToCartButton/>', () => {
           {wrapper: ShopifyTestProviders}
         );
 
-        await user.click(screen.getByRole('button'));
+        user.click(screen.getByRole('button'));
 
-        expect(screen.getByRole('button')).toBeDisabled();
+        await waitFor(() => {
+          expect(screen.getByRole('button')).toBeDisabled();
+        });
       });
 
       it('renders a message for screen readers when an accessible label is provided', async () => {
@@ -224,11 +226,13 @@ describe('<AddToCartButton/>', () => {
           {wrapper: ShopifyTestProviders}
         );
 
-        await user.click(screen.getByRole('button'));
+        user.click(screen.getByRole('button'));
 
-        expect(screen.getByRole('alert')).toHaveTextContent(
-          'Adding product to your cart'
-        );
+        await waitFor(() => {
+          expect(screen.getByRole('alert')).toHaveTextContent(
+            'Adding product to your cart'
+          );
+        });
       });
     });
   });
