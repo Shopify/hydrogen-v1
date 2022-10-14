@@ -45,7 +45,7 @@ export function App() {
 | onBuyerIdentityUpdate? | <code>() => void</code>      | A callback that is invoked when the process to update the buyer identity begins, but before the buyer identity is updated in the Storefront API.                                                                         |
 | onAttributesUpdate?    | <code>() => void</code>      | A callback that is invoked when the process to update the cart attributes begins, but before the attributes are updated in the Storefront API.                                                                           |
 | onDiscountCodesUpdate? | <code>() => void</code>      | A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API.                                                                   |
-| onCreateComplete? | <code>() => void</code> | A callback that is invoked when the process to create a cart completes successfully |
+| onCreateComplete? | <code>() => void</code> | A callback that's invoked when the process to create a cart completes successfully |
 | onLineAddComplete? | <code>() => void</code> | A callback that's invoked when the process to add a line item to the cart completes successfully |
 | onLineRemoveComplete? | <code>() => void</code> | A callback that's invoked when the process to remove a line item to the cart completes successfully |
 | onLineUpdateComplete? | <code>() => void</code> | A callback that's invoked when the process to update a line item in the cart completes successfully |
