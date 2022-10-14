@@ -28,7 +28,7 @@ export function trackCustomerPageView(
     : location.href;
 
   // Only the /account/index route sets the `customerId`, so we persist this value when it's available
-  // and append to analytics events only when customer is in the logged in state (provided by CartProvider)
+  // and append it to analytics events only when a customer is in the logged in state (provided by `CartProvider`).
   if (payload.shopify.customerId) {
     customerId = payload.shopify.customerId;
   }
