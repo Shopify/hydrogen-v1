@@ -77,7 +77,7 @@ Provide the following data to `useServerAnalytics` to view information from the 
 
 | Prop     |  Description        |
 | -------- | ------------------- |
-| canonicalPath? | Url path without localization. If you have the following url scheme `/page`, `/en-CA/page`, `/en-GB/page` that represents the same localized pages, let Shopify know how we can aggregate these events by setting the canonical path. |
+| canonicalPath? | The URL path without localization. If you have the URL scheme `/page`, `/en-CA/page`, `/en-GB/page` that represents the same localized pages, then you can tell Shopify how to aggregate these events by setting the canonical path. |
 | pageType? | The page template type for your routes. For a list of valid values, refer to [ShopifyAnalytics constants](#shopifyanalytics-constants). |
 | resourceId? | The ID of the page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. |
 | collectionHandle? | The collection page handle |
