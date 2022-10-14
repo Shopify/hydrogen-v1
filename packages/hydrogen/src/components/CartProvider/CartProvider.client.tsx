@@ -80,19 +80,19 @@ export function CartProvider({
   onDiscountCodesUpdate?: () => void;
   /** A callback that is invoked when the process to create a cart completes */
   onCreateComplete?: () => void;
-  /** A callback that is invoked when the process to add a line item to the cart completes */
+  /** A callback that is invoked when the process to add a line item to the cart completes successfully */
   onLineAddComplete?: () => void;
-  /** A callback that is invoked when the process to remove a line item to the cart completes */
+  /** A callback that is invoked when the process to remove a line item to the cart completes successfully */
   onLineRemoveComplete?: () => void;
-  /** A callback that is invoked when the process to update a line item in the cart completes */
+  /** A callback that is invoked when the process to update a line item in the cart completes successfully */
   onLineUpdateComplete?: () => void;
-  /** A callback that is invoked when the process to add or update a note in the cart completes */
+  /** A callback that is invoked when the process to add or update a note in the cart completes successfully */
   onNoteUpdateComplete?: () => void;
-  /** A callback that is invoked when the process to update the buyer identity completes */
+  /** A callback that is invoked when the process to update the buyer identity completes successfully */
   onBuyerIdentityUpdateComplete?: () => void;
-  /** A callback that is invoked when the process to update the cart attributes completes */
+  /** A callback that is invoked when the process to update the cart attributes completes successfully */
   onAttributesUpdateComplete?: () => void;
-  /** A callback that is invoked when the process to update the cart discount codes completes */
+  /** A callback that is invoked when the process to update the cart discount codes completes successfully */
   onDiscountCodesUpdateComplete?: () => void;
   /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
@@ -484,26 +484,11 @@ function transposeStatus(
 
 /**
  * Delays a state update until hydration finishes. Useful for preventing suspense boundaries errors when updating a context
- * @remarks this uses startTransition and window load event. Waits for the first startTransition to finish.
+ * @remarks this uses startTransition and waits for it to finish.
  */
 function useDelayedStateUntilHydration<T>(state: T) {
   const [isPending, startTransition] = useTransition();
   const [delayedState, setDelayedState] = useState(state);
-
-  const isWindowLoaded = useRef(false);
-
-  const onPageLoad = useCallback(() => {
-    isWindowLoaded.current = true;
-  }, []);
-
-  useEffect(() => {
-    if (document.readyState === 'complete') {
-      onPageLoad();
-    } else {
-      window.addEventListener('load', onPageLoad);
-      return () => window.removeEventListener('load', onPageLoad);
-    }
-  }, [onPageLoad]);
 
   const firstTimePending = useRef(false);
   if (isPending) {
@@ -523,10 +508,7 @@ function useDelayedStateUntilHydration<T>(state: T) {
     });
   }, [state]);
 
-  const displayState =
-    isWindowLoaded.current && firstTimePendingFinished.current
-      ? state
-      : delayedState;
+  const displayState = firstTimePendingFinished.current ? state : delayedState;
 
   return displayState;
 }
