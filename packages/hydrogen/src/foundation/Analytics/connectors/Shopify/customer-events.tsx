@@ -16,6 +16,33 @@ import {
 import {flattenConnection} from '../../../../utilities/flattenConnection/index.js';
 import {CartLine, CartLineInput} from '../../../../storefront-api-types.js';
 
+const requiredProductFields: Record<string, string>[] = [
+  {
+    column: 'product_gid',
+    gqlField: 'product.id',
+  },
+  {
+    column: 'variant_gid',
+    gqlField: 'variant.id',
+  },
+  {
+    column: 'name',
+    gqlField: 'product.title',
+  },
+  {
+    column: 'variant',
+    gqlField: 'variant.title',
+  },
+  {
+    column: 'brand',
+    gqlField: 'product.vendor',
+  },
+  {
+    column: 'price',
+    gqlField: 'variant.priceV2.amount',
+  },
+];
+
 let customerId = '';
 
 export function trackCustomerPageView(
@@ -121,6 +148,9 @@ function buildCustomerPayload(payload: any, extraData: any = {}): any {
     navigation_api,
 
     currency: shopify.currency,
+
+    ccpa_enforced: false,
+    gdpr_enforced: false,
   };
 
   formattedData = addDataIf(
@@ -137,6 +167,13 @@ function buildCustomerPayload(payload: any, extraData: any = {}): any {
 
 function formatProductsJSON(products: any[]) {
   const formattedProducts = products.map((p) => {
+    validateProductData(
+      p,
+      'useServerAnalytics',
+      'column',
+      'https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics#product-page'
+    );
+
     return JSON.stringify({
       ...p,
       product_id: stripGId(p.product_gid),
@@ -185,7 +222,29 @@ function formatCartLinesByProductVariant(lines: any) {
       price: variant.priceV2.amount,
       sku: variant.sku,
     };
+
+    validateProductData(
+      cartItems[line.merchandise.id],
+      'cart fragment',
+      'gqlField',
+      'https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics#cart-fragment'
+    );
   });
 
   return cartItems;
+}
+
+function validateProductData(
+  product: any,
+  source: string,
+  requireKey: string,
+  docLink: string
+) {
+  requiredProductFields.forEach((field) => {
+    if (!product[field.column] || product[field.column] === '') {
+      throw Error(
+        `\nMake sure ${source} returns "${field[requireKey]}"\nMore details at ${docLink}`
+      );
+    }
+  });
 }
