@@ -83,7 +83,7 @@ Provide the following data to `useServerAnalytics` to view information from the 
 | collectionHandle? | The collection page handle |
 | products? | An array of products |
 | searchTerm? | The search term |
-| customerId? | The customer id |
+| customerId? | The customer ID |
 
 | Product Prop     |  Description        | Example |
 | product_gid | Shopify product id | `gid://shopify/Product/6730943955000` |
