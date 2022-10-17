@@ -88,7 +88,7 @@ const QUERY = gql`
 ```
 {% endcodeblock %}
 
-For more information about retrieving language translations and the `@inContext` directive, refer to the [Storefront API documentation](https://shopify.dev/api/examples/multiple-languages).
+For more information about retrieving language translations and the `@inContext` directive, refer to the [Storefront API documentation](https://shopify.dev/custom-storefronts/internationalization/multiple-languages).
 
 ### Search engine optimization (SEO)
 
