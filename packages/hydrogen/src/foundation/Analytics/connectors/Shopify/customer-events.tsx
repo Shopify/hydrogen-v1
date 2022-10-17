@@ -132,7 +132,7 @@ function buildCustomerPayload(payload: any, extraData: any = {}): any {
   const [navigation_type, navigation_api] = getNavigationType();
   let formattedData = {
     source: 'hydrogen',
-    shopId: stripGId(shopify.shopId),
+    shop_id: stripGId(shopify.shopId),
     hydrogenSubchannelId: shopify.storefrontId || '0',
 
     event_time: Date.now(),
