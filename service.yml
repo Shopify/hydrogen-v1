@@ -1,0 +1,9 @@
+##
+# Services DB manifest file for hydrogen.
+# https://services.shopify.io/services/hydrogen
+#
+# Here you can define some settings that will be synced with Services DB whenever you change them
+# allowing Services DB to infer and show information about your service.
+#
+# For more information on each setting, see https://service-docs.docs.shopify.io/getting_started/configuring_a_service.
+##
