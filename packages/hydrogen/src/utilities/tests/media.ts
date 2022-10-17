@@ -7,7 +7,6 @@ import {
   MediaHost,
   Model3d,
 } from '../../storefront-api-types.js';
-// eslint-disable-next-line node/no-extraneous-import
 import faker from 'faker';
 import type {PartialDeep} from 'type-fest';
 

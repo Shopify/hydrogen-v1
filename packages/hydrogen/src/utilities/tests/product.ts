@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-extraneous-import
 import faker from 'faker';
 import {getPrice} from './price.js';
 import {getUnitPriceMeasurement} from './unitPriceMeasurement.js';

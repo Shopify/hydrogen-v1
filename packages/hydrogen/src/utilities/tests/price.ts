@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-extraneous-import
 import faker from 'faker';
 import {CurrencyCode, MoneyV2} from '../../storefront-api-types.js';
 

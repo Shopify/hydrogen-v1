@@ -17,7 +17,7 @@ vi.mock('../hooks.client.js', () => ({
   useCartFetch: mockUseCartFetch,
 }));
 
-import {CartProviderV2} from '../CartProviderV2.client.js';
+import {CartProvider} from '../CartProvider.client.js';
 import {cartFromGraphQL} from '../useCartAPIStateMachine.client.js';
 import {CountryCode} from '../../../storefront-api-types.js';
 import {CART_ID_STORAGE_KEY} from '../constants.js';
@@ -26,12 +26,12 @@ import {CartFragmentFragment} from '../graphql/CartFragment.js';
 import {getCartLineMock} from '../../CartLineProvider/tests/fixtures.js';
 
 function ShopifyCartProvider(
-  props: Omit<ComponentProps<typeof CartProviderV2>, 'children'> = {}
+  props: Omit<ComponentProps<typeof CartProvider>, 'children'> = {}
 ) {
   return function Wrapper({children}) {
     return (
       <ShopifyTestProviders>
-        <CartProviderV2 {...props}>{children}</CartProviderV2>
+        <CartProvider {...props}>{children}</CartProvider>
       </ShopifyTestProviders>
     );
   };
@@ -43,7 +43,7 @@ const cartMockWithLine = {
   lines: {edges: [{node: getCartLineMock()}]},
 };
 
-describe('<CartProviderV2 />', () => {
+describe('<CartProvider />', () => {
   beforeEach(() => {
     mockUseCartActions.mockClear();
     mockUseCartFetch.mockClear();
@@ -1627,10 +1627,7 @@ describe('<CartProviderV2 />', () => {
 
 async function useCartWithInitializedCart(
   cartActionsMocks = {},
-  cartProviderProps: Omit<
-    ComponentProps<typeof CartProviderV2>,
-    'children'
-  > = {}
+  cartProviderProps: Omit<ComponentProps<typeof CartProvider>, 'children'> = {}
 ) {
   const cartCreateSpy = vi.fn(async () => ({
     data: {cartCreate: {cart: cartMock}},
