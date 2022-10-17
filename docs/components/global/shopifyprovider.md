@@ -76,7 +76,7 @@ export default function App() {
 | locale? | <code>string</code> | The locale string based on `country` and `language`. | Any `ReactNode` elements.
 
 ### Considerations
-- This version of `ShopifyProvider` is meant to only be used on the client. To make API calls from the server, check out the [`createShopifyClient()` helper](https://github.com/Shopify/hydrogen-ui/tree/2022-7/packages/react#authenticating-the-storefront-client).
+- This version of `ShopifyProvider` is meant to only be used on the client. To make API calls from the server, check out the [`createShopifyClient()` helper](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks#step-2-authenticate-the-storefront-api-client).
 
 {% endif %}
 ## Related framework topics
