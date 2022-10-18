@@ -47,6 +47,7 @@ import {DevTools} from './foundation/DevTools/DevTools.server.js';
 import {getSyncSessionApi} from './foundation/session/session.js';
 import {parseJSON} from './utilities/parse.js';
 import {htmlEncode} from './utilities/index.js';
+import {generateUUID} from './utilities/random.js';
 import {splitCookiesString} from 'set-cookie-parser';
 import {
   deleteItemFromCache,
@@ -108,11 +109,24 @@ export const renderHydrogen = (App: any) => {
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
 
+    const platformRequestID = request.headers.get('request-id');
+    if (platformRequestID) {
+      request.ctx.requestGroupID = platformRequestID;
+    } else {
+      request.ctx.requestGroupID = generateUUID();
+    }
+
     setLogger(hydrogenConfig.logger);
     const log = getLoggerWithContext(request);
 
+    const responseHeaders = new Headers(headers);
+    responseHeaders.set(
+      'Custom-Storefront-Request-Group-ID',
+      request.ctx.requestGroupID
+    );
+
     const response = new HydrogenResponse(request.url, null, {
-      headers: headers || {},
+      headers: responseHeaders,
     });
 
     if (request.cookies.get(FORM_REDIRECT_COOKIE)) {
