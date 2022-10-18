@@ -126,7 +126,7 @@ function buildStorefrontPageViewPayload(payload: any): any {
     appClientId: '6167201',
     hydrogenSubchannelId: shopify.storefrontId || '0',
 
-    isPersistentCookie: shopify.isPersistentCookie,
+    isPersistentCookie: true,
     uniqToken: shopify.userId,
     visitToken: shopify.sessionId,
     microSessionId: shopify.pageId,

@@ -8,7 +8,6 @@ import {ShopifyAnalyticsClient} from './ShopifyAnalytics.client.js';
 import {useShopQuery} from '../../../../hooks/useShopQuery/index.js';
 import {CacheLong} from '../../../Cache/strategies/index.js';
 import {gql} from '../../../../utilities/graphql-tag.js';
-import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
 import type {Localization, Shop} from '../../../../storefront-api-types.js';
 import {useLocalization} from '../../../../hooks/useLocalization/useLocalization.js';
 
@@ -42,7 +41,6 @@ export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
       storefrontId,
       acceptedLanguage:
         request.headers.get('Accept-Language')?.replace(/-.*/, '') || 'en',
-      isPersistentCookie: !!cookies[SHOPIFY_S] || !!cookies[SHOPIFY_Y],
     },
   });
 

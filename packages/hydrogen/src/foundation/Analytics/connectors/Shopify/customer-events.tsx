@@ -138,7 +138,6 @@ function buildCustomerPayload(payload: any, extraData: any = {}): any {
     event_time: Date.now(),
     event_id: buildUUID(),
     unique_token: shopify.userId,
-    is_persistent_cookie: shopify.isPersistentCookie,
 
     referrer: document.referrer,
     event_source_url: location.href,
@@ -149,6 +148,20 @@ function buildCustomerPayload(payload: any, extraData: any = {}): any {
 
     currency: shopify.currency,
 
+    /**
+     * For now, all cookie consent management is manage by developers
+     *
+     * TO-DO: When we have access to consent api, implement is_persistent_cookie
+     *        according to the definition below
+     *
+     * It references the state of consent for GDPR protected visitors.
+     * If persistent === FALSE, it means that the merchant has set
+     * “Partially collected before consent”,  and the visitor has not consented.
+     * Until a user consents, we downgrade _shopify_y to a session cookie instead of 1yr expiry.
+     * It denotes a partially stable identifier (stable only for the length of the session,
+     * which should be until they close the browser).
+     */
+    is_persistent_cookie: true,
     ccpa_enforced: false,
     gdpr_enforced: false,
   };
