@@ -5,7 +5,7 @@ import {ClientAnalytics} from '../../ClientAnalytics.js';
 import {
   trackCustomerAddToCart,
   trackCustomerPageView,
-} from './customer-events.js';
+} from './customer-events.client.js';
 import {buildUUID, addDataIf, stripGId} from './utils.js';
 
 const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry

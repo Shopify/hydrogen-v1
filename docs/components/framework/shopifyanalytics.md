@@ -83,15 +83,16 @@ Provide the following data to `useServerAnalytics` to view information from the 
 
 | Prop     |  Description        |
 | -------- | ------------------- |
-| canonicalPath? | The URL path without localization. If you have the URL scheme `/page`, `/en-CA/page`, `/en-GB/page` that represents the same localized pages, then you can tell Shopify how to aggregate these events by setting the canonical path. |
+| canonicalPath? | The URL path without localization. If you have the URL scheme `/page`, `/en-CA/page`, `/en-GB/page` that represents the same localized pages, then you can tell Shopify how to aggregate these events by setting the canonical path to `/page`. |
 | pageType? | The page template type for your routes. For a list of valid values, refer to [`ShopifyAnalytics` constants](#shopifyanalytics-constants). |
 | resourceId? | The ID of the page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. |
 | collectionHandle? | The collection page handle |
-| products? | An array of products |
+| products? | An array of [product](#product) |
 | searchTerm? | The search term |
 | customerId? | The customer ID |
 
-| Product Prop     |  Description        | Example |
+### Product
+| Prop     |  Description        | Example |
 | product_gid | The globally-unique Shopify product ID | `gid://shopify/Product/6730943955000` |
 | variant_gid | The globally-unique Shopify product variant ID | `gid://shopify/ProductVariant/41007290712120` |
 | name | The product title | `The H2 Snowboard` |
