@@ -1,5 +1,4 @@
 import React from 'react';
-import {parse} from 'worktop/cookie';
 import AnalyticsErrorBoundary from '../../../AnalyticsErrorBoundary.client.js';
 import {useServerRequest} from '../../../ServerRequestProvider/index.js';
 import {useServerAnalytics} from '../../hook.js';
@@ -14,7 +13,6 @@ import {useLocalization} from '../../../../hooks/useLocalization/useLocalization
 export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
   const {storeDomain, storefrontId} = useShop();
   const request = useServerRequest();
-  const cookies = parse(request.headers.get('Cookie') || '');
   const domain = cookieDomain || storeDomain;
   const {country} = useLocalization();
 
