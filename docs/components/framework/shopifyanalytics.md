@@ -93,8 +93,8 @@ Provide the following data to `useServerAnalytics` to view information from the 
 
 ### Product
 | Prop     |  Description        | Example |
-| product_gid | The globally-unique Shopify product ID | `gid://shopify/Product/6730943955000` |
-| variant_gid | The globally-unique Shopify product variant ID | `gid://shopify/ProductVariant/41007290712120` |
+| product_gid | The globally unique Shopify product ID | `gid://shopify/Product/6730943955000` |
+| variant_gid | The globally unique Shopify product variant ID | `gid://shopify/ProductVariant/41007290712120` |
 | name | The product title | `The H2 Snowboard` |
 | variant | The variant title | `154cm / Reactive Blue` |
 | brand | The product vendor | `Snowdevil` |
