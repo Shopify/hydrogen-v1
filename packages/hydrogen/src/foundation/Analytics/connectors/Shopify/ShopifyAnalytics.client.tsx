@@ -2,7 +2,11 @@ import {useEffect} from 'react';
 import {parse, stringify} from 'worktop/cookie';
 import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
 import {ClientAnalytics} from '../../ClientAnalytics.js';
-import {buildUUID, addDataIf} from './utils.js';
+import {
+  trackCustomerAddToCart,
+  trackCustomerPageView,
+} from './customer-events.client.js';
+import {buildUUID, addDataIf, stripGId} from './utils.js';
 
 const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry
 const shortTermLength = 60 * 30; // 30 mins
@@ -44,6 +48,7 @@ export function ShopifyAnalyticsClient({cookieDomain}: {cookieDomain: string}) {
         const eventNames = ClientAnalytics.eventNames;
 
         ClientAnalytics.subscribe(eventNames.PAGE_VIEW, trackPageView);
+        ClientAnalytics.subscribe(eventNames.ADD_TO_CART, trackAddToCart);
 
         // On a slow network, the pageview event could be already fired before
         // we subscribed to the pageview event
@@ -92,12 +97,13 @@ function getCookieDomain(cookieDomain: string): string {
 function trackPageView(payload: any): void {
   microSessionCount += 1;
   try {
-    payload &&
-      payload.shopify &&
+    if (payload && payload.shopify) {
       sendToServer(storefrontPageViewSchema(payload));
+      trackCustomerPageView(payload, sendToServer);
+    }
   } catch (error) {
     console.error(
-      `Error Shopify analytics: ${ClientAnalytics.eventNames.PAGE_VIEW}`,
+      `Error Shopify analytics: ${ClientAnalytics.eventNames.PAGE_VIEW}\n`,
       error
     );
   }
@@ -120,7 +126,7 @@ function buildStorefrontPageViewPayload(payload: any): any {
     appClientId: '6167201',
     hydrogenSubchannelId: shopify.storefrontId || '0',
 
-    isPersistentCookie: shopify.isPersistentCookie,
+    isPersistentCookie: true,
     uniqToken: shopify.userId,
     visitToken: shopify.sessionId,
     microSessionId: shopify.pageId,
@@ -140,13 +146,8 @@ function buildStorefrontPageViewPayload(payload: any): any {
   formattedData = addDataIf(
     {
       isMerchantRequest: isMerchantRequest(),
-    },
-    formattedData
-  );
-
-  formattedData = addDataIf(
-    {
       pageType: shopify.pageType,
+      customerId: shopify.customerId,
     },
     formattedData
   );
@@ -165,14 +166,22 @@ function buildStorefrontPageViewPayload(payload: any): any {
     }
   }
 
-  formattedData = addDataIf(
-    {
-      customerId: shopify.customerId,
-    },
-    formattedData
-  );
-
   return formattedData;
+}
+
+function trackAddToCart(payload: any): void {
+  microSessionCount += 1;
+
+  try {
+    if (payload && payload.shopify) {
+      trackCustomerAddToCart(payload, sendToServer);
+    }
+  } catch (error) {
+    console.error(
+      `Error Shopify analytics: ${ClientAnalytics.eventNames.ADD_TO_CART}\n`,
+      error
+    );
+  }
 }
 
 function isMerchantRequest(): Boolean {
@@ -183,11 +192,7 @@ function isMerchantRequest(): Boolean {
   return false;
 }
 
-function stripGId(text: string): number {
-  return parseInt(text.substring(text.lastIndexOf('/') + 1));
-}
-
-function getResourceType(text: string): string {
+function getResourceType(text = ''): string {
   return text
     .substring(0, text.lastIndexOf('/'))
     .replace(/.*shopify\//, '')

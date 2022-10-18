@@ -161,14 +161,17 @@ fragment CartFragment on Cart {
               ...ImageFragment
             }
             product {
+              id
               handle
               title
-              id
+              vendor
+              productType
             }
             selectedOptions {
               name
               value
             }
+            sku
           }
         }
       }

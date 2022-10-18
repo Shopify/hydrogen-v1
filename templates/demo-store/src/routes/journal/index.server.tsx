@@ -6,6 +6,8 @@ import {
   Seo,
   useLocalization,
   useShopQuery,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
 } from '@shopify/hydrogen';
 import type {
   Article,
@@ -51,6 +53,13 @@ function JournalsGrid({pageBy}: {pageBy: number}) {
       language: languageCode,
       blogHandle: BLOG_HANDLE,
       pageBy,
+    },
+  });
+
+  useServerAnalytics({
+    shopify: {
+      canonicalPath: `/${BLOG_HANDLE}`,
+      pageType: ShopifyAnalyticsConstants.pageType.page,
     },
   });
 

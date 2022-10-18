@@ -21,6 +21,7 @@ import {
 export default function Homepage() {
   useServerAnalytics({
     shopify: {
+      canonicalPath: '/',
       pageType: ShopifyAnalyticsConstants.pageType.home,
     },
   });

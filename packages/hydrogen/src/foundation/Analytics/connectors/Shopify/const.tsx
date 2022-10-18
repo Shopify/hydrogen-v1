@@ -22,6 +22,12 @@ const product = 'product';
 const policy = 'policy';
 const search = 'search';
 
+export const PAGE_RENDERED_EVENT_NAME = 'page_rendered';
+export const COLLECTION_PAGE_RENDERED_EVENT_NAME = 'collection_page_rendered';
+export const PRODUCT_PAGE_RENDERED_EVENT_NAME = 'product_page_rendered';
+export const PRODUCT_ADDED_TO_CART_EVENT_NAME = 'product_added_to_cart';
+export const SEARCH_SUBMITTED_EVENT_NAME = 'search_submitted';
+
 export const ShopifyAnalyticsConstants = {
   pageType: {
     article,
