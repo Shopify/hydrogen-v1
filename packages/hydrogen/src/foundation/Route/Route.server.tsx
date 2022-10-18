@@ -8,13 +8,19 @@ export type RouteProps = {
   path: string;
   /** A reference to a React Server Component that's rendered when the route is active. */
   page: ReactElement;
+  /** The base path to use for links. Defaults to `/`. */
+  basePath?: string;
 };
 
 /**
  * The `Route` component is used to set up a route in Hydrogen that's independent of the file system. Routes are
  * matched in the order that they're defined.
  */
-export function Route({path, page}: RouteProps): ReactElement | null {
+export function Route({
+  path,
+  page,
+  basePath = '/',
+}: RouteProps): ReactElement | null {
   const request = useServerRequest();
   const {routeRendered, serverProps} = request.ctx.router;
 
@@ -35,7 +41,7 @@ export function Route({path, page}: RouteProps): ReactElement | null {
     request.ctx.router.routeParams = match.params;
 
     return (
-      <RouteParamsProvider routeParams={match.params} basePath={'/'}>
+      <RouteParamsProvider routeParams={match.params} basePath={basePath}>
         {cloneElement(page, {params: match.params || {}, ...serverProps})}
       </RouteParamsProvider>
     );
