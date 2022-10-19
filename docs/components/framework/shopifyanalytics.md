@@ -91,8 +91,10 @@ Provide the following data to `useServerAnalytics` to view information from the 
 | searchTerm? | The search term |
 | customerId? | The customer ID |
 
-### Product
+#### Product
+
 | Prop     |  Description        | Example |
+| -------- | ------------------- | ------- |
 | product_gid | The globally unique Shopify product ID | `gid://shopify/Product/6730943955000` |
 | variant_gid | The globally unique Shopify product variant ID | `gid://shopify/ProductVariant/41007290712120` |
 | name | The product title | `The H2 Snowboard` |
