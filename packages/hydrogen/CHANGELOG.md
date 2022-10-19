@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.6.0
+
+### Minor Changes
+
+- Add Shopify analytics instrumentation for customer events. ([#2238](https://github.com/Shopify/hydrogen/pull/2238)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+  See the [updated doc](https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics) on `<ShopifyAnalytics />`.
+
+* Updates `CartProvider` to use the new `CartProviderV2`. No code changes are necessary. [Docs for CartProvider can be found here.](https://shopify.dev/api/hydrogen/components/cart/cartprovider) ([#2182](https://github.com/Shopify/hydrogen/pull/2182)) by [@lordofthecactus](https://github.com/lordofthecactus)
+
+  Also adds the following `onComplete` props callbacks:
+  | Name | Type | Description |
+  | ---------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+  | onCreateComplete? | <code>() => void</code> | Invoked when the process to create a cart completes successfully |
+  | onLineAddComplete? | <code>() => void</code> | Invoked when the process to add a line item to the cart completes successfully |
+  | onLineRemoveComplete? | <code>() => void</code> | Invoked when the process to remove a line item to the cart completes successfully |
+  | onLineUpdateComplete? | <code>() => void</code> | Invoked when the process to update a line item in the cart completes successfully |
+  | onNoteUpdateComplete? | <code>() => void</code> | Invoked when the process to add or update a note in the cart completes successfully |
+  | onBuyerIdentityUpdateComplete? | <code>() => void</code> | Invoked when the process to update the buyer identity completes successfully |
+  | onAttributesUpdateComplete? | <code>() => void</code> | Invoked when the process to update the cart attributes completes successfully |
+  | onDiscountCodesUpdateComplete? | <code>() => void</code> | Invoked when the process to update the cart discount codes completes successfully |
+
+- Added missing dependancy for faker to hydrogen package ([#2234](https://github.com/Shopify/hydrogen/pull/2234)) by [@Drew-Garratt](https://github.com/Drew-Garratt)
+
+### Patch Changes
+
+- Add more error catches on shopify analytics ([#2256](https://github.com/Shopify/hydrogen/pull/2256)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+* Requests to SF API will now provide a Custom-Storefront-Group-ID header. ([#2215](https://github.com/Shopify/hydrogen/pull/2215)) by [@uri](https://github.com/uri)
+
 ## 1.5.0
 
 ### Minor Changes
@@ -413,7 +443,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }
