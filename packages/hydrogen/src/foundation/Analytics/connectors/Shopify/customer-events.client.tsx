@@ -16,6 +16,8 @@ import {
 import {flattenConnection} from '../../../../utilities/flattenConnection/index.js';
 import {CartLine, CartLineInput} from '../../../../storefront-api-types.js';
 
+const DOC_URL =
+  'https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics';
 const requiredProductFields: Record<string, string>[] = [
   {
     column: 'product_gid',
@@ -179,13 +181,14 @@ function buildCustomerPayload(payload: any, extraData: any = {}): any {
 }
 
 function formatProductsJSON(products: any[]) {
-  const formattedProducts = products.map((p) => {
-    validateProductData(
-      p,
-      'useServerAnalytics',
-      'column',
-      'https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics#product-page'
+  if (!products || products.length === 0) {
+    throw Error(
+      `Make sure useServerAnalytics returns "products"\n More details at ${DOC_URL}#product\n`
     );
+  }
+
+  const formattedProducts = products.map((p) => {
+    validateProductData(p, 'useServerAnalytics', 'column', 'product-page');
 
     return JSON.stringify({
       ...p,
@@ -240,7 +243,7 @@ function formatCartLinesByProductVariant(lines: any) {
       cartItems[line.merchandise.id],
       'cart fragment',
       'gqlField',
-      'https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics#cart-fragment'
+      'cart-fragment'
     );
   });
 
@@ -251,12 +254,12 @@ function validateProductData(
   product: any,
   source: string,
   requireKey: string,
-  docLink: string
+  docAnchor: string
 ) {
   requiredProductFields.forEach((field) => {
     if (!product[field.column] || product[field.column] === '') {
       throw Error(
-        `Make sure ${source} returns "${field[requireKey]}"\n More details at ${docLink}\n`
+        `Make sure ${source} returns "${field[requireKey]}"\n More details at ${DOC_URL}#${docAnchor}\n`
       );
     }
   });
