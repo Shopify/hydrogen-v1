@@ -6,15 +6,20 @@ description: The CartProvider component creates a context for using a cart.
 
 The `CartProvider` component creates a context for using a cart. It creates a cart object and callbacks
 that can be accessed by any descendent component using the `useCart` hook and related hooks. It also carries out
-any callback props when a relevant action is performed. For example, if a `onLineAdd` callback is provided,
-then the callback will be called when a new line item is successfully added to the cart.
+any callback props when a relevant action is performed. For example, if an `onLineAdd` callback is provided,
+then the callback is called when a new line item is successfully added to the cart.
 
 The `CartProvider` component must be a descendent of the `ShopifyProvider` component.
-You must use this component if you want to use the `useCart` hook or related hooks, or if you would like to use the `AddToCartButton` component.
+
+You must use this component to use the following:
+
+- The `useCart` hook or related hooks
+
+- The `AddToCartButton` component
 
 ## Required access scopes
 
-The `CartProvider` component requires the following [Storefront API access scopes](https://shopify.dev/api/usage/access-scopes#unauthenticated-access-scopes):
+The `CartProvider` component requires the following Storefront API [access scopes](/api/usage/access-scopes#unauthenticated-access-scopes):
 
 - `unauthenticated_read_customers`
 - `unauthenticated_write_customers`
