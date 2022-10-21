@@ -86,6 +86,8 @@ export const renderHydrogen = (App: any) => {
     const request = new HydrogenRequest(rawRequest);
     const url = new URL(request.url);
 
+    console.log('\nhandleRequest', request.normalizedUrl);
+
     let sessionApi = options.sessionApi;
 
     const {default: importedConfig} = await import(
@@ -306,7 +308,7 @@ async function processRequest(
       rscDidError
     );
 
-    if (rscDidError) {
+    if (!rscDidError) {
       response.headers.set('cache-control', response.cacheControlHeader);
       cacheResponse(response, request, [buffered], revalidate);
     }
@@ -383,6 +385,8 @@ async function runSSR({
 }: RunSsrParams) {
   let ssrDidError: Error | undefined;
   const didError = () => rsc.didError() ?? ssrDidError;
+
+  console.log('runSSR');
 
   const [rscReadableForFizz, rscReadableForFlight] = rsc.readable.tee();
   const rscResponse = createFromReadableStream(rscReadableForFizz);
@@ -731,6 +735,8 @@ function runRSC({App, state, log, request, response}: RunRscParams) {
   request.ctx.router.serverProps = serverProps;
   preloadRequestCacheData(request);
 
+  console.log('runRSC');
+
   const AppRSC = (
     <ServerRequestProvider request={request}>
       <App {...serverProps} />
@@ -981,6 +987,9 @@ async function saveCacheResponse(
   const cache = getCache();
 
   if (cache && chunks.length > 0) {
+    // console.log('saveCacheResponse:', request.url);
+    // console.log(`chunk: "${chunks.join('').substring(0, 50)}..."`);
+
     const {headers, status, statusText} = getResponseOptions(response);
 
     headers.set('cache-control', response.cacheControlHeader);

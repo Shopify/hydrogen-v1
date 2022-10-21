@@ -276,6 +276,8 @@ function useServerResponse(
 ) {
   const key = JSON.stringify(state);
 
+  // console.log('useServerResponse', state)
+
   if (apiRouteRscResponse) {
     cache.clear();
     cache.set(apiRouteRscResponse.url, apiRouteRscResponse.response);
