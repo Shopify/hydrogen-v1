@@ -87,23 +87,22 @@ Provide the following data to `useServerAnalytics` to view information from the 
 | pageType? | The page template type for your routes. For a list of valid values, refer to [`ShopifyAnalytics` constants](#shopifyanalytics-constants). |
 | resourceId? | The ID of the page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. |
 | collectionHandle? | The collection page handle |
-| products? | An array of [product](#product) |
-| searchTerm? | The search term |
-| customerId? | The customer ID |
+| products? | An array of [products](#product). |
+| searchTerm? | The search term. |
+| customerId? | The customer ID. |
 
 #### Product
 
 | Prop     |  Description        | Example |
 | -------- | ------------------- | ------- |
-| product_gid | The globally unique Shopify product ID | `gid://shopify/Product/6730943955000` |
-| variant_gid | The globally unique Shopify product variant ID | `gid://shopify/ProductVariant/41007290712120` |
-| name | The product title | `The H2 Snowboard` |
-| variant | The variant title | `154cm / Reactive Blue` |
-| brand | The product vendor | `Snowdevil` |
-| price | The variant price | `629.95` |
-| category? | The product type | `Snowboards` |
-| sku? | The variant SKU | `123` |
-
+| product_gid | The globally unique Shopify product ID. | `gid://shopify/Product/6730943955000` |
+| variant_gid | The globally unique Shopify product variant ID. | `gid://shopify/ProductVariant/41007290712120` |
+| name | The product title. | `The H2 Snowboard` |
+| variant | The variant title. | `154cm / Reactive Blue` |
+| brand | The product vendor. | `Snowdevil` |
+| price | The variant price. | `629.95` |
+| category? | The product type. | `Snowboards` |
+| sku? | The variant SKU. | `123` |
 
 ### Home page
 
@@ -236,7 +235,6 @@ merchandise {
 }
 ```
 
-
 ### `ShopifyAnalytics` constants
 
 The following table provides a list of valid values for the `pageType` property:
@@ -259,7 +257,7 @@ The following table provides a list of valid values for the `pageType` property:
 | `home` | The homepage of the online store. |
 | `listCollections` | A page that displays a list of collections, which each contain a grouping of products. |
 | `forbidden` | A page that users can't access due to insufficient permissions. |
-| `notFound` | A page no longer exists or is inaccessible. |
+| `notFound` | A page that no longer exists or is inaccessible. |
 | `page` | A page that holds static HTML content. Each `page` object represents a custom page on the online store. |
 | `password` | A page that's shown when [password protection is applied to the store](https://help.shopify.com/en/manual/online-store/themes/password-page). |
 | `product` | A page that represents an individual item for sale in a store. |
