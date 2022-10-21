@@ -40,7 +40,7 @@ the `ShopifyAnalytics` component so that cookies persists for your root domain:
 
 If you're not using custom domains or sub-domains, then the `ShopifyAnalytics` component uses the `storeDomain` value in the Hydrogen configuration file as the default cookie domain or leaves it blank when the specified cookie domain doesn't match `window.location.hostname`.
 
-If you have customer login, then make sure `customerAccessToken` is passed to the `<CartProvider>`:
+If you have customer login, then make sure that `customerAccessToken` is passed to the `<CartProvider>`:
 
 {% codeblock file, filename: 'App.server.jsx' %}
 
