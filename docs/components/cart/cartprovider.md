@@ -5,7 +5,7 @@ description: The CartProvider component creates a context for using a cart.
 ---
 
 The `CartProvider` component creates a context for using a cart. It creates a cart object and callbacks
-that can be accessed by any descendent component using the `useCart` hook and related hooks. It also carries out
+that any descendent component can access using the `useCart` hook and related hooks. `CartProvider` also carries out
 any callback props when a relevant action is performed. For example, if an `onLineAdd` callback is provided,
 then the callback is called when a new line item is successfully added to the cart.
 
