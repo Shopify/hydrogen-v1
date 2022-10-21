@@ -151,6 +151,7 @@ export class HydrogenRequest extends Request {
   }
 
   public getPreloadQueries(): PreloadQueriesByURL | undefined {
+    return;
     if (preloadCache.has(this.normalizedUrl)) {
       const combinedPreloadQueries: PreloadQueriesByURL = new Map();
       const urlPreloadCache = preloadCache.get(this.normalizedUrl);

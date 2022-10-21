@@ -17,6 +17,8 @@ import {
 } from '../ServerRequestProvider/index.js';
 import {CacheShort, NO_STORE} from '../Cache/strategies/index.js';
 import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server.js';
+import {findQueryName} from '../../utilities/log/utils.js';
+import {hashKey} from '../../utilities/hash.js';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
@@ -66,6 +68,7 @@ export function useQuery<T>(
   );
 
   collectQueryTimings(request, withCacheIdKey, 'requested');
+  // console.log(' useQuery - get', findQueryName(hashKey(withCacheIdKey)));
 
   if (shouldPreloadQuery(queryOptions)) {
     request.savePreloadQuery({
@@ -113,10 +116,17 @@ function cachedQueryFnBuilder<T>(
   async function useCachedQueryFn(request: HydrogenRequest) {
     const log = getLoggerWithContext(request);
 
-    const cacheResponse = await getItemFromCache(key);
+    // console.log('useCachedQueryFn - get query', findQueryName(hashKey(key)));
+
+    const cacheResponse = await getItemFromCache(
+      key,
+      resolvedQueryOptions?.cache
+    );
 
     if (cacheResponse) {
       const [output, response] = cacheResponse;
+
+      // console.log('HIT');
 
       collectQueryCacheControlHeaders(
         request,
@@ -129,6 +139,8 @@ function cachedQueryFnBuilder<T>(
        */
       if (isStale(key, response)) {
         const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
+
+        // console.log('useCachedQueryFn - stale query', findQueryName(hashKey(key)));
 
         // Run revalidation asynchronously
         const revalidatingPromise = getItemFromCache(lockKey).then(
@@ -170,6 +182,9 @@ function cachedQueryFnBuilder<T>(
      * Important: Do this async
      */
     if (shouldCacheResponse(newOutput)) {
+      // console.log('useCachedQueryFn - Key', key)
+      // console.log('useCachedQueryFn - save query', findQueryName(hashKey(key)));
+
       const setItemInCachePromise = setItemInCache(
         key,
         newOutput,
