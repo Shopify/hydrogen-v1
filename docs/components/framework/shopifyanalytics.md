@@ -40,7 +40,7 @@ the `ShopifyAnalytics` component so that cookies persists for your root domain:
 
 If you're not using custom domains or sub-domains, then the `ShopifyAnalytics` component uses the `storeDomain` value in the Hydrogen configuration file as the default cookie domain or leaves it blank when the specified cookie domain doesn't match `window.location.hostname`.
 
-If you have customer login, make sure `customerAccessToken` is passed to the `<CartProvider>`
+If you have customer login, then make sure that `customerAccessToken` is passed to the `<CartProvider>`:
 
 {% codeblock file, filename: 'App.server.jsx' %}
 
@@ -66,7 +66,7 @@ return (
 
 ### Connecting Hydrogen analytics with Shopify checkout
 
-Analytic cookies must be set at the first-party domain. This means that when a buyer navigates from your Hydrogen storefront to Shopify checkout, the domain name must stay the same.
+Analytics cookies must be set at the first-party domain. This means that when a buyer navigates from your Hydrogen storefront to Shopify checkout, the domain name must stay the same.
 
 You can achieve this by assigning a sub-domain to your online store. For example, you can do the following tasks:
 
@@ -86,24 +86,23 @@ Provide the following data to `useServerAnalytics` to view information from the 
 | canonicalPath? | The URL path without localization. If you have the URL scheme `/page`, `/en-CA/page`, `/en-GB/page` that represents the same localized pages, then you can tell Shopify how to aggregate these events by setting the canonical path to `/page`. |
 | pageType? | The page template type for your routes. For a list of valid values, refer to [`ShopifyAnalytics` constants](#shopifyanalytics-constants). |
 | resourceId? | The ID of the page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. |
-| collectionHandle? | The collection page handle |
-| products? | An array of [product](#product) |
-| searchTerm? | The search term |
-| customerId? | The customer ID |
+| collectionHandle? | The collection page handle. |
+| products? | An array of [products](#product). |
+| searchTerm? | The search term. |
+| customerId? | The customer ID. |
 
 #### Product
 
 | Prop     |  Description        | Example |
 | -------- | ------------------- | ------- |
-| product_gid | The globally unique Shopify product ID | `gid://shopify/Product/6730943955000` |
-| variant_gid | The globally unique Shopify product variant ID | `gid://shopify/ProductVariant/41007290712120` |
-| name | The product title | `The H2 Snowboard` |
-| variant | The variant title | `154cm / Reactive Blue` |
-| brand | The product vendor | `Snowdevil` |
-| price | The variant price | `629.95` |
-| category? | The product type | `Snowboards` |
-| sku? | The variant SKU | `123` |
-
+| product_gid | The globally unique Shopify product ID. | `gid://shopify/Product/6730943955000` |
+| variant_gid | The globally unique Shopify product variant ID. | `gid://shopify/ProductVariant/41007290712120` |
+| name | The product title. | `The H2 Snowboard` |
+| variant | The variant title. | `154cm / Reactive Blue` |
+| brand | The product vendor. | `Snowdevil` |
+| price | The variant price. | `629.95` |
+| category? | The product type. | `Snowboards` |
+| sku? | The variant SKU. | `123` |
 
 ### Home page
 
@@ -236,7 +235,6 @@ merchandise {
 }
 ```
 
-
 ### `ShopifyAnalytics` constants
 
 The following table provides a list of valid values for the `pageType` property:
@@ -254,12 +252,12 @@ The following table provides a list of valid values for the `pageType` property:
 | `customersLogin` | A page that enables a customer to log in to a storefront. |
 | `customersOrder` | A page that displays a customer's orders. |
 | `customersRegister` | A page that enables a customer to create and register their account. |
-| `customersResetPassword` | A page that enables a customer to reset the password associated with their account. |
+| `customersResetPassword` | A page that enables a customer to reset the password that's associated with their account. |
 | `giftCard` | A page that displays an issued gift card. |
 | `home` | The homepage of the online store. |
-| `listCollections` | A page that displays a list of collections, which each contain a grouping of products. |
+| `listCollections` | A page that displays a list of collections that each contain a grouping of products. |
 | `forbidden` | A page that users can't access due to insufficient permissions. |
-| `notFound` | A page no longer exists or is inaccessible. |
+| `notFound` | A page that no longer exists or is inaccessible. |
 | `page` | A page that holds static HTML content. Each `page` object represents a custom page on the online store. |
 | `password` | A page that's shown when [password protection is applied to the store](https://help.shopify.com/en/manual/online-store/themes/password-page). |
 | `product` | A page that represents an individual item for sale in a store. |

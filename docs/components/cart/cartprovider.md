@@ -5,7 +5,7 @@ description: The CartProvider component creates a context for using a cart.
 ---
 
 The `CartProvider` component creates a context for using a cart. It creates a cart object and callbacks
-that can be accessed by any descendent component using the `useCart` hook and related hooks. It also carries out
+that any descendent component can access using the `useCart` hook and related hooks. `CartProvider` also carries out
 any callback props when a relevant action is performed. For example, if an `onLineAdd` callback is provided,
 then the callback is called when a new line item is successfully added to the cart.
 
@@ -19,7 +19,7 @@ You must use this component to use the following:
 
 ## Required access scopes
 
-The `CartProvider` component requires the following Storefront API [access scopes](/api/usage/access-scopes#unauthenticated-access-scopes):
+The `CartProvider` component requires the following Storefront API [access scopes](https://shopify.dev/api/usage/access-scopes#unauthenticated-access-scopes):
 
 - `unauthenticated_read_customers`
 - `unauthenticated_write_customers`
@@ -50,16 +50,16 @@ export function App() {
 | onBuyerIdentityUpdate? | <code>() => void</code>      | A callback that's invoked when the process to update the buyer identity begins, but before the buyer identity is updated in the Storefront API.                                                                         |
 | onAttributesUpdate?    | <code>() => void</code>      | A callback that's invoked when the process to update the cart attributes begins, but before the attributes are updated in the Storefront API.                                                                           |
 | onDiscountCodesUpdate? | <code>() => void</code>      | A callback that's invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API.                                                                   |
-| onCreateComplete? | <code>() => void</code> | A callback that's invoked when the process to create a cart completes successfully |
-| onLineAddComplete? | <code>() => void</code> | A callback that's invoked when the process to add a line item to the cart completes successfully |
-| onLineRemoveComplete? | <code>() => void</code> | A callback that's invoked when the process to remove a line item to the cart completes successfully |
-| onLineUpdateComplete? | <code>() => void</code> | A callback that's invoked when the process to update a line item in the cart completes successfully |
-| onNoteUpdateComplete? | <code>() => void</code> | A callback that's invoked when the process to add or update a note in the cart completes successfully |
-| onBuyerIdentityUpdateComplete? | <code>() => void</code> | A callback that's invoked when the process to update the buyer identity completes successfully |
-| onAttributesUpdateComplete? | <code>() => void</code> | A callback that's invoked when the process to update the cart attributes completes successfully |
-| onDiscountCodesUpdateComplete? | <code>() => void</code> | A callback that is invoked when the process to update the cart discount codes completes successfully |
+| onCreateComplete? | <code>() => void</code> | A callback that's invoked when the process to create a cart completes successfully. |
+| onLineAddComplete? | <code>() => void</code> | A callback that's invoked when the process to add a line item to the cart completes successfully. |
+| onLineRemoveComplete? | <code>() => void</code> | A callback that's invoked when the process to remove a line item to the cart completes successfully. |
+| onLineUpdateComplete? | <code>() => void</code> | A callback that's invoked when the process to update a line item in the cart completes successfully. |
+| onNoteUpdateComplete? | <code>() => void</code> | A callback that's invoked when the process to add or update a note in the cart completes successfully. |
+| onBuyerIdentityUpdateComplete? | <code>() => void</code> | A callback that's invoked when the process to update the buyer identity completes successfully. |
+| onAttributesUpdateComplete? | <code>() => void</code> | A callback that's invoked when the process to update the cart attributes completes successfully. |
+| onDiscountCodesUpdateComplete? | <code>() => void</code> | A callback that is invoked when the process to update the cart discount codes completes successfully. |
 | customerAccessToken?   | <code>CartBuyerIdentityInput['customerAccessToken']</code>          | The token that identifies the user that's logged in. This is necessary to associate the cart to an authenticated user.                                                                                                   |
-| countryCode?            | <code>CountryCode</code>          | The ISO country code for i18n.                                                                                                                                                                                           |
+| countryCode?            | <code>CountryCode</code>          | The ISO country code for i18n.                                                                                                                                                                                     |
 
 ## Cart fragment
 
