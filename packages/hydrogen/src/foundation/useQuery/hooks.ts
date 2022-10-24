@@ -118,10 +118,7 @@ function cachedQueryFnBuilder<T>(
 
     console.log('useCachedQueryFn - get query', findQueryName(hashKey(key)));
 
-    const cacheResponse = await getItemFromCache(
-      key,
-      resolvedQueryOptions?.cache
-    );
+    const cacheResponse = await getItemFromCache(key);
 
     if (cacheResponse) {
       const [output, response] = cacheResponse;
