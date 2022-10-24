@@ -123,7 +123,7 @@ function cachedQueryFnBuilder<T>(
     if (cacheResponse) {
       const [output, response] = cacheResponse;
 
-      console.log('HIT');
+      console.log('HIT query', findQueryName(hashKey(key)));
 
       collectQueryCacheControlHeaders(
         request,
@@ -137,10 +137,7 @@ function cachedQueryFnBuilder<T>(
       if (isStale(key, response)) {
         const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
 
-        console.log(
-          'useCachedQueryFn - stale query',
-          findQueryName(hashKey(key))
-        );
+        console.log('STALE query', findQueryName(hashKey(key)));
 
         // Run revalidation asynchronously
         const revalidatingPromise = getItemFromCache(lockKey).then(
