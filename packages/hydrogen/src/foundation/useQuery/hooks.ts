@@ -116,7 +116,7 @@ function cachedQueryFnBuilder<T>(
   async function useCachedQueryFn(request: HydrogenRequest) {
     const log = getLoggerWithContext(request);
 
-    // console.log('useCachedQueryFn - get query', findQueryName(hashKey(key)));
+    console.log('useCachedQueryFn - get query', findQueryName(hashKey(key)));
 
     const cacheResponse = await getItemFromCache(
       key,
@@ -126,7 +126,7 @@ function cachedQueryFnBuilder<T>(
     if (cacheResponse) {
       const [output, response] = cacheResponse;
 
-      // console.log('HIT');
+      console.log('HIT');
 
       collectQueryCacheControlHeaders(
         request,
@@ -140,7 +140,10 @@ function cachedQueryFnBuilder<T>(
       if (isStale(key, response)) {
         const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
 
-        // console.log('useCachedQueryFn - stale query', findQueryName(hashKey(key)));
+        console.log(
+          'useCachedQueryFn - stale query',
+          findQueryName(hashKey(key))
+        );
 
         // Run revalidation asynchronously
         const revalidatingPromise = getItemFromCache(lockKey).then(
@@ -183,7 +186,7 @@ function cachedQueryFnBuilder<T>(
      */
     if (shouldCacheResponse(newOutput)) {
       // console.log('useCachedQueryFn - Key', key)
-      // console.log('useCachedQueryFn - save query', findQueryName(hashKey(key)));
+      console.log('useCachedQueryFn - save query', findQueryName(hashKey(key)));
 
       const setItemInCachePromise = setItemInCache(
         key,
