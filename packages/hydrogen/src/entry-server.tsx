@@ -306,7 +306,7 @@ async function processRequest(
       rscDidError
     );
 
-    if (rscDidError) {
+    if (!rscDidError) {
       response.headers.set('cache-control', response.cacheControlHeader);
       cacheResponse(response, request, [buffered], revalidate);
     }
