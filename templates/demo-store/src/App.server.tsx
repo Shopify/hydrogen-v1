@@ -42,7 +42,7 @@ function App({request}: HydrogenRouteProps) {
           data={{
             title: 'Hydrogen',
             description:
-              'Hydrogen is a framework for building fast, modern Shopify storefronts.',
+              "A custom storefront powered by Hydrogen, Shopify's React-based framework for building headless.",
             titleTemplate: `%s · Hydrogen`,
           }}
         />
