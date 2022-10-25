@@ -4,6 +4,7 @@ import {Analytics as AnalyticsClient} from './Analytics.client.js';
 import {useServerRequest} from '../ServerRequestProvider/index.js';
 import AnalyticsErrorBoundary from '../AnalyticsErrorBoundary.client.js';
 import {wrapPromise} from '../../utilities/index.js';
+import {findQueryName} from '../../utilities/log/utils.js';
 
 const DELAY_KEY_1 = 'analytics-delay-1';
 const DELAY_KEY_2 = 'analytics-delay-2';
@@ -38,6 +39,13 @@ export function Analytics() {
   }
   cache.has(DELAY_KEY_2) && cache.get(DELAY_KEY_2).read();
   cache.delete(DELAY_KEY_2);
+
+  // console.log('\nctx.cache');
+  // cache.forEach((cacheFn: any, key: string) => {
+  //   console.log(' ', findQueryName(key));
+  //   const result = cacheFn.call();
+  //   console.log('  ', JSON.stringify(result).substring(20, 80));
+  // });
 
   return (
     <AnalyticsErrorBoundary>
