@@ -12,10 +12,11 @@ import {
   CartProvider,
   useSession,
   useServerAnalytics,
+  Seo,
 } from '@shopify/hydrogen';
 import {HeaderFallback, EventsListener} from '~/components';
 import type {CountryCode} from '@shopify/hydrogen/storefront-api-types';
-import {DefaultSeo, NotFound} from '~/components/index.server';
+import {NotFound} from '~/components/index.server';
 
 function App({request}: HydrogenRouteProps) {
   const pathname = new URL(request.normalizedUrl).pathname;
@@ -36,13 +37,19 @@ function App({request}: HydrogenRouteProps) {
     <Suspense fallback={<HeaderFallback isHome={isHome} />}>
       <EventsListener />
       <ShopifyProvider countryCode={countryCode}>
+        <Seo
+          type="defaultSeo"
+          data={{
+            title: 'Hydrogen',
+            description:
+              "A custom storefront powered by Hydrogen, Shopify's React-based framework for building headless.",
+            titleTemplate: `%s · Hydrogen`,
+          }}
+        />
         <CartProvider
           countryCode={countryCode}
           customerAccessToken={customerAccessToken}
         >
-          <Suspense>
-            <DefaultSeo />
-          </Suspense>
           <Router>
             <FileRoutes
               basePath={countryCode ? `/${countryCode}/` : undefined}
