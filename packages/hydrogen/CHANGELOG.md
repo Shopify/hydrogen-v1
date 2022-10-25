@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.6.1
+
+### Patch Changes
+
+- Fix RSC response caching ([#2260](https://github.com/Shopify/hydrogen/pull/2260)) by [@wizardlyhel](https://github.com/wizardlyhel)
+
+* Fix the types for `<Seo type="defaultSeo" />` ([#2268](https://github.com/Shopify/hydrogen/pull/2268)) by [@jplhomer](https://github.com/jplhomer)
+
+- Allow `basePath` to be passed to `Route` to support path-based internationalization inside custom route ([#2252](https://github.com/Shopify/hydrogen/pull/2252)) by [@jplhomer](https://github.com/jplhomer)
+
 ## 1.6.0
 
 ### Minor Changes
@@ -443,7 +453,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }
