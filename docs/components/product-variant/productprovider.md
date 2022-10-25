@@ -5,10 +5,10 @@ description: The ProductProvider component sets up a context with state that tra
 hidden: true
 ---
 
-> Caution:
-> `ProductProvider` is only available as part of the [Hydrogen UI](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks) package, which is in beta. If you’re building with Hydrogen, use [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
+> Note:
+> `ProductProvider` is only available as part of the [Hydrogen UI](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks) package, which is in beta. If you’re building with Hydrogen, then use [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
 
-The `ProductProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions) hook.
+The `ProductProvider` component sets up a context with state that tracks the selected variant and options. Descendants of this component can use the [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions) hook.
 
 ## Example code
 
@@ -289,8 +289,8 @@ export function Product() {
 | Name              | Type                                                                              | Description                                                                                                                                                                                                     |
 | ----------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | children          | <code>ReactNode</code>                                                            | A `ReactNode` element.                                                                                                                                                                                          |
-| data              | <code>PartialDeep&#60;ProductType&#62;</code>                                     | An object with fields that correspond to the Storefront API's [Product object](/api/storefront/reference/products/product).                                                                  |
-| initialVariantId? | <code>Parameters&#60;typeof useProductOption&#62;['0']['initialvariantid']</code> | The initially selected variant. <br></br>The following logic applies to `initialVariantId`:<ul><li>If `initialVariantId` is provided, then it's used, even if it's out of stock.</li><li>If `initialVariantId` is provided, but is `null`, then no variant is used.</li><li>If nothing is passed to `initialVariantId`, and you're in a `ProductProvider` component, then `selectedVariant.id` is used.</li><li>If nothing is passed to `initialVariantId` and you're not in a `ProductProvider` component, then the first available or in-stock variant is used.</li><li>If nothing is passed to `initialVariantId`, you're not in a `ProductProvider` component, and no variants are in stock, then the first variant is used.</li></ul> |
+| data              | <code>PartialDeep&#60;ProductType&#62;</code>                                     | An object with fields that correspond to the Storefront API's [`Product` object](/api/storefront/reference/products/product).                                                                  |
+| initialVariantId? | <code>Parameters&#60;typeof useProductOption&#62;['0']['initialvariantid']</code> | The initially selected variant. <br></br>The following logic applies to `initialVariantId`:<ul><li>If `initialVariantId` is provided, then it's used, even if the variant is out of stock.</li><li>If `initialVariantId` is provided, but is `null`, then no variant is used.</li><li>If nothing is passed to `initialVariantId`, and you're in a `ProductProvider` component, then `selectedVariant.id` is used.</li><li>If nothing is passed to `initialVariantId` and you're not in a `ProductProvider` component, then the first available or in-stock variant is used.</li><li>If nothing is passed to `initialVariantId`, you're not in a `ProductProvider` component, and no variants are in stock, then the first variant is used.</li></ul> |
 
 ## Component type
 
@@ -299,7 +299,7 @@ The `ProductProvider` component is a client component, which means that it rende
 ## Related components
 
 - [`ProductPrice`](https://shopify.dev/api/hydrogen/components/product-variant/productprice)
-- [`ProductOptionsProvider}`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
+- [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
 
 ## Related hooks
 
