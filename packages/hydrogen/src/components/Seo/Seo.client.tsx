@@ -14,7 +14,17 @@ import type {
 type Props =
   | {
       type: 'defaultSeo';
-      data: Omit<DefaultPageType, 'url'>;
+      data: Omit<
+        DefaultPageType,
+        | 'url'
+        | 'metafields'
+        | 'id'
+        | 'moneyFormat'
+        | 'name'
+        | 'paymentSettings'
+        | 'primaryDomain'
+        | 'shipsToCountries'
+      >;
     }
   | {
       type: 'homepage';
