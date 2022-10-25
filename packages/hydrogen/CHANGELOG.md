@@ -2,6 +2,16 @@
 
 ## 1.6.1
 
+### Hydrogen UI React
+
+We’re excited to announce an experimental version of Hydrogen UI React is now available! We’ve decoupled key components, hooks, and utilities from the Hydrogen framework and moved them into a new package called `@shopify/hydrogen-react`.
+
+You can now bring Hydrogen functionality to your React framework of choice! 
+
+The components, hooks, and utilities will continue to be supported in `@shopify/hydrogen` until Hydrogen UI React is made generally available, but all new features will only go into `@shopify/hydrogen-react` going forward.
+
+Check out the [documentation](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks) and the [repository](https://github.com/Shopify/hydrogen-ui) to learn more!
+
 ### Patch Changes
 
 - Fix RSC response caching ([#2260](https://github.com/Shopify/hydrogen/pull/2260)) by [@wizardlyhel](https://github.com/wizardlyhel)
