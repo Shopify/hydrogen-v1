@@ -28,12 +28,7 @@ module.exports = {
     'node/no-missing-import': [
       'error',
       {
-        allowModules: [
-          'types',
-          'testUtils',
-          '@shopify/hydrogen',
-          '@shopify/hydrogen-ui',
-        ],
+        allowModules: ['types', 'testUtils', '@shopify/hydrogen'],
         tryExtensions: ['.ts', '.js', '.jsx', '.tsx', '.d.ts'],
       },
     ],

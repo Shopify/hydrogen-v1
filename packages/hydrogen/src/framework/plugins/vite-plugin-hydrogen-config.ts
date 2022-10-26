@@ -80,10 +80,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         // Reload when updating local Hydrogen lib
         server: process.env.LOCAL_DEV && {
           watch: {
-            ignored: [
-              '!**/node_modules/@shopify/hydrogen/**',
-              '!**/node_modules/@shopify/hydrogen-ui/**',
-            ],
+            ignored: ['!**/node_modules/@shopify/hydrogen/**'],
           },
         },
 
@@ -92,7 +89,6 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
             '@shopify/hydrogen',
             '@shopify/hydrogen/client',
             '@shopify/hydrogen/entry-client',
-            '@shopify/hydrogen-ui',
           ],
           include: [
             /**
