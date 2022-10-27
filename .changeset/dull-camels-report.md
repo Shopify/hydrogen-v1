@@ -4,7 +4,7 @@
 
 Remove automatic origin support from `fetchSync` on the server.
 
-Developers should never be making `fetch` requests against their own Hydrogen app. This is because some production runtimes prohibit invoking `fetch` requests to servers in the same region. Other runtimes will fail to resolve DNS when invoked from within the same process.
+Developers should never be making `fetch` requests on the server against their own Hydrogen app. This is because some production runtimes prohibit invoking `fetch` requests to servers in the same region. Other runtimes will fail to resolve DNS when invoked from within the same process.
 
 This change makes it **required** to pass a fully-qualified URL (including origin) to `fetchSync` when it's being used on the server:
 
