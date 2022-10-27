@@ -7,6 +7,7 @@ import {
   useServerAnalytics,
   useLocalization,
   useShopQuery,
+  fetchSync,
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
@@ -43,6 +44,8 @@ function HomepageContent() {
     language: {isoCode: languageCode},
     country: {isoCode: countryCode},
   } = useLocalization();
+
+  const foo = fetchSync('/foo');
 
   const {data} = useShopQuery<{
     heroBanners: CollectionConnection;
