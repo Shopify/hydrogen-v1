@@ -1,5 +1,4 @@
 import {type HydrogenUseQueryOptions, useQuery} from '../../useQuery/index.js';
-import {useUrl} from '../../useUrl/index.js';
 import {ResponseSync} from '../ResponseSync.js';
 
 /**
@@ -12,17 +11,12 @@ export function fetchSync(
   options?: Omit<RequestInit, 'cache'> & HydrogenUseQueryOptions
 ) {
   const {cache, preload, shouldCacheResponse, ...requestInit} = options ?? {};
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const {origin} = useUrl();
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const {data, error} = useQuery(
     [url, requestInit],
     async () => {
-      const response = await globalThis.fetch(
-        new URL(url, origin),
-        requestInit
-      );
+      const response = await globalThis.fetch(url, requestInit);
 
       return ResponseSync.toSerializable(response);
     },
