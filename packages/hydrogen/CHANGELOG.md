@@ -6,7 +6,7 @@
 
 We’re excited to announce an experimental version of Hydrogen UI React is now available! We’ve decoupled key components, hooks, and utilities from the Hydrogen framework and moved them into a new package called `@shopify/hydrogen-react`.
 
-You can now bring Hydrogen functionality to your React framework of choice! 
+You can now bring Hydrogen functionality to your React framework of choice!
 
 The components, hooks, and utilities will continue to be supported in `@shopify/hydrogen` until Hydrogen UI React is made generally available, but all new features will only go into `@shopify/hydrogen-react` going forward.
 
@@ -463,7 +463,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function(request) {
+  export default function (request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }

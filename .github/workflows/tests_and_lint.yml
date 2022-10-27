@@ -55,10 +55,6 @@ jobs:
         run: yarn lint
         working-directory: ./templates/demo-store
 
-      - name: Type check hydrogen-ui
-        run: yarn typecheck
-        working-directory: ./packages/hydrogen-ui
-
       - name: Run the unit tests
         run: yarn test
 

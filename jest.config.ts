@@ -12,7 +12,6 @@ const config: Config.InitialOptions = {
     '<rootDir>/packages/playground/*',
     '<rootDir>/examples/*',
     '<rootDir>/templates/*',
-    '<rootDir>/packages/hydrogen-ui/*',
   ],
   testTimeout: process.env.CI ? 45000 : 10000,
   watchPathIgnorePatterns: ['<rootDir>/temp', 'fixtures'],
