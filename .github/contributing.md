@@ -47,7 +47,6 @@ Hydrogen is a Yarn v1 monorepo. It consists of several key packages:
 - `examples`: Illustrative proofs of concept demonstrating integrations and special use cases for Hydrogen
 - `templates`: Full working implementations of a Hydrogen storefront (including the Demo Store template)
 - `packages/hydrogen`: The Hydrogen React framework & SDK
-- `packages/create-hydrogen-app`: The CLI used to scaffold new projects
 - `packages/cli`: The CLI used to perform tasks in a Hydrogen app
 - `packages/playground`: Test cases used for both manual testing and automated end-to-end tests
 
@@ -180,52 +179,6 @@ For context, updating the `codegen.yml` file and running the script does the fol
 1. Automatically hits the Storefront API, and use an introspection query to get the latest info
 1. Uses the results of that query to generate a new `graphql.schema.json` (which is a local representation of the Storefront API)
 1. Generates / updates the new types in `/packages/hydrogen/src/storefront-api-types.ts` based on the `graphql.schema.json`
-
-## Running a local version of Hydrogen in a Hydrogen app
-
-> Caution:
-> You must use `yarn` for all commands, due to issues with NPM and dependencies, even if the prompt tells you to use `npm`.
-
-Follow these instructions to create your own Hydrogen app using the local development version of the Hydrogen framework.
-
-Before running any commands, be sure to build the Hydrogen lib with `yarn dev-lib` or `yarn build`.
-
-```bash
-cd packages/create-hydrogen-app && yarn link
-```
-
-This makes the executable `create-hydrogen` available globally.
-
-Next, choose an option below.
-
-### Option 1: `localdev` package
-
-This option creates a new Hydrogen app similar to `templates/demo-store` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
-
-```terminal
-create-hydrogen packages/localdev
-# when prompted, use `localdev` for the package name
-```
-
-Then run your app:
-
-```terminal
-yarn workspace localdev dev
-```
-
-### Option 2: Standalone package
-
-> Caution:
-> This requires you to have a directory structure on your machine like `~/src/github.com/Shopify/*`, and it requires you to create your custom Hydrogen app in a namespace similar to `~/src/github.com/<namespace>/<your hydrogen app here>`.
-
-1. In the directory you want to create your Hydrogen app, run `LOCAL=true create-hydrogen` and answer the prompts.
-1. Run `cd <your app>`.
-1. Run `yarn` or `npm i`.
-1. Optional. Replace default `hydrogen.config.js` with your own storefront credentials.
-1. Run `yarn dev` or `npm run dev` to start your dev server.
-1. Open the dev server in your browser at http://localhost:3000.
-
-If you make changes to core Hydrogen packages, then you'll need to delete `node_modules`, install dependencies again and start the server as mentioned above.
 
 ## Testing
 
