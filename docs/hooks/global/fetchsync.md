@@ -137,6 +137,7 @@ The following considerations apply to `fetchSync` in server and client component
 
 - Don't use `async/await` with the `fetchSync` helper provided by Hydrogen. Hydrogen wraps the native fetch call in a way that supports Suspense boundaries.
 - Process the response contents with `json()` or `text()` helpers.
+- Don't use `fetchSync` on the server to call an endpoint within the same Hydrogen app. This causes issues in some production runtimes. Instead, make the query for the data directly.
 
 ### `fetchSync` in client components
 
@@ -144,6 +145,7 @@ The following considerations apply to `fetchSync` in server and client component
 - Data fetched on the server during SSR isn't serialized to the client. This means that your client `fetchSync` function will run twice during initial page load: once on the server and once on the client.
 - Suspense boundaries inside client components rendered during a subsequent navigation are only rendered on the client - not on the server.
 - If you include browser-only logic inside your client component Suspense boundary, which would otherwise fail on the server, then you should conditionally include the suspending component with a piece of client state activated by `useEffect` or with a user action: `{isLoaded && <Suspense><MyComponent></Suspense>}`.
+- If you are using `fetchSync` to call an API endpoint in the same Hydrogen app, you must wrap the call in conditional logic with a piece of client state activated by `useEffect` to ensure it does not execute during pre-rendering (SSR): `{isLoaded && <Suspense><MyComponent></Suspense>}`.
 
 ## Related hooks
 

@@ -302,24 +302,6 @@ export default async function testCases({
     expect(serverRenderedId).toEqual(clientRenderedId);
   });
 
-  it('can cache fetchSync responses', async () => {
-    const test = async () => {
-      expect(await page.textContent('h1')).toContain('Request Sync');
-      expect(await page.textContent('#response-body')).toMatch('OK');
-      expect(await page.textContent('#response-status')).toMatch('201');
-      expect(await page.textContent('#response-header-test')).toMatch('42');
-    };
-
-    // Make fetchSync request and store response data in cache
-    await page.goto(getServerUrl() + '/response-sync');
-    await test();
-
-    // Check that cached response data is reused properly.
-    // This requires `devCache: true` in `vite.config.js`.
-    await page.reload();
-    await test();
-  });
-
   describe('CSS', () => {
     const extractCssFromDOM = async () => {
       if (isBuild) {
