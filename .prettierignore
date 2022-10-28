@@ -2,7 +2,5 @@
 **/dist/**
 packages/hydrogen/graphql.schema.json
 **/vendor
-packages/hydrogen-ui/storefront.schema.json
-packages/hydrogen-ui/coverage/**
 docs/
 **/coverage/
