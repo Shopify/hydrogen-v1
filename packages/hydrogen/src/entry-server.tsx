@@ -388,9 +388,11 @@ async function runSSR({
   const rscResponse = createFromReadableStream(rscReadableForFizz);
   const RscConsumer = () => rscResponse.readRoot();
 
+  const canStream = response.canStream();
+
   const AppSSR = (
     <Html
-      template={response.canStream() ? noScriptTemplate : template}
+      template={canStream ? noScriptTemplate : template}
       hydrogenConfig={request.ctx.hydrogenConfig!}
     >
       <ServerRequestProvider request={request}>
@@ -417,7 +419,7 @@ async function runSSR({
 
   log.trace('start ssr');
 
-  const rscReadable = response.canStream()
+  const rscReadable = canStream
     ? new ReadableStream({
         start(controller) {
           log.trace('rsc start chunks');
@@ -469,7 +471,7 @@ async function runSSR({
       );
     }
 
-    if (response.canStream()) log.trace('worker ready to stream');
+    if (canStream) log.trace('worker ready to stream');
     ssrReadable.allReady.then(() => log.trace('worker complete ssr'));
 
     const prepareForStreaming = () => {
@@ -509,7 +511,7 @@ async function runSSR({
       return true;
     };
 
-    const shouldFlushBody = response.canStream()
+    const shouldFlushBody = canStream
       ? prepareForStreaming()
       : await ssrReadable.allReady.then(prepareForStreaming);
 
@@ -519,7 +521,7 @@ async function runSSR({
 
       const writingSSR = bufferReadableStream(
         ssrReadable.getReader(),
-        response.canStream()
+        canStream
           ? (chunk) => {
               bufferedSsr += chunk;
 
@@ -542,13 +544,13 @@ async function runSSR({
 
       const writingRSC = bufferReadableStream(
         rscReadable.getReader(),
-        response.canStream()
+        canStream
           ? (scriptTag) => writable.write(encoder.encode(scriptTag))
           : undefined
       );
 
       Promise.all([writingSSR, writingRSC]).then(([ssrHtml, rscPayload]) => {
-        if (!response.canStream()) {
+        if (!canStream) {
           const html = assembleHtml({ssrHtml, rscPayload, request, template});
           writable.write(encoder.encode(html));
         }
@@ -579,7 +581,7 @@ async function runSSR({
       );
     }
 
-    if (response.canStream()) {
+    if (canStream) {
       return new Response(transform.readable, responseOptions);
     }
 
@@ -615,7 +617,7 @@ async function runSSR({
           return nodeResponse.end();
         }
 
-        if (!response.canStream()) return;
+        if (!canStream) return;
 
         startWritingToNodeResponse(nodeResponse, dev ? didError() : undefined);
 
@@ -632,10 +634,7 @@ async function runSSR({
       async onAllReady() {
         log.trace('node complete ssr');
 
-        if (
-          !revalidate &&
-          (response.canStream() || nodeResponse.writableEnded)
-        ) {
+        if (!revalidate && (canStream || nodeResponse.writableEnded)) {
           postRequestTasks(
             'str',
             nodeResponse.statusCode,
