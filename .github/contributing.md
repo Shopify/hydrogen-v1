@@ -47,7 +47,6 @@ Hydrogen is a Yarn v1 monorepo. It consists of several key packages:
 - `examples`: Illustrative proofs of concept demonstrating integrations and special use cases for Hydrogen
 - `templates`: Full working implementations of a Hydrogen storefront (including the Demo Store template)
 - `packages/hydrogen`: The Hydrogen React framework & SDK
-- `packages/cli`: The CLI used to perform tasks in a Hydrogen app
 - `packages/playground`: Test cases used for both manual testing and automated end-to-end tests
 
 For more information, check out the following resources:
