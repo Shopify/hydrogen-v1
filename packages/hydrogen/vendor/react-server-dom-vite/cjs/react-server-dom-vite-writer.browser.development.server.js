@@ -1849,36 +1849,4 @@ function renderToReadableStream(model, options) {
   options ? options.onError : undefined, options ? options.context : undefined, options ? options.identifierPrefix : undefined);
 
   if (options && options.signal) {
-    var signal = options.signal;
-
-    if (signal.aborted) {
-      abort(request, signal.reason);
-    } else {
-      var listener = function () {
-        abort(request, signal.reason);
-        signal.removeEventListener('abort', listener);
-      };
-
-      signal.addEventListener('abort', listener);
-    }
-  }
-
-  var stream = new ReadableStream({
-    type: 'bytes',
-    start: function (controller) {
-      startWork(request);
-    },
-    pull: function (controller) {
-      startFlowing(request, controller);
-    },
-    cancel: function (reason) {}
-  }, // $FlowFixMe size() methods are not allowed on byte streams.
-  {
-    highWaterMark: 0
-  });
-  return stream;
-}
-
-exports.renderToReadableStream = renderToReadableStream;
-  })();
-}
+  
