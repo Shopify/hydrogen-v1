@@ -9,7 +9,12 @@ The `useCartLine` hook provides access to the cart line object. It must be a des
 ## Example code
 
 ```tsx
-import {CartLineProvider, useCartLine, useCart} from '@shopify/hydrogen';
+import {
+  CartLinePrice,
+  CartLineProvider,
+  useCartLine,
+  useCart,
+} from '@shopify/hydrogen';
 
 export function MyComponent() {
   const {lines} = useCart();
@@ -24,13 +29,18 @@ export function MyComponent() {
 }
 
 export function CartLineItem() {
-  const {price, productTitle, quantity} = useCartLine();
+  const {
+    quantity,
+    merchandise: {
+      product: { title },
+    },
+  } = useCartLine();
 
   return (
     <>
-      <h2>{productTitle}</h2>
-      <span>{price}</span>
+      <h2>{title}</h2>
       <span>{quantity}</span>
+      <CartLinePrice as="span" />
     </>
   );
 }
