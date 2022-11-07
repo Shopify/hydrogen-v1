@@ -69,17 +69,22 @@ export function CartDetails({
 }
 
 function CartCheckoutActions() {
-  const {checkoutUrl} = useCart();
+  const {checkoutUrl, customerAccessToken} = useCart();
   return (
     <>
       <div className="grid gap-4">
-        {checkoutUrl ? (
-          <Link to={checkoutUrl} prefetch={false} target="_self">
-            <Button as="span" width="full">
-              Continue to Checkout
-            </Button>
-          </Link>
-        ) : null}
+        {checkoutUrl && (
+          <form method="post" action={checkoutUrl}>
+            {customerAccessToken && (
+              <input
+                type="hidden"
+                name="customer_access_token"
+                value={customerAccessToken}
+              />
+            )}
+            <Button width="full">Continue to Checkout</Button>
+          </form>
+        )}
         <CartShopPayButton />
       </div>
     </>

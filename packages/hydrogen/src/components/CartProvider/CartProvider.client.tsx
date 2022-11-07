@@ -439,6 +439,7 @@ export function CartProvider({
         });
       },
       cartFragment,
+      customerAccessToken,
     };
   }, [
     cartCreate,
@@ -447,6 +448,7 @@ export function CartProvider({
     cartDisplayState.value,
     cartFragment,
     onCartReadySend,
+    customerAccessToken,
   ]);
 
   return (

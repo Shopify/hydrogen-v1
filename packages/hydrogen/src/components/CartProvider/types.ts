@@ -5,6 +5,7 @@ import {
   MutationCartNoteUpdateArgs,
   CartBuyerIdentityInput,
   MutationCartAttributesUpdateArgs,
+  InputMaybe,
 } from '../../storefront-api-types.js';
 import {CartFragmentFragment} from './graphql/CartFragment.js';
 import {StateMachine} from '@xstate/fsm';
@@ -30,6 +31,8 @@ export interface Cart {
   cost?: CartFragmentFragment['cost'];
   /** The total number of items in the cart, across all lines. If there are no lines, then the value is 0. */
   totalQuantity: number;
+  /** A customer access token that's accessible on the server if there's a customer login. */
+  customerAccessToken?: InputMaybe<string>;
 }
 
 export interface CartWithActions extends Cart {
