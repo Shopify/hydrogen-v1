@@ -81,3 +81,19 @@ export function getStorefrontApiRequestHeaders({
 export function getOxygenVariable(key: string): any {
   return typeof Oxygen !== 'undefined' ? Oxygen?.env?.[key] : null;
 }
+
+export function getOnlineStorefrontHeaders(request: Request) {
+  const clientIP = request.headers.get('X-Shopify-Client-IP');
+  const clientIPSig = request.headers.get('X-Shopify-Client-IP-Sig');
+
+  if (!clientIP || !clientIPSig) {
+    log.warn(
+      'Proxying the online store is only available in Oxygen. This request is likely to be throttled.'
+    );
+  }
+
+  return new Headers({
+    'X-Shopify-Client-IP': clientIP!,
+    'X-Shopify-Client-IP-Sig': clientIPSig!,
+  });
+}

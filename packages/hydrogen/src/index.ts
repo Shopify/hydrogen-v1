@@ -66,3 +66,5 @@ export {
   type ResourceGetter as HydrogenApiRoute,
   RequestOptions as HydrogenApiRouteOptions,
 } from './utilities/apiRoutes.js';
+
+export {getOnlineStorefrontHeaders} from './utilities/storefrontApi.js';
