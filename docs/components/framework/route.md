@@ -27,7 +27,7 @@ function App() {
     </Suspense>
   );
 }
-function Products({params}) {
+function Product({params}) {
   return <h1>Product name: {params.handle}</h1>;
 }
 function Home() {
