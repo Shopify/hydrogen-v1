@@ -86,7 +86,7 @@ export function getOnlineStorefrontHeaders(request: Request) {
   const clientIP = request.headers.get('X-Shopify-Client-IP');
   const clientIPSig = request.headers.get('X-Shopify-Client-IP-Sig');
 
-  if (!clientIP || !clientIPSig) {
+  if (!__HYDROGEN_DEV__ && (!clientIP || !clientIPSig)) {
     log.warn(
       'Proxying the online store is only available in Oxygen. This request is likely to be throttled.'
     );
