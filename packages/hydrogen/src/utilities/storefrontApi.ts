@@ -92,8 +92,10 @@ export function getOnlineStorefrontHeaders(request: Request) {
     );
   }
 
-  return new Headers({
-    'X-Shopify-Client-IP': clientIP!,
-    'X-Shopify-Client-IP-Sig': clientIPSig!,
-  });
+  const headers = new Headers(request.headers);
+
+  headers.set('X-Shopify-Client-IP', clientIP!);
+  headers.set('X-Shopify-Client-IP-Sig', clientIPSig!);
+
+  return headers;
 }
