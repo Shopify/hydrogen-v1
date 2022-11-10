@@ -7,7 +7,7 @@
   "engines": {
     "node": ">=14"
   },
-  "version": "1.6.1",
+  "version": "0.0.0-unstable-20221110141506",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",

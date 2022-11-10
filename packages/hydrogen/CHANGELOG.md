@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.0.0-unstable-20221110141506
+
+### Minor Changes
+
+- Remove automatic origin support from `fetchSync` on the server. ([#2276](https://github.com/Shopify/hydrogen/pull/2276)) by [@jplhomer](https://github.com/jplhomer)
+
+  Developers should never be making `fetch` requests on the server against their own Hydrogen app. This is because some production runtimes prohibit invoking `fetch` requests to servers in the same region. Other runtimes will fail to resolve DNS when invoked from within the same process.
+
+  This change makes it **required** to pass a fully-qualified URL (including origin) to `fetchSync` when it's being used on the server:
+
+  ```jsx
+  // MyComponent.server.jsx
+
+  // ❌ You should not use this pattern, and it will now fail:
+  fetchSync('/api/path').json();
+  ```
+
+  Instead, you should query the data directly, or extract the data query to a function and call it inside your server component:
+
+  ```jsx
+  // MyComponent.server.jsx
+  import {sharedQuery} from './shared-location.server';
+
+  // ✅ Do this instead:
+  useQuery('shared-query', sharedQuery);
+  ```
+
+  This is not considered a breaking change because the intention of the server-side `fetchSync` API was never to enable calling a Hydrogen app from itself, but rather to call third-party APIs from the server.
+
+### Patch Changes
+
+- Add a helper method to get headers to proxy the online store. These headers are necessary to prevent the online store from throttling proxied requests: ([#2300](https://github.com/Shopify/hydrogen/pull/2300)) by [@blittle](https://github.com/blittle)
+
+  ```ts
+  import {getOnlineStorefrontHeaders} from '@shopify/hydrogen';
+
+  async function handleEvent(event) {
+    const response = fetch(`https://hydrogen.shop/products/hydrogen`, {
+      headers: getOnlineStorefrontHeaders(event.request),
+    });
+
+    return response;
+  }
+  ```
+
 ## 1.6.1
 
 ### Hydrogen UI React
@@ -463,7 +508,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }
