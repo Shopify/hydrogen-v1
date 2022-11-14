@@ -1,4 +1,3 @@
-import {STOREFRONT_API_BUYER_IP_HEADER} from '../constants.js';
 import type {QueryKey} from '../types.js';
 
 export function hashKey(queryKey: QueryKey): string {
