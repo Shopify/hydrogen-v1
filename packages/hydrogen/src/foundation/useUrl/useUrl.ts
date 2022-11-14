@@ -1,6 +1,6 @@
 import {useContext, useMemo} from 'react';
 import {RSC_PATHNAME} from '../../constants.js';
-import {parseJSON} from '../../utilities/parse.js';
+import {parseState} from '../../utilities/parse.js';
 import {RouterContext} from '../Router/BrowserRouter.client.js';
 import {useEnvContext, META_ENV_SSR} from '../ssr-interop.js';
 
@@ -14,10 +14,10 @@ export function useUrl(): URL {
     );
 
     if (serverUrl.pathname === RSC_PATHNAME) {
-      const state = parseJSON(serverUrl.searchParams.get('state') || '{}');
+      const state = parseState(serverUrl);
 
-      const parsedUrl = `${serverUrl.origin}${state.pathname ?? ''}${
-        state.search ?? ''
+      const parsedUrl = `${serverUrl.origin}${state?.pathname ?? ''}${
+        state?.search ?? ''
       }`;
 
       return new URL(parsedUrl);

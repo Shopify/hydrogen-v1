@@ -45,7 +45,7 @@ import {getTemplate} from './utilities/template.js';
 import {Analytics} from './foundation/Analytics/Analytics.server.js';
 import {DevTools} from './foundation/DevTools/DevTools.server.js';
 import {getSyncSessionApi} from './foundation/session/session.js';
-import {parseJSON} from './utilities/parse.js';
+import {parseState} from './utilities/parse.js';
 import {htmlEncode} from './utilities/index.js';
 import {generateUUID} from './utilities/random.js';
 import {splitCookiesString} from 'set-cookie-parser';
@@ -287,11 +287,16 @@ async function processRequest(
   }
 
   const state: Record<string, any> = isRSCRequest
-    ? parseJSON(decodeURIComponent(url.searchParams.get('state') || '{}'))
+    ? parseState(new URL(decodeURIComponent(url.toString())))
     : {
         pathname: decodeURIComponent(url.pathname),
         search: decodeURIComponent(url.search),
       };
+
+  if (isRSCRequest && !state) {
+    postRequestTasks('rsc', 400, request, response, true);
+    return new Response(`Invalid RSC state`, {status: 400});
+  }
 
   const rsc = runRSC({App, state, log, request, response});
 
