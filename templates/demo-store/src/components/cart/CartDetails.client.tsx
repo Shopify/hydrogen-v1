@@ -41,7 +41,10 @@ export function CartDetails({
   };
 
   return (
-    <form className={container[layout]}>
+    <form
+      className={container[layout]}
+      onSubmit={(evt) => evt.preventDefault()}
+    >
       <section
         ref={scrollRef}
         aria-labelledby="cart-contents"
