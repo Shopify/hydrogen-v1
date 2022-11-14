@@ -155,6 +155,9 @@ export function preloadRequestCacheData(request: HydrogenRequest): void {
   const preloadQueries = request.getPreloadQueries();
   const {cache} = request.ctx;
 
+  // TODO: Remove before shipping
+  console.log(preloadQueries?.size ?? 0, 'preloaded queries');
+
   preloadQueries?.forEach((preloadQuery, cacheKey) => {
     collectQueryTimings(request, preloadQuery.key, 'preload');
 
