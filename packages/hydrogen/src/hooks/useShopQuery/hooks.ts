@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {useShop} from '../../foundation/useShop/index.js';
 import {getLoggerWithContext} from '../../utilities/log/index.js';
 import type {CachingStrategy, PreloadOptions} from '../../types.js';
@@ -5,11 +6,12 @@ import {graphqlRequestBody} from '../../utilities/index.js';
 import {useServerRequest} from '../../foundation/ServerRequestProvider/index.js';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker.js';
 import {sendMessageToClient} from '../../utilities/devtools.js';
-import {fetchSync} from '../../foundation/fetchSync/server/fetchSync.js';
 import {META_ENV_SSR} from '../../foundation/ssr-interop.js';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
 import {parseJSON} from '../../utilities/parse.js';
 import {STOREFRONT_API_BUYER_IP_HEADER} from '../../constants.js';
+import {useQuery} from '../../foundation/useQuery/hooks.js';
+import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.js';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -19,14 +21,8 @@ export interface UseShopQueryResponse<T> {
 
 // Check if the response body has GraphQL errors
 // https://spec.graphql.org/June2018/#sec-Response-Format
-const shouldCacheResponse = ([body]: [any, Response]) => {
-  try {
-    return !parseJSON(body)?.errors;
-  } catch {
-    // If we can't parse the response, then assume
-    // an error and don't cache the response
-    return false;
-  }
+const shouldCacheResponse = (body: any) => {
+  return !body?.errors;
 };
 
 /**
@@ -69,61 +65,91 @@ export function useShopQuery<T>({
     );
   }
 
-  const serverRequest = useServerRequest(); // eslint-disable-line react-hooks/rules-of-hooks
+  const serverRequest = useServerRequest();
   const log = getLoggerWithContext(serverRequest);
 
+  const {
+    storeDomain,
+    storefrontApiVersion,
+    storefrontToken,
+    storefrontId,
+    privateStorefrontToken,
+  } = useShop();
+
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {url, requestInit} = useCreateShopRequest(body); // eslint-disable-line react-hooks/rules-of-hooks
 
-  let text: string;
-  let data: any;
-  let useQueryError: any;
-  let response: ReturnType<typeof fetchSync> | null = null;
+  const {data, error} = useQuery(
+    [storeDomain, storefrontApiVersion, body],
+    async (request) => {
+      const {url, requestInit} = useCreateShopRequest({
+        body,
+        request,
+        storeDomain,
+        storefrontToken,
+        storefrontApiVersion,
+        storefrontId,
+        privateStorefrontToken,
+      });
+      const response = await fetch(url, requestInit);
+      const text = await response.text();
 
-  try {
-    response = fetchSync(url, {
-      ...requestInit,
-      cache,
-      preload,
-      shouldCacheResponse,
-    });
+      try {
+        const data = parseJSON(text);
 
-    text = response.text();
+        /**
+         * GraphQL errors get printed to the console but ultimately
+         * get returned to the consumer.
+         */
+        if (data?.errors) {
+          const errors = Array.isArray(data.errors)
+            ? data.errors
+            : [data.errors];
+          const requestId = response?.headers?.get('x-request-id') ?? '';
+          for (const error of errors) {
+            if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {
+              throw new Error(
+                `Storefront API GraphQL Error: ${error.message}.\nRequest id: ${requestId}`
+              );
+            } else {
+              log.error(
+                'Storefront API GraphQL Error',
+                error,
+                'Storefront API GraphQL request id',
+                requestId
+              );
+            }
+          }
+          log.error(`Storefront API GraphQL error count: ${errors.length}`);
+        }
 
-    try {
-      data = response.json();
-    } catch (error: any) {
-      if (response.headers.get('content-length')) {
-        useQueryError = new Error(
-          `Unable to parse response (x-request-id: ${response.headers.get(
-            'x-request-id'
-          )}):\n${text}`
-        );
-      } else {
-        useQueryError = new Error(
-          `${response.status} ${
-            response.statusText
-          } (x-request-id: ${response.headers.get('x-request-id')})`
-        );
+        return data;
+      } catch (error: any) {
+        if (response.headers.get('content-length')) {
+          throw new Error(
+            `Unable to parse response (x-request-id: ${response.headers.get(
+              'x-request-id'
+            )}):\n${text}`
+          );
+        } else {
+          throw new Error(
+            `${response.status} ${
+              response.statusText
+            } (x-request-id: ${response.headers.get('x-request-id')})`
+          );
+        }
       }
-    }
-  } catch (error: any) {
-    // Pass-through thrown promise for Suspense functionality
-    if (error?.then) {
-      throw error;
-    }
-
-    useQueryError = error;
-  }
+    },
+    {cache, preload, shouldCacheResponse}
+  );
 
   /**
    * The fetch request itself failed, so we handle that differently than a GraphQL error
    */
-  if (useQueryError) {
-    const errorMessage = createErrorMessage(useQueryError);
+  if (error) {
+    const errorMessage = createErrorMessage(error);
 
     log.error(errorMessage);
-    log.error(useQueryError);
+    log.error(error);
 
     if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {
       throw new Error(errorMessage);
@@ -133,30 +159,6 @@ export function useShopQuery<T>({
         `The fetch attempt failed; there was an issue connecting to the data source.`
       );
     }
-  }
-
-  /**
-   * GraphQL errors get printed to the console but ultimately
-   * get returned to the consumer.
-   */
-  if (data?.errors) {
-    const errors = Array.isArray(data.errors) ? data.errors : [data.errors];
-    const requestId = response?.headers?.get('x-request-id') ?? '';
-    for (const error of errors) {
-      if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {
-        throw new Error(
-          `Storefront API GraphQL Error: ${error.message}.\nRequest id: ${requestId}`
-        );
-      } else {
-        log.error(
-          'Storefront API GraphQL Error',
-          error,
-          'Storefront API GraphQL request id',
-          requestId
-        );
-      }
-    }
-    log.error(`Storefront API GraphQL error count: ${errors.length}`);
   }
 
   if (
@@ -213,16 +215,23 @@ export function useShopQuery<T>({
   return data!;
 }
 
-function useCreateShopRequest(body: string) {
-  const {
-    storeDomain,
-    storefrontToken,
-    storefrontApiVersion,
-    storefrontId,
-    privateStorefrontToken,
-  } = useShop();
-
-  const request = useServerRequest();
+function useCreateShopRequest({
+  body,
+  request,
+  storeDomain,
+  storefrontToken,
+  storefrontApiVersion,
+  storefrontId,
+  privateStorefrontToken,
+}: {
+  body: string;
+  request: HydrogenRequest;
+  storeDomain: string;
+  storefrontToken: string;
+  storefrontApiVersion: string;
+  storefrontId?: string;
+  privateStorefrontToken?: string;
+}) {
   const buyerIp = request.getBuyerIp();
 
   let headers: Record<string, string> = {
@@ -271,3 +280,5 @@ function createErrorMessage(fetchError: Response | Error) {
     return `Failed to connect to the Storefront API: ${fetchError.message}`;
   }
 }
+
+/* eslint-enable react-hooks/rules-of-hooks */
