@@ -15,7 +15,7 @@ import {hashKey} from '../../utilities/hash.js';
 import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants.js';
 import type {SessionSyncApi} from '../session/session-types.js';
-import {parseJSON} from '../../utilities/parse.js';
+import {parseState} from '../../utilities/parse.js';
 import {generateUUID} from '../../utilities/random.js';
 
 export type PreloadQueryEntry = {
@@ -281,7 +281,9 @@ function getInitFromNodeRequest(request: any) {
 
 function normalizeUrl(rawUrl: string) {
   const url = new URL(rawUrl);
-  const state = parseJSON(url.searchParams.get('state') ?? '');
+  const state = parseState(url);
+  if (!state) return '';
+
   const normalizedUrl = new URL(state?.pathname ?? '', url.origin);
   normalizedUrl.search = state?.search;
 
