@@ -82,9 +82,18 @@ export function getOxygenVariable(key: string): any {
   return typeof Oxygen !== 'undefined' ? Oxygen?.env?.[key] : null;
 }
 
-export function getOnlineStorefrontHeaders(request: Request) {
+export function getOnlineStorefrontHeaders(request: Request, origin: string) {
   const clientIP = request.headers.get('X-Shopify-Client-IP');
   const clientIPSig = request.headers.get('X-Shopify-Client-IP-Sig');
+
+  const headers = new Headers();
+
+  for (const [key, value] of request.headers.entries()) {
+    headers.append(
+      key,
+      swapHostname(value, {hostname: new URL(request.url).host, origin})
+    );
+  }
 
   if (!__HYDROGEN_DEV__ && (!clientIP || !clientIPSig)) {
     log.warn(
@@ -92,10 +101,12 @@ export function getOnlineStorefrontHeaders(request: Request) {
     );
   }
 
-  const headers = new Headers(request.headers);
-
-  headers.set('X-Shopify-Client-IP', clientIP!);
-  headers.set('X-Shopify-Client-IP-Sig', clientIPSig!);
-
   return headers;
+}
+
+function swapHostname(
+  str: string,
+  {hostname, origin}: {hostname: string; origin: string}
+) {
+  return str.replaceAll(hostname, origin);
 }
