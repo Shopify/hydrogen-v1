@@ -18,14 +18,16 @@ describe('Hash key for subrequests', () => {
     expect(
       hashKey(['hello', 'world', {body: 'longquery', headers: {}}])
     ).toEqual('helloworldlongquery');
+  });
 
+  it('does not include any buyer-specific information in hashes', () => {
     expect(
       hashKey([
         'hello',
         'world',
         {body: 'longquery', headers: {[STOREFRONT_API_BUYER_IP_HEADER]: '42'}},
       ])
-    ).toEqual('helloworldlongquery42');
+    ).toEqual('helloworldlongquery');
   });
 
   it('does not choke on other types', () => {
