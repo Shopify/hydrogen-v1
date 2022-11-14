@@ -177,7 +177,7 @@ export const renderHydrogen = (App: any) => {
     }
 
     // Check if we have cached response
-    if (cache) {
+    if (false && cache) {
       const cachedResponse = await getItemFromCache(request.cacheKey());
       if (cachedResponse) {
         if (isStale(request, cachedResponse)) {

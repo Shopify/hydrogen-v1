@@ -127,7 +127,7 @@ function cachedQueryFnBuilder<T>(
       /**
        * Important: Do this async
        */
-      if (false && isStale(key, response)) {
+      if (isStale(key, response)) {
         const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
 
         // Run revalidation asynchronously
