@@ -9,6 +9,7 @@ import {fetchSync} from '../../foundation/fetchSync/server/fetchSync.js';
 import {META_ENV_SSR} from '../../foundation/ssr-interop.js';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
 import {parseJSON} from '../../utilities/parse.js';
+import {STOREFRONT_API_BUYER_IP_HEADER} from '../../constants.js';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -240,6 +241,10 @@ function useCreateShopRequest(body: string) {
     privateStorefrontToken,
     storefrontId,
   });
+
+  console.log(
+    `Using ${extraHeaders[STOREFRONT_API_BUYER_IP_HEADER]} for buyer IP`
+  );
 
   headers = {...headers, ...extraHeaders};
 
