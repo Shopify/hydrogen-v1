@@ -9,7 +9,6 @@ import {sendMessageToClient} from '../../utilities/devtools.js';
 import {META_ENV_SSR} from '../../foundation/ssr-interop.js';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
 import {parseJSON} from '../../utilities/parse.js';
-import {STOREFRONT_API_BUYER_IP_HEADER} from '../../constants.js';
 import {useQuery} from '../../foundation/useQuery/hooks.js';
 import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.js';
 
@@ -250,10 +249,6 @@ function useCreateShopRequest({
     privateStorefrontToken,
     storefrontId,
   });
-
-  console.log(
-    `Using ${extraHeaders[STOREFRONT_API_BUYER_IP_HEADER]} for buyer IP`
-  );
 
   headers = {...headers, ...extraHeaders};
 
