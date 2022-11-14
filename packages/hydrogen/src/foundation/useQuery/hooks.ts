@@ -81,7 +81,6 @@ export function useQuery<T>(
 export function shouldPreloadQuery(
   queryOptions?: HydrogenUseQueryOptions
 ): boolean {
-  return false;
   if (!queryOptions) return true;
 
   const hasCacheOverride = typeof queryOptions?.cache?.mode !== 'undefined';
@@ -128,7 +127,7 @@ function cachedQueryFnBuilder<T>(
       /**
        * Important: Do this async
        */
-      if (isStale(key, response)) {
+      if (false && isStale(key, response)) {
         const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
 
         // Run revalidation asynchronously
