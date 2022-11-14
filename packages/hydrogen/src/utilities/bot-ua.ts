@@ -5,6 +5,7 @@
  */
 const botUserAgents = [
   'AdsBot-Google',
+  'AdsBot-Google-Mobile',
   'applebot',
   'Baiduspider',
   'baiduspider',
@@ -23,6 +24,9 @@ const botUserAgents = [
   'facebookexternalhit',
   'Google-PageRenderer',
   'Googlebot',
+  'Googlebot-Image',
+  'Googlebot-News',
+  'Googlebot-Video',
   'googleweblight',
   'ia_archive',
   'LinkedInBot',
