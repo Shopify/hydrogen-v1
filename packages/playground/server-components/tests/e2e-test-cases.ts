@@ -106,6 +106,11 @@ export default async function testCases({
     expect(scopedContext).toContain('{"test2":true}');
   });
 
+  it('it responds with error when RSC state is invalid', async () => {
+    const response = await fetch(getServerUrl() + '/__rsc?state=invalid{state');
+    expect(response.status).toEqual(400);
+  });
+
   it.skip('should render server props in client component', async () => {
     await page.goto(getServerUrl() + '/test-server-props');
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
