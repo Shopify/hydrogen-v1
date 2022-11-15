@@ -1,4 +1,3 @@
-import {STOREFRONT_API_BUYER_IP_HEADER} from '../constants.js';
 import type {QueryKey} from '../types.js';
 
 export function hashKey(queryKey: QueryKey): string {
@@ -16,9 +15,6 @@ export function hashKey(queryKey: QueryKey): string {
         // fallback to a safer (but slower) stringify.
         if (!!key.body && typeof key.body === 'string') {
           hash += key.body;
-          if (!!key.headers && key.headers[STOREFRONT_API_BUYER_IP_HEADER]) {
-            hash += key.headers[STOREFRONT_API_BUYER_IP_HEADER];
-          }
         } else {
           hash += JSON.stringify(key);
         }

@@ -50,7 +50,7 @@ export function useQuery<T>(
   /** A string or array to uniquely identify the current query. */
   key: QueryKey,
   /** An asynchronous query function like `fetch` which returns data. */
-  queryFn: () => Promise<T>,
+  queryFn: (request: HydrogenRequest) => Promise<T>,
   /** The options to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
 ) {
@@ -98,7 +98,7 @@ export function shouldPreloadQuery(
 
 function cachedQueryFnBuilder<T>(
   key: QueryKey,
-  generateNewOutput: () => Promise<T>,
+  generateNewOutput: (request: HydrogenRequest) => Promise<T>,
   queryOptions?: HydrogenUseQueryOptions
 ) {
   const resolvedQueryOptions = {
@@ -144,7 +144,7 @@ function cachedQueryFnBuilder<T>(
             );
 
             try {
-              const output = await generateNewOutput();
+              const output = await generateNewOutput(request);
 
               if (shouldCacheResponse(output)) {
                 await setItemInCache(key, output, resolvedQueryOptions?.cache);
@@ -164,7 +164,7 @@ function cachedQueryFnBuilder<T>(
       return output;
     }
 
-    const newOutput = await generateNewOutput();
+    const newOutput = await generateNewOutput(request);
 
     /**
      * Important: Do this async
