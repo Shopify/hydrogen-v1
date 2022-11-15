@@ -16,11 +16,12 @@ export function parseState(url: URL) {
         ? parseJSON(url.searchParams.get('state') ?? '{}')
         : {pathname, search};
 
-    return {
-      ...state,
-      pathname: decodeURIComponent(state.pathname ?? ''),
-      search: decodeURIComponent(state.search ?? ''),
-    };
+    return Object.fromEntries(
+      Object.entries(state).map(([key, value]) => [
+        decodeURIComponent(key ?? ''),
+        decodeURIComponent(value ?? ''),
+      ])
+    );
   } catch {
     // Do not throw to prevent unhandled errors
   }
