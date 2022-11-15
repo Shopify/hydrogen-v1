@@ -106,7 +106,7 @@ export default async function testCases({
     expect(scopedContext).toContain('{"test2":true}');
   });
 
-  it('it responds with error when RSC state is invalid', async () => {
+  it('responds with error when RSC state is invalid', async () => {
     const response = await fetch(getServerUrl() + '/__rsc?state=invalid{state');
     expect(response.status).toEqual(400);
   });

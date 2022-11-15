@@ -1,3 +1,5 @@
+import {RSC_PATHNAME} from '../constants.js';
+
 export function parseJSON(json: any) {
   if (String(json).includes('__proto__')) return JSON.parse(json, noproto);
   return JSON.parse(json);
@@ -8,7 +10,17 @@ function noproto(k: string, v: string) {
 
 export function parseState(url: URL) {
   try {
-    return parseJSON(url.searchParams.get('state') ?? '');
+    const {pathname, search} = url;
+    const state: Record<string, any> =
+      pathname === RSC_PATHNAME
+        ? parseJSON(url.searchParams.get('state') ?? '{}')
+        : {pathname, search};
+
+    return {
+      ...state,
+      pathname: decodeURIComponent(state.pathname ?? ''),
+      search: decodeURIComponent(state.search ?? ''),
+    };
   } catch {
     // Do not throw to prevent unhandled errors
   }
