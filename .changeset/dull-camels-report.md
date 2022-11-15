@@ -1,8 +1,10 @@
 ---
-'@shopify/hydrogen': minor
+'@shopify/hydrogen': patch
 ---
 
 Remove automatic origin support from `fetchSync` on the server.
+
+**Important: Please test that your Hydrogen app is using `fetchSync` correctly before shipping this version of Hydrogen to production.**
 
 Developers should never be making `fetch` requests on the server against their own Hydrogen app. This is because some production runtimes prohibit invoking `fetch` requests to servers in the same region. Other runtimes will fail to resolve DNS when invoked from within the same process.
 
