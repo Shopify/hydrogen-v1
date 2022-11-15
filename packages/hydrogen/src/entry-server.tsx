@@ -286,15 +286,17 @@ async function processRequest(
       : apiResponse;
   }
 
-  const state: Record<string, any> = isRSCRequest
-    ? parseState(new URL(decodeURIComponent(url.toString())))
-    : {
-        pathname: decodeURIComponent(url.pathname),
-        search: decodeURIComponent(url.search),
-      };
+  const state = parseState(url);
 
-  if (isRSCRequest && !state) {
-    postRequestTasks('rsc', 400, request, response, true);
+  if (!state) {
+    postRequestTasks(
+      isRSCRequest ? 'rsc' : 'ssr',
+      400,
+      request,
+      response,
+      true
+    );
+
     return new Response(`Invalid RSC state`, {status: 400});
   }
 
