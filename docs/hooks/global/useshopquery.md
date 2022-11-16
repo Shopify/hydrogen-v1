@@ -58,8 +58,8 @@ The `useShopQuery` takes an object as its only argument, with the following keys
 | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `query`     | Yes      | A string of the GraphQL query.                                                                                                                                                                                                                                      |
 | `variables` | No       | An object of the variables for the GraphQL query.                                                                                                                                                                                                                   |
-| `cache`     | No       | The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you determine which cache control header to set.                                                                                                 |
-| `preload`   | No       | Whether to [preload the request](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries). It defaults to true only when the `CachingStrategy` is not `CacheNone`. Specify `false` to disable or use `'*'` to preload the query for all requests. |
+| `cache`     | No       | The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/querying/cache#caching-strategies) to help you determine which cache control header to set.                                                                                                 |
+| `preload`   | No       | Whether to [preload the request](https://shopify.dev/custom-storefronts/hydrogen/querying/preloaded-queries). It defaults to true only when the `CachingStrategy` is not `CacheNone`. Specify `false` to disable or use `'*'` to preload the query for all requests. |
 
 ## Return value
 
@@ -84,7 +84,7 @@ The `useShopQuery` returns an object with the following key:
 
 ## Related framework topics
 
-- [Caching](https://shopify.dev/custom-storefronts/hydrogen/framework/cache)
-- [Preloaded queries](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries)
-- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
-- [Working with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc)
+- [Caching](https://shopify.dev/custom-storefronts/hydrogen/querying/cache)
+- [Preloaded queries](https://shopify.dev/custom-storefronts/hydrogen/querying/preloaded-queries)
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/routing)
+- [Working with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components/work-with-rsc)

@@ -1,10 +1,10 @@
 # Multipass + Google Sign in
 
-This repo demonstrates how to seamlessly integrate [Shopify Plus](https://www.shopify.com/plus) [multipass](https://shopify.dev/api/multipass) with Hydrogen's customer and checkout [sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
+This repo demonstrates how to seamlessly integrate [Shopify Plus](https://www.shopify.com/plus) [multipass](https://shopify.dev/api/multipass) with Hydrogen's customer and checkout [sessions](https://shopify.dev/custom-storefronts/hydrogen/sessions).
 
 Multipass enables you to do the following:
 
-- Persist the customer [session](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions) state between the Hydrogen and checkout experiences, such as staying logged in or out.
+- Persist the customer [session](https://shopify.dev/custom-storefronts/hydrogen/sessions) state between the Hydrogen and checkout experiences, such as staying logged in or out.
 - Log in or create a new account automatically, based on an external site's user information.
 - Log in or create accounts by leveraging a third-party auth service such as [Google Sign in](https://developers.google.com/identity/gsi/web/guides/overview).
 

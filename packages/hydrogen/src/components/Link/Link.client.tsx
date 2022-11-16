@@ -19,7 +19,7 @@ export interface LinkProps
   clientState?: any;
   /** Whether to reload the whole document on navigation. */
   reloadDocument?: boolean;
-  /** Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). */
+  /** Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](https://shopify.dev/custom-storefronts/hydrogen/routing/manage-routes/#prefetching-a-link-source). */
   prefetch?: boolean;
   /** Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to `true`. */
   scroll?: boolean;

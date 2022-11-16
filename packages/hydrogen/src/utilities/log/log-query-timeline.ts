@@ -157,7 +157,7 @@ export function logQueryTimings(type: RenderType, request: HydrogenRequest) {
       '  Add the `showQueryTiming` property to your Hydrogen configuration to see more information:'
     );
     log.debug(
-      '  https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger'
+      '  https://shopify.dev/custom-storefronts/hydrogen/configuration#logger'
     );
   }
 }

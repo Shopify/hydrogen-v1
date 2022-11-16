@@ -4,7 +4,7 @@ title: useServerProps
 description: The useServerProps hook allows you to manage the server props passed to your server components when using Hydrogen as a React Server Component framework.
 ---
 
-The `useServerProps` hook allows you to manage the [server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) passed to your server components when using Hydrogen as a React Server Component framework. The server props get cleared when you navigate from one route to another.
+The `useServerProps` hook allows you to manage the [server props](https://shopify.dev/custom-storefronts/hydrogen/server-props) passed to your server components when using Hydrogen as a React Server Component framework. The server props get cleared when you navigate from one route to another.
 
 ## Example code
 
@@ -33,5 +33,5 @@ The `useServerProps` hook returns an object with the following keys:
 
 ## Related framework topics
 
-- [Server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props)
-- [Working with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc)
+- [Server props](https://shopify.dev/custom-storefronts/hydrogen/server-props)
+- [Working with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components/work-with-rsc)

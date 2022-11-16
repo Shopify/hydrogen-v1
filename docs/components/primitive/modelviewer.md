@@ -4,7 +4,7 @@ title: ModelViewer
 description: The ModelViewer component renders a 3D model (with the model-viewer tag) for the Storefront API's Model3d object.
 ---
 
-The `ModelViewer` component renders a 3D model for the Storefront API's [Model3d object](https://shopify.dev/api/storefront/reference/products/model3d). 
+The `ModelViewer` component renders a 3D model for the Storefront API's [Model3d object](https://shopify.dev/api/storefront/reference/products/model3d).
 
 The component outputs a `<model-viewer>` tag. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
@@ -128,7 +128,7 @@ The `ModelViewer` component requires the following fields from the Storefront AP
 
 ## Component type
 
-The `ModelViewer` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `ModelViewer` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ## Related components
 

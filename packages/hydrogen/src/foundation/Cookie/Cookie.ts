@@ -34,7 +34,7 @@ export type CookieOptions = {
 const reservedCookieNames = ['mac', 'user_session_id'];
 
 /** The `Cookie` component helps you build your own custom cookie and session implementations. All
- * [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions#types-of-session-storage) use the
+ * [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/sessions#types-of-session-storage) use the
  * same configuration options as what's available in `Cookie`.
  */
 export class Cookie {

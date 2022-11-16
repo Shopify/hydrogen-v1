@@ -38,7 +38,7 @@ export default defineConfig({
 
 ## Component type
 
-The `FileSessionStorage` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `FileSessionStorage` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ## Considerations
 
@@ -56,5 +56,5 @@ Because `FileSessionStorage` relies on the file system, it shouldn't be used in 
 
 ## Related framework topics
 
-- [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
-- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
+- [Session management](https://shopify.dev/custom-storefronts/hydrogen/sessions)
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/configuration)

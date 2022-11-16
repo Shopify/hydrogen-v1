@@ -30,7 +30,7 @@ The `variantIds` and `variantIdsAndQuantities` props are mutually exclusive. You
 
 ## Component type
 
-The `ShopPayButton` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `ShopPayButton` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ## Used by
 

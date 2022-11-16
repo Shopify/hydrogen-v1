@@ -51,4 +51,4 @@ The `useRouteParams` hook returns an object with key values for each matching ro
 
 ## Related framework topics
 
-- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/routing)

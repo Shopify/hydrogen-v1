@@ -50,7 +50,7 @@ export default renderHydrogen(App);
 
 ## Component type
 
-The `Route` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `Route` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ## Considerations
 
@@ -65,4 +65,4 @@ The `Route` component is a server component that renders inside `App.server.jsx`
 
 ## Related framework topics
 
-- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/routing)

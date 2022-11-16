@@ -25,7 +25,7 @@ export default function Home() {
         feature with Hydrogen's customer &nbsp;
         <a
           target="_blank"
-          href="https://https://shopify.dev/custom-storefronts/hydrogen/framework/sessions"
+          href="https://https://shopify.dev/custom-storefronts/hydrogen/sessions"
         >
           session
         </a>

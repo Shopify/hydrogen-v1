@@ -19,11 +19,11 @@ import {CacheShort, NO_STORE} from '../Cache/strategies/index.js';
 import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server.js';
 
 export interface HydrogenUseQueryOptions {
-  /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
+  /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/querying/cache#caching-strategies) to help you
    * determine which cache control header to set.
    */
   cache?: CachingStrategy;
-  /** Whether to [preload the query](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries).
+  /** Whether to [preload the query](https://shopify.dev/custom-storefronts/hydrogen/querying/preloaded-queries).
    * Defaults to `false`. Specify `true` to preload the query for the URL or `'*'`
    * to preload the query for all requests.
    */

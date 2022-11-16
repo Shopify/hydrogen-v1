@@ -39,13 +39,13 @@ export function useShopQuery<T>({
   query?: string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
-  /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to
+  /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/querying/cache#caching-strategies) to
    * help you determine which cache control header to set.
    */
   cache?: CachingStrategy;
   /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
   locale?: string;
-  /** Whether to[preload the query](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries).
+  /** Whether to[preload the query](https://shopify.dev//custom-storefronts/hydrogen/querying/preloaded-queries).
    * Defaults to `false`. Specify `true` to preload the query for the URL or `'*'`
    * to preload the query for all requests.
    */
