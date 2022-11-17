@@ -4,3 +4,4 @@ packages/hydrogen/graphql.schema.json
 **/vendor
 docs/
 **/coverage/
+packages/hydrogen/CHANGELOG.md
