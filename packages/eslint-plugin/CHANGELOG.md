@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.3
+
+### Patch Changes
+
+- Updates links to https://shopify.dev/custom-storefronts/hydrogen in favor of a new information architecture. We've split out conceptual material from procedural material and organized the content by area of work. ([#2326](https://github.com/Shopify/hydrogen/pull/2326)) by [@rennyG](https://github.com/rennyG)
+
 ## 0.12.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.3
+
+### Patch Changes
+
+- Updates links to https://shopify.dev/custom-storefronts/hydrogen in favor of a new information architecture. We've split out conceptual material from procedural material and organized the content by area of work. ([#2326](https://github.com/Shopify/hydrogen/pull/2326)) by [@rennyG](https://github.com/rennyG)
+
 ## 1.6.2
 
 ### Patch Changes
@@ -516,7 +522,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function (request) {
+  export default function(request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }

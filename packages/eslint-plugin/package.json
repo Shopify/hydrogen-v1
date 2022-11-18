@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-hydrogen",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "description": "Eslint rules for hydrogen",
   "license": "MIT",
   "main": "./dist/index.js",

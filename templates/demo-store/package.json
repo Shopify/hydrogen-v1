@@ -24,7 +24,7 @@
     "@tailwindcss/typography": "^0.5.2",
     "@types/react": "^18.0.14",
     "eslint": "^8.18.0",
-    "eslint-plugin-hydrogen": "^0.12.2",
+    "eslint-plugin-hydrogen": "^0.12.3",
     "playwright": "^1.22.2",
     "postcss": "^8.4.14",
     "postcss-import": "^14.1.0",
@@ -38,7 +38,7 @@
   "prettier": "@shopify/prettier-config",
   "dependencies": {
     "@headlessui/react": "^1.7.0",
-    "@shopify/hydrogen": "^1.6.2",
+    "@shopify/hydrogen": "^1.6.3",
     "clsx": "^1.1.1",
     "graphql-tag": "^2.12.6",
     "react": "^18.2.0",
