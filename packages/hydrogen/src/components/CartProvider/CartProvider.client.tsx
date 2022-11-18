@@ -15,6 +15,7 @@ import {
   CartLineUpdateInput,
   CountryCode,
 } from '../../storefront-api-types.js';
+import { defaultCartFragment } from './cart-queries.js';
 import {CartContext} from './context.js';
 import {
   BuyerIdentityUpdateEvent,
@@ -614,104 +615,3 @@ function publishDiscountCodesUpdateAnalytics(
     }
   );
 }
-
-export const defaultCartFragment = `
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  totalQuantity
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        cost {
-          totalAmount {
-            amount
-            currencyCode
-          }
-          compareAtAmountPerQuantity {
-            amount
-            currencyCode
-          }
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  cost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
-`;
