@@ -4,7 +4,7 @@ title: FileRoutes
 description: The FileRoutes component builds a set of Hydrogen routes.
 ---
 
-The `FileRoutes` component builds a set of Hydrogen routes. By default, it loads the routes specified in [the Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) when no props are passed.
+The `FileRoutes` component builds a set of Hydrogen routes. By default, it loads the routes specified in [the Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/configuration) when no props are passed.
 
 You can override the default behavior and use custom routes based on the output that's provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. You can have multiple instances of the `FileRoutes` component to source file routes from multiple locations.
 
@@ -51,7 +51,7 @@ function NotFound() {
 
 ## Component type
 
-The `FileRoutes` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `FileRoutes` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ## Related components
 
@@ -60,5 +60,5 @@ The `FileRoutes` component is a server component that renders inside `App.server
 
 ## Related framework topics
 
-- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
-- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/routing)
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/configuration)

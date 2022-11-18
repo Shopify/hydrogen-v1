@@ -70,7 +70,7 @@ export const SHOPIFY_PROVIDER_CONTEXT_KEY = Symbol.for('SHOPIFY_PROVIDER_RSC');
 export function ShopifyProvider({
   /**
    * Shopify connection information. Defaults to
-   * [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
+   * [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/configuration).
    */
   shopifyConfig,
 

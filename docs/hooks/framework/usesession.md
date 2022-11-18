@@ -31,7 +31,7 @@ The `useSession` hook returns all data within the current session. The return ty
     > Caution:
     > Sessions typically contain privileged data. Avoid passing all session data to the client.
 
-- Don't update session data within server or client components. Instead, [update session data within API routes](/custom-storefronts/hydrogen/framework/sessions#reading-and-updating-session-data).
+- Don't update session data within server or client components. Instead, [update session data within API routes](/custom-storefronts/hydrogen/sessions/manage-sessions#reading-and-updating-session-data).
 - The `useSession` hook will suspend when its called. The length of the suspense depends on where the session data is stored.
 
 ## Related components
@@ -43,4 +43,4 @@ The `useSession` hook returns all data within the current session. The return ty
 
 ## Related framework topics
 
-- [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
+- [Session management](https://shopify.dev/custom-storefronts/hydrogen/sessions)

@@ -36,7 +36,7 @@ export default defineConfig({
 
 ## Component type
 
-The `CookieSessionStorage` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `CookieSessionStorage` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ## Considerations
 
@@ -54,5 +54,5 @@ Don't use `CookieSessionStorage` if you expect to have more than 4kb of data wit
 
 ## Related framework topics
 
-- [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
-- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
+- [Session management](https://shopify.dev/custom-storefronts/hydrogen/sessions)
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/configuration)

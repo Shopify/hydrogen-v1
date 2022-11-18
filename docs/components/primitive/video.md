@@ -4,7 +4,7 @@ title: Video
 description: The Video component renders a video for the Storefront API's Video object.
 ---
 
-The `Video` component renders a video for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video). 
+The `Video` component renders a video for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video).
 
 The component outputs a `video` element. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
@@ -79,7 +79,7 @@ The `Video` component requires the following fields from the Storefront API's
 
 ## Component type
 
-The `Video` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `Video` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ## Related components
 

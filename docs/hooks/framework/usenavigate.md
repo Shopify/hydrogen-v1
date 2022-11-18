@@ -47,4 +47,4 @@ The `useNavigate` hook returns a function which accepts the following values:
 
 ## Related framework topics
 
-- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/routing)

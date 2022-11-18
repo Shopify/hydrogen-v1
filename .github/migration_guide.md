@@ -62,8 +62,8 @@ Again, you cannot yet use context within your server components. We are working 
 
 In version 0.10, we removed React Router on the server. With this release, we have removed React Router on the client as well. In most scenarios this shouldn't be a breaking change, unless you directly use React Router hooks or components within your client components. Simply remove `react-router-dom` from your package.json dependencies. Hydrogen exposes the following utilities for routing:
 
-1. [`<Link>` component](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#link-component)
-2. [`useNavigate` hook](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#usenavigate-hook)
+1. [`<Link>` component](https://shopify.dev/custom-storefronts/hydrogen/routing#related-components-and-hooks)
+2. [`useNavigate` hook](https://shopify.dev/custom-storefronts/hydrogen/routing#related-components-and-hooks)
 3. [`useUrl` hook](https://shopify.dev/api/hydrogen/hooks/global/useurl)
 
 In a later release, we'll continue to enhance the routing capabilities in Hydrogen. Read more in the [Custom Routes RFC](https://github.com/Shopify/hydrogen/discussions/569).
@@ -257,7 +257,7 @@ Additionally, consider adding the `Seo` component to the following places using 
 - **Collections route**: [`/src/pages/collections/[handle].server.jsx`](https://github.com/Shopify/hydrogen/blob/8ea40b5e119883ca380406edc123d9cb10ca8650/examples/demo-store/src/pages/collections/[handle].server.jsx#L42)
 - **Pages route**: [`/src/pages/pages/[handle].server.jsx`](https://github.com/Shopify/hydrogen/blob/8ea40b5e119883ca380406edc123d9cb10ca8650/examples/demo-store/src/pages/pages/[handle].server.jsx#L19)
 
-Learn more about [how SEO works in Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/framework/seo).
+Learn more about [how SEO works in Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/seo).
 
 ### Entry points have been simplified
 

@@ -11,7 +11,7 @@ description: The Form provides a declarative way to perform mutations for creati
 
 </aside>
 
-Within a Hydrogen app, [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc#fetching-data-on-the-server) are used to fetch data and [API routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#api-routes) are used to mutate data. The `Form` component provides a declarative way to send data to API routes and re-render server components. The `Form` component mimics the functionality of a native `<form>` element, but it provides an enhanced user experience with client-side JavaScript.
+Within a Hydrogen app, [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components/work-with-rsc#fetching-data-on-the-server) are used to fetch data and [API routes](https://shopify.dev/custom-storefronts/hydrogen/routing#api-routes) are used to mutate data. The `Form` component provides a declarative way to send data to API routes and re-render server components. The `Form` component mimics the functionality of a native `<form>` element, but it provides an enhanced user experience with client-side JavaScript.
 
 ## Example code
 
@@ -60,8 +60,8 @@ The `Form` component shares the same props that are available to the [native `<f
 
 ## Component type
 
-The `Form` component is a client component, so it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `Form` component is a client component, so it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ## Related framework topics
 
-- [Forms and API routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#concatenating-requests)
+- [Forms and API routes](https://shopify.dev/custom-storefronts/hydrogen/routing/manage-routes#concatenate-requests)

@@ -5,7 +5,7 @@ description: The Metafield component renders the value of a Storefront API's Met
 ---
 
 The `Metafield` component renders the value of a Storefront
-API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). 
+API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).
 
 The component provides a [default output](https://shopify.dev/api/hydrogen/components/primitive/metafield#default-output) depending on the metafield type. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
@@ -79,7 +79,7 @@ For all other metafield `type`s, the following fields are required:
 
 ## Component type
 
-The `Metafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `Metafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ### Variables
 

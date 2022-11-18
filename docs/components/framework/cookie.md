@@ -4,7 +4,7 @@ title: Cookie
 description: The Cookie component helps you build your own custom cookie and session implementations.
 ---
 
-The `Cookie` component helps you build your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions#types-of-session-storage) use the same configuration options as `Cookie`.
+The `Cookie` component helps you build your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/sessions#types-of-session-storage) use the same configuration options as `Cookie`.
 
 ## Example code
 
@@ -42,7 +42,7 @@ The following table describes the options for how the cookie is persisted within
 
 ## Component type
 
-The `Cookie` component is a server component. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `Cookie` component is a server component. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ## Related components
 
@@ -56,5 +56,5 @@ The `Cookie` component is a server component. For more information about compone
 
 ## Related framework topics
 
-- [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
-- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
+- [Session management](https://shopify.dev/custom-storefronts/hydrogen/sessions)
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/configuration)

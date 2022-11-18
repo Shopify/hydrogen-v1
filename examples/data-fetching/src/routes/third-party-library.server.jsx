@@ -20,8 +20,8 @@ export default function UseQueryExample() {
       return await randomUser.get(); // Example 3P SDK
     },
     {
-      cache: CacheLong(), // https://shopify.dev/custom-storefronts/hydrogen/framework/cache
-      preload: true, // Defaults to true. https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries
+      cache: CacheLong(), // https://shopify.dev/custom-storefronts/hydrogen/querying/cache
+      preload: true, // Defaults to true. https://shopify.dev/custom-storefronts/hydrogen/querying/preloaded-queries
     }
   );
 

@@ -266,9 +266,9 @@ The following table provides a list of valid values for the `pageType` property:
 
 ## Component type
 
-The `ShopifyAnalytics` component is a server component, which means that it renders on the server. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+The `ShopifyAnalytics` component is a server component, which means that it renders on the server. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/react-server-components).
 
 ## Related framework topics
 
-- [Analytics](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics)
-- [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
+- [Analytics](https://shopify.dev/custom-storefronts/hydrogen/analytics)
+- [Session management](https://shopify.dev/custom-storefronts/hydrogen/sessions)

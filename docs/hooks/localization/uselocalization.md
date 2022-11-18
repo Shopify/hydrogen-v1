@@ -64,5 +64,5 @@ Alternatively if the `language` contains a language tag extension, then we use i
 
 ## Related framework topics
 
-- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
-- [Internationalization](https://shopify.dev/custom-storefronts/hydrogen/framework/internationalization)
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/)
+- [Internationalization](https://shopify.dev/custom-storefronts/hydrogen/internationalization)

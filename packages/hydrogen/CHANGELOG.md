@@ -400,7 +400,7 @@ Check out the [documentation](https://shopify.dev/custom-storefronts/hydrogen/al
 
 ### Minor Changes
 
-- Add a new experimental Forms and mutations feature. Read more https://shopify.dev/custom-storefronts/hydrogen/framework/forms ([#1552](https://github.com/Shopify/hydrogen/pull/1552)) by [@blittle](https://github.com/blittle)
+- Add a new experimental Forms and mutations feature. Read more https://shopify.dev/custom-storefronts/hydrogen/forms ([#1552](https://github.com/Shopify/hydrogen/pull/1552)) by [@blittle](https://github.com/blittle)
 
 * `CartLineQuantityAdjustButton`, `BuyNowButton`, and `AddToCartButton` now have an `as` property. The types for these components have also been improved. ([#1827](https://github.com/Shopify/hydrogen/pull/1827)) by [@blittle](https://github.com/blittle)
 
@@ -666,7 +666,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
 
   Additionally, `cart.cost.compareAtAmount` was renamed to `cart.cost.compareAtAmountPerQuantity`.
 
-* [#1619](https://github.com/Shopify/hydrogen/pull/1619) [`b0c13696`](https://github.com/Shopify/hydrogen/commit/b0c13696b6030ab8697147fdbe3ccdf2522a3913) Thanks [@blittle](https://github.com/blittle)! - We have reworked how localization works in Hydrogen. By default the `useLocalization()` hook returns the default locale defined within your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). The `<LocalizationProvider>` component now takes `countryCode` and `languageCode` as optional props. Any props given to `<LocalizationProvider>` will also be used by the `useLocalization` hook.
+* [#1619](https://github.com/Shopify/hydrogen/pull/1619) [`b0c13696`](https://github.com/Shopify/hydrogen/commit/b0c13696b6030ab8697147fdbe3ccdf2522a3913) Thanks [@blittle](https://github.com/blittle)! - We have reworked how localization works in Hydrogen. By default the `useLocalization()` hook returns the default locale defined within your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/configuration). The `<LocalizationProvider>` component now takes `countryCode` and `languageCode` as optional props. Any props given to `<LocalizationProvider>` will also be used by the `useLocalization` hook.
 
   **Breaking Change**
 
@@ -748,7 +748,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
 
 - [#1346](https://github.com/Shopify/hydrogen/pull/1346) [`01814369`](https://github.com/Shopify/hydrogen/commit/018143693f96b7a200258665de570a9369ae8e65) Thanks [@lordofthecactus](https://github.com/lordofthecactus)! - Add `onClick` and `buttonRef` props to `AddToCartButton`, `BuyNowButton` and `CartLineQuantityAdjustButton`
 
-* [#1523](https://github.com/Shopify/hydrogen/pull/1523) [`4ef2e5b9`](https://github.com/Shopify/hydrogen/commit/4ef2e5b93cd537a213334211113c224194d9dd68) Thanks [@blittle](https://github.com/blittle)! - We've simplified the built-in Hydrogen caching strategies. Instead of `CacheSeconds`, `CacheMinutes`, `CacheHours`, `CacheDays`, `CacheMonths`, and `NoStore`, there is no simply `CacheLong`, `CacheShort`, and `CacheNone`. Please remember that you can [build your own caching strategies](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#build-your-own-caching-strategies).
+* [#1523](https://github.com/Shopify/hydrogen/pull/1523) [`4ef2e5b9`](https://github.com/Shopify/hydrogen/commit/4ef2e5b93cd537a213334211113c224194d9dd68) Thanks [@blittle](https://github.com/blittle)! - We've simplified the built-in Hydrogen caching strategies. Instead of `CacheSeconds`, `CacheMinutes`, `CacheHours`, `CacheDays`, `CacheMonths`, and `NoStore`, there is no simply `CacheLong`, `CacheShort`, and `CacheNone`. Please remember that you can [build your own caching strategies](https://shopify.dev/custom-storefronts/hydrogen/querying/manage-caching#create-a-caching-strategy).
 
 - [#1513](https://github.com/Shopify/hydrogen/pull/1513) [`8d67b559`](https://github.com/Shopify/hydrogen/commit/8d67b559e8d59d02ca353ec43fb5b2b3ff2f5961) Thanks [@frandiox](https://github.com/frandiox)! - **Breaking change:** We are starting to use [`exports` property in `package.json`](https://nodejs.org/api/packages.html#package-entry-points) to list all the entry points in this package.
 
@@ -880,7 +880,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
 
 ### Minor Changes
 
-- [#1489](https://github.com/Shopify/hydrogen/pull/1489) [`e2ee2d45`](https://github.com/Shopify/hydrogen/commit/e2ee2d4575613ae34727de9c1a6280904bb2e3ff) Thanks [@blittle](https://github.com/blittle)! - In an effort to be performant by default, the [preloaded queries](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries) are turned on by default when caching is also enabled. By default, each query has caching enabled too, so `preload` will on universally by default.
+- [#1489](https://github.com/Shopify/hydrogen/pull/1489) [`e2ee2d45`](https://github.com/Shopify/hydrogen/commit/e2ee2d4575613ae34727de9c1a6280904bb2e3ff) Thanks [@blittle](https://github.com/blittle)! - In an effort to be performant by default, the [preloaded queries](https://shopify.dev/custom-storefronts/hydrogen/querying/preloaded-queries) are turned on by default when caching is also enabled. By default, each query has caching enabled too, so `preload` will on universally by default.
 
 * [#1237](https://github.com/Shopify/hydrogen/pull/1237) [`356e75f3`](https://github.com/Shopify/hydrogen/commit/356e75f351c04ff393e996c34632005331ec0872) Thanks [@frehner](https://github.com/frehner)! - Updated Cart queries in two ways, one of which requires you to be using Storefront API `2022-07`:
 
@@ -1502,7 +1502,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
 
   Finally, delete `shopify.config.js` from your app.
 
-  [Read more about the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
+  [Read more about the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/configuration)
 
 * [#1214](https://github.com/Shopify/hydrogen/pull/1214) [`58ef6d69`](https://github.com/Shopify/hydrogen/commit/58ef6d69f1148e7bc8452fa77e7e8f54396c6105) Thanks [@frehner](https://github.com/frehner)! - Upgraded SFAPI version to 2022-07
 
@@ -1556,7 +1556,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
 
 ### Minor Changes
 
-- [#1044](https://github.com/Shopify/hydrogen/pull/1044) [`c8f5934d`](https://github.com/Shopify/hydrogen/commit/c8f5934d85db63162a13256cfcf21098b390887b) Thanks [@blittle](https://github.com/blittle)! - Hydrogen now has a built in session and cookie implementation. Read more about [how sessions work in Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions). The starter template also includes a cookie session storage implementation. To use the new session implementation within an existing Hydrogen app:
+- [#1044](https://github.com/Shopify/hydrogen/pull/1044) [`c8f5934d`](https://github.com/Shopify/hydrogen/commit/c8f5934d85db63162a13256cfcf21098b390887b) Thanks [@blittle](https://github.com/blittle)! - Hydrogen now has a built in session and cookie implementation. Read more about [how sessions work in Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/sessions). The starter template also includes a cookie session storage implementation. To use the new session implementation within an existing Hydrogen app:
 
   ```diff
   import renderHydrogen from '@shopify/hydrogen/entry-server';
@@ -1718,7 +1718,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
 * [#890](https://github.com/Shopify/hydrogen/pull/890) [`a4c6d6c4`](https://github.com/Shopify/hydrogen/commit/a4c6d6c4d31337cecbd4d5afb76887bcd31ceb65) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Analytics instrumentation - this provides integration points for both server
   and client side analytics instrumentations
 
-  - [Usage documentation](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics)
+  - [Usage documentation](https://shopify.dev/custom-storefronts/hydrogen/analytics)
 
 ### Patch Changes
 
