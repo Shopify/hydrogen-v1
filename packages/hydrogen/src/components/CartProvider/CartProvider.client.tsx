@@ -15,7 +15,7 @@ import {
   CartLineUpdateInput,
   CountryCode,
 } from '../../storefront-api-types.js';
-import { defaultCartFragment } from './cart-queries.js';
+import {defaultCartFragment} from './cart-queries.js';
 import {CartContext} from './context.js';
 import {
   BuyerIdentityUpdateEvent,
