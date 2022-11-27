@@ -11,6 +11,8 @@ import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
 import {parseJSON} from '../../utilities/parse.js';
 import {useQuery} from '../../foundation/useQuery/hooks.js';
 import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.js';
+import {TypedDocumentNode} from '@graphql-typed-document-node/core';
+import {print} from 'graphql';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -27,7 +29,7 @@ const shouldCacheResponse = (body: any) => {
 /**
  * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
  */
-export function useShopQuery<T>({
+export function useShopQuery<Data, Variables extends Record<string, any> = {}>({
   query,
   variables = {},
   cache,
@@ -36,7 +38,7 @@ export function useShopQuery<T>({
   /** A string of the GraphQL query.
    * If no query is provided, useShopQuery will make no calls to the Storefront API.
    */
-  query?: string;
+  query?: string | TypedDocumentNode<Data, Variables>;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/querying/cache#caching-strategies) to
@@ -50,12 +52,12 @@ export function useShopQuery<T>({
    * to preload the query for all requests.
    */
   preload?: PreloadOptions;
-}): UseShopQueryResponse<T> {
+}): UseShopQueryResponse<Data> {
   /**
    * If no query is passed, we no-op here to allow developers to obey the Rules of Hooks.
    */
   if (!query) {
-    return {data: undefined as unknown as T, errors: undefined};
+    return {data: undefined as unknown as Data, errors: undefined};
   }
 
   if (!META_ENV_SSR) {
@@ -75,7 +77,12 @@ export function useShopQuery<T>({
     privateStorefrontToken,
   } = useShop();
 
-  const body = query ? graphqlRequestBody(query, variables) : '';
+  const body = query
+    ? graphqlRequestBody(
+        typeof query === 'string' ? query : print(query),
+        variables
+      )
+    : '';
 
   const {data, error} = useQuery(
     [storeDomain, storefrontApiVersion, body],
