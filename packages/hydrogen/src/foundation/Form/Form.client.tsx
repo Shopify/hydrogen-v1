@@ -6,7 +6,9 @@ import {useInternalServerProps} from '../useServerProps/use-server-props.js';
 interface FormProps {
   action: string;
   method?: string;
-  children?: Array<React.ReactNode>;
+  children?:
+    | Array<React.ReactNode>
+    | ((props: {loading: boolean; error: Error | null}) => React.ReactNode);
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
   encType?: string;
   noValidate?: boolean;
