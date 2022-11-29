@@ -46,7 +46,7 @@ The `ShopifyProvider` component is a server component that renders inside `App.s
 If you're using a third-party framework, such as Next.js, you should import `ShopifyProvider` from Hydrogen UI via the `@shopify/hydrogen-react` package.
 
 > Note:
-> Hydrogen UI is an experiemental feature at this time and is subject to change. Learn more about using [alternate frameworks](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks).
+> Hydrogen UI is an experimental feature at this time and is subject to change. Learn more about using [alternate frameworks](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks).
 
 ### Example code
 
