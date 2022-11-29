@@ -6,11 +6,9 @@ description: The ShopifyProvider component wraps your entire app and provides su
 
 The `ShopifyProvider` component wraps your entire app and provides functionality for many components, hooks, and utilities. The `ShopifyProvider` component also provides localization data for the app. You should place it in your app's entry point component.
 
-{% if feature_flags.hydrogen_ui_beta %}
 ## `ShopifyProvider` in the Hydrogen framework
 
 If you're using the [Hydrogen framework](https://shopify.dev/custom-storefronts/hydrogen/), then you need to import `ShopifyProvider` from the `@shopify/hydrogen` package and use it in `App.server.jsx`.
-{% endif %}
 
 The default localization data is defined within your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/configuration). You can change the active country and language at runtime by passing in the `countryCode` and `languageCode` props.
 
@@ -39,19 +37,16 @@ The `ShopifyProvider` component is a server component that renders inside `App.s
 
 ### Considerations
 
-{% if feature_flags.hydrogen_ui_beta %}
-- This version of `ShopifyProvider` is specific to Hydrogen and currently doesn't work in Next.js or other frameworks. Learn how to use `ShopifyProvider` [with other frameworks](#shopify-provider-in-alternate-frameworks).
-{% endif %}
+- This version of `ShopifyProvider` is specific to Hydrogen and currently doesn't work in Next.js or other frameworks. Learn how to use `ShopifyProvider` [with other frameworks](#shopifyprovider-in-alternate-frameworks).
 - You can't have multiple instances of `ShopifyProvider` within your app. Because it's not using `Context` (which isn't currently supported in server components), all `<ShopifyProvider>` instances share the same configuration for each request.
 - You can dynamically define the Shopify connection information for each request to the server by providing a function in [the Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/configuration#configuration-properties). This is useful for aggregating multiple storefronts with a single Hydrogen app.
 
-{% if feature_flags.hydrogen_ui_beta %}
 ## `ShopifyProvider` in alternate frameworks
 
 If you're using a third-party framework, such as Next.js, you should import `ShopifyProvider` from Hydrogen UI via the `@shopify/hydrogen-react` package.
 
 > Note:
-> Hydrogen UI is an experiemental feature at this time and is subject to change. Learn more about using [alternate frameworks](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks).
+> Hydrogen UI is an experimental feature at this time and is subject to change. Learn more about using [alternate frameworks](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks).
 
 ### Example code
 
@@ -79,7 +74,6 @@ export default function App() {
 
 - This version of `ShopifyProvider` is meant to only be used on the client. To make API calls from the server, check out the [`createShopifyClient()` helper](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks#step-2-authenticate-the-storefront-api-client).
 
-{% endif %}
 ## Related framework topics
 
 - [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/configuration)
