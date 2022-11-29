@@ -13,7 +13,7 @@ The `ProductProvider` component sets up a context with state that tracks the sel
 ## Example code
 
 ```tsx
-import {ProductProvider, gql} from '@shopify/hydrogen-react';
+import {ProductProvider} from '@shopify/hydrogen-react';
 import {gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
