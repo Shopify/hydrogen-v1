@@ -9,7 +9,7 @@ The `ShopifyProvider` component wraps your entire app and provides functionality
 {% if feature_flags.hydrogen_ui_beta %}
 ## `ShopifyProvider` in the Hydrogen framework
 
-If you're using the [Hydrogen framework](https://shopify.dev/custom-storefronts/hydrogen/framework), then you need to import `ShopifyProvider` from the `@shopify/hydrogen` package and use it in `App.server.jsx`.
+If you're using the [Hydrogen framework](https://shopify.dev/custom-storefronts/hydrogen/), then you need to import `ShopifyProvider` from the `@shopify/hydrogen` package and use it in `App.server.jsx`.
 {% endif %}
 
 The default localization data is defined within your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/configuration). You can change the active country and language at runtime by passing in the `countryCode` and `languageCode` props.
