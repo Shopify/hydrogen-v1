@@ -12,8 +12,6 @@ It must be a descendent of the `CartProvider` component.
 ```tsx
 import {
   CartProvider,
-  CartUIProvider,
-  CartContainer,
   AddToCartButton,
 } from '@shopify/hydrogen';
 
@@ -22,17 +20,14 @@ export function MyComponent() {
 
   return (
     <CartProvider>
-      <CartUIProvider>
-        <AddToCartButton
-          variantId="1234"
-          quantity={1}
-          attributes={[{key: 'Engraving', value: 'Hello world'}]}
-          accessibleAddingToCartLabel="Adding item to your cart"
-        >
-          Add to Cart
-        </AddToCartButton>
-        <CartContainer>{/* Your cart container JSX */}</CartContainer>
-      </CartUIProvider>
+      <AddToCartButton
+        variantId="1234"
+        quantity={1}
+        attributes={[{key: 'Engraving', value: 'Hello world'}]}
+        accessibleAddingToCartLabel="Adding item to your cart"
+      >
+        Add to Cart
+      </AddToCartButton>
     </CartProvider>
   );
 }
@@ -42,8 +37,6 @@ export function MyComponent() {
 // Override `onClick` default behavior
 import {
   CartProvider,
-  CartUIProvider,
-  CartContainer,
   AddToCartButton,
 } from '@shopify/hydrogen';
 
@@ -57,18 +50,15 @@ export function MyComponent() {
 
   return (
     <CartProvider>
-      <CartUIProvider>
-        <AddToCartButton
-          variantId="1234"
-          quantity={1}
-          attributes={[{key: 'Engraving', value: 'Hello world'}]}
-          accessibleAddingToCartLabel="Adding item to your cart"
-          onClick={handleCustomOnClick}
-        >
-          Add to Cart
-        </AddToCartButton>
-        <CartContainer>{/* Your cart container JSX */}</CartContainer>
-      </CartUIProvider>
+      <AddToCartButton
+        variantId="1234"
+        quantity={1}
+        attributes={[{key: 'Engraving', value: 'Hello world'}]}
+        accessibleAddingToCartLabel="Adding item to your cart"
+        onClick={handleCustomOnClick}
+      >
+        Add to Cart
+      </AddToCartButton>
     </CartProvider>
   );
 }
@@ -78,8 +68,6 @@ export function MyComponent() {
 // Run an async action before the default `onClick` behaviour
 import {
   CartProvider,
-  CartUIProvider,
-  CartContainer,
   AddToCartButton,
 } from '@shopify/hydrogen';
 
@@ -105,7 +93,6 @@ export function MyComponent() {
 
   return (
     <CartProvider>
-      <CartUIProvider>
         <AddToCartButton
           variantId="1234"
           quantity={1}
@@ -116,8 +103,6 @@ export function MyComponent() {
         >
           Add to Cart
         </AddToCartButton>
-        <CartContainer>{/* Your cart container JSX */}</CartContainer>
-      </CartUIProvider>
     </CartProvider>
   );
 }
