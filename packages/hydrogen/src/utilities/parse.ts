@@ -11,17 +11,18 @@ function noproto(k: string, v: string) {
 export function parseState(url: URL) {
   try {
     const {pathname, search} = url;
+    const stateParam = url.searchParams.get('state');
     const state: Record<string, any> =
       pathname === RSC_PATHNAME
-        ? parseJSON(url.searchParams.get('state') ?? '{}')
-        : {pathname, search};
+        ? stateParam
+          ? parseJSON(decodeURIComponent(stateParam))
+          : {}
+        : {
+            pathname: decodeURIComponent(pathname),
+            search: decodeURIComponent(search),
+          };
 
-    return Object.fromEntries(
-      Object.entries(state).map(([key, value]) => [
-        decodeURIComponent(key ?? ''),
-        decodeURIComponent(value ?? ''),
-      ])
-    );
+    return state;
   } catch {
     // Do not throw to prevent unhandled errors
   }
