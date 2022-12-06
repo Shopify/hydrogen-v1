@@ -12,12 +12,12 @@ export default function ReadServerProps() {
             : 'server-props'
         }
       >
-        props: {JSON.stringify(serverProps)}
+        client: {JSON.stringify(serverProps)}
       </p>
       <button
         id="update-server-props"
         onClick={() => {
-          setServerProps({hello: 'world'});
+          setServerProps('message', {hello: 'world'});
         }}
       >
         Update server props
