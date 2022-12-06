@@ -919,7 +919,7 @@ function tagOnWrite(
 
   response.write = (arg: any) => {
     if (arg instanceof Uint8Array) {
-      savedChunks.push(decoder.decode(arg));
+      savedChunks.push(decoder.decode(arg, {stream: true}));
     } else {
       savedChunks.push(arg);
     }
