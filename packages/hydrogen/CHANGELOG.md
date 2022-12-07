@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.6.4
+
+### Patch Changes
+
+- Improve form props type for render function ([#2352](https://github.com/Shopify/hydrogen/pull/2352)) by [@ya-s-u](https://github.com/ya-s-u)
+
+* Fix an issue where non-string server prop values get in-properly parsed. Resolves https://github.com/Shopify/hydrogen/issues/2365 ([#2376](https://github.com/Shopify/hydrogen/pull/2376)) by [@blittle](https://github.com/blittle)
+
+- Fix streaming SSR with multibyte characters ([#2351](https://github.com/Shopify/hydrogen/pull/2351)) by [@ya-s-u](https://github.com/ya-s-u)
+
+* Use correct defaultCartFragment in CartProvider.client.tsx This resolves an error sending Add To Cart events to Shopify Analytics ([#2332](https://github.com/Shopify/hydrogen/pull/2332)) by [@mperreux](https://github.com/mperreux)
+
 ## 1.6.3
 
 ### Patch Changes
