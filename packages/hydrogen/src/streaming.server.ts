@@ -47,7 +47,7 @@ export async function bufferReadableStream(
     if (done) break;
 
     const stringValue =
-      typeof value === 'string' ? value : decoder.decode(value);
+      typeof value === 'string' ? value : decoder.decode(value, {stream: true});
 
     result += stringValue;
 
