@@ -28,6 +28,9 @@ function invokeCart(
   return {
     entry: [
       ...(options?.entryActions || []),
+      assign({
+        lastValidCart: (context) => context?.cart,
+      }),
       'onCartActionEntry',
       'onCartActionOptimisticUI',
       action,
@@ -37,7 +40,7 @@ function invokeCart(
         target: options?.resolveTarget || 'idle',
         actions: [
           assign({
-            prevCart: (context) => context?.cart,
+            prevCart: (context) => context?.lastValidCart,
             cart: (_, event) => event?.payload?.cart,
             rawCartResult: (_, event) => event?.payload?.rawCartResult,
             errors: (_) => undefined,
@@ -48,7 +51,7 @@ function invokeCart(
         target: options?.errorTarget || 'error',
         actions: [
           assign({
-            prevCart: (context) => context?.cart,
+            prevCart: (context) => context?.lastValidCart,
             cart: (context, _) => context?.lastValidCart,
             errors: (_, event) => event?.payload?.errors,
           }),
@@ -60,6 +63,7 @@ function invokeCart(
           prevCart: (_) => undefined,
           cart: (_) => undefined,
           lastValidCart: (_) => undefined,
+          rawCartResult: (_) => undefined,
           errors: (_) => undefined,
         }),
       },
