@@ -495,7 +495,7 @@ describe('<CartProvider />', () => {
           cartLineAdd: cartLineAddSpy,
         });
 
-        const cartLinesInput = [{merchandiseId: '123'}];
+        const cartLinesInput = [{merchandiseId: 'def'}];
 
         const clientAnalyticsSpy = vi.spyOn(ClientAnalytics, 'publish');
 
@@ -613,15 +613,29 @@ describe('<CartProvider />', () => {
       });
 
       it('send analytics event after updating a cart line', async () => {
+        const cartCreateSpy = vi.fn(async () => ({
+          data: {cartCreate: {cart: cartMockWithLine}},
+        }));
+
+        const updatedCartMockLine = {
+          ...cartMock,
+          lines: {edges: [{node: getCartLineMock()}]},
+        };
+
+        updatedCartMockLine.lines.edges[0].node.quantity = 10;
+
         const cartLineUpdateSpy = vi.fn(async () => ({
-          data: {cartLinesUpdate: {cart: cartMockWithLine}},
+          data: {cartLinesUpdate: {cart: updatedCartMockLine}},
         }));
 
         const result = await useCartWithInitializedCart({
           cartLineUpdate: cartLineUpdateSpy,
+          cartCreate: cartCreateSpy,
         });
 
-        const cartLinesInput = [{id: '123', merchandiseId: '123', quantity: 2}];
+        const cartLinesInput = [
+          {id: 'abc', merchandiseId: 'def', quantity: 10},
+        ];
 
         const clientAnalyticsSpy = vi.spyOn(ClientAnalytics, 'publish');
 
@@ -638,9 +652,9 @@ describe('<CartProvider />', () => {
           true,
           {
             updatedCartLines: cartLinesInput,
-            cart: cartMockWithLine,
-            prevCart: cartFromGraphQL(cartMock),
-            oldCart: cartFromGraphQL(cartMock),
+            cart: updatedCartMockLine,
+            prevCart: cartFromGraphQL(cartMockWithLine),
+            oldCart: cartFromGraphQL(cartMockWithLine),
           }
         );
       });
@@ -657,7 +671,7 @@ describe('<CartProvider />', () => {
         });
 
         act(() => {
-          result.current.linesRemove(['123']);
+          result.current.linesRemove(['abc']);
         });
 
         expect(result.current.status).toEqual('updating');
@@ -684,7 +698,7 @@ describe('<CartProvider />', () => {
         });
 
         act(() => {
-          result.current.linesRemove(['123']);
+          result.current.linesRemove(['abc']);
         });
 
         // wait till idle
@@ -711,7 +725,7 @@ describe('<CartProvider />', () => {
         );
 
         act(() => {
-          result.current.linesRemove(['123']);
+          result.current.linesRemove(['abc']);
         });
 
         expect(onLineRemoveSpy).toBeCalledTimes(1);
@@ -739,7 +753,7 @@ describe('<CartProvider />', () => {
 
         const clientAnalyticsSpy = vi.spyOn(ClientAnalytics, 'publish');
 
-        const cartLineIds = ['123'];
+        const cartLineIds = ['abc'];
 
         act(() => {
           result.current.linesRemove(cartLineIds);
