@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.5
+
+### Patch Changes
+
+- Fix issues with cart analytics described in https://github.com/Shopify/hydrogen/issues/2382 ([#2388](https://github.com/Shopify/hydrogen/pull/2388)) by [@lordofthecactus](https://github.com/lordofthecactus)
+
 ## 1.6.4
 
 ### Patch Changes
