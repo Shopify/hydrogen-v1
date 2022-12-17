@@ -28,6 +28,6 @@ Removing fragments makes the starter templates much more verbose. It's possible 
 
 It's less simple to fetch data than requesting a massive REST-style payload for components.
 
-It also makes it more difficult to design Hydrogen UI components around a varying data input, as developers can completely customize queries.
+It also makes it more difficult to design React Storefront Kit components around a varying data input, as developers can completely customize queries.
 
 We've found the performance benefits and discoverability benefits to outweigh these initial drawbacks, but there are places where fragments can be useful. For example, housed in the demo store template and reused across a single project. Or the `Media` type spreading fragment.

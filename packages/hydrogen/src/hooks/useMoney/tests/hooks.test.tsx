@@ -4,7 +4,7 @@ import {useMoney} from '../index.js';
 
 const mountUseMoney = createMountableHook(useMoney);
 
-// this has already been migrated to Vitest in hydrogen-ui; no need to migrate it here as well
+// this has already been migrated to Vitest in storefront-kit-react; no need to migrate it here as well
 describe(`useMoney`, () => {
   it('returns an object with all of the details about the money', async () => {
     const money = await mountUseMoney({
