@@ -101,7 +101,7 @@ Note: this gets a bit messy, because pre mode does make changes to package versi
 
 ### If we introduce storefront-kit-react-vue?
 
-Vue (and other potential variants of React Storefront Kit) will be pinned to the SFAPI, too. We will not be creating other variants of the framework, so we don't need to worry about factoring another semver into the equation.
+Vue (and other potential variants of React Storefront Kit) will be pinned to the SFAPI, too. We will not be creating other variants of the framework, so we don't need to worry about factoring another SemVer into the equation.
 
 ### To the demo store templates?
 
