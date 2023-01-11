@@ -105,7 +105,7 @@ Vue (and other potential variants of React Storefront Kit) will be pinned to the
 
 ### To the demo store templates?
 
-The demo store templates will be affected by both Hydrogen and React Storefront Kit. This means this versioning and branching strategy is a perfect fit. Scaffolding CLIs are unique because only their latest versions are intended to be used. This means we don't need to be concerned about versioning here.
+The demo store templates will be affected by both Hydrogen and React Storefront Kit. This means that this versioning and branching strategy is a perfect fit. Scaffolding CLIs are unique because only their latest versions are intended to be used. This means we don't need to be concerned about versioning here.
 
 ### To the linter packages and any other semver packages we might include in the Hydrogen monorepo?
 
