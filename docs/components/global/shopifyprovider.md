@@ -46,7 +46,7 @@ The `ShopifyProvider` component is a server component that renders inside `App.s
 If you're using a third-party framework, such as Next.js, you should import `ShopifyProvider` from React Storefront Kit using the `@shopify/storefront-kit-react` package.
 
 > Note:
-> React Storefront Kit is an experimental feature at this time and is subject to change. Learn more about using [alternate frameworks](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks).
+> React Storefront Kit is an experimental feature at this time and is subject to change. Learn more about using [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit).
 
 ### Example code
 
@@ -72,7 +72,7 @@ export default function App() {
 
 ### Considerations
 
-- This version of `ShopifyProvider` is meant to only be used on the client. To make API calls from the server, check out the [`createShopifyClient()` helper](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks#step-2-authenticate-the-storefront-api-client).
+- This version of `ShopifyProvider` is meant to only be used on the client. To make API calls from the server, check out the [`createShopifyClient()` helper](https://shopify.dev/custom-storefronts/react-storefront-kit#step-2-authenticate-the-storefront-api-client).
 
 ## Related framework topics
 
