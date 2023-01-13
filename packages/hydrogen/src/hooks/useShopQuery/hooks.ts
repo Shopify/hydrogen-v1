@@ -11,6 +11,12 @@ import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
 import {parseJSON} from '../../utilities/parse.js';
 import {useQuery} from '../../foundation/useQuery/hooks.js';
 import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.js';
+import {
+  SHOPIFY_STOREFRONT_Y_HEADER,
+  SHOPIFY_STOREFRONT_S_HEADER,
+  SHOPIFY_Y,
+  SHOPIFY_S,
+} from '../../constants.js';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -251,6 +257,16 @@ function useCreateShopRequest({
   });
 
   headers = {...headers, ...extraHeaders};
+
+  [
+    { cookieKey: SHOPIFY_Y, headerKey: SHOPIFY_STOREFRONT_Y_HEADER },
+    { cookieKey: SHOPIFY_S, headerKey: SHOPIFY_STOREFRONT_S_HEADER },
+  ].forEach(({cookieKey, headerKey}) => {
+    const cookieValue = request.cookies.get(cookieKey);
+    if (cookieValue) {
+      headers[headerKey] = cookieValue;
+    }
+  });
 
   return {
     key: [storeDomain, storefrontApiVersion, body],
