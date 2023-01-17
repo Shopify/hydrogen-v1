@@ -5,7 +5,7 @@ description: The useProduct hook returns an object that enables you to keep trac
 ---
 
 > Note:
-> `useProduct` is only available as part of the [Hydrogen UI](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks) package, which is in beta. If you’re building with Hydrogen, then use [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions)
+> `useProduct` is only available as part of the [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit) package, which is in beta. If you’re building with Hydrogen, then use [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions)
 
 The `useProduct` hook returns an object that enables you to keep track of the
 selected variant and/or selling plan state, as well as callbacks for modifying the state. The `useProduct` hook must be a child of the [`ProductProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productprovider) component.
@@ -16,7 +16,7 @@ selected variant and/or selling plan state, as well as callbacks for modifying t
 /**
  * Iterate through a list of variants and allow the customer to select a specific variant.
  */
-import {useProduct} from '@shopify/hydrogen-react';
+import {useProduct} from '@shopify/storefront-kit-react';
 
 export function MyComponent() {
   const {variants, selectedVariant, setSelectedVariant} = useProduct();
@@ -50,7 +50,7 @@ export function MyComponent() {
  * Support selling plans. You should display a selling plan selector to a user
  * when a product has selling plans enabled. You need to pass `sellingPlanGroups` to the hook.
  */
-import {useProduct} from '@shopify/hydrogen-react';
+import {useProduct} from '@shopify/storefront-kit-react';
 
 export function MyComponent() {
   const {
@@ -93,7 +93,7 @@ export function MyComponent() {
 /**
  * Use product options.
  */
-import {useProduct} from '@shopify/hydrogen-react';
+import {useProduct} from '@shopify/storefront-kit-react';
 
 export function MyComponent() {
   const {options, selectedVariant, selectedOptions, setSelectedOption} =

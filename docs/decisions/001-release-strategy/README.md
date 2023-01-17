@@ -6,7 +6,7 @@ Approved by internal consensus in early 2022.
 
 ## tl;dr
 
-We should use a Git branch strategy driven by major-release pairs of our two main packages (hydrogen and hydrogen-ui). We should set our GitHub default branch to the latest major version branch. We should use an `unstable` branch which generates scheduled or on-demand snapshot releases.
+We should use a Git branch strategy driven by major-release pairs of our two main packages (`hydrogen` and `storefront-kit-react`). We should set our GitHub default branch to the latest major version branch. We should use an `unstable` branch which generates scheduled or on-demand snapshot releases.
 
 The first branch will be `v1.x-2022-07`.
 
@@ -21,11 +21,11 @@ We want to keep iterating Hydrogen now that we have reached v1.0. Especially aga
 - Allows us to apply the same patches to stable and to the new major version of Hydrogen
 
 
-We plan to version hydrogen and hydrogen-ui differently on NPM:
+We plan to version hydrogen and storefront-kit-react differently on NPM:
 
-- hydrogen will be versioned using [semver](https://semver.org/) `(<major>.<minor>.<patch>)`
+- `hydrogen` will be versioned using [semver](https://semver.org/) `(<major>.<minor>.<patch>)`
 
-- hydrogen-ui will be versioned using [calver](https://calver.org/) `(<year>.<month>.<patch>)` according to its compatibility with the Storefront API of the same version
+- `storefront-kit-react` will be versioned using [calver](https://calver.org/) `(<year>.<month>.<patch>)` according to its compatibility with the Storefront API of the same version
 
 ## What should we do?
 
@@ -37,7 +37,7 @@ We should use major version branches. At v1.0 Hydrogen launch, we'll create a ne
 
 - A Changesets GitHub Action is responsible for keeping a Release PR active and handling Git tag & release via Shipit.
 
-- Developers can install the latest stable release by running `yarn add @shopify/hydrogen @shopify/hydrogen-ui`
+- Developers can install the latest stable release by running `yarn add @shopify/hydrogen @shopify/storefront-kit-react`
 
 Meanwhile, we'll start using a new `unstable` branch to build brand new features into Hydrogen, which are tied directly to the `unstable` SFAPI.
 
@@ -47,9 +47,9 @@ Meanwhile, we'll start using a new `unstable` branch to build brand new features
 
 - We will add a new redirect <https://hydrogen.new/unstable> which creates a Stackblitz based on the latest unstable release.
 
-- Developers can install the latest unstable release by running `yarn add @shopify/hydrogen@unstable @shopify/hydrogen-ui@unstable`
+- Developers can install the latest unstable release by running `yarn add @shopify/hydrogen@unstable @shopify/storefront-kit-react@unstable`
 
-Then, when it comes time to release Hydrogen UI for the next version of the stable SFAPI, we'll cut a new branch and make it the default branch in GitHub:
+Then, when it comes time to release React Storefront Kit for the next version of the stable SFAPI, we'll cut a new branch and make it the default branch in GitHub:
 
 `v1.x-2022-10`
 
@@ -69,7 +69,7 @@ Note that this means we now have two "most recent major versions" to account for
 
 `v2.x-2022-10`
 
-At least until we bump to the new version of hydrogen-ui, and we'll be back to just maintaining a single one:
+At least until we bump to the new version of storefront-kit-react, and we'll be back to just maintaining a single one:
 
 `v2.x-2023-01`
 
@@ -99,13 +99,13 @@ Leading up to a new major release, we might want to issue release candidates. To
 
 Note: this gets a bit messy, because pre mode does make changes to package versions and changelogs. It will make merging stuff from `unstable` more tricky, and it can bloat the changelog. We can probably get around this with manual changelog grooming.
 
-### If we introduce hydrogen-ui-vue?
+### If we introduce storefront-kit-react-vue?
 
-Vue (and other potential variants of Hydrogen UI) will be pinned to the SFAPI, too. We will not be creating other variants of the framework, so we don't need to worry about factoring another semver into the equation.
+Vue (and other potential variants of React Storefront Kit) will be pinned to the SFAPI, too. We will not be creating other variants of the framework, so we don't need to worry about factoring another SemVer into the equation.
 
 ### To the demo store templates?
 
-The demo store templates will be affected by both Hydrogen and Hydrogen UI. This means this versioning and branching strategy is a perfect fit. Scaffolding CLIs are unique because only their latest versions are intended to be used. This means we don't need to be concerned about versioning here.
+The demo store templates will be affected by both Hydrogen and React Storefront Kit. This means that this versioning and branching strategy is a perfect fit. Scaffolding CLIs are unique because only their latest versions are intended to be used. This means we don't need to be concerned about versioning here.
 
 ### To the linter packages and any other semver packages we might include in the Hydrogen monorepo?
 

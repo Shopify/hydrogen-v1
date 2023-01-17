@@ -6,14 +6,14 @@ hidden: true
 ---
 
 > Note:
-> `ProductProvider` is only available as part of the [Hydrogen UI](https://shopify.dev/custom-storefronts/hydrogen/alternate-frameworks) package, which is in beta. If you’re building with Hydrogen, then use [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
+> `ProductProvider` is only available as part of the [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit) package, which is in beta. If you’re building with Hydrogen, then use [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
 
 The `ProductProvider` component sets up a context with state that tracks the selected variant and options. Descendants of this component can use the [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions) hook.
 
 ## Example code
 
 ```tsx
-import {ProductProvider} from '@shopify/hydrogen-react';
+import {ProductProvider} from '@shopify/storefront-kit-react';
 import {gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
