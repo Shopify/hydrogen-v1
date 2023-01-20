@@ -4,7 +4,7 @@ import {eventNames} from './const.js';
 import {EVENT_PATHNAME} from '../../constants.js';
 import {META_ENV_SSR} from '../ssr-interop.js';
 
-type EventGuard = Record<string, NodeJS.Timeout>;
+type EventGuard = Record<string, {timeout: NodeJS.Timeout; data: unknown}>;
 
 const subscribers: Subscribers = {};
 let pageAnalyticsData: any = {};
@@ -47,16 +47,22 @@ function publish(eventname: string, guardDup = false, payload = {}) {
 
   // De-dup events due to re-renders
   if (guardDup) {
-    const eventGuardTimeout = guardDupEvents[namedspacedEventname];
+    const guardName = namedspacedEventname + ':' + pageAnalyticsData.url;
+    const eventGuardTimeout = guardDupEvents[guardName];
 
     if (eventGuardTimeout) {
-      clearTimeout(eventGuardTimeout);
+      clearTimeout(eventGuardTimeout.timeout);
     }
 
     const namespacedTimeout = setTimeout(() => {
-      publishEvent(namedspacedEventname, mergeDeep(pageAnalyticsData, payload));
-    }, 100);
-    guardDupEvents[namedspacedEventname] = namespacedTimeout;
+      publishEvent(namedspacedEventname, guardDupEvents[guardName].data);
+      delete guardDupEvents[guardName];
+    }, 2000);
+
+    guardDupEvents[guardName] = {
+      timeout: namespacedTimeout,
+      data: mergeDeep(pageAnalyticsData, payload),
+    };
   } else {
     publishEvent(namedspacedEventname, mergeDeep(pageAnalyticsData, payload));
   }
