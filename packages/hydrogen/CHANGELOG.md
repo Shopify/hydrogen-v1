@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.6
+
+### Patch Changes
+
+- Fix race condition and memory leak within Hydrogen Analytics ([#2443](https://github.com/Shopify/hydrogen/pull/2443)) by [@blittle](https://github.com/blittle)
+
 ## 1.6.5
 
 ### Patch Changes
