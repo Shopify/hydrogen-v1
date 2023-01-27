@@ -2,9 +2,8 @@ import {useState} from 'react';
 import {useNavigate, Link} from '@shopify/hydrogen/client';
 
 import {emailValidation, passwordValidation} from '~/lib/utils';
-
+import {getInputStyleClasses} from '~/lib/styleUtils';
 import {callLoginApi} from './AccountLoginForm.client';
-import {getInputStyleClasses} from '../../lib/styleUtils';
 
 interface FormElements {
   email: HTMLInputElement;

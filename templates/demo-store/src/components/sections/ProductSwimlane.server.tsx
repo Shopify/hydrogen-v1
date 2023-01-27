@@ -1,11 +1,12 @@
 import {Suspense, useMemo} from 'react';
 import {gql, useShopQuery, useLocalization} from '@shopify/hydrogen';
-import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
-import {ProductCards, Section} from '~/components';
 import type {
   Product,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
+
+import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {ProductCards, Section} from '~/components';
 
 const mockProducts = new Array(12).fill('');
 

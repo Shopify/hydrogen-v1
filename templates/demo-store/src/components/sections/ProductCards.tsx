@@ -1,5 +1,6 @@
 import {Product} from '@shopify/hydrogen/storefront-api-types';
-import {ProductCard} from '../cards/ProductCard.client';
+
+import {ProductCard} from '~/components';
 
 export function ProductCards({products}: {products: Product[]}) {
   return (
