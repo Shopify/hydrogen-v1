@@ -11,7 +11,7 @@ hidden: true
 > Beta:
 > The Content platform is in beta and is only available to [Shopify Plus](https://www.shopify.com/plus) and [Advanced](https://www.shopify.com/pricing) plans.
 
-Hydrogen includes support for integrating content on storefronts. For example, you might have content about product features, specifications, or size charts. You can integrate content into your Hydrogen storefront using the [Storefront API](/api/storefront).
+Hydrogen includes support for integrating content on storefronts. For example, you might have content about product features, specifications, or size charts. You can integrate content into your Hydrogen storefront using the [Storefront API](https://shopify.dev/api/storefront).
 
 ![Product features content in a custom storefront](/assets/custom-storefronts/hydrogen/hydrogen-content.gif)
 

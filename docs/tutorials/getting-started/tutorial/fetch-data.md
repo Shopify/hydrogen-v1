@@ -9,7 +9,7 @@ description: Connect your Hydrogen app to your storefront and fetch data using t
 
 Previously, you [began developing a Hydrogen storefront](/docs/tutorials/getting-started/tutorial/begin). You have a minimal Hydrogen storefront running locally. You’re now ready to fetch data from your storefront.
 
-In this tutorial, you'll connect your Hydrogen app to your storefront and fetch data using the [Storefront API](/api/storefront).
+In this tutorial, you'll connect your Hydrogen app to your storefront and fetch data using the [Storefront API](https://shopify.dev/api/storefront).
 
 ## Scenario
 
@@ -222,7 +222,7 @@ const QUERY = gql`
 > Note:
 > By default, your Hydrogen app is connected to a Demo Store and uses a demo Storefront API access token. For the purposes of this tutorial, you'll use the Demo Store configuration. After you've finished this tutorial series, you can create a new Hydrogen app and [connect it to your own storefront](/docs/tutorials/configuration).
 
-You can explore the [Storefront API](/api/storefront) and run test queries in your Hydrogen app. When you're running the Hydrogen local development server, you can load an interactive GraphiQL explorer that's connected to your shop.
+You can explore the [Storefront API](https://shopify.dev/api/storefront) and run test queries in your Hydrogen app. When you're running the Hydrogen local development server, you can load an interactive GraphiQL explorer that's connected to your shop.
 
 1. With your development server running, visit the GraphiQL explorer at one of the following URLs:
     - http://localhost:3000/graphql
@@ -532,7 +532,7 @@ Next, you'll fetch the image associated with each collection.
 In `FeaturedCollections.server.jsx`, update your GraphQL query to retrieve collection images and use an `Image` component to display the image:
 
 > Tip:
-> In the following code sample, you’ll notice a reference to an [`Image`] (/api/hydrogen/components/primitive/image) component. The `Image` component renders an image for the Storefront API's [Image object](/api/storefront/latest/objects/image) by using the `data` prop, or a custom location by using the `src` prop.
+> In the following code sample, you’ll notice a reference to an [`Image`] (/api/hydrogen/components/primitive/image) component. The `Image` component renders an image for the Storefront API's [Image object](https://shopify.dev/api/storefront/latest/objects/image) by using the `data` prop, or a custom location by using the `src` prop.
 
 ```jsx
 // /src/components/FeaturedCollections.server.jsx

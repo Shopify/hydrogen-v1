@@ -758,7 +758,7 @@ The page now renders an image next to the details about the product:
 Next, you'll create a product form that includes a variant selector, product price, and buy button:
 
 - The variant selector will use the [`useProductOptions`](/api/hydrogen/hooks/product-variant/useproductoptions) hook to retrieve selected options.
-- The [`ProductPrice`](/api/hydrogen/components/product-variant/productprice) component will render a [`Money`](/api/hydrogen/components/primitive/money) component with the product [`priceRange`](/api/storefront/latest/objects/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
+- The [`ProductPrice`](/api/hydrogen/components/product-variant/productprice) component will render a [`Money`](/api/hydrogen/components/primitive/money) component with the product [`priceRange`](https://shopify.dev/api/storefront/latest/objects/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
 - The [`BuyNowButton`](/api/hydrogen/components/cart/buynowbutton) component will render a button that adds an item to the cart and redirects the custom to checkout.
 
 > Tip:

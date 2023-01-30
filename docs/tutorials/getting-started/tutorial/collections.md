@@ -375,7 +375,7 @@ If you inspect the dynamic collection page, then you can find the collection SEO
 Products are the goods, digital downloads, services, and gift cards that a merchant sells. If a product has options, like size or color, then merchants can add a variant for each combination of options. For example, a snowboard might be available for purchase in blue and green. The blue snowboard and the green snowboard are variants.
 
 > Tip:
-> In the following code samples, you’ll notice a reference to a [`Money`](/api/hydrogen/components/primitive/money) component. The `Money` component renders a string of the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) according to the `defaultLocale` in the [Hydrogen configuration file](/docs/tutorials/configuration).
+> In the following code samples, you’ll notice a reference to a [`Money`](/api/hydrogen/components/primitive/money) component. The `Money` component renders a string of the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) according to the `defaultLocale` in the [Hydrogen configuration file](/docs/tutorials/configuration).
 
 1. Create a `ProductCard` component to display the title, price, and image of each product within the collection:
 

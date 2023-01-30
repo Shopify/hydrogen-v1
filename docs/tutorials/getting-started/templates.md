@@ -17,7 +17,7 @@ Hydrogen provides the following templates to help you get started:
 
 ### Components
 
-The Demo Store template provides a series of components that you can use to accelerate your development process. The components integrate directly with the [Storefront API](/api/storefront) for efficient data-fetching, allowing you to save time on crafting GraphQL queries to interact with Shopify APIs or other third-party data sources.
+The Demo Store template provides a series of components that you can use to accelerate your development process. The components integrate directly with the [Storefront API](https://shopify.dev/api/storefront) for efficient data-fetching, allowing you to save time on crafting GraphQL queries to interact with Shopify APIs or other third-party data sources.
 
 The Demo Store template includes different categories of components.
 
