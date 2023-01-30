@@ -347,7 +347,7 @@ If you're deploying to a non-Oxygen runtime, then this is a necessary step to av
 > Note:
 > In the following example, environment variables are stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.
 
-1. Create a [delegate access token](/apps/auth/oauth/delegate-access-tokens) for the Storefront API.
+1. Create a [delegate access token](http://shopify.dev/apps/auth/oauth/delegate-access-tokens) for the Storefront API.
 
 1. [Store the token](https://vitejs.dev/guide/env-and-mode.html#env-files) in a private environment variable called `PRIVATE_STOREFRONT_API_TOKEN`.
 

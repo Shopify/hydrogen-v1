@@ -74,7 +74,7 @@ The following code snippet provides an example layout of product features conten
 
 Your Hydrogen storefront can retrieve the data that's stored in a content model using the Storefront API. You can retrieve content by querying the `type` field, which is the definition or type of data that the metafield stores.
 
-All connected [metafields](/apps/custom-data/metafields) have a `namespace` that matches the `type` field.
+All connected [metafields](http://shopify.dev/apps/custom-data/metafields) have a `namespace` that matches the `type` field.
 
 ### Basic example
 
