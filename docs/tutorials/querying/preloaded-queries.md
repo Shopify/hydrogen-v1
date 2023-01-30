@@ -4,6 +4,9 @@ title: Preloaded queries
 description: Get familiar with how preloaded queries work and how to configure them in your Hydrogen app.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 <aside class="note beta">
 <h4>Experimental feature</h4>
 

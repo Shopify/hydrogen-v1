@@ -5,6 +5,9 @@ description: A reference of commands that you can use to build Hydrogen storefro
 feature_flag: hydrogen2
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 This reference lists the commands that you can use to build Hydrogen storefronts with Shopify CLI.
 
 ## Command overview

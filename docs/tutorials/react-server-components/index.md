@@ -4,6 +4,9 @@ title: React Server Components overview
 description: Learn about React Server Components, an opinionated data-fetching and rendering workflow for React apps.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 Hydrogen is modelled after [React Server Components](https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html), an approach that offers an opinionated data-fetching and rendering workflow for React apps.
 
 This guide provides information about how React Server Components work in the context of Hydrogen.

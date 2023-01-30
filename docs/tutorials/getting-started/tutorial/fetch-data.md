@@ -4,6 +4,9 @@ title: Fetch storefront data
 description: Connect your Hydrogen app to your storefront and fetch data using the Storefront API.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 Previously, you [began developing a Hydrogen storefront](/custom-storefronts/hydrogen/getting-started/tutorial/begin). You have a minimal Hydrogen storefront running locally. You’re now ready to fetch data from your storefront.
 
 In this tutorial, you'll connect your Hydrogen app to your storefront and fetch data using the [Storefront API](/api/storefront).

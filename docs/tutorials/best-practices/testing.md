@@ -4,6 +4,9 @@ title: Testing best practices for Hydrogen
 description: Learn about best practices for testing your Hydrogen storefront.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 When testing your Hydrogen storefront, make sure you have accounted for any issues that might occur when customers visit your live storefront.
 
 This guide describes best practices for testing your Hydrogen storefront.

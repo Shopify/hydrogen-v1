@@ -4,6 +4,9 @@ title: SEO
 description: Learn about SEO-related tags in your Hydrogen client and server components.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 This guide how SEO works in Hydrogen and the output of SEO-related tags in your Hydrogen client and server components.
 
 ## How SEO works in Hydrogen

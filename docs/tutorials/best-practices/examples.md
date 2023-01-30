@@ -4,6 +4,9 @@ title: Hydrogen examples
 description: Explore Hydrogen examples that demonstrate integrations and special use cases.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 Hydrogen includes a set of examples that demonstrate integrations and special use cases. This guide describes the available examples that you can explore.
 
 ## How it works

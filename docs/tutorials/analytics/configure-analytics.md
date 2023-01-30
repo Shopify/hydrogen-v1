@@ -4,6 +4,9 @@ title: Configure analytics
 description: Learn how to work with analytics in Hydrogen, such as subscribing and unsubscribing from events, configuring custom events, and sending analytics data server side. Learn about client analytics connectors, including testing.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 Hydrogen includes [support for analytics](/custom-storefronts/hydrogen/analytics) that give you insight into how customers are interacting with a custom storefront.
 
 This guide describes how to subscribe to the default events that Hydrogen offers, configure custom events, send analytics data from the server-side, and unsubscribe from events. It also provides example implementations of client analytics connectors, and shows how to write an end-to-end (E2E) for testing analytics connectors.

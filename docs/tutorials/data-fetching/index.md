@@ -5,6 +5,9 @@ description: Get familiar with how data fetching works with Hydrogen and Remix.
 feature_flag: hydrogen2
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 ## Introduction
 
 Provide a summary of the product including why a developer would want to build it. Be sure to include a summary of all the key use cases that are possible with the product.

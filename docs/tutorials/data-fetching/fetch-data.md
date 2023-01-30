@@ -5,6 +5,9 @@ description: Learn how to query, fetch, and mutate data in your Hydrogen storefr
 feature_flag: hydrogen2
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 Write a brief summary of the how-to guide that includes:
 
 - the goal of the how-to guide

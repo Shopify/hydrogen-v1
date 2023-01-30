@@ -3,6 +3,9 @@ gid: 55a52d8a-bc89-4000-9f00-86cba62a7737
 title: Manage static assets
 description: Learn how to reference and serve static assets in Hydrogen.
 ---
+
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
 When building your custom storefront, it can be useful to have access to static assets that aren't already hosted elsewhere, like images. This guide describes how to reference and serve static assets in Hydrogen.
 
 ## Change the base URL

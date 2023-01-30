@@ -4,6 +4,9 @@ title: Begin developing a Hydrogen storefront
 description: Create a Hydrogen app locally to begin developing a Hydrogen storefront.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 You're ready to develop a Hydrogen storefront. You want to set up your development environment so that you can begin coding.
 
 In this tutorial, you'll create a Hydrogen app locally to begin developing a Hydrogen storefront. [Hydrogen](/custom-storefronts/hydrogen) is a front-end web development framework that's optimized for commerce by Shopify.

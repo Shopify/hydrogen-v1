@@ -4,6 +4,9 @@ title: Hydrogen quickstart
 description: Learn how to scaffold a new Hydrogen app and start a developer server.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 In this quickstart, you'll create a Hydrogen app locally. [Hydrogen](/custom-storefronts/hydrogen) is a front-end web development framework used for building Shopify custom storefronts.
 
 ## Requirements

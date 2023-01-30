@@ -5,6 +5,9 @@ description: Get familiar with the Shopify CLI requirements and commands for Hyd
 feature_flag: hydrogen2
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 Shopify CLI is a command-line interface tool that helps you build Hydrogen storefronts. You can also use it to automate many common development tasks.
 
 You need to use Node.js to install Shopify CLI and manage its dependencies. However, you can use any technology stack to build your Hydrogen storefront's functionality.

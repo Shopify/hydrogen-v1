@@ -5,6 +5,9 @@ description: Learn how you can adopt Hydrogen incrementally when you use the onl
 hidden: true
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 Some merchants want to adopt Hydrogen incrementally. For example, they might want to use the online store only for product pages and Hydrogen for everything else.
 
 This guide explains how to adopt Hydrogen incrementally by proxying certain routes to the online store.

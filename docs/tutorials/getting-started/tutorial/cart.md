@@ -4,6 +4,9 @@ title: Build a cart
 description: Build a cart that contains the merchandise that a customer intends to purchase, and the estimated cost associated with the cart.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 Previously, you [built a product page](/custom-storefronts/hydrogen/getting-started/tutorial/products). Your Hydrogen storefront now renders detailed information about products and provides a purchasing option, **Buy it now**, to customers. You're now ready to build a cart in your app.
 
 In this tutorial, you'll build a cart that contains the merchandise that a customer wants to buy, and the estimated cost that's associated with the cart.

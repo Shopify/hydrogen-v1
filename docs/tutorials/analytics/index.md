@@ -4,6 +4,9 @@ title: Analytics
 description: Learn about the analytics support built into Hydrogen.
 ---
 
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+
+
 Hydrogen includes support for analytics that give you insight into how customers are interacting with a custom storefront. This guide describes how the analytics support that's built in to Hydrogen works
 
 ## How it works
