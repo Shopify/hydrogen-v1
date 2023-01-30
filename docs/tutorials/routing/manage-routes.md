@@ -7,11 +7,11 @@ description: Learn some common tasks for working with Hydrogen's file-based rout
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-The Hydrogen framework uses a [file-based routing system](/custom-storefronts/hydrogen/routing). This guide explains how to perform some common tasks for managing routes.
+The Hydrogen framework uses a [file-based routing system](/docs/tutorials/routing). This guide explains how to perform some common tasks for managing routes.
 
 ## Retrieve the `handle` property
 
-The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` to `:handle`. [Refer to an example](/custom-storefronts/hydrogen/routing#example).
+The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` to `:handle`. [Refer to an example](/docs/tutorials/routing#example).
 
 You can retrieve the `handle` property by using the [`useRouteParams` hook](/api/hydrogen/hooks/framework/userouteparams):
 
@@ -75,7 +75,7 @@ By default, when a user hovers or focuses on the link for more than 100ms, a pre
 
 You can extend dynamic routes to catch all paths by adding an ellipsis (...) inside the brackets. For example, `/routes/example/[...handle].server.jsx` will match `/example/a` and `/example/a/b`.
 
-Learn more about [Hydrogen's built-in routes](/custom-storefronts/hydrogen/routing#built-in-routes).
+Learn more about [Hydrogen's built-in routes](/docs/tutorials/routing#built-in-routes).
 
 ### Example
 
@@ -94,7 +94,7 @@ export default function({request}) {
 ## API routes
 
 > Note:
-> If you want to use a third-party data source to render Hydrogen components, then refer to [Using Hydrogen components with a third-party data source](/custom-storefronts/hydrogen/data-sources/work-with-3p-data-sources#use-hydrogen-components-with-a-third-party-data-source). If you want to fetch data that goes alongside your Shopify product data and shopping experience, then refer to [Fetching supplementary data](/custom-storefronts/hydrogen/data-sources/work-with-3p-data-sources#fetch-supplementary-data).
+> If you want to use a third-party data source to render Hydrogen components, then refer to [Using Hydrogen components with a third-party data source](/docs/tutorials/data-sources/work-with-3p-data-sources#use-hydrogen-components-with-a-third-party-data-source). If you want to fetch data that goes alongside your Shopify product data and shopping experience, then refer to [Fetching supplementary data](/docs/tutorials/data-sources/work-with-3p-data-sources#fetch-supplementary-data).
 
 Any server component within the `src/routes` directory that exports an API function will become an API route.
 
@@ -204,7 +204,7 @@ export default function Page() {
 
 ## Create custom experiences with props
 
-Server components placed in the `src/routes` directory [receive special props](/custom-storefronts/hydrogen/routing#props-for-creating-custom-experiences) that you can use to create custom experiences:
+Server components placed in the `src/routes` directory [receive special props](/docs/tutorials/routing#props-for-creating-custom-experiences) that you can use to create custom experiences:
 
 The following are some examples.
 
@@ -232,7 +232,7 @@ function MyPage({request}) {
 
 
 
-In some cases, you might want to use `HydrogenRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](/custom-storefronts/hydrogen/react-server-components):
+In some cases, you might want to use `HydrogenRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](/docs/tutorials/react-server-components):
 
 ```jsx
 
@@ -262,7 +262,7 @@ All server components receive a `response` prop containing a Hydrogen-specific v
 
 **Prop**: `response.cache()`
 
-If you want to modify the [full-page cache options](/custom-storefronts/hydrogen/querying/cache), then you can call `cache()` on the response object:
+If you want to modify the [full-page cache options](/docs/tutorials/querying/cache), then you can call `cache()` on the response object:
 
 ```jsx
 
@@ -282,11 +282,11 @@ export default function MyProducts({response}) {
 ### Disable streaming for routes
 
 > Caution:
-> There are [performance benefits](/custom-storefronts/hydrogen/best-practices/performance) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
+> There are [performance benefits](/docs/tutorials/best-practices/performance) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
 
 **Prop**: `response.doNotStream()`
 
-By default, Hydrogen [streams SSR responses](/custom-storefronts/hydrogen/streaming-ssr). However, you can also disable streaming for each route and return a fully buffered response. This is helpful in scenarios like [handling custom SEO bots](/custom-storefronts/hydrogen/seo/manage-seo#check-for-custom-robots).
+By default, Hydrogen [streams SSR responses](/docs/tutorials/streaming-ssr). However, you can also disable streaming for each route and return a fully buffered response. This is helpful in scenarios like [handling custom SEO bots](/docs/tutorials/seo/manage-seo#check-for-custom-robots).
 
 To disable streaming, call `response.doNotStream()`:
 
@@ -358,7 +358,7 @@ return response.redirect('https://yoursite.com/new-page', 301);
 
 ### Server props
 
-In addition to `request` and `response` props, any props you manage with [`setServerProps`](/custom-storefronts/hydrogen/server-props) are passed to each of your server components as props:
+In addition to `request` and `response` props, any props you manage with [`setServerProps`](/docs/tutorials/server-props) are passed to each of your server components as props:
 
 ```jsx
 

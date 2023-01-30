@@ -36,10 +36,10 @@ For example, the [`ProductOptionsProvider`](/api/hydrogen/components/product-var
 
 ## Third-party data sources
 
-Hydrogen can also support data from third-party sources. If you want to use Hydrogen components with a third-party data source, then data from the third-party source must first be transformed into the types expected by the Hydrogen components, hooks, and utilities, and then passed on to the components, hooks, and utilities. Learn more about [working with third-party data sources](/custom-storefronts/hydrogen/data-sources/work-with-3p-data-sources).
+Hydrogen can also support data from third-party sources. If you want to use Hydrogen components with a third-party data source, then data from the third-party source must first be transformed into the types expected by the Hydrogen components, hooks, and utilities, and then passed on to the components, hooks, and utilities. Learn more about [working with third-party data sources](/docs/tutorials/data-sources/work-with-3p-data-sources).
 
 ## Next steps
 
-- Learn how to perform common tasks for [working with third-party data sources in Hydrogen](/custom-storefronts/hydrogen/data-sources/work-with-3p-data-sources).
+- Learn how to perform common tasks for [working with third-party data sources in Hydrogen](/docs/tutorials/data-sources/work-with-3p-data-sources).
 - Get familiar with the [Shopify-specific commerce components, hooks, and utilities](/api/hydrogen) included in Hydrogen.
 - Learn about [Hydrogen's architecture and framework](/custom-storefronts/hydrogen).

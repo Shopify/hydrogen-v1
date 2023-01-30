@@ -53,7 +53,7 @@ You can create a Hydrogen app locally using `npm`, `npx`, `pnpm`, or `yarn`.
 
 ## Step 2: Choose a template
 
-Choose a [template](/custom-storefronts/hydrogen/getting-started/templates) to get started building your Hydrogen storefront:
+Choose a [template](/docs/tutorials/getting-started/templates) to get started building your Hydrogen storefront:
 
 ```bash
 
@@ -117,4 +117,4 @@ Name your new Hydrogen storefront
     You can reach the development server at <http://localhost:3000/>.
 ## Next steps
 
-- Follow the [Hydrogen tutorial series](/custom-storefronts/hydrogen/getting-started/tutorial/begin) to go from "Hello World" to a fully built out Shopify custom storefront.
+- Follow the [Hydrogen tutorial series](/docs/tutorials/getting-started/tutorial/begin) to go from "Hello World" to a fully built out Shopify custom storefront.

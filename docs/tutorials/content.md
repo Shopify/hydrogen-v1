@@ -144,5 +144,5 @@ const QUERY = gql`
 
 ## Next steps
 
-- Learn about the [CSS support](/custom-storefronts/hydrogen/css-support) built into Hydrogen.
-- Learn how to reference and serve [static assets](/custom-storefronts/hydrogen/static-assets/manage-static-assets) in Hydrogen.
+- Learn about the [CSS support](/docs/tutorials/css-support) built into Hydrogen.
+- Learn how to reference and serve [static assets](/docs/tutorials/static-assets/manage-static-assets) in Hydrogen.

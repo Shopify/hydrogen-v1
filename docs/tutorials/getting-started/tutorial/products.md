@@ -7,7 +7,7 @@ description: Build a page that shows detailed product information.
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-Previously, you [built a collection page](/custom-storefronts/hydrogen/getting-started/tutorial/collections). Your Hydrogen storefront sorts products within your collections, using [server props](/custom-storefronts/hydrogen/server-props) and [file-based routing](/custom-storefronts/hydrogen/routing). Now that you have a collections page that renders your products, you’re ready to build a product page.
+Previously, you [built a collection page](/docs/tutorials/getting-started/tutorial/collections). Your Hydrogen storefront sorts products within your collections, using [server props](/docs/tutorials/server-props) and [file-based routing](/docs/tutorials/routing). Now that you have a collections page that renders your products, you’re ready to build a product page.
 
 In this tutorial, you'll build a page that shows detailed product information.
 
@@ -34,7 +34,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 ## Requirements
 
-- You’ve completed the [build a collection page](/custom-storefronts/hydrogen/getting-started/tutorial/collections) tutorial.
+- You’ve completed the [build a collection page](/docs/tutorials/getting-started/tutorial/collections) tutorial.
 
 ## Sample code
 
@@ -362,7 +362,7 @@ function ProductGallery({ media }) {
 
 ## Step 1: Create a products route
 
-You can create a products route similar to how you previously created [a collections route](/custom-storefronts/hydrogen/getting-started/tutorial/collections#step-1-create-a-collections-route).
+You can create a products route similar to how you previously created [a collections route](/docs/tutorials/getting-started/tutorial/collections#step-1-create-a-collections-route).
 
 To begin building your product page, create a file called `/src/routes/products/[handle].server.jsx` that registers a new products route. Then, display the dynamic handle on the page within a layout component.
 
@@ -396,11 +396,11 @@ The products route is registered. Clicking a product takes you to a dynamic prod
 
 ## Step 2: Query a product by handle
 
-Similar to [querying a collection by its handle](/custom-storefronts/hydrogen/getting-started/tutorial/collections#step-2-query-a-collection-by-handle), you can use a product’s handle to query a product.
+Similar to [querying a collection by its handle](/docs/tutorials/getting-started/tutorial/collections#step-2-query-a-collection-by-handle), you can use a product’s handle to query a product.
 
 If a handle isn't specified when a product is created, then the handle is generated from the product's original title, replacing any spaces with hyphens. For example, a product that was created with the title **The Full Stack** might have the handle **the-full-stack**.
 
-At the bottom of your `/src/routes/products/[handle].server.jsx` file, add a GraphQL query that retrieves a product by its handle. You'll also set up an `Seo` component and implement Shopify Analytics, [similar to how you did this for collection pages](/custom-storefronts/hydrogen/getting-started/tutorial/collections#step-3-generate-seo-tags-and implement-shopify-analytics).
+At the bottom of your `/src/routes/products/[handle].server.jsx` file, add a GraphQL query that retrieves a product by its handle. You'll also set up an `Seo` component and implement Shopify Analytics, [similar to how you did this for collection pages](/docs/tutorials/getting-started/tutorial/collections#step-3-generate-seo-tags-and implement-shopify-analytics).
 
 ```jsx
 // /src/routes/products/[handle].server.jsx
@@ -473,9 +473,9 @@ The product page renders the following dynamic content:
 
 ## Step 3: Query product and variant details
 
-In this step, you'll create your first [client component](/custom-storefronts/hydrogen/react-server-components#component-types) - `ProductDetails`. Client components render on the client, enabling a client-side state. Client components end in `.client.jsx`.
+In this step, you'll create your first [client component](/docs/tutorials/react-server-components#component-types) - `ProductDetails`. Client components render on the client, enabling a client-side state. Client components end in `.client.jsx`.
 
-Similar to [querying all products and variants that belong to a collection](/custom-storefronts/hydrogen/getting-started/tutorial/collections#step-4-query-products-and-variants), you can set up a GraphQL query to retrieve detailed information about products and variants.
+Similar to [querying all products and variants that belong to a collection](/docs/tutorials/getting-started/tutorial/collections#step-4-query-products-and-variants), you can set up a GraphQL query to retrieve detailed information about products and variants.
 
 > Tip:
 > In the following code sample, you’ll notice a reference to a [`ProductOptionsProvider`](/api/hydrogen/components/product-variant/productoptionsprovider) component. The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](/api/hydrogen/hooks/product-variant/useproductoptions) hook.
@@ -955,10 +955,10 @@ function ProductGallery({ media }) {
 
 
 
-The product page now renders all of the details for a product and its variants. It also includes a button to purchase the product. In the [next tutorial](/custom-storefronts/hydrogen/getting-started/tutorial/cart), you’ll define the context for interacting with a cart and add an **Add to cart** button, which allows customers to choose products to purchase without completing the payment process.
+The product page now renders all of the details for a product and its variants. It also includes a button to purchase the product. In the [next tutorial](/docs/tutorials/getting-started/tutorial/cart), you’ll define the context for interacting with a cart and add an **Add to cart** button, which allows customers to choose products to purchase without completing the payment process.
 
 ![The details for a product and its variants, and a button to purchase the product](/assets/custom-storefronts/hydrogen/product-variants-purchase-button.png)
 
 ## Next steps
 
-- Learn how to [build a cart](/custom-storefronts/hydrogen/getting-started/tutorial/cart).
+- Learn how to [build a cart](/docs/tutorials/getting-started/tutorial/cart).

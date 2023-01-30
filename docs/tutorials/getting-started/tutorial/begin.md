@@ -58,7 +58,7 @@ If you want to [integrate with an existing React framework](/custom-storefronts/
 
 1. Run the following command:
 
-    Because you're not passing the [flag to use TypeScript](/custom-storefronts/hydrogen/getting-started/templates), the project files are created in JavaScript by default.
+    Because you're not passing the [flag to use TypeScript](/docs/tutorials/getting-started/templates), the project files are created in JavaScript by default.
 
 {% include hydrogen/cli-template-commands.md parent="hello-world" %}
 
@@ -94,7 +94,7 @@ You can reach the development server at <http://localhost:3000/>.
 
 ## Step 3: Explore your project structure
 
-So far, you've created a Hydrogen storefront that's based off the **Hello World** template. [Hydrogen templates](/custom-storefronts/hydrogen/getting-started/templates) are working implementations of Hydrogen storefronts.
+So far, you've created a Hydrogen storefront that's based off the **Hello World** template. [Hydrogen templates](/docs/tutorials/getting-started/templates) are working implementations of Hydrogen storefronts.
 
 The **Hello World** template is a minimal implementation of a Hydrogen storefront. It has few dependencies, little boilerplate, and provides a base for building a Hydrogen storefront.
 
@@ -229,4 +229,4 @@ Tailwind is a CSS framework that is composed of classes. It offers developers a 
 
 ## Next steps
 
-- Learn how to [fetch data from your storefront](/custom-storefronts/hydrogen/getting-started/tutorial/fetch-data).
+- Learn how to [fetch data from your storefront](/docs/tutorials/getting-started/tutorial/fetch-data).

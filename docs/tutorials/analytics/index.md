@@ -41,7 +41,7 @@ By default, Hydrogen publishes the following events to subscribers (`ClientAnaly
 > Note:
 > The event name constants are available in `ClientAnalytics.eventNames`.
 
-Learn how to [subscribe and unsubscribe](/custom-storefronts/hydrogen/analytics/configure-analytics) to events, and learn how to [configure custom events](/custom-storefronts/hydrogen/analytics/configure-analytics#configure-custom-events)
+Learn how to [subscribe and unsubscribe](/docs/tutorials/analytics/configure-analytics) to events, and learn how to [configure custom events](/docs/tutorials/analytics/configure-analytics#configure-custom-events)
 
 ## Analytics sent from the server-side
 
@@ -58,7 +58,7 @@ The following table describes the request function parameters for `ServerAnalyti
 | `data`          | object or text | The result from `.json()` or `.text()`.           |
 | `contentType`   | string         | The content type. Valid values: `json` or `text`. |
 
-Learn how to [send analytics data](/custom-storefronts/hydrogen/analytics/configure-analytics#send-analytics-data-from-the-server-side) from the server-side.
+Learn how to [send analytics data](/docs/tutorials/analytics/configure-analytics#send-analytics-data-from-the-server-side) from the server-side.
 
 ## Performance metrics
 
@@ -69,7 +69,7 @@ Performance metrics provide insight into how fast pages are loading in your Hydr
 - **Largest Contentful Paint (LCP)**: The time it takes to render and interact with the largest content element on the page
 - **Duration**: The total amount of time it takes for a page to finish streaming
 
-Learn about [displaying performance metrics](/custom-storefronts/hydrogen/analytics/configure-analytics#performance-metrics).
+Learn about [displaying performance metrics](/docs/tutorials/analytics/configure-analytics#performance-metrics).
 
 ## Related components
 
@@ -77,7 +77,7 @@ Learn about [displaying performance metrics](/custom-storefronts/hydrogen/analyt
 
 ## Next steps
 
-- Learn how to perform common tasks for [configuring analytics](/custom-storefronts/hydrogen/analytics/configure-analytics).
-- Learn how to [configure queries to preload](/custom-storefronts/hydrogen/querying/preloaded-queries) in your Hydrogen app.
-- Learn how to customize the output of [SEO-related tags](/custom-storefronts/hydrogen/seo/manage-seo) in your Hydrogen client and server components.
-- Learn about [Hydrogen's configuration properties](/custom-storefronts/hydrogen/configuration) and how to change the location of the configuration file.
+- Learn how to perform common tasks for [configuring analytics](/docs/tutorials/analytics/configure-analytics).
+- Learn how to [configure queries to preload](/docs/tutorials/querying/preloaded-queries) in your Hydrogen app.
+- Learn how to customize the output of [SEO-related tags](/docs/tutorials/seo/manage-seo) in your Hydrogen client and server components.
+- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration) and how to change the location of the configuration file.

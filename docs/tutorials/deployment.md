@@ -226,7 +226,7 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 > Note:
 > Requirements might be different for Cloudflare enterprise accounts.
 
-1. [Create a Hydrogen storefront locally](/custom-storefronts/hydrogen/getting-started/quickstart).
+1. [Create a Hydrogen storefront locally](/docs/tutorials/getting-started/quickstart).
 
 1. Create a `wrangler.toml` file in the root of your project.
 
@@ -342,7 +342,7 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 
 ## Avoid rate limiting in production
 
-If you're deploying to a non-Oxygen runtime, then this is a necessary step to avoid rate-limiting in production. [Learn more](/custom-storefronts/hydrogen/environment-variables#use-storefront-api-server-tokens) about why it's required.
+If you're deploying to a non-Oxygen runtime, then this is a necessary step to avoid rate-limiting in production. [Learn more](/docs/tutorials/environment-variables#use-storefront-api-server-tokens) about why it's required.
 
 > Note:
 > In the following example, environment variables are stored in `Oxygen.env`. If you're not deploying to Oxygen, then you can choose a different storage location.

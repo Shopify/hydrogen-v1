@@ -6,7 +6,7 @@ description: Learn how to build user authentication in your Hydrogen storefront,
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
-Hydrogen includes built-in support for [managing user authentication](/custom-storefronts/hydrogen/authentication), including account creation, login, password reset, and logout. This guide describes additional configurations for user authentication.
+Hydrogen includes built-in support for [managing user authentication](/docs/tutorials/authentication), including account creation, login, password reset, and logout. This guide describes additional configurations for user authentication.
 
 
 ## Retrieve a customer access token

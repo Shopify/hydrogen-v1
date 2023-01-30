@@ -40,7 +40,7 @@ In development mode, Hydrogen detects request waterfalls, and warns you that the
 
 ![Shows a screenshot of request waterfall warning](/assets/custom-storefronts/hydrogen/suspense-waterfall.png)
 
-Learn how to [disable preloaded queries](/custom-storefronts/hydrogen/querying/preload-queries#disable-preloaded-queries).
+Learn how to [disable preloaded queries](/docs/tutorials/querying/preload-queries#disable-preloaded-queries).
 
 ### Routes with parameters
 
@@ -50,7 +50,7 @@ For example, the first time a user visits `/collections/freestyle-collection`, n
 
 ## Preload everywhere
 
-You can tell Hydrogen to [preload a query everywhere](/custom-storefronts/hydrogen/querying/preload-queries#preload-everywhere). This option can be helpful for menu links in your navigation, because it allows you to preload a query on button click or while you animate a transition to another page.
+You can tell Hydrogen to [preload a query everywhere](/docs/tutorials/querying/preload-queries#preload-everywhere). This option can be helpful for menu links in your navigation, because it allows you to preload a query on button click or while you animate a transition to another page.
 
 ## Debug query timings
 
@@ -61,9 +61,9 @@ You can tell Hydrogen to [preload a query everywhere](/custom-storefronts/hydrog
 
 </aside>
 
-If you have a suspense waterfall detected, then you can log request timing information by enabling the `logger.showQueryTiming` property in your [Hydrogen configuration file](/custom-storefronts/hydrogen/configuration#logger).
+If you have a suspense waterfall detected, then you can log request timing information by enabling the `logger.showQueryTiming` property in your [Hydrogen configuration file](/docs/tutorials/configuration#logger).
 
-The [`showQueryTiming`](/custom-storefronts/hydrogen/configuration#logger) property logs the timeline of when queries are being requested, resolved, and rendered. If a query is preloaded, but isn't being used, then a warning displays in the server log:
+The [`showQueryTiming`](/docs/tutorials/configuration#logger) property logs the timeline of when queries are being requested, resolved, and rendered. If a query is preloaded, but isn't being used, then a warning displays in the server log:
 
 ![Shows a screenshot of preloaded query warning](/assets/custom-storefronts/hydrogen/preload-query-warning.png)
 
@@ -80,5 +80,5 @@ If a query is being double loaded, then a warning displays in the server log. Th
 
 ## Next steps
 
-- Learn how to perform common tasks for [preloading queries](/custom-storefronts/hydrogen/querying/preload-queries).
-- Learn about the [analytics support](/custom-storefronts/hydrogen/analytics) built into Hydrogen.
+- Learn how to perform common tasks for [preloading queries](/docs/tutorials/querying/preload-queries).
+- Learn about the [analytics support](/docs/tutorials/analytics) built into Hydrogen.

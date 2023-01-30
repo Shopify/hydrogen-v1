@@ -33,7 +33,7 @@ export default function Hero() {
 
 ### Static assets in Oxygen
 
-If you're [using Oxygen to deploy your Hydrogen custom storefront](/custom-storefronts/hydrogen/deployment#deploy-to-oxygen), then static assets are automatically deployed to Shopify's content delivery network (CDN). The assets are available through the automatically-generated URL, and also by directly using the store's domain. The following is an example:
+If you're [using Oxygen to deploy your Hydrogen custom storefront](/docs/tutorials/deployment#deploy-to-oxygen), then static assets are automatically deployed to Shopify's content delivery network (CDN). The assets are available through the automatically-generated URL, and also by directly using the store's domain. The following is an example:
 
 ```sh
 https://cdn.shopify.com/oxygen/.../icon.png
@@ -48,10 +48,10 @@ Files delivered over the Shopify CDN are minified and compressed automatically u
 
 ## Considerations and limitations
 
-You should only import assets, such as styles or images, from [client components](/custom-storefronts/hydrogen/react-server-components#component-types). Any static assets that are referenced in server components, or shared components that are rendered from server components, won't display in the browser.
+You should only import assets, such as styles or images, from [client components](/docs/tutorials/react-server-components#component-types). Any static assets that are referenced in server components, or shared components that are rendered from server components, won't display in the browser.
 
 ## Next steps
 
-- Learn how to perform common tasks for [managing static assets in Hydrogen](/custom-storefronts/hydrogen/static-assets/manage-static-assets).
-- Learn about [React Server Components](/custom-storefronts/hydrogen/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [deploy your Hydrogen storefront](/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.
+- Learn how to perform common tasks for [managing static assets in Hydrogen](/docs/tutorials/static-assets/manage-static-assets).
+- Learn about [React Server Components](/docs/tutorials/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to [deploy your Hydrogen storefront](/docs/tutorials/deployment) to Oxygen and other runtimes.

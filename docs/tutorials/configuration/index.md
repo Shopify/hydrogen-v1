@@ -152,7 +152,7 @@ export default defineConfig({
 
 ### `serverAnalyticsConnectors`
 
-The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](/custom-storefronts/hydrogen/analytics#analytics-sent-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](/custom-storefronts/hydrogen/analytics).
+The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](/docs/tutorials/analytics#analytics-sent-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](/docs/tutorials/analytics).
 
 ### `serverErrorPage`
 
@@ -181,7 +181,7 @@ export default function Error({error}) {
 
 ### `session`
 
-The `session` property allows you to configure sessions support in your Hydrogen storefront. Learn moore about configuring [sessions support](/custom-storefronts/hydrogen/sessions/) in Hydrogen storefronts.
+The `session` property allows you to configure sessions support in your Hydrogen storefront. Learn moore about configuring [sessions support](/docs/tutorials/sessions/) in Hydrogen storefronts.
 
 ```tsx
 // hydrogen.config.ts
@@ -296,7 +296,7 @@ export default defineConfig({
 
 ## Change the configuration file location
 
-If you don't want the Hydrogen configuration file located at the root of your project, then you can [change the config file location](/custom-storefronts/hydrogen/configuration/change-config-file-location).
+If you don't want the Hydrogen configuration file located at the root of your project, then you can [change the config file location](/docs/tutorials/configuration/change-config-file-location).
 
 ## Related components
 
@@ -304,7 +304,7 @@ If you don't want the Hydrogen configuration file located at the root of your pr
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/routing) that Hydrogen uses.
-- Learn about the Hydrogen framework's built-in support for [session management](/custom-storefronts/hydrogen/sessions).
-- Learn about the [analytics support](/custom-storefronts/hydrogen/analytics) built into Hydrogen.
+- Learn about [React Server Components](/docs/tutorials/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Get familiar with the [file-based routing system](/docs/tutorials/routing) that Hydrogen uses.
+- Learn about the Hydrogen framework's built-in support for [session management](/docs/tutorials/sessions).
+- Learn about the [analytics support](/docs/tutorials/analytics) built into Hydrogen.

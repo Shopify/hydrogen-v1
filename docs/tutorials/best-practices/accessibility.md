@@ -176,4 +176,4 @@ Dynamic components such as slideshows, predictive search, modal windows, and tab
 
 - Review the [Polaris guidelines for accessibility](https://polaris.shopify.com/foundations/accessibility).
 - Learn how to design apps with [keyboard accessibility](https://www.shopify.com/partners/blog/keyboard-accessibility) in mind.
-- Learn about [best practices for making your Hydrogen custom storefront performant](/custom-storefronts/hydrogen/best-practices/performance).
+- Learn about [best practices for making your Hydrogen custom storefront performant](/docs/tutorials/best-practices/performance).

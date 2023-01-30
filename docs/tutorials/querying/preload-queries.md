@@ -61,4 +61,4 @@ const data = fetchSync('https://my.api.com/data.json', {
 
 </aside>
 
-Enable the `logger.showQueryTiming` property in your [Hydrogen configuration file](/custom-storefronts/hydrogen/configuration#logger).
+Enable the `logger.showQueryTiming` property in your [Hydrogen configuration file](/docs/tutorials/configuration#logger).

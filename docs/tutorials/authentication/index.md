@@ -11,7 +11,7 @@ Hydrogen includes built-in support for managing user authentication, including a
 
 ## User account routes
 
-The [Demo Store template](/custom-storefronts/hydrogen/getting-started/templates) contains the following user account-specific routes:
+The [Demo Store template](/docs/tutorials/getting-started/templates) contains the following user account-specific routes:
 
 | Route        | Description                                                                                |
 | --------------- | ------------------------------------------------------------------------------------------ |
@@ -30,7 +30,7 @@ The [Demo Store template](/custom-storefronts/hydrogen/getting-started/templates
 
 ## Configuring user authentication
 
-You can [configure user authentication](/custom-storefronts/hydrogen/authentication/configure-user-authentication) with the following tasks:
+You can [configure user authentication](/docs/tutorials/authentication/configure-user-authentication) with the following tasks:
 
 - Retrieve a customer access token
 - Tell bots not to index a page
@@ -38,6 +38,6 @@ You can [configure user authentication](/custom-storefronts/hydrogen/authenticat
 ## Next steps
 
 - Learn how to [manage customer accounts](/custom-storefronts/customer-accounts) with the Storefront API.
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/routing) that Hydrogen uses.
-- Learn about the Hydrogen framework's built-in support for [session management](/custom-storefronts/hydrogen/sessions).
-- Learn how to customize the output of [SEO-related tags](/custom-storefronts/hydrogen/seo/manage-seo) in your Hydrogen client and server components.
+- Get familiar with the [file-based routing system](/docs/tutorials/routing) that Hydrogen uses.
+- Learn about the Hydrogen framework's built-in support for [session management](/docs/tutorials/sessions).
+- Learn how to customize the output of [SEO-related tags](/docs/tutorials/seo/manage-seo) in your Hydrogen client and server components.

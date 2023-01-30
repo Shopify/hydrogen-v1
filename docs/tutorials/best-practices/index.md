@@ -13,10 +13,10 @@ To optimize your development experience, Shopify has established a set of best p
 
 To create an optimal customer experience, and to keep your merchants' stores fast, accessible, and discoverable, you need to consider the following factors:
 
-* [**Performance**](/custom-storefronts/hydrogen/best-practices/performance): Learn how to make your Hydrogen custom storefront performant.
-* [**Accessibility**](/custom-storefronts/hydrogen/best-practices/accessibility): Learn how to make your Hydrogen custom storefront accessible and maintainable.
-* [**Testing**](/custom-storefronts/hydrogen/best-practices/testing): Learn how to test your Hydrogen storefront.
-* [**Examples**](/custom-storefronts/hydrogen/best-practices/examples): Explore Hydrogen examples that demonstrate integrations and special use cases.
+* [**Performance**](/docs/tutorials/best-practices/performance): Learn how to make your Hydrogen custom storefront performant.
+* [**Accessibility**](/docs/tutorials/best-practices/accessibility): Learn how to make your Hydrogen custom storefront accessible and maintainable.
+* [**Testing**](/docs/tutorials/best-practices/testing): Learn how to test your Hydrogen storefront.
+* [**Examples**](/docs/tutorials/best-practices/examples): Explore Hydrogen examples that demonstrate integrations and special use cases.
 
 <div class="resource-card-grid">
   {% resource_card

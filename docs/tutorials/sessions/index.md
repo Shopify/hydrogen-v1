@@ -31,9 +31,9 @@ The following table describes the types of session storage available by default 
 
 ## Configuring sessions
 
-The [Demo Store template](/custom-storefronts/hydrogen/getting-started/templates) comes pre-configured with session support.
+The [Demo Store template](/docs/tutorials/getting-started/templates) comes pre-configured with session support.
 
-By default, session data is persisted within a cookie. You can adjust the session cookie configuration within your Hydrogen configuration file for an in-memory storage or file-based storage (NodeJS only), or build your own storage adapter. [Learn how](/custom-storefronts/hydrogen/sessions/manage-sessions).
+By default, session data is persisted within a cookie. You can adjust the session cookie configuration within your Hydrogen configuration file for an in-memory storage or file-based storage (NodeJS only), or build your own storage adapter. [Learn how](/docs/tutorials/sessions/manage-sessions).
 
 ## Related components and hooks
 
@@ -45,4 +45,4 @@ By default, session data is persisted within a cookie. You can adjust the sessio
 
 ## Next steps
 
-- Learn how to perform common tasks for [managing sessions in Hydrogen](/custom-storefronts/hydrogen/sessions/manage-sessions).
+- Learn how to perform common tasks for [managing sessions in Hydrogen](/docs/tutorials/sessions/manage-sessions).

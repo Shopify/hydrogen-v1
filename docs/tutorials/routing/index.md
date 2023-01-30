@@ -85,7 +85,7 @@ export function api(request, {params}) {
 
 {% endcodeblock%}
 
-Learn how to [work with API routes](/custom-storefronts/hydrogen/routing/manage-routes#api-routes).
+Learn how to [work with API routes](/docs/tutorials/routing/manage-routes#api-routes).
 
 ## Props for creating custom experiences
 
@@ -100,7 +100,7 @@ Server components placed in the `src/routes` directory receive the following spe
 
 Each server component receives props, which includes custom versions of `request` and `response` and any `serverProps` that you have passed from the client.
 
-Learn how to [create custom experiences](/custom-storefronts/hydrogen/routing/manage-routes#create-custom-experiences-with-props) with props.
+Learn how to [create custom experiences](/docs/tutorials/routing/manage-routes#create-custom-experiences-with-props) with props.
 
 ## TypeScript
 
@@ -134,7 +134,7 @@ export async function api(
 
 
 > Tip:
-> The Hello World template is available in [TypeScript](/custom-storefronts/hydrogen/getting-started/templates#hello-world-template). You can also refer to the [example implementation of TypeScript](https://github.com/Shopify/hydrogen/tree/main/examples/typescript) in GitHub.
+> The Hello World template is available in [TypeScript](/docs/tutorials/getting-started/templates#hello-world-template). You can also refer to the [example implementation of TypeScript](https://github.com/Shopify/hydrogen/tree/main/examples/typescript) in GitHub.
 
 ## Related components and hooks
 
@@ -151,9 +151,9 @@ export async function api(
 
 ## Next steps
 
-- Learn how to perform common tasks for [managing routes in Hydrogen](/custom-storefronts/hydrogen/routing/manage-routes).
-- Learn about [Hydrogen's configuration properties](/custom-storefronts/hydrogen/configuration) and how to change the location of the configuration file.
-- Learn about how Hydrogen consumes data from different [sources](/custom-storefronts/hydrogen/data-sources).
-- Learn how to manage [cache options](/custom-storefronts/hydrogen/querying/cache) for Hydrogen storefronts.
-- Improve your app's loading performance with [streaming SSR and Suspense](/custom-storefronts/hydrogen/streaming-ssr).
-- Learn how to [manage your server props](/custom-storefronts/hydrogen/server-props) during your development process.
+- Learn how to perform common tasks for [managing routes in Hydrogen](/docs/tutorials/routing/manage-routes).
+- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration) and how to change the location of the configuration file.
+- Learn about how Hydrogen consumes data from different [sources](/docs/tutorials/data-sources).
+- Learn how to manage [cache options](/docs/tutorials/querying/cache) for Hydrogen storefronts.
+- Improve your app's loading performance with [streaming SSR and Suspense](/docs/tutorials/streaming-ssr).
+- Learn how to [manage your server props](/docs/tutorials/server-props) during your development process.

@@ -7,7 +7,7 @@ description: Learn how to manage your server props during your development proce
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-As you build your Hydrogen app with [React Server Components](/custom-storefronts/hydrogen/react-server-components), you might need to update `props` on the server. Sharing data between the client and server is important for common tasks, such as [page routing](/custom-storefronts/hydrogen/routing).
+As you build your Hydrogen app with [React Server Components](/docs/tutorials/react-server-components), you might need to update `props` on the server. Sharing data between the client and server is important for common tasks, such as [page routing](/docs/tutorials/routing).
 
 This guide describes how to manage server props during your development process.
 
@@ -94,5 +94,5 @@ When the user navigates to a new page in your app, the server props will reset. 
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [work with React Server Components](/custom-storefronts/hydrogen/react-server-components/work-with-rsc).
+- Learn about [React Server Components](/docs/tutorials/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to [work with React Server Components](/docs/tutorials/react-server-components/work-with-rsc).

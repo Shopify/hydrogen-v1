@@ -7,7 +7,7 @@ description: Build a page that renders a collection and products that belong to 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-Previously, you [fetched data from your storefront](/custom-storefronts/hydrogen/getting-started/tutorial/fetch-data), including your store’s name and collections. Your home page is rendering a featured collections section. You’re now ready to build a collection page.
+Previously, you [fetched data from your storefront](/docs/tutorials/getting-started/tutorial/fetch-data), including your store’s name and collections. Your home page is rendering a featured collections section. You’re now ready to build a collection page.
 
 In this tutorial, you'll build a page that renders a collection and products that belong to the collection.
 
@@ -31,7 +31,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 ## Requirements
 
-- You’ve completed [Fetch storefront data](/custom-storefronts/hydrogen/getting-started/tutorial/fetch-data).
+- You’ve completed [Fetch storefront data](/docs/tutorials/getting-started/tutorial/fetch-data).
 
 ## Sample code
 
@@ -204,7 +204,7 @@ export default function ProductCard({ product }) {
 
 ## Step 1: Create a collections route
 
-All components added to the `src/routes` directory in your Hydrogen app are [registered as routes](/custom-storefronts/hydrogen/routing). Any filenames with brackets, like `[handle]`, are converted to a route parameter called `:handle`.
+All components added to the `src/routes` directory in your Hydrogen app are [registered as routes](/docs/tutorials/routing). Any filenames with brackets, like `[handle]`, are converted to a route parameter called `:handle`.
 
 To begin building your collection page, create a file called `/src/routes/collections/[handle].server.jsx` to register a new collections route. Then, display the dynamic handle on the page within the layout component.
 
@@ -285,7 +285,7 @@ The collection page renders the following dynamic content:
 
 ## Step 3: Generate SEO tags and implement Shopify Analytics
 
-In [Step 4 of the previous tutorial](/custom-storefronts/hydrogen/getting-started/tutorial/fetch-data#step-3-generate-seo-tags), you added an SEO component to your Layout component, which allowed you to generate a series of default SEO tags in the `<head>` tag. In this step, you'll generate SEO tags that are specific to the collections page.
+In [Step 4 of the previous tutorial](/docs/tutorials/getting-started/tutorial/fetch-data#step-3-generate-seo-tags), you added an SEO component to your Layout component, which allowed you to generate a series of default SEO tags in the `<head>` tag. In this step, you'll generate SEO tags that are specific to the collections page.
 
 You'll also implement [Shopify Analytics](/api/hydrogen/components/framework/shopifyanalytics) to send commerce-related analytics to Shopify. By adding the `ShopifyAnalytics` component to your Hydrogen storefront, you can view key sales, orders, and online store visitor data from the [Analytics dashboard in your Shopify admin](https://help.shopify.com/en/manual/reports-and-analytics/shopify-reports/overview-dashboard).
 
@@ -375,7 +375,7 @@ If you inspect the dynamic collection page, then you can find the collection SEO
 Products are the goods, digital downloads, services, and gift cards that a merchant sells. If a product has options, like size or color, then merchants can add a variant for each combination of options. For example, a snowboard might be available for purchase in blue and green. The blue snowboard and the green snowboard are variants.
 
 > Tip:
-> In the following code samples, you’ll notice a reference to a [`Money`](/api/hydrogen/components/primitive/money) component. The `Money` component renders a string of the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) according to the `defaultLocale` in the [Hydrogen configuration file](/custom-storefronts/hydrogen/configuration).
+> In the following code samples, you’ll notice a reference to a [`Money`](/api/hydrogen/components/primitive/money) component. The `Money` component renders a string of the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) according to the `defaultLocale` in the [Hydrogen configuration file](/docs/tutorials/configuration).
 
 1. Create a `ProductCard` component to display the title, price, and image of each product within the collection:
 
@@ -558,4 +558,4 @@ Products are the goods, digital downloads, services, and gift cards that a merch
 
 ## Next steps
 
-- Learn how to [build a product page](/custom-storefronts/hydrogen/getting-started/tutorial/products).
+- Learn how to [build a product page](/docs/tutorials/getting-started/tutorial/products).

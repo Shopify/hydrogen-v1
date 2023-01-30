@@ -7,7 +7,7 @@ description: Build a cart that contains the merchandise that a customer intends 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-Previously, you [built a product page](/custom-storefronts/hydrogen/getting-started/tutorial/products). Your Hydrogen storefront now renders detailed information about products and provides a purchasing option, **Buy it now**, to customers. You're now ready to build a cart in your app.
+Previously, you [built a product page](/docs/tutorials/getting-started/tutorial/products). Your Hydrogen storefront now renders detailed information about products and provides a purchasing option, **Buy it now**, to customers. You're now ready to build a cart in your app.
 
 In this tutorial, you'll build a cart that contains the merchandise that a customer wants to buy, and the estimated cost that's associated with the cart.
 
@@ -27,7 +27,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 ## Requirements
 
-You’ve completed [Build a product page](/custom-storefronts/hydrogen/getting-started/tutorial/products).
+You’ve completed [Build a product page](/docs/tutorials/getting-started/tutorial/products).
 
 ## Sample code
 
@@ -1672,6 +1672,6 @@ If you add a product to your cart, and click the cart icon, then the product dis
 ## Next steps
 
 - Explore the source code of the [example Hydrogen demo store](https://github.com/Shopify/hydrogen/tree/main/templates/demo-store) in GitHub.
-- Get familiar with [React Server Components](/custom-storefronts/hydrogen/react-server-components).
+- Get familiar with [React Server Components](/docs/tutorials/react-server-components).
 - Learn more about the [Shopify-specific commerce components, hooks, and utilities](/api/hydrogen) included in Hydrogen.
-- Build your own API using [API routes](/custom-storefronts/hydrogen/routing#api-routes).
+- Build your own API using [API routes](/docs/tutorials/routing#api-routes).

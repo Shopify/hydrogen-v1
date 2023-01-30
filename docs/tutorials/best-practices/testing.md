@@ -13,7 +13,7 @@ This guide describes best practices for testing your Hydrogen storefront.
 
 ## Running tests
 
-The [Demo Store template](/custom-storefronts/hydrogen/getting-started/templates) contains basic end-to-end (E2E) tests in the [`/tests/e2e`](https://github.com/Shopify/hydrogen/tree/main/templates/demo-store/tests/e2e) folder. The E2E tests are powered by [Vitest](https://vitest.dev) and [Playwright](https://playwright.dev).
+The [Demo Store template](/docs/tutorials/getting-started/templates) contains basic end-to-end (E2E) tests in the [`/tests/e2e`](https://github.com/Shopify/hydrogen/tree/main/templates/demo-store/tests/e2e) folder. The E2E tests are powered by [Vitest](https://vitest.dev) and [Playwright](https://playwright.dev).
 
 You can use the following command to run tests in development:
 
@@ -35,11 +35,11 @@ yarn test:ci
 
 ## Catching common issues
 
-Hydrogen provides an [ESLint plugin](/custom-storefronts/hydrogen/eslint) that enforces Shopify’s JavaScript best practices and catches common issues when using [React Server Components](/custom-storefronts/hydrogen/react-server-components) in Hydrogen apps.
+Hydrogen provides an [ESLint plugin](/docs/tutorials/eslint) that enforces Shopify’s JavaScript best practices and catches common issues when using [React Server Components](/docs/tutorials/react-server-components) in Hydrogen apps.
 
 ### Hydrogen rules
 
-If you [install the ESLint plugin](/custom-storefronts/hydrogen/eslint#installation) and enable the [Hydrogen configuration](/custom-storefronts/hydrogen/eslint#hydrogen-configuration), then the following Hydrogen rules are included:
+If you [install the ESLint plugin](/docs/tutorials/eslint#installation) and enable the [Hydrogen configuration](/docs/tutorials/eslint#hydrogen-configuration), then the following Hydrogen rules are included:
 
 | Rule            | Description |
 | -------------- | -------- |
@@ -51,4 +51,4 @@ If you [install the ESLint plugin](/custom-storefronts/hydrogen/eslint#installat
 
 ## Next steps
 
-- Learn about best practices for making your Hydrogen custom storefront [accessible](/custom-storefronts/hydrogen/best-practices/accessibility) and [performant](/custom-storefronts/hydrogen/best-practices/performance).
+- Learn about best practices for making your Hydrogen custom storefront [accessible](/docs/tutorials/best-practices/accessibility) and [performant](/docs/tutorials/best-practices/performance).
