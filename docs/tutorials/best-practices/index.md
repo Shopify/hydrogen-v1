@@ -4,7 +4,7 @@ title: Hydrogen best practices
 description: Review best practices for designing and working with Hydrogen custom storefronts.
 ---
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
 To optimize your development experience, Shopify has established a set of best practices that you can refer to when designing and working with Hydrogen custom storefronts.

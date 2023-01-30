@@ -4,7 +4,7 @@ title: Accessibility best practices for Hydrogen
 description: Learn about best practices for making your Hydrogen custom storefront accessible.
 ---
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
 When you build your Hydrogen custom storefront, make design choices that help keep content accessible. An accessible storefront is designed so that it can be used by everyone, including people who rely on [assistive technology](https://www.w3.org/WAI/perspective-videos/). Accessibility for your storefront is essential to providing an inclusive experience for merchants and customers.

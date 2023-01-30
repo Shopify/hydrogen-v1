@@ -4,7 +4,7 @@ title: Manage caching
 description:  Learn how to manage cache options for Hydrogen storefronts.
 ---
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
 Combined with [streaming server-side rendering](/docs/tutorials/streaming-ssr), caching ensures that buyers get the quickest response possible while also displaying the latest data.

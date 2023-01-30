@@ -4,7 +4,7 @@ title: Build a Hydrogen storefront
 description: Follow the Hydrogen tutorial series to go from Hello World to a fully built out Shopify custom storefront.
 ---
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
 Learn how to build a Hydrogen storefront and access resources to learn more about Hydrogen.

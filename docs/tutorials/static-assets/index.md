@@ -4,7 +4,7 @@ title: Static assets
 description: Get familiar with static assets and how they work in Hydrogen and Oxygen.
 ---
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
 When building your custom storefront, it can be useful to have access to static assets that aren't already hosted elsewhere, like images. This guide explains how static assets work and the considerations and limitations associated with them.

@@ -4,7 +4,7 @@ title: Build a product page
 description: Build a page that shows detailed product information.
 ---
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
 Previously, you [built a collection page](/docs/tutorials/getting-started/tutorial/collections). Your Hydrogen storefront sorts products within your collections, using [server props](/docs/tutorials/server-props) and [file-based routing](/docs/tutorials/routing). Now that you have a collections page that renders your products, you’re ready to build a product page.

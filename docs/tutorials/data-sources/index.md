@@ -4,7 +4,7 @@ title: Data sources
 description: Get familiar with how Hydrogen consumes data from different sources.
 ---
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
 Hydrogen contains a set of [Shopify-specific commerce components, hooks, and utilities](/api/hydrogen) that help accelerate your development process. This guide describes how Hydrogen consumes data from different sources.

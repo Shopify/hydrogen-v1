@@ -4,7 +4,7 @@ title: Server props
 description: Learn how to manage your server props during your development process.
 ---
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
 As you build your Hydrogen app with [React Server Components](/docs/tutorials/react-server-components), you might need to update `props` on the server. Sharing data between the client and server is important for common tasks, such as [page routing](/docs/tutorials/routing).

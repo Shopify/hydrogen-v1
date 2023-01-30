@@ -4,7 +4,7 @@ title: Performance best practices for Hydrogen
 description: Learn about best practices for making your Hydrogen custom storefront performant.
 ---
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
 Hydrogen custom storefronts should be built with performance in mind, so that merchants and their customers can benefit from the fastest, most reliable online shopping experiences.
