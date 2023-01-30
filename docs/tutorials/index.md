@@ -4,11 +4,6 @@ title: Hydrogen overview
 description: Learn about Hydrogen, a front-end web development framework that you can use to build fast and dynamic Shopify custom storefronts.
 ---
 
-{% if feature_flags.hydrogen2 %}
-> Remix:
-> Refer to the [Remix documentation](https://remix.run/docs/en/v1) for framework information.
-{% endif %}
-
 Hydrogen is a front-end web development framework used for building [Shopify custom storefronts](/custom-storefronts/getting-started). It includes the structure, components, and tooling you need to get started so you can spend your time styling and designing features that make your brand unique.
 
 {% include /hydrogen/hydro-ui-use-when.md prop='shopify/hydrogen' %}
