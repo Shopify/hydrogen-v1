@@ -38,11 +38,11 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 ## Sample code
 
-{% include /hydrogen/sample-code.md %}
+If you want to quickly get started, then you can copy and paste the following code from each file into the corresponding files in your Hydrogen app. If the file doesn’t yet exist, then you can create it in your Hydrogen app. This tutorial describes the sample code step by step:
 
-{% codeblock file, filename: 'Sample code' %}
+```jsx
+// /src/routes/products/[handle].server.jsx
 
-```javascript?filename: '/src/routes/products/[handle].server.jsx', title: 'Products route'
 import {
   gql,
   useShopQuery,
@@ -358,7 +358,7 @@ function ProductGallery({ media }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Step 1: Create a products route
 
@@ -366,9 +366,9 @@ You can create a products route similar to how you previously created [a collect
 
 To begin building your product page, create a file called `/src/routes/products/[handle].server.jsx` that registers a new products route. Then, display the dynamic handle on the page within a layout component.
 
-{% codeblock file, filename: '/src/routes/products/[handle].server.jsx' %}
-
 ```jsx
+// /src/routes/products/[handle].server.jsx
+
 import {
   useRouteParams,
 } from "@shopify/hydrogen";
@@ -388,7 +388,7 @@ export default function Product() {
 }
 ```
 
-{% endcodeblock %}
+
 
 The products route is registered. Clicking a product takes you to a dynamic product page:
 
@@ -402,9 +402,9 @@ If a handle isn't specified when a product is created, then the handle is genera
 
 At the bottom of your `/src/routes/products/[handle].server.jsx` file, add a GraphQL query that retrieves a product by its handle. You'll also set up an `Seo` component and implement Shopify Analytics, [similar to how you did this for collection pages](/custom-storefronts/hydrogen/getting-started/tutorial/collections#step-3-generate-seo-tags-and implement-shopify-analytics).
 
-{% codeblock file, filename: '/src/routes/products/[handle].server.jsx' %}
-
 ```jsx
+// /src/routes/products/[handle].server.jsx
+
 import {
   gql,
   useShopQuery,
@@ -465,7 +465,7 @@ const PRODUCT_QUERY = gql`
 `;
 ```
 
-{% endcodeblock %}
+
 
 The product page renders the following dynamic content:
 
@@ -482,9 +482,9 @@ Similar to [querying all products and variants that belong to a collection](/cus
 
 1. Create a `ProductDetails` component to display product information, such as the description, title, and image of the product:
 
-    {% codeblock file, filename: '/src/components/ProductDetails.client.jsx' %}
-
     ```jsx
+    // /src/components/ProductDetails.client.jsx
+
     import { ProductOptionsProvider } from "@shopify/hydrogen";
 
     export default function ProductDetails({ product }) {
@@ -511,13 +511,12 @@ Similar to [querying all products and variants that belong to a collection](/cus
     }
     ```
 
-    {% endcodeblock %}
+
 
 2. In `/src/routes/products/[handle].server.jsx`, update the GraphQL query to retrieve details about the product and its associated variants and pass the data through to the new **ProductDetails** component:
 
-    {% codeblock file, filename: '/src/routes/products/[handle].server.jsx' %}
-
     ```jsx
+    // /src/routes/products/[handle].server.jsx
     import {
       gql,
       useShopQuery,
@@ -648,7 +647,7 @@ Similar to [querying all products and variants that belong to a collection](/cus
     `;
     ```
 
-    {% endcodeblock %}
+
 
     The page renders details about the product in a basic layout:
 
@@ -658,9 +657,9 @@ Similar to [querying all products and variants that belong to a collection](/cus
 
 In this step, you'll use a [`MediaFile`](/api/hydrogen/components/primitive/mediafile) component to render media for your product pages. The `MediaFile` component renders an `Image`, a `Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the `media` provided as a prop. The `MediaFile` component is also compatible with 3D models.
 
-{% codeblock file, filename: '/src/components/ProductDetails.client.jsx' %}
-
 ```jsx
+// /src/components/ProductDetails.client.jsx
+
 import { ProductOptionsProvider, MediaFile } from "@shopify/hydrogen";
 
 export default function ProductDetails({ product }) {
@@ -748,7 +747,7 @@ function ProductGallery({ media }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 The page now renders an image next to the details about the product:
 
@@ -765,9 +764,9 @@ Next, you'll create a product form that includes a variant selector, product pri
 > Tip:
 > Consider styling the buy button to be unique and prominent so that it’s easy for customers to make purchases.
 
-{% codeblock file, filename: '/src/components/ProductDetails.client.jsx' %}
-
 ```jsx
+// /src/components/ProductDetails.client.jsx
+
 import {
   ProductOptionsProvider,
   MediaFile,
@@ -954,7 +953,7 @@ function ProductGallery({ media }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 The product page now renders all of the details for a product and its variants. It also includes a button to purchase the product. In the [next tutorial](/custom-storefronts/hydrogen/getting-started/tutorial/cart), you’ll define the context for interacting with a cart and add an **Add to cart** button, which allows customers to choose products to purchase without completing the payment process.
 

@@ -14,7 +14,6 @@ If you don't want to build with Tailwind's library and instead want to write you
 3. Remove Tailwind from `postcss.config.js`.
 4. Run the following commands:
 
-    {% codeblock terminal %}
 
     ```bash?filename: 'Terminal', title: 'npm'
     // Switch to your app's directory
@@ -38,4 +37,4 @@ If you don't want to build with Tailwind's library and instead want to write you
     yarn dev
     ```
 
-    {% endcodeblock %}
+

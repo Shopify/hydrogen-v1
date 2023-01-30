@@ -18,9 +18,9 @@ This guide describes Hydrogen's configuration properties and how to change the l
 
 The Hydrogen configuration file contains information that's needed at runtime for routing, connecting to the Storefront API, and many other options. The following example shows a basic Hydrogen configuration file:
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
 ```tsx
+// hydrogen.config.ts
+
 import {defineConfig} from '@shopify/hydrogen/config';
 
 /* The `defineConfig` function is an optional utility that provides types for the configuration object. */
@@ -45,7 +45,7 @@ export default defineConfig({
 });
 ```
 
-{% endcodeblock %}
+
 
 ## Configuration properties
 
@@ -66,9 +66,9 @@ The default behavior of the [`log` utility](/api/hydrogen/utilities/log) maps to
 
 You can pass [any method](/api/hydrogen/utilities/log#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
 ```tsx
+// hydrogen.config.ts
+
 export default defineConfig({
   logger: {
     /* Overrides the default `log.trace` behavior. */
@@ -100,42 +100,42 @@ export default defineConfig({
 });
 ```
 
-{% endcodeblock %}
+
 
 ### `poweredByHeader`
 
 By default, Hydrogen responds with the `x-powered-by: Shopify-Hydrogen` header. You can disable this by adding `poweredByHeader: false` to your config:
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
 ```tsx
+// hydrogen.config.ts
+
 export default defineConfig({
   poweredByHeader: false,
 });
 ```
 
-{% endcodeblock %}
+
 
 ### `routes`
 
 The `routes` property specifies a path to find server components and API handlers. The default value for the `routes` property is `/src/routes`, but you can specify the value to any path that starts from the project root:
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
 ```tsx
+// hydrogen.config.ts
+
 export default defineConfig({
   /* Path from the project root to the files for server components and API handlers */
   routes: '/path/to/routes',
 });
 ```
 
-{% endcodeblock %}
+
 
 If your app requires a more advanced configuration, then you can provide additional information about routes manually:
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
 ```tsx
+// hydrogen.config.ts
+
 export default defineConfig({
   routes: {
     /* Path from the project root to the files for server components and API handlers */
@@ -148,7 +148,7 @@ export default defineConfig({
 });
 ```
 
-{% endcodeblock %}
+
 
 ### `serverAnalyticsConnectors`
 
@@ -160,9 +160,9 @@ If an unexpected error occurs while rendering a route, then Hydrogen responds wi
 
 You can define a custom error page with the `serverErrorPage` configuration property. The custom error page is passed an `Error` property. The following is an example:
 
-{% codeblock file, filename: '/src/Error.jsx' %}
-
 ```tsx
+// /src/Error.jsx
+
 export default function Error({error}) {
   return (
     <div>
@@ -174,7 +174,7 @@ export default function Error({error}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 > Note:
 > If Hydrogen fails to render the custom error page, then it falls back to the default built-in Error page.
@@ -183,9 +183,9 @@ export default function Error({error}) {
 
 The `session` property allows you to configure sessions support in your Hydrogen storefront. Learn moore about configuring [sessions support](/custom-storefronts/hydrogen/sessions/) in Hydrogen storefronts.
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
 ```tsx
+// hydrogen.config.ts
+
 import {defineConfig, CookieSessionStorage} from '@shopify/hydrogen/config';
 
 export default defineConfig({
@@ -205,15 +205,15 @@ export default defineConfig({
 });
 ```
 
-{% endcodeblock %}
+
 
 ### `shopify`
 
 The `shopify` property contains all the information that your app needs to connect to the Storefront API. This configuration is passed automatically to the [`ShopifyProvider`](/api/hydrogen/components/global/shopifyprovider) component in your app.
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
 ```tsx
+// hydrogen.config.ts
+
 export default defineConfig({
   shopify: {
     /* The app's default language */
@@ -230,13 +230,13 @@ export default defineConfig({
 });
 ```
 
-{% endcodeblock %}
+
 
 For advanced use cases, you can provide a function that returns the same properties. For example, this approach is useful when the Storefront API connection varies depending on the domain or a subpath of the URL:
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
 ```tsx
+// hydrogen.config.ts
+
 let myShopifyConfigCache = {};
 
 export default defineConfig({
@@ -268,7 +268,7 @@ export default defineConfig({
 };
 ```
 
-{% endcodeblock %}
+
 
 The function is called inside the [`ShopifyProvider`](/api/hydrogen/components/global/shopifyprovider) component in your app. This means that Suspense fallbacks are shown while resolving the configuration if a promise is returned.
 
@@ -281,15 +281,15 @@ The function is called inside the [`ShopifyProvider`](/api/hydrogen/components/g
 
 If strict effects cause problems for your app, then you can turn off strict mode.
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
 ```tsx
+// hydrogen.config.ts
+
 export default defineConfig({
   strictMode: false,
 });
 ```
 
-{% endcodeblock %}
+
 
 > Caution:
 > If you turn off strict mode, then we recommended that you still include the `StrictMode` component at as high of a level as possible in your React tree to catch errors.

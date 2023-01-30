@@ -21,9 +21,9 @@ At the route level, you can customize [the `<head>` tags](/custom-storefronts/hy
 
 You can override the default SEO values by passing in custom props:
 
-{% codeblock file, filename: '/products/[handle].server.jsx' %}
-
 ```js
+// /products/[handle].server.jsx
+
 const storeFrontData = {...};
 const customData = {
   ...storeFrontData,
@@ -33,7 +33,7 @@ const customData = {
 <Seo type="product" data={customData} />
 ```
 
-{% endcodeblock %}
+
 
 ## Generate SEO tags
 
@@ -43,21 +43,21 @@ Each `type` expects a different `data` shape.
 
 The following example shows how to use an SEO component of type `product` and pass a `product` object into the `data` prop. This allows the component to generate standard SEO-related tags for your product page:
 
-{% codeblock file, filename: '/products/[handle].server.jsx' %}
-
 ```jsx
+// /products/[handle].server.jsx
+
 <Seo type="product" data={product} />
 ```
 
-{% endcodeblock %}
+
 
 ### Add custom `head` tags to the `Seo` component
 
 Import `Head` from Hydrogen on any client component and use the syntax described by the [underlying Helmet library](https://github.com/nfl/react-helmet):
 
-{% codeblock file, filename: '/products/[handle].server.jsx' %}
-
 ```jsx
+// /products/[handle].server.jsx
+
 import {Head} from '@shopify/hydrogen';
 
 return (
@@ -70,15 +70,15 @@ return (
 );
 ```
 
-{% endcodeblock %}
+
 
 ## Query and populate `<head>` tags as a server component
 
 The following example shows how to include a catch-all SEO component with the type `defaultSeo` that queries and populates `<head>` tags as a server component:
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
 ```jsx
+// App.server.jsx
+
 {% raw %}
 import {Suspense} from 'react';
 
@@ -106,7 +106,7 @@ export default function App({log, ...serverProps}) {
 {% endraw %}
 ```
 
-{% endcodeblock %}
+
 
 ## Overwriting title template
 
@@ -119,9 +119,9 @@ In the [Demo Store template](/custom-storefronts/hydrogen/getting-started/templa
 
 The following example shows how to overwrite title template for all pages (for example, `Fullstack Snow Board | Snowdevil`):
 
-{% codeblock file, filename: 'DefaultSeo.server.jsx' %}
-
 ```jsx
+// DefaultSeo.server.jsx
+
 ...
   return (
     <Seo
@@ -136,15 +136,15 @@ The following example shows how to overwrite title template for all pages (for e
 ...
 ```
 
-{% endcodeblock %}
+
 
 ### Overwrite for a single page
 
 The following example shows how to overwrite title template for a single page:
 
-{% codeblock file, filename: '/mypage.server.jsx' %}
-
 ```jsx
+// /mypage.server.jsx
+
 import {Head} from '@shopify/hydrogen';
 
 return (
@@ -154,7 +154,7 @@ return (
 );
 ```
 
-{% endcodeblock %}
+
 
 ## SEO bots
 
@@ -168,9 +168,9 @@ To imitate the behavior of an SEO bot and show the page content fully from serve
 
 If you find a bot that's not recognized by Hydrogen's bot detection algorithm, then you can [manually disable streaming](/custom-storefronts/hydrogen/routing/manage-routes#disable-streaming-for-routes) to buffer the response and make the content immediately available to bots:
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
 ```jsx
+// App.server.jsx
+
 function App({request, response}) {
   if (request.headers.get('user-agent') === 'custom bot') {
     response.doNotStream();
@@ -182,16 +182,16 @@ function App({request, response}) {
 export default renderHydrogen(App);
 ```
 
-{% endcodeblock %}
+
 
 ### Remove SEO with noindex
 
 Pages that require authentication shouldn't be indexed by bots. For example, bots shouldn't index login and account pages. You can tell bots to not index a page by passing `noindex` to the `Seo` component:
 
-{% codeblock file, filename: '/account/login.server.jsx' %}
-
 ```jsx
+// /account/login.server.jsx
+
 <Seo type="noindex" data={% raw %}{{title: 'Login'}}{% endraw %} />
 ```
 
-{% endcodeblock %}
+

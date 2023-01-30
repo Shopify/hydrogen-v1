@@ -49,13 +49,12 @@ If you want to [integrate with an existing React framework](/custom-storefronts/
 
 1. Change to the directory where you want to create your project:
 
-    {% codeblock terminal %}
 
     ```bash
     cd <directory>
     ```
 
-    {% endcodeblock %}
+
 
 1. Run the following command:
 
@@ -67,21 +66,19 @@ If you want to [integrate with an existing React framework](/custom-storefronts/
 
 1. Change to your app’s directory:
 
-    {% codeblock terminal %}
 
     ```bash
     cd <app-directory>
     ```
 
-    {% endcodeblock %}
+
 
 ## Step 2: Start the development server
 
 Start the development server:
 
-{% codeblock terminal %}
-
 ```bash?title: 'npm'
+
 npm run dev
 ```
 
@@ -89,7 +86,7 @@ npm run dev
 yarn dev
 ```
 
-{% endcodeblock %}
+
 
 You can reach the development server at <http://localhost:3000/>.
 
@@ -104,8 +101,6 @@ The **Hello World** template is a minimal implementation of a Hydrogen storefron
 ### Open your project
 
 Open your code editor and navigate to your Hydrogen project directory. The Hello World template provides the following structure:
-
-{% codeblock file, filename: "File structure of the Hello World template" %}
 
 ```
 ├── public
@@ -125,7 +120,7 @@ Open your code editor and navigate to your Hydrogen project directory. The Hello
 ├── vite.config.js  // Vite configuration file
 ```
 
-{% endcodeblock %}
+
 
 ## Step 4: Make a text change
 
@@ -133,9 +128,9 @@ Now that you've explored your Hydrogen project directory, you're ready to make y
 
 1. In `/src/routes/index.server.jsx`, update the `Home` component to return **Hello world!** and an introductory statement about Hydrogen:
 
-    {% codeblock file, filename: '/src/routes/index.server.jsx' %}
-
     ```jsx
+    // /src/routes/index.server.jsx
+
     export default function Home() {
       return (
         <div>
@@ -150,7 +145,7 @@ Now that you've explored your Hydrogen project directory, you're ready to make y
     }
     ```
 
-    {% endcodeblock %}
+
 
 1. Save the file to see your changes updated in real-time:
 
@@ -166,7 +161,6 @@ Tailwind is a CSS framework that is composed of classes. It offers developers a 
 
 1. Install `tailwindcss` and its peer dependencies, and generate the `tailwind.config.js` and `postcss.config.js` files.
 
-    {% codeblock terminal %}
 
     ```bash?title: 'npm'
     npm install -D tailwindcss @tailwindcss/typography postcss autoprefixer
@@ -178,13 +172,13 @@ Tailwind is a CSS framework that is composed of classes. It offers developers a 
     yarn tailwindcss init -p
     ```
 
-    {% endcodeblock %}
+
 
 1. Add the paths to the template files in your `tailwind.config.js` file:
 
-    {% codeblock file, filename: 'tailwind.config.js' %}
-
     ```js
+    // tailwind.config.js
+
     module.exports = {
       content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
       theme: {
@@ -194,11 +188,9 @@ Tailwind is a CSS framework that is composed of classes. It offers developers a 
     }
     ```
 
-    {% endcodeblock %}
+
 
 1. Add Tailwind directives to `/src/index.css`:
-
-    {% codeblock file, filename: '/src/index.css' %}
 
     ```
     @tailwind base;
@@ -206,15 +198,15 @@ Tailwind is a CSS framework that is composed of classes. It offers developers a 
     @tailwind utilities;
     ```
 
-    {% endcodeblock %}
+
 
 1. Restart your development server.
 
 1. In `/src/routes/index.server.jsx`, style the **Hello world!** heading and **Welcome to Hydrogen** paragraph by adding some classes:
 
-    {% codeblock file, filename: 'src/routes/index.server.jsx' %}
-
     ```jsx
+    // src/routes/index.server.jsx
+
     export default function Home() {
       return (
         <section className="p-6 md:p-8 lg:p-12">
@@ -229,7 +221,7 @@ Tailwind is a CSS framework that is composed of classes. It offers developers a 
     }
     ```
 
-    {% endcodeblock %}
+
 
 1. Save the file to see your changes updated in real-time:
 

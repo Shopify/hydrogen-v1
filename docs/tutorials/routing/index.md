@@ -17,8 +17,6 @@ You can navigate between routes using the [`Link`](/api/hydrogen/components/fram
 
 The following example shows how each `*.server.jsx` file maps to a different route in the Hydrogen app:
 
-{% codeblock file, filename: "Hydrogen routes" %}
-
 ```
 └── src
     ├── routes
@@ -31,13 +29,11 @@ The following example shows how each `*.server.jsx` file maps to a different rou
         └── index.server.jsx // localhost:3000/
 ```
 
-{% endcodeblock %}
+
 
 ### Example
 
 You have following components in your `src/routes` directory:
-
-{% codeblock file, filename: 'src/routes' %}
 
 ```
 /routes/index.server.jsx
@@ -45,11 +41,9 @@ You have following components in your `src/routes` directory:
 /routes/products/[handle].server.jsx
 ```
 
-{% endcodeblock %}
+
 
 The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` to `:handle`:
-
-{% codeblock file, filename: 'App.server.jsx' %}
 
 ```
 /
@@ -57,7 +51,7 @@ The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` t
 /products/:handle
 ```
 
-{% endcodeblock %}
+
 
 ## Built-in routes
 
@@ -82,8 +76,6 @@ API routes allow you to build your API in Hydrogen. Any server component within 
 ### Example
 
 The following example shows a "Hello world" implementation of an API route:
-
-{% codeblock file, filename: "Hello world example" %}
 
 ```jsx
 export function api(request, {params}) {
@@ -114,9 +106,9 @@ Learn how to [create custom experiences](/custom-storefronts/hydrogen/routing/ma
 
 Hydrogen supports TypeScript out of the box. When building route components, you can use the provided TypeScript types to improve your developer experience:
 
-{% codeblock file %}
-
 ```tsx
+
+
 import type {
   HydrogenApiRoute,
   HydrogenApiRouteOptions,
@@ -139,7 +131,7 @@ export async function api(
 ) {}
 ```
 
-{% endcodeblock %}
+
 
 > Tip:
 > The Hello World template is available in [TypeScript](/custom-storefronts/hydrogen/getting-started/templates#hello-world-template). You can also refer to the [example implementation of TypeScript](https://github.com/Shopify/hydrogen/tree/main/examples/typescript) in GitHub.

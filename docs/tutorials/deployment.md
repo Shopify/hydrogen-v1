@@ -33,16 +33,15 @@ By default, Hydrogen targets a Workers runtime like Oxygen. However, you can als
 
 Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) which suits basic production use cases. You can run and preview your Hydrogen storefront in Node.js by building your Hydrogen storefront for production and previewing the app locally:
 
-{% codeblock terminal %}
-
 ```bash
+
 
 yarn build --target node
 
 yarn preview --target node
 ```
 
-{% endcodeblock %}
+
 
 The production version of your app will be running at http://localhost:3000. You can inspect and deploy the compiled version of your Node.js Hydrogen storefront from `dist/node`.
 
@@ -52,9 +51,9 @@ If you're using the default server entry point in the `build --target node` scri
 
 This bundle also exports the `createServer` function, which you can call programmatically to apply extra middleware:
 
-{% codeblock file, filename: 'server.js' %}
-
 ```js
+// server.js
+
 const {createServer} = require('./dist/node');
 
 // This function accepts an optional
@@ -70,7 +69,7 @@ createServer({
 });
 ```
 
-{% endcodeblock %}
+
 
 ### Use a different Node.js framework
 
@@ -78,9 +77,9 @@ If you want to use a different Node.js framework like [Express](https://expressj
 
 1. Create a new server entry point (for example, `server.js`) and import `hydrogenMiddleware`:
 
-    {% codeblock file, filename: 'server.js' %}
-
     ```js
+    // server.js
+
     import {hydrogenMiddleware} from '@shopify/hydrogen/middleware';
     import serveStatic from 'serve-static';
     import compression from 'compression';
@@ -113,22 +112,20 @@ If you want to use a different Node.js framework like [Express](https://expressj
     });
     ```
 
-    {% endcodeblock %}
+
 
 2. Use the new file as the entry point for your build command. For example, if the script is located in `<root>/server.js`, then you would run the following command:
 
-    {% codeblock terminal %}
 
     ```bash
 
     yarn build --entry server --target node
     ```
 
-    {% endcodeblock %}
+
 
 3. Preview the server bundle:
 
-    {% codeblock terminal %}
 
     ```bash?title: 'Yarn'
     yarn preview --target node
@@ -138,7 +135,7 @@ If you want to use a different Node.js framework like [Express](https://expressj
     node dist/node
     ```
 
-    {% endcodeblock %}
+
 
 ### Use `App.server.jsx` as the server entry point
 
@@ -156,9 +153,9 @@ Update the scripts in `package.json` to specify your new entry point:
 
 This exposes a `handleRequest` function that can be imported in your server or serverless function:
 
-{% codeblock file, filename: 'server.js' %}
-
 ```js
+// server.js
+
 // Polyfill Web APIs like `fetch` and `ReadableStream`
 require('@shopify/hydrogen/web-polyfills');
 
@@ -175,7 +172,7 @@ module.exports = function (request, response) {
 };
 ```
 
-{% endcodeblock %}
+
 
 ## Deploy to Docker
 
@@ -185,9 +182,7 @@ You can deploy your project to any platform that supports Docker-based hosting, 
 
 2. Add a Docker file to the root of your project:
 
-    {% codeblock file, filename: 'Dockerfile' %}
-
-    ```
+    ```dockerfile
     FROM node:16 AS build-env
     ADD . /app
 
@@ -205,11 +200,10 @@ You can deploy your project to any platform that supports Docker-based hosting, 
     CMD ["dist/node/index.js"]
     ```
 
-    {% endcodeblock %}
+
 
 1. Run Docker inside your app directory by executing the following commands:
 
-    {% codeblock terminal %}
 
     ```bash
     docker build . --tag hydrogen-sample-app:latest
@@ -217,7 +211,7 @@ You can deploy your project to any platform that supports Docker-based hosting, 
     docker run -d -p 8080:8080 hydrogen-sample-app
     ```
 
-    {% endcodeblock %}
+
 
     The production version of your app will be running at http://localhost:8080.
 
@@ -238,9 +232,9 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 
     For more information about the configurable properties in the `wrangler.toml` file, refer to Cloudflare's [configuration](https://developers.cloudflare.com/workers/cli-wrangler/configuration) and [compatibility dates](https://developers.cloudflare.com/workers/platform/compatibility-dates) documentation.
 
-    {% codeblock file, filename: 'wrangler.toml' %}
-
     ```toml
+    # wrangler.toml
+
     account_id = ""
     compatibility_date = "2022-01-28"
     compatibility_flags = ["streams_enable_constructors"]
@@ -256,7 +250,7 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
     command = "yarn && yarn build"
     ```
 
-    {% endcodeblock %}
+
 
     Your static files are now uploaded to Workers KV.
 
@@ -268,9 +262,9 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 
 1. Create a new Worker entry file (for example, `worker.js`) in your project:
 
-    {% codeblock file, filename: 'worker.js' %}
-
     ```js
+    // worker.js
+
     // If the request path matches any of your assets, then use the `getAssetFromKV`
     // function from `@cloudflare/kv-asset-handler` to serve it. Otherwise, call the
     // `handleRequest` function, which is imported from your `App.server.jsx` file,
@@ -327,7 +321,7 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
     addEventListener('fetch', (event) => event.respondWith(handleEvent(event)));
     ```
 
-    {% endcodeblock %}
+
 
 1. Update `package.json` to specify the new Worker entry point. If the entry point is in `<root>/worker.js`, then the changes look like the following:
 
@@ -359,9 +353,9 @@ If you're deploying to a non-Oxygen runtime, then this is a necessary step to av
 
 1. In the Hydrogen configuration file, set the private token using the variable `PRIVATE_STOREFRONT_API_TOKEN`.
 
-    {% codeblock file, filename: 'hydrogen.config.ts' %}
-
     ```tsx
+    // hydrogen.config.ts
+
     export default defineConfig({
       privateStorefrontToken:
       /* In this example, the environment variable is stored in `Oxygen.env`.
@@ -370,4 +364,4 @@ If you're deploying to a non-Oxygen runtime, then this is a necessary step to av
     });
     ```
 
-    {% endcodeblock %}
+

@@ -15,16 +15,16 @@ The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` t
 
 You can retrieve the `handle` property by using the [`useRouteParams` hook](/api/hydrogen/hooks/framework/userouteparams):
 
-{% codeblock file, filename: '[handle].server.jsx' %}
-
 ```jsx
+// [handle].server.jsx
+
 export default function Product() {
   const {handle} = useRouteParams();
   return <div>{handle}</div>;
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Provide a custom static implementation
 
@@ -32,14 +32,12 @@ You can also provide a custom static implementation of a dynamic page to overrid
 
 In the following example, any requests to `/products/hoodie` are rendered using `hoodie.server.jsx` instead of `[handle].server.jsx`:
 
-{% codeblock file, filename: 'src/routes' %}
-
 ```
 /routes/products/hoodie.server.jsx
 /routes/products/[handle].server.jsx
 ```
 
-{% endcodeblock %}
+
 
 ### Prefetch a link source
 
@@ -47,13 +45,13 @@ The [`Link`](https://shopify.dev/api/hydrogen/components/framework/link) compone
 
 If you want to disable link prefetching, then pass `prefetch={false}` to the `Link` component:
 
-{% codeblock file, filename: 'Component.client.jsx' %}
+```jsx
+// Component.client.jsx
 
-```html
 <Link prefetch={false} to="/path">Link</Link>
 ```
 
-{% endcodeblock %}
+
 
 By default, when a user hovers or focuses on the link for more than 100ms, a prefetch link tag is rendered for the React Server Components response path. If the user prematurely leaves or blurs the link, then the prefetch link tag isn't added.
 
@@ -63,13 +61,13 @@ The [`Link`](/api/hydrogen/components/framework/link) component includes an opti
 
 If you want to disable link prefetching, then pass `prefetch={false}` to the `Link` component:
 
-{% codeblock file, filename: 'Component.client.jsx' %}
+```jsx
+// Component.client.jsx
 
-```html
 <Link prefetch={false} to="/path">Link</Link>
 ```
 
-{% endcodeblock %}
+
 
 By default, when a user hovers or focuses on the link for more than 100ms, a prefetch link tag is rendered for the React Server Components response path. If the user prematurely leaves or blurs the link, then the prefetch link tag isn't added.
 
@@ -83,15 +81,15 @@ Learn more about [Hydrogen's built-in routes](/custom-storefronts/hydrogen/routi
 
 The following example shows how to obtain catch all routes data using `location.pathname`:
 
-{% codeblock file, filename: '[...handle].server.jsx' %}
-
 ```jsx
+// [...handle].server.jsx
+
 export default function({request}) {
   const { pathname } = new URL(request.url);)
 }
 ```
 
-{% endcodeblock %}
+
 
 ## API routes
 
@@ -106,9 +104,9 @@ The following examples show some common use cases for implementing API routes:
 
 The following example shows an API route that returns a JSON response:
 
-{% codeblock file %}
-
 ```jsx
+
+
 export function api(request, {params}) {
   return new Response(JSON.stringify({data: 1}), {
     headers: {'Content-Type': 'application/json'},
@@ -116,15 +114,15 @@ export function api(request, {params}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Set a URL redirect
 
 The following example shows how to set up a URL redirect with a status code of `301`:
 
-{% codeblock file %}
-
 ```jsx
+
+
 export function api(request, {params}) {
   return new Response(null, {
     status: 301,
@@ -133,15 +131,15 @@ export function api(request, {params}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Switch the HTTP method
 
 The following example shows how to switch the HTTP method for the action performed by an API:
 
-{% codeblock file %}
-
 ```jsx
+
+
 export async function api(request, {params}) {
   switch (request.method) {
     case 'GET':
@@ -152,15 +150,15 @@ export async function api(request, {params}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Use API routes to read a request body
 
 The following example shows how to use API routes to read a request body:
 
-{% codeblock file %}
-
 ```jsx
+
+
 export async function api(request, {params}) {
   if (request.method === 'PUT') {
     const json = await request.json();
@@ -172,7 +170,7 @@ export async function api(request, {params}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 > Tip:
 > Explore an [example implementation in GitHub](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/api/countries.server.ts) that lazy loads [available countries](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/CountrySelector.client.tsx) by an API route (`/api/countries`).
@@ -181,9 +179,9 @@ export async function api(request, {params}) {
 
 You can concatenate requests in API routes to avoid extra network problems, such as waterfall requests. Concatenating requests is useful for HTML forms, where it's common to refresh the current page after a form is submitted.
 
-{% codeblock file %}
-
 ```jsx
+
+
 // src/routes/my-page.server.jsx
 
 export async function api(request) {
@@ -203,7 +201,7 @@ export default function Page() {
 }
 ```
 
-{% endcodeblock %}
+
 ## Create custom experiences with props
 
 Server components placed in the `src/routes` directory [receive special props](/custom-storefronts/hydrogen/routing#props-for-creating-custom-experiences) that you can use to create custom experiences:
@@ -218,9 +216,9 @@ All server components receive a `request` prop containing a Hydrogen-specific ve
 
 In addition to the standard methods, `HydrogenRequest` exposes a `cookies` helper, which is a simple `Map` of cookie values:
 
-{% codeblock file %}
-
 ```jsx
+
+
 function MyPage({request}) {
   if (request.headers.get('my-custom-header') === SOME_VALUE) {
     // Do something based on a header
@@ -232,13 +230,13 @@ function MyPage({request}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 In some cases, you might want to use `HydrogenRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](/custom-storefronts/hydrogen/react-server-components):
 
-{% codeblock file %}
-
 ```jsx
+
+
 function MyPage({request}) {
   // 🔴 You probably don't want to read `url`:
   console.log(request.url);
@@ -250,7 +248,7 @@ function MyPage({request}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Customize the response returned from the Hydrogen server
 
@@ -266,9 +264,9 @@ All server components receive a `response` prop containing a Hydrogen-specific v
 
 If you want to modify the [full-page cache options](/custom-storefronts/hydrogen/querying/cache), then you can call `cache()` on the response object:
 
-{% codeblock file %}
-
 ```jsx
+
+
 export default function MyProducts({response}) {
   response.cache({
     // Cache the page for one hour.
@@ -279,7 +277,7 @@ export default function MyProducts({response}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Disable streaming for routes
 
@@ -292,9 +290,9 @@ By default, Hydrogen [streams SSR responses](/custom-storefronts/hydrogen/stream
 
 To disable streaming, call `response.doNotStream()`:
 
-{% codeblock file %}
-
 ```js
+
+
 export default function CustomPage({response}) {
   response.doNotStream();
 
@@ -302,7 +300,7 @@ export default function CustomPage({response}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Set headers and status codes
 
@@ -310,9 +308,9 @@ export default function CustomPage({response}) {
 
 You can use `response` to set headers or status codes using the `Response` API:
 
-{% codeblock file %}
-
 ```jsx
+
+
 export default function CustomPage({response}) {
   response.doNotStream();
 
@@ -323,7 +321,7 @@ export default function CustomPage({response}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 > Caution:
 > You must call `response.doNotStream()` before any calls to `fetchSync`, `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved.
@@ -334,26 +332,26 @@ export default function CustomPage({response}) {
 
 If you want to return users to a different URL, then use `response.redirect()` in your server components.
 
-{% codeblock file %}
-
 ```jsx
+
+
 export default function PageThatShouldRedirect({response}) {
   return response.redirect('/new-page');
 }
 ```
 
-{% endcodeblock %}
+
 
 The `redirect` function accepts a `location` URL and an optional `statusCode`, which defaults to `307`:
 
-{% codeblock file %}
-
 ```jsx
+
+
 // This redirect function only supports initial server-rendered page responses. It doesn't yet support client-navigated responses.
 return response.redirect('https://yoursite.com/new-page', 301);
 ```
 
-{% endcodeblock %}
+
 
 > Caution:
 > You must call `return response.redirect()` before any calls to `fetchSync`, `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response. The value must also be returned.
@@ -362,12 +360,12 @@ return response.redirect('https://yoursite.com/new-page', 301);
 
 In addition to `request` and `response` props, any props you manage with [`setServerProps`](/custom-storefronts/hydrogen/server-props) are passed to each of your server components as props:
 
-{% codeblock file %}
-
 ```jsx
+
+
 export default function MyPage({custom, props, here}) {
   // Use custom server props
 }
 ```
 
-{% endcodeblock %}
+

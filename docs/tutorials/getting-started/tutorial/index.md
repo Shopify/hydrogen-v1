@@ -36,9 +36,3 @@ Build a cart that contains the merchandise that a customer intends to purchase, 
 {% endresource_card %}
 
 {% endresource_card_container %}
-
-## More resources
-
-Consult additional resources to learn more about Hydrogen.
-
-{% include hydrogen/more-resources.md %}

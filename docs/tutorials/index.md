@@ -9,8 +9,6 @@ description: Learn about Hydrogen, a front-end web development framework that yo
 
 Hydrogen is a front-end web development framework used for building [Shopify custom storefronts](/custom-storefronts/getting-started). It includes the structure, components, and tooling you need to get started so you can spend your time styling and designing features that make your brand unique.
 
-{% include /hydrogen/hydro-ui-use-when.md prop='shopify/hydrogen' %}
-
 {{ 'Su-x4Mo5xmU' | youtube }}
 
 ## How Hydrogen works
@@ -40,13 +38,11 @@ For more information, refer to [Hydrogen templates](/custom-storefronts/hydrogen
   <figcaption>Demo Store template</figcaption>
 </figure>
 
-{% include hydrogen/templates.md %}
-
 ## Data sources
 
-{% include hydrogen/shopify-data.md %}
+Hydrogen is built and optimized to use data coming from Shopify's [Storefront API](/api/storefront). The shape of the data passed to components, hooks, and utilities corresponds and conforms to the structure based on the GraphQL types from the Storefront API.
 
-{% include hydrogen/third-party-data.md prop='concept'%}
+Hydrogen can also support data from third-party sources. If you want to use Hydrogen components with a third-party data source, then data from the third-party source must first be transformed into the types expected by the Hydrogen components, hooks, and utilities, and then passed on to the components, hooks, and utilities.{% if includes.prop == 'concept' %} Learn more about [working with third-party data sources](/custom-storefronts/hydrogen/data-sources/work-with-3p-data-sources).{% endif %}
 
 ![A diagram that shows how the Hydrogen components, hooks, and utilities consume data](/assets/custom-storefronts/hydrogen/hydrogen-data-sources.png)
 
@@ -78,11 +74,15 @@ The Hydrogen app is hosted on a worker platform like [Oxygen](/custom-storefront
 
 By default, Hydrogen includes a [`@shopify/hydrogen/platforms/worker`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/worker.ts) package for server-side rendering. The Cache API and KV API are powered by Oxygen, Cloudflare, or another runtime adapter.
 
-{% include /hydrogen/default-entry-points.md prop='with_link' %}
+Hydrogen includes the following default entry points for your app:
 
+- **Client entry point**: [`@shopify/hydrogen/entry-client`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/entry-client.tsx), which is included in [`index.html`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/index.html) and used for hydration purposes
+- **Server entry point**: [`App.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/App.server.jsx)
+
+You can [configure the default entry points](/custom-storefronts/hydrogen/data-sources/configure-default-entry-points) for your app.
 ## Oxygen
 
-{% include oxygen/intro.md %}
+[Oxygen](/custom-storefronts/oxygen) is Shopify's recommended deployment platform for Hydrogen storefronts. Oxygen removes the need to maintain server infrastructure, and enables you to manage and deploy Hydrogen storefronts. You can deploy different Hydrogen storefronts to Oxygen environments, enabling you to preview and share different versions of storefronts.
 
 ## Limitations
 

@@ -19,9 +19,9 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
 
 1. In your client component, add the following code to initialize the subscription to the `PAGE_VIEW` event:
 
-    {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
-
     ```jsx
+    // components/AnalyticsListener.client.jsx
+
     import {ClientAnalytics} from '@shopify/hydrogen';
 
     let init = false;
@@ -48,13 +48,14 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
     }
     ```
 
-    {% endcodeblock %}
+
 
 1. Add your client component to your app's top-level React component (`App.server.jsx`):
 
-    {% codeblock file, filename: 'App.server.jsx' %}
 
     ```jsx
+    // App.server.jsx
+
     function App({routes}) {
      return (
        <>
@@ -65,7 +66,7 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
     }
     ```
 
-    {% endcodeblock %}
+
 
 1. Test the event by refreshing the root page of your app. The `PAGE_VIEW` payload object details display in the browser’s console log.
 
@@ -73,9 +74,9 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
 
 You can unsubscribe from events that you no longer want your Hydrogen app to track. The following example shows how to unsubscribe from the `accepts-marketing` event:
 
-{% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
-
 ```jsx
+// components/SomeComponent.client.jsx
+
 useEffect(() => {
   const acceptMarketingSubscriber = ClientAnalytics.subscribe(
     'accepts-marketing',
@@ -90,7 +91,7 @@ useEffect(() => {
 });
 ```
 
-{% endcodeblock %}
+
 
 ## Configure custom events
 
@@ -98,9 +99,9 @@ Aside from the [default events](/custom-storefronts/hydrogen/analytics#default-e
 
 1. Emit a custom event by using the publish method and specifying a custom event name:
 
-    {% codeblock file, filename: 'components/Banner.client.jsx' %}
-
     ```jsx
+    // components/Banner.client.jsx
+
     <Banner onClick={(event) => {
       ClientAnalytics.publish('select_promotion', true, {
         creative_name: "Summer Banner",
@@ -110,13 +111,13 @@ Aside from the [default events](/custom-storefronts/hydrogen/analytics#default-e
     }}
     ```
 
-    {% endcodeblock %}
+
 
 1. In `AnalyticsListener`, use the `ClientAnalytics` component to subscribe to your custom event by name:
 
-    {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
-
     ```jsx
+    // components/AnalyticsListener.client.jsx
+
     import {ClientAnalytics} from '@shopify/hydrogen';
 
     let init = false;
@@ -143,7 +144,7 @@ Aside from the [default events](/custom-storefronts/hydrogen/analytics#default-e
     }
     ```
 
-    {% endcodeblock %}
+
 
 > Note:
 > You can test the custom event subscription by clicking the button with the analytics event attached. The custom fields `creative_name` and `creative_slot` are added to the payload.
@@ -158,9 +159,9 @@ You can capture data on how customers are interacting with your storefront.
 
 The following example captures the Shopify product collection that a customer has interacted with. `collectionName` and `collectionId` fields are added to the `PAGE_VIEW` event object:
 
-{% codeblock file, filename: 'collections/[handle].server.js' %}
-
 ```js
+// collections/[handle].server.js
+
 const {data} = useShopQuery({
   query: QUERY,
   variables: {
@@ -182,7 +183,7 @@ useServerAnalytics({
 });
 ```
 
-{% endcodeblock %}
+
 
 When the collection page is reloaded, a `PAGE_VIEW` event displays in the console that includes the new `collectionName` and `collectionId` fields.
 
@@ -192,9 +193,9 @@ You can also capture events in client components, like when a customer makes a q
 
 The following example captures when a customer clicks a promotional banner:
 
-{% codeblock file, filename: '*.client.js' %}
-
 ```js
+// *.client.js
+
 // some.client.jsx
 useEffect(() => {
   ClientAnalytics.pushToPageAnalyticsData({
@@ -203,7 +204,7 @@ useEffect(() => {
 });
 ```
 
-{% endcodeblock %}
+
 
 > Note:
 > All `ClientAnalytics.*` function calls must be wrapped in a [`useEffect`](https://reactjs.org/docs/hooks-reference.html#useeffect) hook.
@@ -212,13 +213,13 @@ useEffect(() => {
 
 The following example shows how to retrieve page analytics data from a client component:
 
-{% codeblock file, filename: '*.client.js' %}
-
 ```js
+// *.client.js
+
 ClientAnalytics.getPageAnalyticsData();
 ```
 
-{% endcodeblock %}
+
 
 > Caution:
 > Don't use the data from `ClientAnalytics.getPageAnalyticsData()` for rendering. This will cause occasional mismatches during hydration.
@@ -227,16 +228,16 @@ ClientAnalytics.getPageAnalyticsData();
 
 To retrieve the data that's available elsewhere in your Hydrogen storefront, you can add the following code to your server components:
 
-{% codeblock file, filename: '*.server.js' %}
-
 ```js
+// *.server.js
+
 const serverDataLayer = useServerAnalytics();
 ```
 
 > Caution:
 > Don't use the data from `useServerAnalytics()` for rendering. This causes occasional mismatches during hydration.
 
-{% endcodeblock %}
+
 
 #### Trigger analytics events on navigation
 
@@ -244,15 +245,15 @@ If you need to trigger additional analytics events on navigation, then you can s
 
 The following example publishes when a customer views a product:
 
-{% codeblock file, filename: '*.server.js' %}
-
 ```js
+// *.server.js
+
 const serverDataLayer = useServerAnalytics({
   publishEventsOnNavigate: [ClientAnalytics.eventNames.VIEWED_PRODUCT],
 });
 ```
 
-{% endcodeblock %}
+
 
 ## Send analytics data from the server-side
 
@@ -260,9 +261,9 @@ To send analytics data from the server-side, complete the following steps:
 
 1. Create a client-side analytics listener that makes a fetch call to the `__event` endpoint.
 
-    {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
-
     ```jsx
+    // components/AnalyticsListener.client.jsx
+
     import {ClientAnalytics} from '@shopify/hydrogen';
 
     let init = false;
@@ -300,13 +301,13 @@ To send analytics data from the server-side, complete the following steps:
     }
     ```
 
-    {% endcodeblock %}
+
 
 1. Create a server-side analytics connector:
 
-    {% codeblock file, filename: 'MyServerAnalyticsConnector.jsx' %}
-
     ```jsx
+    // MyServerAnalyticsConnector.jsx
+
     export const MyServerAnalyticsConnector = {
       request(requestUrl, requestHeader, data, contentType) {
         // Send your analytics request to third-party analytics
@@ -318,13 +319,13 @@ To send analytics data from the server-side, complete the following steps:
     };
     ```
 
-    {% endcodeblock %}
+
 
 1. Pass the analytics connector into the `serverAnalyticsConnectors` configuration:
 
-    {% codeblock file, filename: 'hydrogen.config.ts' %}
-
     ```js
+    // hydrogen.config.ts
+
     import * as MyServerAnalyticsConnector from '/components/MyServerAnalyticsConnector.jsx'
 
     export default defineConfig({
@@ -333,7 +334,7 @@ To send analytics data from the server-side, complete the following steps:
     });
     ```
 
-    {% endcodeblock %}
+
 
     > Tip:
     > Refer to the [request function parameters](/custom-storefronts/hydrogen/analytics#parameters) for `ServerAnalyticsConnector`.
@@ -350,9 +351,9 @@ Include `<PerformanceMetrics />` in `App.server.js`.
 
 To see performance debug metrics displayed in your browser console log, then include `<PerformanceMetricsDebug />` in `App.server.js`:
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
 ```jsx
+// App.server.jsx
+
 import {
   PerformanceMetrics,
   PerformanceMetricsDebug,
@@ -372,15 +373,15 @@ function App({routes}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Implement a client analytics connector
 
 The following example shows an implementation of a client analytics connector with [Google Analytics 4](https://developers.google.com/analytics/devguides/collection/ga4):
 
-{% codeblock file, filename: 'components/GoogleAnalytics.client.jsx' %}
-
 ```jsx
+// components/GoogleAnalytics.client.jsx
+
 import {useEffect} from 'react';
 import {ClientAnalytics, loadScript} from '@shopify/hydrogen';
 
@@ -427,16 +428,16 @@ export function GoogleAnalytics() {
 }
 ```
 
-{% endcodeblock %}
+
 
 > Note:
 > The code calls `loadScript` instead of [`useLoadScript`](/api/hydrogen/hooks/primitive/useloadscript). `useLoadScript` is a hook and can't be called inside `useEffect`.
 
 The following example shows an implementation of a client analytics connector using the [getanalytics.io Google Tag Manager package](https://getanalytics.io/plugins/google-tag-manager/):
 
-{% codeblock file, filename: 'components/GoogleTagManager.client.jsx' %}
-
 ```jsx
+// components/GoogleTagManager.client.jsx
+
 import Analytics from 'analytics';
 import googleTagManager from '@analytics/google-tag-manager';
 import {useEffect} from 'react';
@@ -461,7 +462,7 @@ export default function GTM() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Test analytics connectors end-to-end
 
@@ -470,9 +471,9 @@ export default function GTM() {
 
 The following example shows how to write an end-to-end (E2E) test for [Google Analytics 4](https://developers.google.com/analytics/devguides/collection/ga4).
 
-{% codeblock file, filename: 'tests/e2e/analytics.ga4.test.js' %}
-
 ```jsx
+// tests/e2e/analytics.ga4.test.js
+
 import {startHydrogenServer} from '../utils';
 
 const ANALYTICS_ENDPOINT = 'https://www.google-analytics.com/g/collect';
@@ -512,4 +513,4 @@ describe('Google Analytics 4', () => {
 });
 ```
 
-{% endcodeblock %}
+

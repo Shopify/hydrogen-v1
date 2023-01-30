@@ -17,7 +17,7 @@ Hydrogen supports data coming from Shopify and third-parties:
 
 ## Shopify data source
 
-{% include hydrogen/shopify-data.md %}
+Hydrogen is built and optimized to use data coming from Shopify's [Storefront API](/api/storefront). The shape of the data passed to components, hooks, and utilities corresponds and conforms to the structure based on the GraphQL types from the Storefront API.
 
 You can pass data from the Storefront API directly into [components](/api/hydrogen/components), [hooks](/api/hydrogen/hooks), and [utilities](/api/hydrogen/utilities).
 
@@ -36,7 +36,7 @@ For example, the [`ProductOptionsProvider`](/api/hydrogen/components/product-var
 
 ## Third-party data sources
 
-{% include hydrogen/third-party-data.md prop='concept' %}
+Hydrogen can also support data from third-party sources. If you want to use Hydrogen components with a third-party data source, then data from the third-party source must first be transformed into the types expected by the Hydrogen components, hooks, and utilities, and then passed on to the components, hooks, and utilities. Learn more about [working with third-party data sources](/custom-storefronts/hydrogen/data-sources/work-with-3p-data-sources).
 
 ## Next steps
 

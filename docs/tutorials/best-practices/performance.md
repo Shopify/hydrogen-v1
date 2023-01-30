@@ -128,9 +128,9 @@ If you're fetching from a third-party data source, then the runtime exposes the 
 
 The following example shows how to fetch from a third-party data source and make sure that customers get the quickest response possible while also displaying the latest data:
 
-{% codeblock file, filename: '3p-hydrogen-fetch.js' %}
-
 ```js
+// 3p-hydrogen-fetch.js
+
 import {fetchSync, CacheLong} from '@shopify/hydrogen';
 function MyServerComponent() {
   const {data} = fetchSync('https://my.3p.com/data.json', {
@@ -139,7 +139,7 @@ function MyServerComponent() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Caching and stale-while-revalidate
 
@@ -151,9 +151,9 @@ If a stale response falls outside the `staleWhileRevalidate` window, then the re
 
 Hydrogen's [caching strategies](/custom-storefronts/hydrogen/querying/cache#caching-strategies) include `maxAge` and `staleWhileRevalidate` values by default:
 
-{% codeblock file, filename: 'data-fetching-caching-strategies.js' %}
-
 ```js
+// data-fetching-caching-strategies.js
+
 // First-party request
 import { useShopQuery, CacheLong } from "@shopify/hydrogen";
 export default function Example() {
@@ -192,13 +192,13 @@ export default function Example() {
 
 ```
 
-{% endcodeblock %}
+
 
 If you don't want to use the caching strategies provided by Hydrogen, then you can create your own using a `CustomCache` strategy:
 
-{% codeblock file, filename: 'data-fetching-custom-caching-strategy.js' %}
-
 ```js
+// data-fetching-custom-caching-strategy.js
+
 import { useShopQuery, CacheCustom } from "@shopify/hydrogen";
 export default function Example() {
   const {
@@ -213,7 +213,7 @@ export default function Example() {
   return <p>Cached a response from the Storefront API using custom cache values.</p>;
 }
 ```
-{% endcodeblock %}
+
 
 > Note:
 > Sub-request caching is disabled by default during development. To learn how to enable sub-request caching, refer to [Sub-request caching](/custom-storefronts/hydrogen/querying/cache#sub-request-caching).
@@ -227,8 +227,6 @@ To help you request only the data that you need, Hydrogen includes a [`log`](/ap
 To enable logging for unused query properties, set the `logger.showUnusedQueryProperties` option to `true` in your [Hydrogen configuration file](/custom-storefronts/hydrogen/configuration#logger).
 
 Then, visit your terminal that's running the development server to see any notices printed by the utility:
-
-{% codeblock terminal, nocopy: 'true' %}
 
 ```bash
 GET Server Components 200 878.05 ms  {"pathname":"/products/snowboard","search":""}
@@ -245,7 +243,7 @@ Query `product` in file `/src/routes/products/[handle].server.jsx:30:29` (functi
 Examine the list of fields above to confirm that they are being used
 ```
 
-{% endcodeblock %}
+
 
 ## Pages and subrequests
 
@@ -253,9 +251,9 @@ Hydrogen doesn't require that all requests are server-rendered. [Routes and subr
 
 For example, a marketing page that’s typically static can be [cached](/custom-storefronts/hydrogen/querying/cache), served directly from the CDN edge, and asynchronously revalidated with the help of the `CacheLong()` caching strategy:
 
-{% codeblock file, filename: 'routes/products/[handle].server.jsx' %}
-
 ```js
+// routes/products/[handle].server.jsx
+
 import {CacheLong} from '@shopify/hydrogen';
 export default function MarketingPage({response}) {
   response.cache(CacheLong());
@@ -263,7 +261,7 @@ export default function MarketingPage({response}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Suspense boundaries
 
@@ -275,9 +273,9 @@ It's important to wrap your server components that fetch data in Suspense bounda
 
 Wrap a Suspense boundary around the content that suspends, not inside of it:
 
-{% codeblock file, filename: 'routes/products/[handle].server.jsx' %}
-
 ```js
+// routes/products/[handle].server.jsx
+
 // 🔴 Don't do this:
 export default function Product() {
   const {data} = useShopQuery({ ... });
@@ -305,7 +303,7 @@ function ProductDetails() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Prioritizing components
 
@@ -313,9 +311,9 @@ It's important to prioritize some content over other content. For example, you m
 
 You can prioritize some components and defer other components by wrapping Suspense boundaries around the deferred components in the same app tree. This allows Hydrogen to stream the prioritized component's data first, and fetch the data for the deferred components asynchronously:
 
-{% codeblock file, filename: 'routes/products/[handle].server.jsx' %}
-
 ```js
+// routes/products/[handle].server.jsx
+
 export default function Product() {
   return (
     // First, this component suspends and resolves.
@@ -350,7 +348,7 @@ function RelatedProducts() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Split queries
 
@@ -358,9 +356,9 @@ Some data sources might load more quickly than others. If your Hydrogen storefro
 
 For example, requesting a shop's name and information from the Storefront API is very quick, while loading many collections with nested product details will be less quick. Because both pieces of data are requested in the same query, the response will only be as quick as the slowest resource:
 
-{% codeblock file, filename: 'routes/products/[handle].server.jsx' %}
-
 ```js
+// routes/products/[handle].server.jsx
+
 export default function Product() {
   return (
     <Suspense fallback="Loading...">
@@ -397,13 +395,13 @@ function ProductPage() {
 }
 ```
 
-{% endcodeblock %}
+
 
 Instead, you can split the query for basic storefront data from the query for collection information to make the storefront data load quicker:
 
-{% codeblock file, filename: 'routes/products/[handle].server.jsx' %}
-
 ```js
+// routes/products/[handle].server.jsx
+
 export default function Product() {
   return (
     <>
@@ -450,7 +448,7 @@ function ProductPage() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Combine and re-use queries
 
@@ -460,9 +458,9 @@ Hydrogen de-duplicates identical requests made to [`fetchSync`](/api/hydrogen/ho
 
 You can use this behavior to your advantage. For example, the following components request very similar data, but they're not identical:
 
-{% codeblock file, filename: 'components/ProductTitle.server.jsx' %}
-
 ```js
+// components/ProductTitle.server.jsx
+
 const QUERY = `
   query ProductTitle {
     product(handle: "shoes") {
@@ -478,11 +476,11 @@ export default function ProductTitle() {
 }
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'components/ProductVendor.server.jsx' %}
 
 ```js
+// components/ProductVendor.server.jsx
+
 const QUERY = `
   query ProductVendor {
     product(handle: "shoes") {
@@ -498,13 +496,13 @@ export default function ProductVendor() {
 }
 ```
 
-{% endcodeblock %}
+
 
 If you combine the above two queries, then Hydrogen only makes a single call to the Storefront API, and your components can read from the same response:
 
-{% codeblock file, filename: 'components/ProductTitle.server.jsx' %}
-
 ```js
+// components/ProductTitle.server.jsx
+
 export const PRODUCT_QUERY = `
   query ProductInfo {
     product(handle: "shoes") {
@@ -521,11 +519,11 @@ export default function ProductTitle() {
 }
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'components/ProductVendor.server.jsx' %}
 
 ```js
+// components/ProductVendor.server.jsx
+
 import {PRODUCT_QUERY} from './ProductTitle.server';
 
 export default function ProductVendor() {
@@ -535,22 +533,22 @@ export default function ProductVendor() {
 }
 ```
 
-{% endcodeblock %}
+
 
 
 ### Use a preload cache
 
 Hydrogen offers a [preload cache](/custom-storefronts/hydrogen/querying/preloaded-queries) that you should enable for non-personalized data resources. This allows Hydrogen to start loading all of the required resources for a given page immediately, rather than after the entire app tree has been resolved and rendered.
 
-{% codeblock file, filename: 'components/Marketing.server.jsx' %}
-
 ```tsx
+// components/Marketing.server.jsx
+
 const data = fetchSync('https://my.api.com/static-data.json', {
   preload: true,
 }).json();
 ```
 
-{% endcodeblock %}
+
 
 ## Server bundle size
 
@@ -561,9 +559,9 @@ Some client-only dependencies like [`threejs`](https://threejs.org/) might be la
 Hydrogen provides a `import.meta.env.SSR` object to allow you to tree-shake these dependencies from your server bundle:
 
 
-{% codeblock file, filename: 'components/Product.client.jsx' %}
-
 ```js
+// components/Product.client.jsx
+
 import {lazy} from 'react';
 
 /**
@@ -587,7 +585,7 @@ export default function Product() {
 }
 ```
 
-{% endcodeblock %}
+
 
 > Note:
 > This method only works when importing client components from existing client components. You can't use this method inside server components.

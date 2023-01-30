@@ -14,13 +14,12 @@ If you want to serve your static assets from a different domain or path, then yo
 
 For example, running the following command will cause references to `/icon.png` to instead reference `https://mycdn.example/path/to/folder/icon.png` in the compiled code.
 
-{% codeblock terminal %}
-
 ```bash
+
 $ HYDROGEN_ASSET_BASE_URL=https://mycdn.example/path/to/folder yarn build
 ```
 
-{% endcodeblock %}
+
 
 > Note:
 > Make sure to check the `dist/client/index.html` file to verify that the URLs point to the provided URL.
@@ -29,15 +28,14 @@ $ HYDROGEN_ASSET_BASE_URL=https://mycdn.example/path/to/folder yarn build
 
 If asset content hasn't changed but you want to regenerate the already-compiled assets, then you can use the following configuration:
 
-{% codeblock terminal %}
-
 ```js
+
 // vite.config.js
 export default {
   plugins: [hydrogen({assetHashVersion: 'v2'})]
 }
 ```
 
-{% endcodeblock %}
+
 
 The configuration adds an optional string to force all files to be recompiled with a new hash. This can be helpful when the asset is cached but you want to change the behavior of your cache or the response headers that are currently cached, such as in a CDN or user's browser.

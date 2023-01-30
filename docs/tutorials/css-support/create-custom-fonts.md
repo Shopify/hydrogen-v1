@@ -15,9 +15,9 @@ If you want to use a font that's not included in Shopify's font library, then yo
 1. Add font files inside the `/public` folder. For example, add font files to `/public/fonts`.
 2. Create a `.css` file that loads the local custom font and reference the font with `url()`:
 
-    {% codeblock file, filename: 'custom-font.css' %}
+    ```css
+    /* custom-font.css */
 
-    ```js
     /* fraunces-regular - latin */
     @font-face {
       font-family: 'Fraunces';
@@ -38,6 +38,6 @@ If you want to use a font that's not included in Shopify's font library, then yo
     }
     ```
 
-    {% endcodeblock %}
+
 
 3. Import your `.css` file into `index.html` or any desired client component.

@@ -22,9 +22,9 @@ This guide explains how to adopt Hydrogen incrementally by proxying certain rout
 
 The following code is an example of proxying product page requests to the online store:
 
-{% codeblock file, filename: 'src/routes/products/[handle].server.jsx' %}
-
 ```jsx
+// src/routes/products/[handle].server.jsx
+
 export async function api(request, { params }) {
   // This approach is only supported by Oxygen
   const { handle } = params;
@@ -39,7 +39,7 @@ export async function api(request, { params }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Sharing carts
 
@@ -67,9 +67,9 @@ Hydrogen stores a Storefront API cart ID in local storage under the `shopifyCart
 
 The following code example shows how to proxy product page requests to the online store:
 
-{% codeblock file, filename: 'src/routes/products/[handle].server.jsx' %}
-
 ```jsx
+// src/routes/products/[handle].server.jsx
+
 export async function api(request, { params }) {
   // This approach is only supported by Oxygen
   const { handle } = params;
@@ -84,6 +84,6 @@ export async function api(request, { params }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 Ensure that you test the implementation before directing all of your traffic to the Hydrogen site.

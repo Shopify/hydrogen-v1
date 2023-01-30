@@ -28,9 +28,9 @@ To learn how to fetch data from third-party sources, refer to [Data sources](/cu
 
 The following example shows a server component (`Product.server.jsx`) that uses the `useShopQuery` hook to fetch data. The data is passed to a client component (`WishListButton.client.jsx`) that uses state:
 
-{% codeblock file, filename: 'Product.server.jsx' %}
-
 ```js
+// Product.server.jsx
+
 import {useShopQuery} from '@shopify/hydrogen';
 import WishListButton from './WishListButton.client';
 
@@ -46,11 +46,11 @@ export default function Product() {
 }
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'WishListButton.client.jsx' %}
 
 ```js
+// WishListButton.client.jsx
+
 import {useState} from 'react';
 
 export default function WishListButton({product}) {
@@ -64,15 +64,15 @@ export default function WishListButton({product}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Fetching data on the client
 
 To make a third-party HTTP request on the client, use the [`fetchSync`](/api/hydrogen/hooks/global/fetchsync) hook within a Suspense boundary:
 
-{% codeblock file, filename: 'PostDetails.client.jsx' %}
-
 ```js
+// PostDetails.client.jsx
+
 import {fetchSync} from '@shopify/hydrogen';
 import {Suspense, useState} from 'react';
 export default function PostDetails() {
@@ -96,13 +96,13 @@ function Details() {
 }
 ```
 
-{% endcodeblock %}
+
 
 Some third-party integrations offer a JavaScript SDK in the form of an `npm` package. You can use Hydrogen's `suspendFunction` utility to create a version of the SDK which supports Suspense data-fetching:
 
-{% codeblock file, filename: 'PostDetails.client.jsx' %}
-
 ```js
+// PostDetails.client.jsx
+
 import {suspendFunction} from '@shopify/hydrogen';
 import {Suspense, useState} from 'react';
 import thirdPartyClient from 'third-party';
@@ -132,7 +132,7 @@ function Details() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Sharing data between client and server
 
@@ -154,9 +154,9 @@ Currently, you can't use `Context` inside server components because server conte
 
 The following example shows how to use `Context` in the `CartProvider` client component:
 
-{% codeblock file, filename: 'CartContext.client.jsx' %}
-
 ```js
+// CartContext.client.jsx
+
 const CartAppContext = createContext();
 
 export default CartAppContext;
@@ -172,11 +172,11 @@ export function useCartContext() {
 }
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'CartProvider.client.jsx' %}
 
 ```js
+// CartProvider.client.jsx
+
 import {CartContext} from './CartContext.client';
 
 export default function CartProvider({items, children}) {
@@ -189,11 +189,11 @@ export default function CartProvider({items, children}) {
 }
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'App.server.jsx' %}
 
 ```js
+// App.server.jsx
+
 import CartProvider from './CartProvider.client';
 
 export default function App() {
@@ -207,7 +207,7 @@ export default function App() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Related hooks
 

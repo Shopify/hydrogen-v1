@@ -17,15 +17,15 @@ Server `props` are props that are passed to your root server component route. Hy
 
 For example, you can use geolocation co-ordinates as server props to provide a new hydrated experience for the current location:
 
-{% codeblock file, filename: 'GeoLocate.client.jsx' %}
-
 ```js
+// GeoLocate.client.jsx
+
 navigator.geolocation.getCurrentPosition((data) => {
   setServerProps('geoCoordinates', data);
 });
 ```
 
-{% endcodeblock %}
+
 
 Whenever you modify the props with `setServerProps()`, Hydrogen automatically makes a hydration request to the server component. Your app tree is updated based on the result of that hydration request.
 
@@ -33,9 +33,9 @@ Whenever you modify the props with `setServerProps()`, Hydrogen automatically ma
 
 The following example shows a page that queries a specific product ID based on server props:
 
-{% codeblock file, filename: 'MyPage.server.jsx' %}
-
 ```jsx
+// MyPage.server.jsx
+
 export default function MyPage({selectedProductId}) {
   const {data} = useShopQuery({
     query: QUERY,
@@ -52,11 +52,11 @@ export default function MyPage({selectedProductId}) {
 }
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'ProductSelector.client.jsx' %}
 
 ```jsx
+// ProductSelector.client.jsx
+
 import {useServerProps} from '@shopify/hydrogen';
 
 export default function ProductSelector({selectedProductId}) {
@@ -84,7 +84,7 @@ export default function ProductSelector({selectedProductId}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 When the user navigates to a new page in your app, the server props will reset. This is important because if the user navigates to another product, then the selected variant of the previous product shouldn't apply to the new product page.
 

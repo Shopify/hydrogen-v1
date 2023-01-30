@@ -18,25 +18,7 @@ All Hydrogen examples are located in the [`/examples` directory](https://github.
 
 ## Official Hydrogen examples
 
-Shopify provides a variety of official Hydrogen examples:
-
-{% include hydrogen/examples.md %}
-
-## Third-party Hydrogen examples
-
-The following examples are created and maintained by members of the Shopify community. They aren’t official Hydrogen examples.
-
-{% resource_card_container %}
-
-{% resource_card type: :rust, link: "https://github.com/Shopify/hydrogen/tree/main/examples/rust", title: "Rust" %}
-Explore an example implementation of Rust.
-{% endresource_card %}
-
-{% resource_card type: :sanity, link: "https://github.com/Shopify/hydrogen/tree/main/examples/sanity", title: "Sanity" %}
-Explore an example implementation of connecting Hydrogen with your Shopify store and Sanity project.
-{% endresource_card %}
-
-{% endresource_card_container %}
+Shopify provides a variety of official Hydrogen examples. Check this repo's [examples](/examples) directory to see them.
 
 ## Next steps
 

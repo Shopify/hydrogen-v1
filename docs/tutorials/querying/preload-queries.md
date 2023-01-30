@@ -23,8 +23,6 @@ You can disable preloaded queries in the following ways:
 - Set cache to `CacheNone`
 - Opting out with `preload: false`
 
-{% codeblock %}
-
 ```js
 const {data} = useShopQuery({
   query: QUERY,
@@ -36,13 +34,11 @@ const {data} = useShopQuery({
 });
 ```
 
-{% endcodeblock %}
+
 
 ## Preload everywhere
 
 Supply the `preload` property with either a Boolean value or a string. When the value is `*`, Hydrogen preloads the query for every request.
-
-{% codeblock %}
 
 ```js
 const data = fetchSync('https://my.api.com/data.json', {
@@ -54,7 +50,7 @@ const data = fetchSync('https://my.api.com/data.json', {
 }).json();
 ```
 
-{% endcodeblock %}
+
 
 ## Log request timing information
 

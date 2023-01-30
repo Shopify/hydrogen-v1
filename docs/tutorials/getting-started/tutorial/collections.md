@@ -35,11 +35,11 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 ## Sample code
 
-{% include /hydrogen/sample-code.md %}
+If you want to quickly get started, then you can copy and paste the following code from each file into the corresponding files in your Hydrogen app. If the file doesn’t yet exist, then you can create it in your Hydrogen app. This tutorial describes the sample code step by step:
 
-{% codeblock file, filename: 'Sample code' %}
+```jsx
+// /src/routes/collections/[handle].server.jsx
 
-```javascript?filename: '/src/routes/collections/[handle].server.jsx', title: 'Collections route'
 import {
   gql,
   useShopQuery,
@@ -200,7 +200,7 @@ export default function ProductCard({ product }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Step 1: Create a collections route
 
@@ -208,9 +208,9 @@ All components added to the `src/routes` directory in your Hydrogen app are [reg
 
 To begin building your collection page, create a file called `/src/routes/collections/[handle].server.jsx` to register a new collections route. Then, display the dynamic handle on the page within the layout component.
 
-{% codeblock file, filename: '/src/routes/collections/[handle].server.jsx' %}
-
 ```jsx
+// /src/routes/collections/[handle].server.jsx
+
 import { useRouteParams } from "@shopify/hydrogen";
 
 import { Layout } from "../../components/Layout.server";
@@ -227,7 +227,7 @@ export default function Collection() {
 }
 ```
 
-{% endcodeblock %}
+
 
 The collections route is registered. Clicking a featured collection from the home page takes you to a dynamic collection page:
 
@@ -239,9 +239,9 @@ You can use a collection’s handle to query a collection. A handle is a unique 
 
 In `/src/routes/collections/[handle].server.jsx`, add a GraphQL query that retrieves a collection by its handle:
 
-{% codeblock file, filename: '/src/routes/collections/[handle].server.jsx' %}
-
 ```jsx
+// /src/routes/collections/[handle].server.jsx
+
 import { gql, useShopQuery, useRouteParams } from "@shopify/hydrogen";
 
 import { Layout } from "../../components/Layout.server";
@@ -277,7 +277,7 @@ const QUERY = gql`
 `;
 ```
 
-{% endcodeblock %}
+
 
 The collection page renders the following dynamic content:
 
@@ -289,9 +289,9 @@ In [Step 4 of the previous tutorial](/custom-storefronts/hydrogen/getting-starte
 
 You'll also implement [Shopify Analytics](/api/hydrogen/components/framework/shopifyanalytics) to send commerce-related analytics to Shopify. By adding the `ShopifyAnalytics` component to your Hydrogen storefront, you can view key sales, orders, and online store visitor data from the [Analytics dashboard in your Shopify admin](https://help.shopify.com/en/manual/reports-and-analytics/shopify-reports/overview-dashboard).
 
-{% codeblock file, filename: '/src/routes/collections/[handle].server.jsx' %}
-
 ```jsx
+// /src/routes/collections/[handle].server.jsx
+
 import {
   gql,
   useShopQuery,
@@ -364,7 +364,7 @@ const QUERY = gql`
 `;
 ```
 
-{% endcodeblock %}
+
 
 If you inspect the dynamic collection page, then you can find the collection SEO tags that have been added into the `<head>` tag. The collection's title and description display on the page:
 
@@ -379,9 +379,9 @@ Products are the goods, digital downloads, services, and gift cards that a merch
 
 1. Create a `ProductCard` component to display the title, price, and image of each product within the collection:
 
-    {% codeblock file, filename: '/src/components/ProductCard.server.jsx' %}
-
     ```jsx
+    // /src/components/ProductCard.server.jsx
+
     import { Link, Image, Money } from "@shopify/hydrogen";
 
     export default function ProductCard({ product }) {
@@ -428,13 +428,13 @@ Products are the goods, digital downloads, services, and gift cards that a merch
     }
     ```
 
-    {% endcodeblock %}
+
 
 2. Update the collection GraphQL query to include retrieving products and variants that belong to the collection:
 
-    {% codeblock file, filename: '/src/routes/collections/[handle].server.jsx' %}
-
     ```jsx
+    // /src/routes/collections/[handle].server.jsx
+
     import {
       gql,
       useShopQuery,
@@ -548,7 +548,7 @@ Products are the goods, digital downloads, services, and gift cards that a merch
     `;
     ```
 
-    {% endcodeblock %}
+
 
     The page renders the following products that belong to the collection:
 

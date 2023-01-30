@@ -31,14 +31,14 @@ You’ve completed [Build a product page](/custom-storefronts/hydrogen/getting-s
 
 ## Sample code
 
-{% include /hydrogen/sample-code.md %}
+If you want to quickly get started, then you can copy and paste the following code from each file into the corresponding files in your Hydrogen app. If the file doesn’t yet exist, then you can create it in your Hydrogen app. This tutorial describes the sample code step by step:
 
 > Note:
 > The Drawer sample code includes a `Dialog` component from [@headlessui/react](https://www.npmjs.com/package/@headlessui/react). You must install this package manually. [Learn more](#step-2-create-a-drawer).
 
-{% codeblock file, filename: 'Sample code' %}
+```jsx
+// /src/App.server.jsx
 
-```javascript?filename: '/src/App.server.jsx', title: 'App'
 import renderHydrogen from "@shopify/hydrogen/entry-server";
 import {
   Router,
@@ -65,7 +65,9 @@ function App({ routes }) {
 export default renderHydrogen(App);
 ```
 
-```javascript?filename: '/src/components/Layout.server.jsx', title: 'Layout'
+```jsx
+// /src/components/Layout.server.jsx
+
 import { Suspense } from "react";
 import { useShopQuery, CacheLong, gql, Seo } from "@shopify/hydrogen";
 
@@ -732,7 +734,7 @@ function ProductGallery({ media }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Step 1: Wrap your app in the `CartProvider`
 
@@ -742,9 +744,9 @@ The [`CartProvider`](/api/hydrogen/components/cart/cartprovider) component creat
 
 In `/src/App.server.jsx`, import the `CartProvider` component and make it a descendent of the [`ShopifyProvider`](/api/hydrogen/components/global/shopifyprovider) component:
 
-{% codeblock file, filename: '/src/App.server.jsx' %}
-
 ```jsx
+// /src/App.server.jsx
+
 import renderHydrogen from "@shopify/hydrogen/entry-server";
 import {
   Router,
@@ -771,7 +773,7 @@ function App({ routes }) {
 export default renderHydrogen(App);
 ```
 
-{% endcodeblock %}
+
 
 ## Step 2: Create a drawer
 
@@ -781,9 +783,8 @@ You want to display a cart section when a customer clicks the cart icon or adds 
 
 2. Install the [@headlessui/react](https://www.npmjs.com/package/@headlessui/react) package. This package includes unstyled and fully-accessible UI components for React, and integrates well with Tailwind:
 
-{% codeblock terminal %}
-
 ```bash?title: 'npm'
+
 npm install -s @headlessui/react
 ```
 
@@ -791,15 +792,15 @@ npm install -s @headlessui/react
 yarn add @headlessui/react
 ```
 
-{% endcodeblock %}
+
 
 3. Restart your developer server.
 
 4. In your project, create a `Drawer` client component in `/src/components/Drawer.client.jsx` with the following contents:
 
-{% codeblock file, filename: '/src/components/Drawer.client.jsx' %}
-
 ```jsx
+// /src/components/Drawer.client.jsx
+
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 
@@ -916,7 +917,7 @@ function IconClose() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Step 3: Add a cart icon to the header
 
@@ -924,9 +925,9 @@ In this step, you'll add a cart icon to the header to trigger a cart drawer. To 
 
 1. In your project, create a `Header` client component and add the `Drawer` component to it. Then, add a cart button to toggle the drawer along with a bag icon (`IconBag`) and cart badge counter (`CartBadge`).
 
-{% codeblock file, filename: '/src/components/Header.client.jsx' %}
-
 ```jsx
+// /src/components/Header.client.jsx
+
 import { useUrl, Link, useCart } from "@shopify/hydrogen";
 import { Drawer, useDrawer } from "./Drawer.client";
 
@@ -997,13 +998,13 @@ function CartBadge({ dark }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 2. Import the `Header` component into your `Layout` component:
 
-{% codeblock file, filename: '/src/components/Layout.server.jsx' %}
-
 ```jsx
+// /src/components/Layout.server.jsx
+
 import { Suspense } from "react";
 import { useShopQuery, CacheLong, gql, Seo } from "@shopify/hydrogen";
 
@@ -1057,7 +1058,7 @@ const SHOP_QUERY = gql`
 `;
 ```
 
-{% endcodeblock %}
+
 
 The cart now renders on any page in your app:
 
@@ -1071,9 +1072,10 @@ In this step, you'll build different UI components within your cart. You'll cent
 
 1. Create a `CartDetails` client component in `/src/components/CartDetails.client.jsx` with the following contents:
 
-    {% codeblock file, filename: '/src/components/CartDetails.client.jsx' %}
 
     ```jsx
+    // /src/components/CartDetails.client.jsx
+
     import {
       useCart,
       useCartLine,
@@ -1125,7 +1127,7 @@ In this step, you'll build different UI components within your cart. You'll cent
     }
     ```
 
-    {% endcodeblock %}
+
 
 2. In `/src/components/CartDetails.client.jsx`, add each of the following functions:
 
@@ -1139,9 +1141,9 @@ In this step, you'll build different UI components within your cart. You'll cent
 
 Add the `CartEmpty` function to `/src/components/CartDetails.client.jsx` to render the UI when a cart doesn't contain any products:
 
-{% codeblock file, filename: '/src/components/CartDetails.client.jsx' %}
-
 ```jsx
+// /src/components/CartDetails.client.jsx
+
 export function CartEmpty({ onClose }) {
   return (
     <div className="flex flex-col space-y-7 justify-center items-center md:py-8 md:px-12 px-4 py-6 h-screen">
@@ -1159,7 +1161,7 @@ export function CartEmpty({ onClose }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ![The UI when a cart doesn't contain any products](/assets/custom-storefronts/hydrogen/hydrogen-cart-empty.png)
 
@@ -1167,9 +1169,9 @@ export function CartEmpty({ onClose }) {
 
 Add the `CartCheckoutActions` function to `/src/components/CartDetails.client.jsx` to render checkout and Shop Pay buttons:
 
-{% codeblock file, filename: '/src/components/CartDetails.client.jsx' %}
-
 ```jsx
+// /src/components/CartDetails.client.jsx
+
 function CartCheckoutActions() {
   const { checkoutUrl } = useCart();
   return (
@@ -1189,7 +1191,7 @@ function CartCheckoutActions() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ![Checkout and Shop Pay buttons](/assets/custom-storefronts/hydrogen/hydrogen-checkout-shop-pay.png)
 
@@ -1197,9 +1199,9 @@ function CartCheckoutActions() {
 
 Add the `OrderSummary` function to `/src/components/CartDetails.client.jsx` to render order summary information, which includes a subtotal and a shipping estimate:
 
-{% codeblock file, filename: '/src/components/CartDetails.client.jsx' %}
-
 ```jsx
+// /src/components/CartDetails.client.jsx
+
 function OrderSummary() {
   const { cost } = useCart();
   return (
@@ -1227,7 +1229,7 @@ function OrderSummary() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ![Order summary information](/assets/custom-storefronts/hydrogen/hydrogen-order-summary.png)
 
@@ -1235,9 +1237,9 @@ function OrderSummary() {
 
 Add the `CartLineItem` function to `/src/components/CartDetails.client.jsx` to render cart line items that include an image, product details, and a price:
 
-{% codeblock file, filename: '/src/components/CartDetails.client.jsx' %}
-
 ```jsx
+// /src/components/CartDetails.client.jsx
+
 export function CartLineItem() {
   const { linesRemove } = useCart();
   const { id: lineId, quantity, merchandise } = useCartLine();
@@ -1305,7 +1307,7 @@ export function CartLineItem() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ![Cart line items that include an image, product details, and a price](/assets/custom-storefronts/hydrogen/hydrogen-cart-line-items.png)
 
@@ -1313,9 +1315,9 @@ export function CartLineItem() {
 
 Add the `CartLineQuantityAdjust` function to `/src/components/CartDetails.client.jsx` to render the quantity of each cart line item and a plus `+` and minus `-` adjustor function:
 
-{% codeblock file, filename: '/src/components/CartDetails.client.jsx' %}
-
 ```jsx
+// /src/components/CartDetails.client.jsx
+
 function CartLineQuantityAdjust({ lineId, quantity }) {
   return (
     <>
@@ -1347,7 +1349,7 @@ function CartLineQuantityAdjust({ lineId, quantity }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ![The quantity of each cart line item](/assets/custom-storefronts/hydrogen/hydrogen-cart-line-item-quantities.png)
 
@@ -1357,9 +1359,9 @@ After you’ve finished building the different sections of your `CartDetails` co
 
 In your `Header` component, add the `CartDetails` component to the `Drawer` component:
 
-{% codeblock file, filename: '/src/components/Header.client.jsx' %}
-
 ```jsx
+// /src/components/Header.client.jsx
+
 import { useUrl, Link, useCart } from "@shopify/hydrogen";
 import { Drawer, useDrawer } from "./Drawer.client";
 import { CartDetails } from "./CartDetails.client";
@@ -1438,7 +1440,7 @@ function CartBadge({ dark }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Step 6: Add an "Add to cart" button to the product page
 
@@ -1446,9 +1448,9 @@ Now that you’ve built a cart context with a functioning cart, you can update t
 
 Replace the `BuyNowButton` logic with a `PurchaseMarkup` component and add an **Add to cart** button:
 
-{% codeblock file, filename: '/src/components/ProductDetails.client.jsx' %}
-
 ```jsx
+// /src/components/ProductDetails.client.jsx
+
 import {
   ProductOptionsProvider,
   MediaFile,
@@ -1657,7 +1659,7 @@ function ProductGallery({ media }) {
 }
 ```
 
-{% endcodeblock %}
+
 
 The product details page now includes an **Add to cart** button:
 

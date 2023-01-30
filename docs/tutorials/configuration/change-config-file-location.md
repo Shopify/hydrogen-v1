@@ -9,9 +9,9 @@ description: Learn how to change the Hydrogen configuration file location.
 
 If you don't want the Hydrogen configuration file located at the root of your project, then you can provide the new path to the file in the Hydrogen Vite plugin (`vite.config.js`):
 
-{% codeblock file, filename: 'vite.config.js' %}
-
 ```tsx
+// vite.config.js
+
 import {defineConfig} from 'vite';
 import hydrogen from '@shopify/hydrogen/plugin';
 
@@ -20,7 +20,7 @@ export default defineConfig({
 });
 ```
 
-{% endcodeblock %}
+
 
 > Note:
 > The `configPath` property must be an absolute path to the Hydrogen configuration file or a relative path starting from the `vite.config.js` location.

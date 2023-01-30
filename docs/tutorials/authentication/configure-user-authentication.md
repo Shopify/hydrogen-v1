@@ -13,25 +13,25 @@ Hydrogen includes built-in support for [managing user authentication](/custom-st
 
 You can retrieve a customer access token using the [`useSession`](/api/hydrogen/hooks/framework/usesession) hook. If the `customerAccessToken` isn't defined, then the user isn't logged in.
 
-{% codeblock file, filename: 'component.server.jsx' %}
-
 ```js
+// component.server.jsx
+
 const { customerAccessToken } = useSession()
 ```
 
-{% endcodeblock %}
+
 
 ## Tell bots not to index a page
 
 Pages that require authentication shouldn't be indexed by bots. For example, bots shouldn't index login and account pages. You can tell bots to not index a page by passing `noindex` to the `Seo` component:
 
-{% codeblock file, filename: '/account/login.server.jsx' %}
-
 ```jsx
+// /account/login.server.jsx
+
 <Seo type="noindex" data={% raw %}{{title: 'Login'}}{% endraw %} />
 ```
 
-{% endcodeblock %}
+
 
 ## Related components and hooks
 

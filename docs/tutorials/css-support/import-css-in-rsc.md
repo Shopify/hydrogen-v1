@@ -21,15 +21,16 @@ Hydrogen collects styles for each CSS file imported in your client and server co
 
 You can modify the following modes for CSS support by passing `experimental.css` option to the Hydrogen plugin in `vite.config.js`:
 
-{% codeblock file, filename: 'vite.config.js' %}
 
-```
+```js
+// vite.config.js
+
 export default defineConfig({
   plugins: [hydrogen({experimental: {css: 'global'}})]
 })
 ```
 
-{% endcodeblock %}
+
 
 - **`modules-only`**: Enables limited support for CSS Modules only. This is the current default mode.
 - **`global`**: Enables full support for vanilla CSS and CSS Modules. `global` also enables a way to integrate with tools that provide CSS-in-JS at build time. This is the recommended mode.
@@ -43,9 +44,9 @@ Vanilla CSS and language extensions such as [Sass](https://sass-lang.com/), [Les
 
 Once enabled, you can import your stylesheets directly in your server components:
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
 ```jsx
+// App.server.jsx
+
 import './my-style.css';
 import './another-style.sass';
 
@@ -54,15 +55,15 @@ function App() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Import CSS Modules
 
 Hydrogen collects styles for each CSS Module in your components. CSS Modules can be imported in both client and server components.
 
-{% codeblock file, filename: 'src/components/Hello.server.jsx' %}
-
 ```js
+// src/components/Hello.server.jsx
+
 import {red} from './styles.module.css';
 
 export default function MyComponent() {
@@ -74,7 +75,7 @@ export default function MyComponent() {
 }
 ```
 
-{% endcodeblock %}
+
 
 When the CSS mode is `modules-only`, styles are inlined in a `<style>` tag before your component. This tag is only added automatically for the default export in the file. Consider using the `global` CSS mode to support named exports and reduce code duplication.
 

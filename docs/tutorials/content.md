@@ -35,9 +35,8 @@ The following example shows an individual content entry that maps to the content
 
 The following code snippet provides an example layout of product features content on the product details page. The content model, `features`, is mapped to the layout of the page:
 
-{% codeblock file, title: '/src/routes/products/[handle].server.jsx' %}
-
 ```js
+// /src/routes/products/[handle].server.jsx
 ...
 <Layout>
   <Seo type="product" data={product} />
@@ -71,8 +70,6 @@ The following code snippet provides an example layout of product features conten
 ...
 ```
 
-{% endcodeblock %}
-
 ## Retrieve content
 
 Your Hydrogen storefront can retrieve the data that's stored in a content model using the Storefront API. You can retrieve content by querying the `type` field, which is the definition or type of data that the metafield stores.
@@ -83,9 +80,9 @@ All connected [metafields](/apps/custom-data/metafields) have a `namespace` that
 
 The following example shows a Storefront API query that retrieves content by its associated `handle`:
 
-{% codeblock file, title: 'POST /api/unstable/graphql.json' %}
-
 ```graphql
+# POST /api/unstable/graphql.json
+
 query {
  content(type: "lookbook", first: 10) {
    edges {
@@ -97,15 +94,15 @@ query {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Advanced example
 
 The following GraphQL query retrieves a `references` array for product content. The query returns `nil` if no object is referenced on the product details page.
 
-{% codeblock file, title: '/src/routes/products/[handle].server.jsx' %}
-
 ```graphql
+# /src/routes/products/[handle].server.jsx
+
 const QUERY = gql`
   query product(
     $handle: String!
@@ -141,7 +138,7 @@ const QUERY = gql`
 `;
 ```
 
-{% endcodeblock %}
+
 
 ![Product features content in a custom storefront](/assets/custom-storefronts/hydrogen/hydrogen-content.gif)
 

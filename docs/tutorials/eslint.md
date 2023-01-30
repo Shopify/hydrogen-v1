@@ -13,25 +13,23 @@ Hydrogen provides an [ESLint plugin](https://github.com/Shopify/hydrogen/tree/ma
 
 Run the following command to install [ESLint](https://eslint.org/) and the ESLint plugin:
 
-{% codeblock terminal %}
-
 ```bash
+
 yarn add --dev eslint eslint-plugin-hydrogen
 ```
 
-{% endcodeblock %}
+
 
 ### Using Shopify CLI
 
 You can automatically set up `eslint` using Shopify CLI by running the following command within your Hydrogen app:
 
-{% codeblock terminal %}
-
 ```bash
+
 yarn shopify hydrogen add eslint
 ```
 
-{% endcodeblock %}
+
 
 ## Configurations
 
@@ -43,15 +41,15 @@ The recommended configuration enforces Shopify's JavaScript best practices and i
 
 To enable the recommended configuration, add the `extends` property in your `.eslintrc.js` config file:
 
-{% codeblock file, filename: '.eslintrc.js' %}
-
 ```js
+// .eslintrc.js
+
 {
   extends: 'plugin:hydrogen/recommended',
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Hydrogen configuration
 
@@ -59,29 +57,29 @@ Unlike the recommended configuration, the Hydrogen configuration excludes sugges
 
 To enable the Hydrogen configuration, add the `extends` property in your `.eslintrc.js` config file:
 
-{% codeblock file, filename: '.eslintrc.js' %}
-
 ```js
+// .eslintrc.js
+
 {
   extends: 'plugin:hydrogen/hydrogen',
 }
 ```
 
-{% endcodeblock %}
+
 
 ### TypeScript configuration
 
 The ESlint plugin provides a configuration override that you can use in TypeScript projects. You can add the following configuration after either the recommended or Hydrogen configuration:
 
-{% codeblock file, filename: '.eslintrc.js' %}
-
 ```js
+// .eslintrc.js
+
 {
   extends: ['plugin:hydrogen/recommended', 'plugin:hydrogen/typescript'],
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Contributing to Hydrogen's ESLint plugin
 

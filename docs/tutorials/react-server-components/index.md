@@ -68,9 +68,9 @@ One of the key constraints of React Server Components is that you can't import a
 
 The following example shows how to pass a server component as a `children` prop to a client component. The `OuterServerComponent` can then instantiate both the client and server components. This is how you can have server components under client components in your [React element tree](#how-react-server-components-work).
 
-{% codeblock file, filename: 'MyClientComponent.client.jsx' %}
-
 ```js
+// MyClientComponent.client.jsx
+
 export default function MyClientComponent({children}) {
   return (
     <div>
@@ -81,21 +81,21 @@ export default function MyClientComponent({children}) {
 }
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'MyServerComponent.server.jsx' %}
 
 ```js
+// MyServerComponent.server.jsx
+
 export default function MyServerComponent() {
   return <span>This code is rendered on the server</span>;
 }
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'MyOuterServerComponent.server.jsx' %}
 
 ```js
+// MyOuterServerComponent.server.jsx
+
 // `MyOuterServerComponent` can instantiate both the client and server
 // components. You can pass in `<MyServerComponent/>` as
 // the `children` prop to `MyClientComponent`.
@@ -110,7 +110,7 @@ export default function MyOuterServerComponent() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Sending props
 
@@ -118,27 +118,27 @@ When you send props to client components from a server component, make sure that
 
 The following prop would send successfully:
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
 ```jsx
+// App.server.jsx
+
 <MyClientComponent color="red" intro={<p>Here's my favorite color:</p>}>
   Great to have you here today.
 </MyClientComponent>
 ```
 
-{% endcodeblock %}
+
 
 The following prop wouldn't send successfully:
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
 ```jsx
+// App.server.jsx
+
 <MyClientComponent onClick={() => console.log('uh oh')}>
   Great to have you here today.
 </MyClientComponent>
 ```
 
-{% endcodeblock %}
+
 
 ### Sharing code between server and client
 
@@ -156,9 +156,9 @@ This behavior might be confusing, because the word "client" indicates a client-o
 
 In the meantime, avoid including browser-only logic in client components in a way that will cause problems during SSR:
 
-{% codeblock file, filename: 'Button.client.jsx' %}
-
 ```tsx
+// Button.client.jsx
+
 // ❌ Don't do this because `window` isn't available during SSR
 function Button() {
   const innerWidth = window.innerWidth;
@@ -178,7 +178,7 @@ function Button() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Component organization and index files
 
@@ -186,9 +186,9 @@ You might be familiar with a "facade file" pattern, where similar files are re-e
 
 If you want to use the facade pattern, then you need to create separate files for client components and server components:
 
-{% codeblock file, filename: 'components/index.js' %}
-
 ```tsx
+// components/index.js
+
 // ❌ Don't do this because it mixes client components and server components:
 
 export {Button} from './Button.client.jsx'
@@ -196,28 +196,28 @@ export {Dropdown} from './Dropdown.client.jsx'
 export {Widget} from './Widget.server.jsx'
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'components/index.js' %}
 
 ```tsx
+// components/index.js
+
 // ✅ Do this because only client components are exported
 
 export {Button} from './Button.client.jsx'
 export {Dropdown} from './Dropdown.client.jsx'
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'components/server.js' %}
 
 ```tsx
+// components/server.js
+
 // ✅ Do this because only server components are exported
 
 export {Widget} from './Widget.server.jsx'
 ```
 
-{% endcodeblock %}
+
 
 ## Next steps
 

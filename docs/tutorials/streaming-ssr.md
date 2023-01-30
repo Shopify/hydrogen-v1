@@ -74,9 +74,9 @@ A Suspense boundary is any portion of React component code that's enclosed by a 
 
 Suspense lets you render a fallback while a component is waiting for an asynchronous operation to finish. The following example shows how you can use `Suspense` to add a layout fallback to improve cumulative layout shift (CLS):
 
-{% codeblock file, filename: 'Product.server.jsx' %}
-
 ```jsx
+// Product.server.jsx
+
 export default function Product({country = {isoCode: 'US'}}) {
   const {handle} = useRouteParams();
   return (
@@ -101,7 +101,7 @@ function ProductFallback() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Example: No Suspense component defined
 

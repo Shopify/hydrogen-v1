@@ -13,9 +13,8 @@ Third-party dependencies will generally work out-of-the-box with Hydrogen. This 
 
 To install third party dependencies, run the following command:
 
-{% codeblock terminal %}
-
 ```bash?title: 'npm'
+
 npm install <dependency>
 ```
 
@@ -23,7 +22,7 @@ npm install <dependency>
 yarn add <dependency>
 ```
 
-{% endcodeblock %}
+
 
 ## Where to insert dependencies
 
@@ -58,9 +57,9 @@ This happens because [Vite](https://vitejs.dev/) uses a heuristic to determine w
 
 To fix this, you can try adding the dependency to the `optimizeDeps.include` property of your `vite.config.js` file:
 
-{% codeblock file, filename: 'vite.config.js' %}
-
 ```js
+// vite.config.js
+
 import {defineConfig} from 'vite';
 import hydrogen from '@shopify/hydrogen/plugin';
 
@@ -74,7 +73,7 @@ export default defineConfig({
 });
 ```
 
-{% endcodeblock %}
+
 
 > Tip:
 > If you find that a dependency is being optimized when it shouldn't, then you can try adding the dependency to `optimizeDeps.exclude` to see if it fixes the issue.

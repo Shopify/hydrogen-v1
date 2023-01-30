@@ -22,9 +22,9 @@ By default, session data is persisted within a cookie. You can adjust the sessio
 
 If you want to persist session data in a custom way, then you can write your own session storage adapter. To do so, you need to implement a function that returns an object:
 
-{% codeblock file, filename: 'customStorage.js' %}
-
 ```ts
+// customStorage.js
+
 import {Cookie} from '@shopify/hydrogen';
 
 export const CookieSessionStorage = function (name, options) {
@@ -53,7 +53,7 @@ export const CookieSessionStorage = function (name, options) {
 };
 ```
 
-{% endcodeblock %}
+
 
 ## Reading and updating session data
 
@@ -69,9 +69,9 @@ In Hydrogen, you can use the [`useSession`](/api/hydrogen/hooks/framework/useses
 
 The following example shows an API route that's used to retrieve, set, and delete a `countryCode` within a session:
 
-{% codeblock file, filename: 'my-api.server.js' %}
-
 ```ts
+// my-api.server.js
+
 export async function api(request, {session}) {
   let sessionData, jsonData;
   switch (request.method) {
@@ -90,13 +90,13 @@ export async function api(request, {session}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 The following example shows a server component which reads data from the session:
 
-{% codeblock file, filename: 'my-component.server.jsx' %}
-
 ```ts
+// my-component.server.jsx
+
 import {useSession} from '@shopify/hydrogen';
 
 export async function MyComponent() {
@@ -104,7 +104,7 @@ export async function MyComponent() {
 }
 ```
 
-{% endcodeblock %}
+
 
 > Note:
 > Session data is read-only within server components. To update or delete session data, use API functions.

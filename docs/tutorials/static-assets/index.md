@@ -15,9 +15,9 @@ Static assets are files that your app downloads from a server. In Hydrogen, you 
 
 The following example shows how to render the `/src/icon.png` image:
 
-{% codeblock file, filename: "src/components/Hero.client.jsx" %}
-
 ```js
+// src/components/Hero.client.jsx
+
 import icon from '../icon.png';
 import {Image} from '@shopify/hydrogen';
 
@@ -26,7 +26,7 @@ export default function Hero() {
 }
 ```
 
-{% endcodeblock %}
+
 
 > Tip:
 > You can also import static assets as an explicit URL or as a string. For more information, refer to [Vite's guide](https://vitejs.dev/guide/assets.html#explicit-url-imports).
@@ -35,9 +35,7 @@ export default function Hero() {
 
 If you're [using Oxygen to deploy your Hydrogen custom storefront](/custom-storefronts/hydrogen/deployment#deploy-to-oxygen), then static assets are automatically deployed to Shopify's content delivery network (CDN). The assets are available through the automatically-generated URL, and also by directly using the store's domain. The following is an example:
 
-{% codeblock output, title: 'Static asset URLS', nocopy: 'true' %}
-
-```ssh
+```sh
 https://cdn.shopify.com/oxygen/.../icon.png
 https://example.com/icon.png
 ```

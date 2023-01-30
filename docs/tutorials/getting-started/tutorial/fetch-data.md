@@ -32,11 +32,11 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 ## Sample code
 
-{% include /hydrogen/sample-code.md %}
+If you want to quickly get started, then you can copy and paste the following code from each file into the corresponding files in your Hydrogen app. If the file doesn’t yet exist, then you can create it in your Hydrogen app. This tutorial describes the sample code step by step:
 
-{% codeblock file, filename: 'Sample code' %}
+```jsx
+// /src/routes/index.server.jsx
 
-```javascript?filename: '/src/routes/index.server.jsx', title: 'Index'
 import { Suspense } from "react";
 
 import FeaturedCollections from "../components/FeaturedCollections.server";
@@ -215,7 +215,7 @@ const QUERY = gql`
 `;
 ```
 
-{% endcodeblock %}
+
 
 ## Step 1: Visit the GraphiQL explorer
 
@@ -230,8 +230,6 @@ You can explore the [Storefront API](/api/storefront) and run test queries in yo
 
 1. Run the following query in the GraphiQL explorer:
 
-    {% codeblock file, filename: 'GraphQL query' %}
-
     ```graphql
     query ShopInfo {
       shop {
@@ -241,7 +239,7 @@ You can explore the [Storefront API](/api/storefront) and run test queries in yo
     }
     ```
 
-    {% endcodeblock %}
+
 
     ![GraphQL query run in the GraphiQL explorer](/assets/custom-storefronts/hydrogen/graphql-query.png)
 
@@ -262,9 +260,9 @@ The first [server component](/custom-storefronts/hydrogen/react-server-component
 
 1. Create a new server component named `Layout.server.jsx` and move your GraphQL query to the `useShopQuery` hook:
 
-{% codeblock file, filename: '/src/components/Layout.server.jsx' %}
-
 ```jsx
+// /src/components/Layout.server.jsx
+
 import { useShopQuery, CacheLong, gql, useUrl, Link } from "@shopify/hydrogen";
 
 /**
@@ -321,13 +319,13 @@ const SHOP_QUERY = gql`
 `;
 ```
 
-{% endcodeblock %}
+
 
 1. Import the `Layout` component into the home page of your storefront and update the home page:
 
-{% codeblock file, filename: '/src/routes/index.server.jsx' %}
-
 ```jsx
+// /src/routes/index.server.jsx
+
 import { Layout } from "../components/Layout.server";
 
 export default function Home() {
@@ -348,7 +346,7 @@ export default function Home() {
 }
 ```
 
-{% endcodeblock %}
+
 
 The home page renders the name of your shop and a **Hello world!** message:
 
@@ -360,9 +358,9 @@ Hydrogen includes an [Seo](/api/hydrogen/components/primitive/seo) client compon
 
 To generate SEO tags for search engines, add an [`Seo`](/api/hydrogen/components/primitive/seo) component to your layout, and pass the shop `title` and `description` to the `data` prop:
 
-{% codeblock file, filename: '/src/components/Layout.server.jsx' %}
-
 ```jsx
+// /src/components/Layout.server.jsx
+
 {% raw %}
 import {
   useShopQuery,
@@ -435,7 +433,7 @@ const SHOP_QUERY = gql`
 {% endraw %}
 ```
 
-{% endcodeblock %}
+
 
 If you inspect the page, then you can find the SEO tags that have been added into the `<head>` tag:
 
@@ -454,9 +452,9 @@ To list some collections on the home page, you’ll create a `FeaturedCollection
 > Tip:
 > In the following code sample, you’ll notice a reference to a [`Link`](/api/hydrogen/components/framework/link) component. The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all properties available to the `<a>` element are also available to the `Link` component.
 
-{% codeblock file, filename: '/src/components/FeaturedCollections.server.jsx' %}
-
 ```jsx
+// /src/components/FeaturedCollections.server.jsx
+
 import { Link, Image, gql, useShopQuery, CacheLong } from "@shopify/hydrogen";
 
 export default function FeaturedCollections() {
@@ -502,13 +500,13 @@ const QUERY = gql`
 `;
 ```
 
-{% endcodeblock %}
+
 
 1. Import the `FeaturedCollections` component into the home page of your storefront:
 
-{% codeblock file, filename: '/src/routes/index.server.jsx' %}
-
 ```jsx
+// /src/routes/index.server.jsx
+
 import FeaturedCollections from "../components/FeaturedCollections.server";
 import { Layout } from "../components/Layout.server";
 
@@ -521,7 +519,7 @@ export default function Home() {
 }
 ```
 
-{% endcodeblock %}
+
 
 The home page renders the following featured collections section:
 
@@ -536,9 +534,9 @@ In `FeaturedCollections.server.jsx`, update your GraphQL query to retrieve colle
 > Tip:
 > In the following code sample, you’ll notice a reference to an [`Image`] (/api/hydrogen/components/primitive/image) component. The `Image` component renders an image for the Storefront API's [Image object](/api/storefront/latest/objects/image) by using the `data` prop, or a custom location by using the `src` prop.
 
-{% codeblock file, filename: '/src/components/FeaturedCollections.server.jsx' %}
-
 ```jsx
+// /src/components/FeaturedCollections.server.jsx
+
 import { Link, Image, gql, useShopQuery, CacheLong } from "@shopify/hydrogen";
 
 export default function FeaturedCollections() {
@@ -599,7 +597,7 @@ const QUERY = gql`
 `;
 ```
 
-{% endcodeblock %}
+
 
 The home page renders the following featured collections section that contains the images of the first three collections:
 
@@ -615,9 +613,9 @@ Currently, the closest Suspense ancestor wraps the entire app in `App.server.jsx
 
 1. Wrap the `FeaturedCollections` component in a Suspense component:
 
-{% codeblock file, filename: '/src/routes/index.server.jsx' %}
-
 ```jsx
+// /src/routes/index.server.jsx
+
 import { Suspense } from "react";
 
 import FeaturedCollections from "../components/FeaturedCollections.server";
@@ -634,13 +632,13 @@ export default function Home() {
 }
 ```
 
-{% endcodeblock %}
+
 
 1. Similarly, update your Layout component to wrap `Seo` and `{ children }` in `Suspense` components:
 
-{% codeblock file, filename: '/src/components/Layout.server.jsx' %}
-
 ```jsx
+// /src/components/Layout.server.jsx
+
 {% raw %}
 import {
   useShopQuery,
@@ -715,7 +713,7 @@ const SHOP_QUERY = gql`
 {% endraw %}
 ```
 
-{% endcodeblock %}
+
 
 ## Next steps
 

@@ -17,23 +17,21 @@ The [Demo Store template](/custom-storefronts/hydrogen/getting-started/templates
 
 You can use the following command to run tests in development:
 
-{% codeblock terminal %}
-
 ```bash
+
 yarn test
 ```
 
-{% endcodeblock %}
+
 
 To run tests in a continuous-integration (CI) environment like GitHub Actions, you can use the following command:
 
-{% codeblock terminal %}
-
 ```bash
+
 yarn test:ci
 ```
 
-{% endcodeblock %}
+
 
 ## Catching common issues
 
