@@ -26,22 +26,8 @@ Starting in the middle helps you ask important questions:
 
 #### Examples
 
-<div class="resource-card-grid">
-  {% resource_card
-    type: :github,
-    link: "https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/elements/Icon.tsx",
-    title: "Icon.tsx"
-  %}
-    A shared component that represents an icon
-  {% endresource_card %}
-  {% resource_card
-    type: :github,
-    link: "https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/elements/Section.tsx",
-    title: "Section.tsx"
-  %}
-    A shared component that displays a section on a page
-  {% endresource_card %}
-</div>
+- [A shared component that represents an icon](/templates/demo-store/src/components/elements/Icon.tsx)
+- [A shared component that displays a section on a page](/templates/demo-store/src/components/elements/Section.tsx)
 
 ### Build server components as often as possible
 
@@ -61,22 +47,8 @@ The majority of the components in your app should be server components. Consider
 
 #### Examples
 
-<div class="resource-card-grid">
-  {% resource_card
-    type: :github,
-    link: "https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/account/AccountDetails.client.tsx",
-    title: "AccountDetails.server.tsx"
-  %}
-    A server component that renders account details
-  {% endresource_card %}
-  {% resource_card
-    type: :github,
-    link: "https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/global/NotFound.server.tsx",
-    title: "NotFound.server.tsx"
-  %}
-    A server component that renders a 404 page
-  {% endresource_card %}
-</div>
+- [A server component that renders account details](/templates/demo-store/src/components/account/AccountDetails.client.tsx)
+- [A server component that renders a 404 page](/templates/demo-store/src/components/global/NotFound.server.tsx)
 
 ### Build client components in rare cases
 
@@ -94,22 +66,8 @@ Generally, you don't need to convert the entire component into a client componen
 
 #### Examples
 
-<div class="resource-card-grid">
-  {% resource_card
-    type: :github,
-    link: "https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/product/ProductInfo.client.tsx",
-    title: "ProductInfo.client.tsx"
-  %}
-    A client component that renders product information
-  {% endresource_card %}
-  {% resource_card
-    type: :github,
-    link: "https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/account/AccountLoginForm.client.tsx",
-    title: "AccountLoginForm.client.tsx"
-  %}
-    A client component that renders an account login form
-  {% endresource_card %}
-</div>
+- [A client component that renders product information](templates/demo-store/src/components/product/ProductInfo.client.tsx)
+- [A client component that renders an account login form](/templates/demo-store/src/components/account/AccountLoginForm.client.tsx)
 
 ## Data fetching
 
