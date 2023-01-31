@@ -10,7 +10,7 @@ Hydrogen includes support for analytics that give you insight into how customers
 
 The following diagram describes how analytics data is processed on the server and client in Hydrogen:
 
-![Shows a diagram that describes how analytics data is processed on the server and client in Hydrogen](/assets/custom-storefronts/hydrogen/hydrogen-analytics.png)
+![Shows a diagram that describes how analytics data is processed on the server and client in Hydrogen](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-analytics.png)
 
 1. On the server, the `useServerAnalytics` hook collects data in a single render request.
 

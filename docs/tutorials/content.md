@@ -9,7 +9,7 @@
 
 Hydrogen includes support for integrating content on storefronts. For example, you might have content about product features, specifications, or size charts. You can integrate content into your Hydrogen storefront using the [Storefront API](https://shopify.dev/api/storefront).
 
-![Product features content in a custom storefront](/assets/custom-storefronts/hydrogen/hydrogen-content.gif)
+![Product features content in a custom storefront](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-content.gif)
 
 ## Build a content model
 
@@ -17,15 +17,15 @@ Content models are custom object schemas that you can create and associate with 
 
 The following example shows a content model that displays product features content:
 
-![Product feature metafields](/assets/custom-storefronts/hydrogen/product-feature-metafields.png)
+![Product feature metafields](https://shopify.dev/assets/custom-storefronts/hydrogen/product-feature-metafields.png)
 
 After you've set up the content model, you can add content:
 
-![Content associated with the product feature metafield](/assets/custom-storefronts/hydrogen/product-feature-content.png)
+![Content associated with the product feature metafield](https://shopify.dev/assets/custom-storefronts/hydrogen/product-feature-content.png)
 
 The following example shows an individual content entry that maps to the content model:
 
-![Individual content entry](/assets/custom-storefronts/hydrogen/individual-entry-content.png)
+![Individual content entry](https://shopify.dev/assets/custom-storefronts/hydrogen/individual-entry-content.png)
 
 ## Build a content layout
 
@@ -136,7 +136,7 @@ const QUERY = gql`
 
 
 
-![Product features content in a custom storefront](/assets/custom-storefronts/hydrogen/hydrogen-content.gif)
+![Product features content in a custom storefront](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-content.gif)
 
 ## Next steps
 

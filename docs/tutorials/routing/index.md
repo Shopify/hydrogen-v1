@@ -86,7 +86,7 @@ Learn how to [work with API routes](/docs/tutorials/routing/manage-routes#api-ro
 
 ## Props for creating custom experiences
 
-![Shows a diagram that illustrates how server components receive props](/assets/custom-storefronts/hydrogen/hydrogen-pages.png)
+![Shows a diagram that illustrates how server components receive props](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-pages.png)
 
 Server components placed in the `src/routes` directory receive the following special props that you can use to create custom experiences:
 

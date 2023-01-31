@@ -10,7 +10,7 @@ Hydrogen contains a set of [Shopify-specific commerce components, hooks, and uti
 
 Hydrogen supports data coming from Shopify and third-parties:
 
-![A diagram that shows how Hydrogen consumes data](/assets/custom-storefronts/hydrogen/hydrogen-data-sources.png)
+![A diagram that shows how Hydrogen consumes data](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-data-sources.png)
 
 ## Shopify data source
 

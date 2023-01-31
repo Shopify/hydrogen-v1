@@ -27,7 +27,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 - Create a variant selector for a product.
 - Add a **Buy Now** button to the product page.
 
-![The details for a product and its variants, and a button to purchase the product](/assets/custom-storefronts/hydrogen/product-variants-purchase-button.png)
+![The details for a product and its variants, and a button to purchase the product](https://shopify.dev/assets/custom-storefronts/hydrogen/product-variants-purchase-button.png)
 
 ## Requirements
 
@@ -389,7 +389,7 @@ export default function Product() {
 
 The products route is registered. Clicking a product takes you to a dynamic product page:
 
-![A dynamic product page](/assets/custom-storefronts/hydrogen/dynamic-product-page.png)
+![A dynamic product page](https://shopify.dev/assets/custom-storefronts/hydrogen/dynamic-product-page.png)
 
 ## Step 2: Query a product by handle
 
@@ -466,7 +466,7 @@ const PRODUCT_QUERY = gql`
 
 The product page renders the following dynamic content:
 
-![Dynamic content on the product page](/assets/custom-storefronts/hydrogen/dynamic-content-product-page.png)
+![Dynamic content on the product page](https://shopify.dev/assets/custom-storefronts/hydrogen/dynamic-content-product-page.png)
 
 ## Step 3: Query product and variant details
 
@@ -648,7 +648,7 @@ Similar to [querying all products and variants that belong to a collection](/doc
 
     The page renders details about the product in a basic layout:
 
-    ![Details about the product in a basic layout](/assets/custom-storefronts/hydrogen/product-details-basic-layout.png)
+    ![Details about the product in a basic layout](https://shopify.dev/assets/custom-storefronts/hydrogen/product-details-basic-layout.png)
 
 ## Step 4: Add a product gallery
 
@@ -748,7 +748,7 @@ function ProductGallery({ media }) {
 
 The page now renders an image next to the details about the product:
 
-![An image next to the details about the product](/assets/custom-storefronts/hydrogen/image-with-product-details.png)
+![An image next to the details about the product](https://shopify.dev/assets/custom-storefronts/hydrogen/image-with-product-details.png)
 
 ## Step 5: Create a product form
 
@@ -954,7 +954,7 @@ function ProductGallery({ media }) {
 
 The product page now renders all of the details for a product and its variants. It also includes a button to purchase the product. In the [next tutorial](/docs/tutorials/getting-started/tutorial/cart), you’ll define the context for interacting with a cart and add an **Add to cart** button, which allows customers to choose products to purchase without completing the payment process.
 
-![The details for a product and its variants, and a button to purchase the product](/assets/custom-storefronts/hydrogen/product-variants-purchase-button.png)
+![The details for a product and its variants, and a button to purchase the product](https://shopify.dev/assets/custom-storefronts/hydrogen/product-variants-purchase-button.png)
 
 ## Next steps
 

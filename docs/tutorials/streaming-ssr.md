@@ -19,11 +19,11 @@ Streaming SSR is a feature in React that allows you to load data over a network 
 
 The following clip shows an example of streaming content. The yellow boxes represent the content to display. As the streaming approaches 1.5 seconds, each yellow box gets replaced by a blue box at the specified time. The blue boxes represent that the data is ready:
 
-![Example of streaming content](/assets/custom-storefronts/hydrogen/streaming.gif)
+![Example of streaming content](https://shopify.dev/assets/custom-storefronts/hydrogen/streaming.gif)
 
 The following example shows the source code for a streamed document. The HTML that's being streamed in chunks is displayed out of order:
 
-![Source code for a streamed document](/assets/custom-storefronts/hydrogen/streaming-source.png)
+![Source code for a streamed document](https://shopify.dev/assets/custom-storefronts/hydrogen/streaming-source.png)
 
 ## Benefits of streaming SSR
 
@@ -104,13 +104,13 @@ function ProductFallback() {
 
 If you don't define a `Suspense` component, then React waits for the streaming to finish before showing the final layout. The following clip shows a streamed document source that doesn't include a `Suspense` component:
 
-![A streamed document source that doesn't include a Suspense component](/assets/custom-storefronts/hydrogen/no-suspense.gif)
+![A streamed document source that doesn't include a Suspense component](https://shopify.dev/assets/custom-storefronts/hydrogen/no-suspense.gif)
 
 ### Example: Suspense component defined
 
 When a `Suspense` component is wrapped around a group of components that fetch data, it waits for the last component in the group to resolve before rendering. The order of the streamed content doesn't change in the streamed document source:
 
-![A streamed document source that includes a Suspense component](/assets/custom-storefronts/hydrogen/suspense-defined.gif)
+![A streamed document source that includes a Suspense component](https://shopify.dev/assets/custom-storefronts/hydrogen/suspense-defined.gif)
 
 ## Next steps
 

@@ -16,7 +16,7 @@ Hydrogen is the approach you use to build a custom storefront. It contains a fra
 
 - **[Hydrogen components, hooks, and utilities](/api/hydrogen)**: Hydrogen includes components, hooks, and utilities that support features and concepts that exist in Shopify. They're accessible, performant, and ready for use. They also help to reduce the initial complexity and boilerplate needed for building a custom storefront.
 
-![A diagram that shows what Hydrogen includes: Vite offerings and Shopify-specific components, hooks, and utilities](/assets/custom-storefronts/hydrogen/hydrogen-overview.png)
+![A diagram that shows what Hydrogen includes: Vite offerings and Shopify-specific components, hooks, and utilities](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-overview.png)
 
 > Note:
 > The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](/docs/tutorials/react-server-components), which affects SSR.
@@ -41,7 +41,7 @@ Hydrogen is built and optimized to use data coming from Shopify's [Storefront AP
 
 Hydrogen can also support data from third-party sources. If you want to use Hydrogen components with a third-party data source, then data from the third-party source must first be transformed into the types expected by the Hydrogen components, hooks, and utilities, and then passed on to the components, hooks, and utilities.{% if includes.prop == 'concept' %} Learn more about [working with third-party data sources](/docs/tutorials/data-sources/work-with-3p-data-sources).{% endif %}
 
-![A diagram that shows how the Hydrogen components, hooks, and utilities consume data](/assets/custom-storefronts/hydrogen/hydrogen-data-sources.png)
+![A diagram that shows how the Hydrogen components, hooks, and utilities consume data](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-data-sources.png)
 
 ## Performance optimizations
 
@@ -57,7 +57,7 @@ Hydrogen's architecture enables a mix of static and dynamic data fetching betwee
 
 The following diagram shows the request workflow for Hydrogen apps, based on the platform where Hydrogen is being hosted:
 
-![A diagram that illustrates the request workflow for Hydrogen apps, based on the platform where Hydrogen is being hosted](/assets/custom-storefronts/hydrogen/hydrogen-server-entry-points.png)
+![A diagram that illustrates the request workflow for Hydrogen apps, based on the platform where Hydrogen is being hosted](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-server-entry-points.png)
 
 ### Node.js runtime
 

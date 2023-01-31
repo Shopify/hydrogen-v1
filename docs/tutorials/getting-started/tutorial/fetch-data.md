@@ -21,7 +21,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 - Generate default SEO tags.
 - Improve the loading sequence of your app using Suspense.
 
-![A collections page, GraphQL query, and SEO tags](/assets/custom-storefronts/hydrogen/hydrogen-fetch-data.png)
+![A collections page, GraphQL query, and SEO tags](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-fetch-data.png)
 
 ## Requirements
 
@@ -238,7 +238,7 @@ You can explore the [Storefront API](https://shopify.dev/api/storefront) and run
 
 
 
-    ![GraphQL query run in the GraphiQL explorer](/assets/custom-storefronts/hydrogen/graphql-query.png)
+    ![GraphQL query run in the GraphiQL explorer](https://shopify.dev/assets/custom-storefronts/hydrogen/graphql-query.png)
 
 ## Step 2: Move the query into your Hydrogen app
 
@@ -347,7 +347,7 @@ export default function Home() {
 
 The home page renders the name of your shop and a **Hello world!** message:
 
-![Home page with name of shop and Hello world messaged rendered](/assets/custom-storefronts/hydrogen/shop-name-hello-world.png)
+![Home page with name of shop and Hello world messaged rendered](https://shopify.dev/assets/custom-storefronts/hydrogen/shop-name-hello-world.png)
 
 ## Step 3: Generate SEO tags
 
@@ -434,7 +434,7 @@ const SHOP_QUERY = gql`
 
 If you inspect the page, then you can find the SEO tags that have been added into the `<head>` tag:
 
-![SEO tags that have been added into the head tag](/assets/custom-storefronts/hydrogen/seo-tags.png)
+![SEO tags that have been added into the head tag](https://shopify.dev/assets/custom-storefronts/hydrogen/seo-tags.png)
 
 ## Step 4: Fetch collections
 
@@ -520,7 +520,7 @@ export default function Home() {
 
 The home page renders the following featured collections section:
 
-![A featured collections section that contains three collections](/assets/custom-storefronts/hydrogen/three-collections.png)
+![A featured collections section that contains three collections](https://shopify.dev/assets/custom-storefronts/hydrogen/three-collections.png)
 
 ### Fetch collection images
 
@@ -598,7 +598,7 @@ const QUERY = gql`
 
 The home page renders the following featured collections section that contains the images of the first three collections:
 
-![A featured collections section that contains the images of the first three collections](/assets/custom-storefronts/hydrogen/collection-images.png)
+![A featured collections section that contains the images of the first three collections](https://shopify.dev/assets/custom-storefronts/hydrogen/collection-images.png)
 
 ## Step 5: Improve the loading sequence with Suspense
 

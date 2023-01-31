@@ -20,7 +20,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 - Build a cart section that renders on any page in your Hydrogen storefront
 - Update the product details page to include an **Add to cart** option.
 
-![An implementation of a cart in a Hydrogen storefront](/assets/custom-storefronts/hydrogen/hydrogen-cart.png)
+![An implementation of a cart in a Hydrogen storefront](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-cart.png)
 
 ## Requirements
 
@@ -1160,7 +1160,7 @@ export function CartEmpty({ onClose }) {
 
 
 
-![The UI when a cart doesn't contain any products](/assets/custom-storefronts/hydrogen/hydrogen-cart-empty.png)
+![The UI when a cart doesn't contain any products](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-cart-empty.png)
 
 ### CartCheckoutActions
 
@@ -1190,7 +1190,7 @@ function CartCheckoutActions() {
 
 
 
-![Checkout and Shop Pay buttons](/assets/custom-storefronts/hydrogen/hydrogen-checkout-shop-pay.png)
+![Checkout and Shop Pay buttons](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-checkout-shop-pay.png)
 
 ### OrderSummary
 
@@ -1228,7 +1228,7 @@ function OrderSummary() {
 
 
 
-![Order summary information](/assets/custom-storefronts/hydrogen/hydrogen-order-summary.png)
+![Order summary information](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-order-summary.png)
 
 ### CartLineItem
 
@@ -1306,7 +1306,7 @@ export function CartLineItem() {
 
 
 
-![Cart line items that include an image, product details, and a price](/assets/custom-storefronts/hydrogen/hydrogen-cart-line-items.png)
+![Cart line items that include an image, product details, and a price](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-cart-line-items.png)
 
 ### CartLineQuantityAdjust
 
@@ -1348,7 +1348,7 @@ function CartLineQuantityAdjust({ lineId, quantity }) {
 
 
 
-![The quantity of each cart line item](/assets/custom-storefronts/hydrogen/hydrogen-cart-line-item-quantities.png)
+![The quantity of each cart line item](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-cart-line-item-quantities.png)
 
 ## Step 5: Add `CartDetails` to `Drawer`
 
@@ -1660,11 +1660,11 @@ function ProductGallery({ media }) {
 
 The product details page now includes an **Add to cart** button:
 
-![A product details page with the add to cart button](/assets/custom-storefronts/hydrogen/product-details-add-to-cart.png)
+![A product details page with the add to cart button](https://shopify.dev/assets/custom-storefronts/hydrogen/product-details-add-to-cart.png)
 
 If you add a product to your cart, and click the cart icon, then the product displays in the cart section:
 
-![A product that has been added to a cart](/assets/custom-storefronts/hydrogen/add-product-to-cart.png)
+![A product that has been added to a cart](https://shopify.dev/assets/custom-storefronts/hydrogen/add-product-to-cart.png)
 
 ## Next steps
 

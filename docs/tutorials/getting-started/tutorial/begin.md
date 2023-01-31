@@ -26,7 +26,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 - Change text and a component's style.
 
-![A development environment that shows the Hello World template](/assets/custom-storefronts/hydrogen/hydrogen-begin-development.png)
+![A development environment that shows the Hello World template](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-begin-development.png)
 
 ## Requirements
 
@@ -87,7 +87,7 @@ yarn dev
 
 You can reach the development server at <http://localhost:3000/>.
 
-![The homepage of the Hello World template](/assets/custom-storefronts/hydrogen/visit-dev-env.png)
+![The homepage of the Hello World template](https://shopify.dev/assets/custom-storefronts/hydrogen/visit-dev-env.png)
 
 ## Step 3: Explore your project structure
 
@@ -146,7 +146,7 @@ Now that you've explored your Hydrogen project directory, you're ready to make y
 
 1. Save the file to see your changes updated in real-time:
 
-    ![A simple heading that says "Hello world! Welcome to Hydrogen."](/assets/custom-storefronts/hydrogen/make-text-change.png)
+    ![A simple heading that says "Hello world! Welcome to Hydrogen."](https://shopify.dev/assets/custom-storefronts/hydrogen/make-text-change.png)
 
 ## Step 5: Add styling
 
@@ -222,7 +222,7 @@ Tailwind is a CSS framework that is composed of classes. It offers developers a 
 
 1. Save the file to see your changes updated in real-time:
 
-    ![The hello world heading styled with Tailwind classes](/assets/custom-storefronts/hydrogen/component-style-change.png)
+    ![The hello world heading styled with Tailwind classes](https://shopify.dev/assets/custom-storefronts/hydrogen/component-style-change.png)
 
 ## Next steps
 

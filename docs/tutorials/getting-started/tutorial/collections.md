@@ -228,7 +228,7 @@ export default function Collection() {
 
 The collections route is registered. Clicking a featured collection from the home page takes you to a dynamic collection page:
 
-![A dynamic collection page](/assets/custom-storefronts/hydrogen/dynamic-collection-page.png)
+![A dynamic collection page](https://shopify.dev/assets/custom-storefronts/hydrogen/dynamic-collection-page.png)
 
 ## Step 2: Query a collection by handle
 
@@ -278,7 +278,7 @@ const QUERY = gql`
 
 The collection page renders the following dynamic content:
 
-![Dynamic content on the collection page](/assets/custom-storefronts/hydrogen/dynamic-content-collections.png)
+![Dynamic content on the collection page](https://shopify.dev/assets/custom-storefronts/hydrogen/dynamic-content-collections.png)
 
 ## Step 3: Generate SEO tags and implement Shopify Analytics
 
@@ -365,7 +365,7 @@ const QUERY = gql`
 
 If you inspect the dynamic collection page, then you can find the collection SEO tags that have been added into the `<head>` tag. The collection's title and description display on the page:
 
-![The title and description of a collection](/assets/custom-storefronts/hydrogen/registered-collections-route.png)
+![The title and description of a collection](https://shopify.dev/assets/custom-storefronts/hydrogen/registered-collections-route.png)
 
 ## Step 4: Query products and variants
 

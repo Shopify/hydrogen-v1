@@ -19,7 +19,7 @@ React Server Components allow the server and the client to work together to rend
 
 For example, the following React element tree is [composed of React components](#composition) that render other React components. React Server Components allow some components to render on the server, some to render in the browser or on the server using server-side rendering (SSR), and others to render on both the server and the client:
 
-![A diagram that illustrates a React element tree composed of server, client, and shared components](/assets/custom-storefronts/hydrogen/react-element-tree.png)
+![A diagram that illustrates a React element tree composed of server, client, and shared components](https://shopify.dev/assets/custom-storefronts/hydrogen/react-element-tree.png)
 
 > Note:
 > You can't import a server component into a client component. However, you can pass a server component into a client component using [passthrough props](/docs/components#customizing-hydrogen-components).
@@ -57,7 +57,7 @@ React Server Components have the following constraints on server and client comp
 
 Due to these constraints, there are [specific rules](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#capabilities--constraints-of-server-and-client-components) that you need to follow when building your Hydrogen app:
 
-![A diagram that illustrates the rules that apply to server and client components](/assets/custom-storefronts/hydrogen/server-client-component-rules.png)
+![A diagram that illustrates the rules that apply to server and client components](https://shopify.dev/assets/custom-storefronts/hydrogen/server-client-component-rules.png)
 
 ### Composition
 
@@ -141,7 +141,7 @@ The following prop wouldn't send successfully:
 
 In addition to server-specific and client-specific components, you can create components that work on both the server and the client. This allows logic to be shared across environments, as long as the components meet all the [constraints of both the server and client components](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#sharing-code-between-server-and-client).
 
-![A diagram that illustrates server-specific and client-specific components, and shared components between the client and server](/assets/custom-storefronts/hydrogen/hydrogen-shared-components.png)
+![A diagram that illustrates server-specific and client-specific components, and shared components between the client and server](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-shared-components.png)
 
 Although shared components have the most constraints, many components already obey these rules and can be used across the server and client without modification. For example, many components transform some props based on certain conditions, without using state or loading additional data. This is why shared components are the default and [don’t have a dedicated file extension](#component-types).
 
