@@ -43,13 +43,13 @@ Because `FileSessionStorage` relies on the file system, it shouldn't be used in 
 
 ## Related components
 
-- [`Cookie`](https://shopify.dev/api/hydrogen/components/framework/cookie)
-- [`MemorySessionStorage`](https://shopify.dev/api/hydrogen/components/framework/memorysessionstorage)
-- [`CookieSessionStorage`](https://shopify.dev/api/hydrogen/components/framework/cookiesessionstorage)
+- [`Cookie`](/docs/components/framework/cookie)
+- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage)
+- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage)
 
 ## Related hooks
 
-- [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession)
+- [`useSession`](/docs/hooks/framework/usesession)
 
 ## Related framework topics
 

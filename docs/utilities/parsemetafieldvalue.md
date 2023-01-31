@@ -92,8 +92,8 @@ Depending on the `type` specified in the passed [Metafield](https://shopify.dev/
 
 ## Related components
 
-- [`Metafield`](https://shopify.dev/api/hydrogen/components/primitive/metafield)
+- [`Metafield`](/docs/components/primitive/metafield)
 
 ## Related utilities
 
-- [`parseMetafield`](https://shopify.dev/api/hydrogen/utilities/parsemetafield)
+- [`parseMetafield`](/docs/utilities/parsemetafield)

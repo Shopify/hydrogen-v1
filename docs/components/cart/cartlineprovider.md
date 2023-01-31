@@ -34,12 +34,12 @@ The `CartLineProvider` component is a client component, which means that it rend
 
 ## Related components
 
-- [`CartLineImage`](https://shopify.dev/api/hydrogen/components/cart/cartlineimage)
-- [`CartLinePrice`](https://shopify.dev/api/hydrogen/components/cart/cartlineprice)
-- [`CartLineProductTitle`](https://shopify.dev/api/hydrogen/components/cart/cartlineproducttitle)
-- [`CartLineQuantity`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantity)
-- [`CartLineQuantityAdjustButton`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantityadjustbutton)
+- [`CartLineImage`](/docs/components/cart/cartlineimage)
+- [`CartLinePrice`](/docs/components/cart/cartlineprice)
+- [`CartLineProductTitle`](/docs/components/cart/cartlineproducttitle)
+- [`CartLineQuantity`](/docs/components/cart/cartlinequantity)
+- [`CartLineQuantityAdjustButton`](/docs/components/cart/cartlinequantityadjustbutton)
 
 ## Related hooks
 
-- [`useCartLine`](https://shopify.dev/api/hydrogen/hooks/cart/usecartline)
+- [`useCartLine`](/docs/hooks/cart/usecartline)

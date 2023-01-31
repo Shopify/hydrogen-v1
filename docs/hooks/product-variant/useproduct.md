@@ -2,10 +2,10 @@
 
 
 > Note:
-> `useProduct` is only available as part of the [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit) package, which is in beta. If you’re building with Hydrogen, then use [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions)
+> `useProduct` is only available as part of the [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit) package, which is in beta. If you’re building with Hydrogen, then use [`useProductOptions`](/docs/hooks/product-variant/useproductoptions)
 
 The `useProduct` hook returns an object that enables you to keep track of the
-selected variant and/or selling plan state, as well as callbacks for modifying the state. The `useProduct` hook must be a child of the [`ProductProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productprovider) component.
+selected variant and/or selling plan state, as well as callbacks for modifying the state. The `useProduct` hook must be a child of the [`ProductProvider`](/docs/components/product-variant/productprovider) component.
 
 ## Example code
 
@@ -169,4 +169,4 @@ The [Product object](https://shopify.dev/api/storefront/reference/products/produ
 
 ## Related components
 
-- [`ProductProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productprovider)
+- [`ProductProvider`](/docs/components/product-variant/productprovider)

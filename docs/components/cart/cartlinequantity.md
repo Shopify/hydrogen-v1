@@ -34,4 +34,4 @@ The `CartLineQuantity` component is a client component, which means that it rend
 
 ## Related components
 
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider)

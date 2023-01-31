@@ -32,8 +32,8 @@ For more information about component types, refer to [React Server Components](h
 
 ## Related components
 
-- [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money)
+- [`Money`](/docs/components/primitive/money)
 
 ## Related hooks
 
-- [`useCart`](https://shopify.dev/api/hydrogen/hooks/cart/usecart)
+- [`useCart`](/docs/hooks/cart/usecart)

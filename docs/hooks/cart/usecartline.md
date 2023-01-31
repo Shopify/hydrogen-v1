@@ -56,4 +56,4 @@ The `useCartLine` hook returns an object with the following keys:
 
 ## Related components
 
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartprovider)
+- [`CartLineProvider`](/docs/components/cart/cartprovider)

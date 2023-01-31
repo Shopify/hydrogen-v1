@@ -44,12 +44,12 @@ The `Router` component is a server component that renders inside `App.server.jsx
 ## Considerations
 
 - You should only have one `Router` component in your app.
-- All [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes) and [`Route`](https://shopify.dev/api/hydrogen/components/framework/route) components must be children of `Router`.
+- All [`FileRoutes`](/docs/components/framework/fileroutes) and [`Route`](/docs/components/framework/route) components must be children of `Router`.
 
 ## Related components
 
-- [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes)
-- [`Route`](https://shopify.dev/api/hydrogen/components/framework/route)
+- [`FileRoutes`](/docs/components/framework/fileroutes)
+- [`Route`](/docs/components/framework/route)
 
 ## Related framework topics
 

@@ -90,8 +90,8 @@ A flat array that contains elements that correspond to the `node` value in each 
 
 ## Related components
 
-- [ProductOptionsProvider](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
+- [ProductOptionsProvider](/docs/components/product-variant/productoptionsprovider)
 
 ## Related hooks
 
-- [useProductOptions](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions)
+- [useProductOptions](/docs/hooks/product-variant/useproductoptions)

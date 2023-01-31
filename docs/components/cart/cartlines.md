@@ -51,13 +51,13 @@ The `CartLines` component is a shared component, which means that it renders on 
 
 ## Related components
 
-- [`CartLineImage`](https://shopify.dev/api/hydrogen/components/cart/cartlineimage)
-- [`CartLinePrice`](https://shopify.dev/api/hydrogen/components/cart/cartlineprice)
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
-- [`CartLineProductTitle`](https://shopify.dev/api/hydrogen/components/cart/cartlineproducttitle)
-- [`CartLineQuantity`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantity)
-- [`CartLineQuantityAdjustButton`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantityadjustbutton)
+- [`CartLineImage`](/docs/components/cart/cartlineimage)
+- [`CartLinePrice`](/docs/components/cart/cartlineprice)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider)
+- [`CartLineProductTitle`](/docs/components/cart/cartlineproducttitle)
+- [`CartLineQuantity`](/docs/components/cart/cartlinequantity)
+- [`CartLineQuantityAdjustButton`](/docs/components/cart/cartlinequantityadjustbutton)
 
 ## Related hooks
 
-- [`useCartLine`](https://shopify.dev/api/hydrogen/hooks/cart/usecart)
+- [`useCartLine`](/docs/hooks/cart/usecart)

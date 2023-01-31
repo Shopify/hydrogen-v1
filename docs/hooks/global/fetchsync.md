@@ -31,7 +31,7 @@ function MyThings() {
 
 ## `fetchSync` in server components
 
-If you're using `fetchSync` in a server component, then you provide options for caching and preloading. This is similar to the [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery) hook:
+If you're using `fetchSync` in a server component, then you provide options for caching and preloading. This is similar to the [`useQuery`](/docs/hooks/global/usequery) hook:
 
 {% codeblock file, filename: "MyComponent.server.js" %}
 
@@ -146,8 +146,8 @@ The following considerations apply to `fetchSync` in server and client component
 
 ## Related hooks
 
-- [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
-- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
+- [`useShopQuery`](/docs/hooks/global/useshopquery)
+- [`useQuery`](/docs/hooks/global/usequery)
 
 ## Related framework topics
 

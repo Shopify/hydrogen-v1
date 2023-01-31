@@ -125,4 +125,4 @@ The `CartLineQuantityAdjustButton` component is a shared component, which means 
 
 ## Related components
 
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider)

@@ -29,8 +29,8 @@ The `CartCheckoutButton` component is a client component, which means that it re
 
 ## Related components
 
-- [CartProvider](https://shopify.dev/api/hydrogen/components/cart/cartprovider)
+- [CartProvider](/docs/components/cart/cartprovider)
 
 ## Related hooks
 
-- [useCart](https://shopify.dev/api/hydrogen/hooks/cart/usecart)
+- [useCart](/docs/hooks/cart/usecart)

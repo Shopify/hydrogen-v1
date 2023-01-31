@@ -34,5 +34,5 @@ The `CartLinePrice` component is a client component, which means that it renders
 
 ## Related components
 
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
-- [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider)
+- [`Money`](/docs/components/primitive/money)

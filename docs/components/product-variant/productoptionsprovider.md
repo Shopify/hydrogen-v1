@@ -1,7 +1,7 @@
 # ProductOptionsProvider
 
 
-The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions) hook.
+The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](/docs/hooks/product-variant/useproductoptions) hook.
 
 ## Example code
 
@@ -290,8 +290,8 @@ The `ProductOptionsProvider` component is a client component, which means that i
 
 ## Related components
 
-- [`ProductPrice`](https://shopify.dev/api/hydrogen/components/product-variant/productprice)
+- [`ProductPrice`](/docs/components/product-variant/productprice)
 
 ## Related hooks
 
-- [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions)
+- [`useProductOptions`](/docs/hooks/product-variant/useproductoptions)

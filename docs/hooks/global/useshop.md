@@ -29,7 +29,7 @@ The `useShop` hook returns an object with the following keys:
 
 ## Related components
 
-- [`ShopifyProvider`](https://shopify.dev/api/hydrogen/components/global/shopifyprovider)
+- [`ShopifyProvider`](/docs/components/global/shopifyprovider)
 
 ## Related framework topics
 

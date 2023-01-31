@@ -41,13 +41,13 @@ Don't use `CookieSessionStorage` if you expect to have more than 4kb of data wit
 
 ## Related components
 
-- [`Cookie`](https://shopify.dev/api/hydrogen/components/framework/cookie)
-- [`MemorySessionStorage`](https://shopify.dev/api/hydrogen/components/framework/memorysessionstorage)
-- [`FileSessionStorage`](https://shopify.dev/api/hydrogen/components/framework/filesessionstorage)
+- [`Cookie`](/docs/components/framework/cookie)
+- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage)
+- [`FileSessionStorage`](/docs/components/framework/filesessionstorage)
 
 ## Related hooks
 
-- [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession)
+- [`useSession`](/docs/hooks/framework/usesession)
 
 ## Related framework topics
 

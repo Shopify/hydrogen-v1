@@ -173,9 +173,9 @@ The `CartProvider` component is a client component, which means that it renders 
 
 ## Related components
 
-- [`AddToCartButton`](https://shopify.dev/api/hydrogen/components/cart/addtocartbutton)
-- [`CartCheckoutButton`](https://shopify.dev/api/hydrogen/components/cart/cartcheckoutbutton)
+- [`AddToCartButton`](/docs/components/cart/addtocartbutton)
+- [`CartCheckoutButton`](/docs/components/cart/cartcheckoutbutton)
 
 ## Related hooks
 
-- [`useCart`](https://shopify.dev/api/hydrogen/hooks/cart/usecart)
+- [`useCart`](/docs/hooks/cart/usecart)

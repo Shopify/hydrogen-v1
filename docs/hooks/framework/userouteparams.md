@@ -37,14 +37,14 @@ The `useRouteParams` hook returns an object with key values for each matching ro
 
 ## Related components
 
-- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router)
-- [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes)
-- [`Route`](https://shopify.dev/api/hydrogen/components/framework/route)
-- [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)
+- [`Router`](/docs/components/framework/router)
+- [`FileRoutes`](/docs/components/framework/fileroutes)
+- [`Route`](/docs/components/framework/route)
+- [`Link`](/docs/components/framework/link)
 
 ## Related hooks
 
-- [`useNavigate`](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate)
+- [`useNavigate`](/docs/hooks/framework/usenavigate)
 
 ## Related framework topics
 

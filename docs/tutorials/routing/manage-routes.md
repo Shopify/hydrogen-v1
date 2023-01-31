@@ -38,7 +38,7 @@ In the following example, any requests to `/products/hoodie` are rendered using 
 
 ### Prefetch a link source
 
-The [`Link`](https://shopify.dev/api/hydrogen/components/framework/link) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
+The [`Link`](/docs/components/framework/link) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
 
 If you want to disable link prefetching, then pass `prefetch={false}` to the `Link` component:
 

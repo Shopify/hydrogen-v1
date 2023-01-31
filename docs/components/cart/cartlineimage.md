@@ -28,5 +28,5 @@ The `CartLineImage` component is a client component, which means that it renders
 
 ## Related components
 
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
-- [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider)
+- [`Image`](/docs/components/primitive/image)
