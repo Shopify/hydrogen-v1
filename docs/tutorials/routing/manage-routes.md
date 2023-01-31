@@ -4,11 +4,11 @@
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-The Hydrogen framework uses a [file-based routing system](/docs/tutorials/routing.md). This guide explains how to perform some common tasks for managing routes.
+The Hydrogen framework uses a [file-based routing system](/docs/tutorials/routing/index.md). This guide explains how to perform some common tasks for managing routes.
 
 ## Retrieve the `handle` property
 
-The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` to `:handle`. [Refer to an example](/docs/tutorials/routing.md#example).
+The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` to `:handle`. [Refer to an example](/docs/tutorials/routing/index.md#example).
 
 You can retrieve the `handle` property by using the [`useRouteParams` hook](/docs/hooks/framework/userouteparams.md):
 
@@ -72,7 +72,7 @@ By default, when a user hovers or focuses on the link for more than 100ms, a pre
 
 You can extend dynamic routes to catch all paths by adding an ellipsis (...) inside the brackets. For example, `/routes/example/[...handle].server.jsx` will match `/example/a` and `/example/a/b`.
 
-Learn more about [Hydrogen's built-in routes](/docs/tutorials/routing.md#built-in-routes).
+Learn more about [Hydrogen's built-in routes](/docs/tutorials/routing/index.md#built-in-routes).
 
 ### Example
 
@@ -201,7 +201,7 @@ export default function Page() {
 
 ## Create custom experiences with props
 
-Server components placed in the `src/routes` directory [receive special props](/docs/tutorials/routing.md#props-for-creating-custom-experiences) that you can use to create custom experiences:
+Server components placed in the `src/routes` directory [receive special props](/docs/tutorials/routing/index.md#props-for-creating-custom-experiences) that you can use to create custom experiences:
 
 The following are some examples.
 
@@ -229,7 +229,7 @@ function MyPage({request}) {
 
 
 
-In some cases, you might want to use `HydrogenRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](/docs/tutorials/react-server-components.md):
+In some cases, you might want to use `HydrogenRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](/docs/tutorials/react-server-components/index.md):
 
 ```jsx
 

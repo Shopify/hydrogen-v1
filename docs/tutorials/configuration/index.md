@@ -149,7 +149,7 @@ export default defineConfig({
 
 ### `serverAnalyticsConnectors`
 
-The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](/docs/tutorials/analytics.md#analytics-sent-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](/docs/tutorials/analytics.md).
+The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](/docs/tutorials/analytics/index.md#analytics-sent-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](/docs/tutorials/analytics/index.md).
 
 ### `serverErrorPage`
 
@@ -301,7 +301,7 @@ If you don't want the Hydrogen configuration file located at the root of your pr
 
 ## Next steps
 
-- Learn about [React Server Components](/docs/tutorials/react-server-components.md), an opinionated data-fetching and rendering workflow for React apps.
-- Get familiar with the [file-based routing system](/docs/tutorials/routing.md) that Hydrogen uses.
-- Learn about the Hydrogen framework's built-in support for [session management](/docs/tutorials/sessions.md).
-- Learn about the [analytics support](/docs/tutorials/analytics.md) built into Hydrogen.
+- Learn about [React Server Components](/docs/tutorials/react-server-components/index.md), an opinionated data-fetching and rendering workflow for React apps.
+- Get familiar with the [file-based routing system](/docs/tutorials/routing/index.md) that Hydrogen uses.
+- Learn about the Hydrogen framework's built-in support for [session management](/docs/tutorials/sessions/index.md).
+- Learn about the [analytics support](/docs/tutorials/analytics/index.md) built into Hydrogen.

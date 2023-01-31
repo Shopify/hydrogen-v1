@@ -47,4 +47,4 @@ If you want to fetch data that goes alongside your Shopify product data and shop
 For example, inside the `useQuery` hook, you can use the [`fetch()` method](https://developer.mozilla.org/en-US/docs/Web/API/fetch) on server components, or an HTTP client like [Axios](https://axios-http.com/), which can be used on both the client and the server.
 
 > Note:
-> If you want to build your API in Hydrogen, then refer to [API routes](/docs/tutorials/routing.md#api-routes).
+> If you want to build your API in Hydrogen, then refer to [API routes](/docs/tutorials/routing/index.md#api-routes).

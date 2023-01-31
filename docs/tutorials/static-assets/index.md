@@ -45,10 +45,10 @@ Files delivered over the Shopify CDN are minified and compressed automatically u
 
 ## Considerations and limitations
 
-You should only import assets, such as styles or images, from [client components](/docs/tutorials/react-server-components.md#component-types). Any static assets that are referenced in server components, or shared components that are rendered from server components, won't display in the browser.
+You should only import assets, such as styles or images, from [client components](/docs/tutorials/react-server-components/index.md#component-types). Any static assets that are referenced in server components, or shared components that are rendered from server components, won't display in the browser.
 
 ## Next steps
 
 - Learn how to perform common tasks for [managing static assets in Hydrogen](/docs/tutorials/static-assets/manage-static-assets.md).
-- Learn about [React Server Components](/docs/tutorials/react-server-components.md), an opinionated data-fetching and rendering workflow for React apps.
+- Learn about [React Server Components](/docs/tutorials/react-server-components/index.md), an opinionated data-fetching and rendering workflow for React apps.
 - Learn how to [deploy your Hydrogen storefront](/docs/tutorials/deployment.md) to Oxygen and other runtimes.

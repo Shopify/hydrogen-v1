@@ -32,7 +32,7 @@ yarn test:ci
 
 ## Catching common issues
 
-Hydrogen provides an [ESLint plugin](/docs/tutorials/eslint.md) that enforces Shopify’s JavaScript best practices and catches common issues when using [React Server Components](/docs/tutorials/react-server-components.md) in Hydrogen apps.
+Hydrogen provides an [ESLint plugin](/docs/tutorials/eslint.md) that enforces Shopify’s JavaScript best practices and catches common issues when using [React Server Components](/docs/tutorials/react-server-components/index.md) in Hydrogen apps.
 
 ### Hydrogen rules
 

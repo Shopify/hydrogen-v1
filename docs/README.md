@@ -25,7 +25,7 @@
   - [Testing](tutorials/best-practices/testing.md)
 - [Configuration](tutorials/configuration/index.md)
   - [Change config file location](tutorials/configuration/change-config-file-location.md)
-- [Ccontent](tutorials/content.md)
+- [Content](tutorials/content.md)
 - [CSS support](tutorials/css-support/index.md)
   - [Create custom fonts](tutorials/css-support/create-custom-fonts.md)
   - [Import CSS in RSC](tutorials/css-support/import-css-in-rsc.md)

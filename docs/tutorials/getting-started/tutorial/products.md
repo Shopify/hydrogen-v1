@@ -4,7 +4,7 @@
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-Previously, you [built a collection page](/docs/tutorials/getting-started/tutorial/collections.md). Your Hydrogen storefront sorts products within your collections, using [server props](/docs/tutorials/server-props.md) and [file-based routing](/docs/tutorials/routing.md). Now that you have a collections page that renders your products, you’re ready to build a product page.
+Previously, you [built a collection page](/docs/tutorials/getting-started/tutorial/collections.md). Your Hydrogen storefront sorts products within your collections, using [server props](/docs/tutorials/server-props.md) and [file-based routing](/docs/tutorials/routing/index.md). Now that you have a collections page that renders your products, you’re ready to build a product page.
 
 In this tutorial, you'll build a page that shows detailed product information.
 
@@ -470,7 +470,7 @@ The product page renders the following dynamic content:
 
 ## Step 3: Query product and variant details
 
-In this step, you'll create your first [client component](/docs/tutorials/react-server-components.md#component-types) - `ProductDetails`. Client components render on the client, enabling a client-side state. Client components end in `.client.jsx`.
+In this step, you'll create your first [client component](/docs/tutorials/react-server-components/index.md#component-types) - `ProductDetails`. Client components render on the client, enabling a client-side state. Client components end in `.client.jsx`.
 
 Similar to [querying all products and variants that belong to a collection](/docs/tutorials/getting-started/tutorial/collections.md#step-4-query-products-and-variants), you can set up a GraphQL query to retrieve detailed information about products and variants.
 

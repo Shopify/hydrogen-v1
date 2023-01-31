@@ -77,4 +77,4 @@ Learn about [displaying performance metrics](/docs/tutorials/analytics/configure
 - Learn how to perform common tasks for [configuring analytics](/docs/tutorials/analytics/configure-analytics.md).
 - Learn how to [configure queries to preload](/docs/tutorials/querying/preloaded-queries.md) in your Hydrogen app.
 - Learn how to customize the output of [SEO-related tags](/docs/tutorials/seo/manage-seo.md) in your Hydrogen client and server components.
-- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration.md) and how to change the location of the configuration file.
+- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration/index.md) and how to change the location of the configuration file.

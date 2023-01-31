@@ -149,8 +149,8 @@ export async function api(
 ## Next steps
 
 - Learn how to perform common tasks for [managing routes in Hydrogen](/docs/tutorials/routing/manage-routes.md).
-- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration.md) and how to change the location of the configuration file.
-- Learn about how Hydrogen consumes data from different [sources](/docs/tutorials/data-sources.md).
+- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration/index.md) and how to change the location of the configuration file.
+- Learn about how Hydrogen consumes data from different [sources](/docs/tutorials/data-sources/index.md).
 - Learn how to manage [cache options](/docs/tutorials/querying/cache.md) for Hydrogen storefronts.
 - Improve your app's loading performance with [streaming SSR and Suspense](/docs/tutorials/streaming-ssr.md).
 - Learn how to [manage your server props](/docs/tutorials/server-props.md) during your development process.

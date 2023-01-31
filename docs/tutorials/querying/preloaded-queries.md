@@ -58,9 +58,9 @@ You can tell Hydrogen to [preload a query everywhere](/docs/tutorials/querying/p
 
 </aside>
 
-If you have a suspense waterfall detected, then you can log request timing information by enabling the `logger.showQueryTiming` property in your [Hydrogen configuration file](/docs/tutorials/configuration.md#logger).
+If you have a suspense waterfall detected, then you can log request timing information by enabling the `logger.showQueryTiming` property in your [Hydrogen configuration file](/docs/tutorials/configuration/index.md#logger).
 
-The [`showQueryTiming`](/docs/tutorials/configuration.md#logger) property logs the timeline of when queries are being requested, resolved, and rendered. If a query is preloaded, but isn't being used, then a warning displays in the server log:
+The [`showQueryTiming`](/docs/tutorials/configuration/index.md#logger) property logs the timeline of when queries are being requested, resolved, and rendered. If a query is preloaded, but isn't being used, then a warning displays in the server log:
 
 ![Shows a screenshot of preloaded query warning](https://shopify.dev/assets/custom-storefronts/hydrogen/preload-query-warning.png)
 
@@ -78,4 +78,4 @@ If a query is being double loaded, then a warning displays in the server log. Th
 ## Next steps
 
 - Learn how to perform common tasks for [preloading queries](/docs/tutorials/querying/preload-queries.md).
-- Learn about the [analytics support](/docs/tutorials/analytics.md) built into Hydrogen.
+- Learn about the [analytics support](/docs/tutorials/analytics/index.md) built into Hydrogen.

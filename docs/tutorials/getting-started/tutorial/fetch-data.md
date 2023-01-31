@@ -217,7 +217,7 @@ const QUERY = gql`
 ## Step 1: Visit the GraphiQL explorer
 
 > Note:
-> By default, your Hydrogen app is connected to a Demo Store and uses a demo Storefront API access token. For the purposes of this tutorial, you'll use the Demo Store configuration. After you've finished this tutorial series, you can create a new Hydrogen app and [connect it to your own storefront](/docs/tutorials/configuration.md).
+> By default, your Hydrogen app is connected to a Demo Store and uses a demo Storefront API access token. For the purposes of this tutorial, you'll use the Demo Store configuration. After you've finished this tutorial series, you can create a new Hydrogen app and [connect it to your own storefront](/docs/tutorials/configuration/index.md).
 
 You can explore the [Storefront API](https://shopify.dev/api/storefront) and run test queries in your Hydrogen app. When you're running the Hydrogen local development server, you can load an interactive GraphiQL explorer that's connected to your shop.
 
@@ -244,16 +244,16 @@ You can explore the [Storefront API](https://shopify.dev/api/storefront) and run
 
 Now that you’ve tested your query in the GraphiQL explorer and verified that it works, you can move the query into your Hydrogen app to display the shop name.
 
-Hydrogen offers the [`useShopQuery`](/docs/hooks/global/useshopquery.md) hook to fetch data from your storefront from within [server components](/docs/tutorials/react-server-components.md#component-types). In this step, you'll create a new `Layout` component that renders your shop name, and you'll use the `useShopQuery` hook within `Layout` to pass in a GraphQL query that retrieves your shop's name.
+Hydrogen offers the [`useShopQuery`](/docs/hooks/global/useshopquery.md) hook to fetch data from your storefront from within [server components](/docs/tutorials/react-server-components/index.md#component-types). In this step, you'll create a new `Layout` component that renders your shop name, and you'll use the `useShopQuery` hook within `Layout` to pass in a GraphQL query that retrieves your shop's name.
 
 > Tip:
 > Hydrogen contains a set of Shopify-specific commerce components, hooks, and utilities that help accelerate your development process. You can refer to the [Hydrogen reference](/api/hydrogen) to determine which fields need to be queried for each component.
 
 ### Create a `Layout` component
 
-Hydrogen is modelled after [React Server Components](/docs/tutorials/react-server-components.md), an approach that offers an opinionated data-fetching and rendering workflow for React apps. It includes server, client, and shared component types.
+Hydrogen is modelled after [React Server Components](/docs/tutorials/react-server-components/index.md), an approach that offers an opinionated data-fetching and rendering workflow for React apps. It includes server, client, and shared component types.
 
-The first [server component](/docs/tutorials/react-server-components.md#component-types) that you’ll build is a layout component. The layout component will be a server component because it doesn't require any client-side interactivity. Server components end in `.server.jsx`.
+The first [server component](/docs/tutorials/react-server-components/index.md#component-types) that you’ll build is a layout component. The layout component will be a server component because it doesn't require any client-side interactivity. Server components end in `.server.jsx`.
 
 1. Create a new server component named `Layout.server.jsx` and move your GraphQL query to the `useShopQuery` hook:
 

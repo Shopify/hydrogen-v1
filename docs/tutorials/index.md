@@ -19,7 +19,7 @@ Hydrogen is the approach you use to build a custom storefront. It contains a fra
 ![A diagram that shows what Hydrogen includes: Vite offerings and Shopify-specific components, hooks, and utilities](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-overview.png)
 
 > Note:
-> The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](/docs/tutorials/react-server-components.md), which affects SSR.
+> The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](/docs/tutorials/react-server-components/index.md), which affects SSR.
 
 ## Templates
 
@@ -51,7 +51,7 @@ Hydrogen's architecture enables a mix of static and dynamic data fetching betwee
 
 - **[Server-side rendering](/docs/tutorials/streaming-ssr.md)** to optimize the initial load.
 
-- **[React Server Components](/docs/tutorials/react-server-components.md)**, an opinionated data-fetching and rendering flow for React apps. React Server Components offer an improved development experience. Components render fast, which allows you to see your work instantly as you’re building it.
+- **[React Server Components](/docs/tutorials/react-server-components/index.md)**, an opinionated data-fetching and rendering flow for React apps. React Server Components offer an improved development experience. Components render fast, which allows you to see your work instantly as you’re building it.
 
 ## Request workflow for Hydrogen apps
 
@@ -88,5 +88,5 @@ Hydrogen can only be used to build Shopify web storefronts. Currently, Hydrogen 
 ## Next steps
 
 - [Get started](/docs/tutorials/getting-started/index.md) with Hydrogen and begin building a custom storefront.
-- Learn about [React Server Components](/docs/tutorials/react-server-components.md), an opinionated data-fetching and rendering workflow for React apps.
+- Learn about [React Server Components](/docs/tutorials/react-server-components/index.md), an opinionated data-fetching and rendering workflow for React apps.
 - Learn how to [deploy your Hydrogen storefront](/docs/tutorials/deployment.md) to Oxygen and other runtimes.

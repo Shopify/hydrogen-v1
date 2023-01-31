@@ -7,7 +7,7 @@ This guide describes how to customize the output of SEO-related tags in your cli
 
 ## Customize SEO at the route level
 
-At the route level, you can customize [the `<head>` tags](/docs/tutorials/seo.md#seo-client-component) that search engines look for.
+At the route level, you can customize [the `<head>` tags](/docs/tutorials/seo/index.md#seo-client-component) that search engines look for.
 
 - [Home page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/index.server.tsx)
 - [Pages page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/pages/%5Bhandle%5D.server.tsx)

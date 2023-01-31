@@ -48,4 +48,4 @@ The following limitations and considerations apply to the [XML sitemap](https://
 ## Next steps
 
 - Learn how to perform common tasks for [managing routes SEO in Hydrogen](/docs/tutorials/seo/manage-seo.md).
-- Learn about the [analytics support](/docs/tutorials/analytics.md) built into Hydrogen.
+- Learn about the [analytics support](/docs/tutorials/analytics/index.md) built into Hydrogen.

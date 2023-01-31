@@ -13,7 +13,7 @@
 
 Hydrogen's [Demo Store template](/docs/tutorials/getting-started/templates.md) comes pre-configured with session support.
 
-By default, session data is persisted within a cookie. You can adjust the session cookie configuration within your [Hydrogen configuration file](/docs/tutorials/configuration.md#session) for an in-memory storage or file-based storage (NodeJS only), or build your own storage adapter.
+By default, session data is persisted within a cookie. You can adjust the session cookie configuration within your [Hydrogen configuration file](/docs/tutorials/configuration/index.md#session) for an in-memory storage or file-based storage (NodeJS only), or build your own storage adapter.
 
 ## Custom session storage
 
@@ -54,7 +54,7 @@ export const CookieSessionStorage = function (name, options) {
 
 ## Reading and updating session data
 
-In Hydrogen, you can use the [`useSession`](/docs/hooks/framework/usesession.md) hook to read session data. You can update session data within [API routes](/docs/tutorials/routing.md#api-routes). API routes are passed a session object for interacting with the session. The session object has the following keys:
+In Hydrogen, you can use the [`useSession`](/docs/hooks/framework/usesession.md) hook to read session data. You can update session data within [API routes](/docs/tutorials/routing/index.md#api-routes). API routes are passed a session object for interacting with the session. The session object has the following keys:
 
 | Key       | Description                                                     |
 | --------- | --------------------------------------------------------------- |
@@ -108,7 +108,7 @@ export async function MyComponent() {
 
 ## Building custom session implementations
 
-Hydrogen provides a [`Cookie`](/docs/components/framework/cookie.md) component for building your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](/docs/tutorials/sessions.md#types-of-session-storage) use the same configuration options as `Cookie`.
+Hydrogen provides a [`Cookie`](/docs/components/framework/cookie.md) component for building your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](/docs/tutorials/sessions/index.md#types-of-session-storage) use the same configuration options as `Cookie`.
 
 ## Related components and hooks
 
@@ -120,5 +120,5 @@ Hydrogen provides a [`Cookie`](/docs/components/framework/cookie.md) component f
 
 ## Next steps
 
-- Get familiar with the [file-based routing system](/docs/tutorials/routing.md) that Hydrogen uses.
-- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration.md) and how to change the location of the configuration file.
+- Get familiar with the [file-based routing system](/docs/tutorials/routing/index.md) that Hydrogen uses.
+- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration/index.md) and how to change the location of the configuration file.

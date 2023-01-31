@@ -10,7 +10,7 @@ This guide describes best practices for making your Hydrogen custom storefront p
 
 ## React Server Components
 
-Hydrogen is modelled after [React Server Components](/docs/tutorials/react-server-components.md), an approach that offers an opinionated data-fetching and rendering workflow for React apps.
+Hydrogen is modelled after [React Server Components](/docs/tutorials/react-server-components/index.md), an approach that offers an opinionated data-fetching and rendering workflow for React apps.
 
 As you develop your Hydrogen custom storefront, you'll need to determine what to render on the server, what to the render on the client, and what to render on both the server and client. Making the right choices will result in performance benefits.
 
@@ -71,7 +71,7 @@ Generally, you don't need to convert the entire component into a client componen
 
 ## Data fetching
 
-Delivering fast server-side responses requires fast and efficient [first-party (Shopify)](/docs/tutorials/data-sources.md#shopify-data-source) and [third-party data access](/docs/tutorials/data-sources/work-with-3p-data-sources.md).
+Delivering fast server-side responses requires fast and efficient [first-party (Shopify)](/docs/tutorials/data-sources/index.md#shopify-data-source) and [third-party data access](/docs/tutorials/data-sources/work-with-3p-data-sources.md).
 
 ### First-party (Shopify) data source
 
@@ -179,7 +179,7 @@ Requesting too much data from the Storefront API or from other resources can slo
 
 To help you request only the data that you need, Hydrogen includes a [`log`](/docs/utilities/log.md) utility that identifies unused data returned from [`useShopQuery`](/docs/hooks/global/useshopquery.md). The `log` utility prints unused query properties in the server console to highlight potential data over-fetching.
 
-To enable logging for unused query properties, set the `logger.showUnusedQueryProperties` option to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration.md#logger).
+To enable logging for unused query properties, set the `logger.showUnusedQueryProperties` option to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration/index.md#logger).
 
 Then, visit your terminal that's running the development server to see any notices printed by the utility:
 
@@ -202,7 +202,7 @@ Examine the list of fields above to confirm that they are being used
 
 ## Pages and subrequests
 
-Hydrogen doesn't require that all requests are server-rendered. [Routes and subrequests](/docs/tutorials/routing.md) with static or infrequently updated content can be served from the edge.
+Hydrogen doesn't require that all requests are server-rendered. [Routes and subrequests](/docs/tutorials/routing/index.md) with static or infrequently updated content can be served from the edge.
 
 For example, a marketing page that’s typically static can be [cached](/docs/tutorials/querying/cache.md), served directly from the CDN edge, and asynchronously revalidated with the help of the `CacheLong()` caching strategy:
 

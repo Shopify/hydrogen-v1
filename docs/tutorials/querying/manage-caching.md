@@ -102,7 +102,7 @@ The following are common tasks for managing caching in development:
 
 ### Enable logging for the cache API status
 
-Set `logger.showCacheApiStatus` to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration.md#logger). The status of the cache updates on each query:
+Set `logger.showCacheApiStatus` to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration/index.md#logger). The status of the cache updates on each query:
 
 ```sh
 [Cache] MISS   query shopInfo
@@ -113,7 +113,7 @@ Set `logger.showCacheApiStatus` to `true` in your [Hydrogen configuration file](
 
 ### Enable logging for cache control headers
 
-Set `logger.showCacheControlHeader` to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration.md#logger).
+Set `logger.showCacheControlHeader` to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration/index.md#logger).
 
 ### Bust query cache busting on build
 
