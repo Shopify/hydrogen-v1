@@ -36,7 +36,7 @@ Sub-request caching keeps pages loading quickly for end-users. All sub-request h
 
 ### `useShopQuery`
 
-The following example shows how to implement [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) for Shopify Storefront API queries:
+The following example shows how to implement [`useShopQuery`](/docs/hooks/global/useshopquery) for Shopify Storefront API queries:
 
 ```jsx
 // /routes/my-products.server.jsx
@@ -52,7 +52,7 @@ const {data} = useShopQuery({
 
 ### `fetchSync`
 
-The following example shows how to implement [`fetchSync`](/api/hydrogen/hooks/global/fetchsync) for third-party requests:
+The following example shows how to implement [`fetchSync`](/docs/hooks/global/fetchsync) for third-party requests:
 
 ```jsx
 // /routes/my-products.server.jsx
@@ -180,9 +180,9 @@ Full-page caching is powered completely by [`cache-control` headers on the Hydro
 
 ## Related hooks
 
-- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery)
-- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync)
-- [`useQuery`](/api/hydrogen/hooks/global/usequery)
+- [`useShopQuery`](/docs/hooks/global/useshopquery)
+- [`fetchSync`](/docs/hooks/global/fetchsync)
+- [`useQuery`](/docs/hooks/global/usequery)
 
 ## Next steps
 

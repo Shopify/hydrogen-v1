@@ -45,7 +45,7 @@ If you [install the ESLint plugin](/docs/tutorials/eslint#installation) and enab
 | -------------- | -------- |
 | [server-component-banned-hooks](https://github.com/Shopify/hydrogen/tree/main/packages/eslint-plugin/src/rules/server-component-banned-hooks)          | Prevents using the `useState`, `useReducer`, `useEffect`, and `useLayoutEffect` hooks in files that don't end with the `.client` extension      |
 | [client-component-banned-hooks](https://github.com/Shopify/hydrogen/tree/main/packages/eslint-plugin/src/rules/client-component-banned-hooks)      | Prevents using the `useQuery` hook in files that end with the `.client` extension      |
-| [prefer-image-component](https://github.com/Shopify/hydrogen/tree/main/packages/eslint-plugin/src/rules/prefer-image-component) | Prevents using the `img` tag directly and suggests using the [`Image`](/api/hydrogen/components/primitive/image) component from `@shopify/hydrogen`     |
+| [prefer-image-component](https://github.com/Shopify/hydrogen/tree/main/packages/eslint-plugin/src/rules/prefer-image-component) | Prevents using the `img` tag directly and suggests using the [`Image`](/docs/components/primitive/image) component from `@shopify/hydrogen`     |
 | [server-no-json-parse](https://github.com/Shopify/hydrogen/tree/main/packages/eslint-plugin/src/rules/server-no-json-parse) | Prevents using `JSON.parse` in a Hydrogen API route or server component       |
 | [prefer-gql](https://github.com/Shopify/hydrogen/tree/main/packages/eslint-plugin/src/rules/prefer-gql) | Detects the use of a GraphQL utility other than the one provided by Hydrogen       |
 

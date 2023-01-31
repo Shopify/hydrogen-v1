@@ -11,7 +11,7 @@ This guide how SEO works in Hydrogen and the output of SEO-related tags in your 
 
 ## How SEO works in Hydrogen
 
-Hydrogen includes an [`Seo`](/api/hydrogen/components/primitive/seo) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](/docs/tutorials/getting-started/templates):
+Hydrogen includes an [`Seo`](/docs/components/primitive/seo) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](/docs/tutorials/getting-started/templates):
 
 - [`Sitemap.xml.server.ts`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/sitemap.xml.server.ts): A file that generates all products, collections, and pages URLs using the Storefront API
 
@@ -19,7 +19,7 @@ Hydrogen includes an [`Seo`](/api/hydrogen/components/primitive/seo) client comp
 
 ### `Seo` client component
 
-The [`Seo`](/api/hydrogen/components/primitive/seo) client component uses the data from Storefront API to generate the `<head>` tags that search engines look for. For example, [`Product.Seo`](https://shopify.dev/api/storefront/latest/objects/Product) is used to generate the `<head>` tags for the products page.
+The [`Seo`](/docs/components/primitive/seo) client component uses the data from Storefront API to generate the `<head>` tags that search engines look for. For example, [`Product.Seo`](https://shopify.dev/api/storefront/latest/objects/Product) is used to generate the `<head>` tags for the products page.
 
 Learn how to [customize `<head>` tags](/docs/tutorials/seo/manage-seo#customize-seo-at-the-route-level) at the route level.
 
@@ -46,7 +46,7 @@ The following limitations and considerations apply to the [XML sitemap](https://
 
 ## Related components
 
-- [`Seo`](/api/hydrogen/components/primitive/seo)
+- [`Seo`](/docs/components/primitive/seo)
 
 ## Next steps
 

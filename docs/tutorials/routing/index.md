@@ -13,7 +13,7 @@ The Hydrogen framework uses a file-based routing system. This guide provides an 
 
 All components added to the `src/routes` directory are registered as routes in `App.server.jsx`. Any filenames with brackets, like `[handle]`, are converted to a route parameter called `:handle`.
 
-You can navigate between routes using the [`Link`](/api/hydrogen/components/framework/link) component or the [`useNavigate`](/api/hydrogen/hooks/framework/usenavigate) hook. You can use the [`useRouteParams`](/api/hydrogen/hooks/framework/userouteparams) hook to retrieve the parameters of an active route.
+You can navigate between routes using the [`Link`](/docs/components/framework/link) component or the [`useNavigate`](/docs/hooks/framework/usenavigate) hook. You can use the [`useRouteParams`](/docs/hooks/framework/userouteparams) hook to retrieve the parameters of an active route.
 
 The following example shows how each `*.server.jsx` file maps to a different route in the Hydrogen app:
 
@@ -65,9 +65,9 @@ Hydrogen provides the following built-in routes:
 
 By default, Hydrogen uses a file-based routing system, but you can customize routes in `App.server.jsx` using the following components:
 
-- [`Router`](/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen storefront
-- [`FileRoutes`](/api/hydrogen/components/framework/fileroutes): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method
-- [`Route`](/api/hydrogen/components/framework/route): Used to set up a route in Hydrogen that's independent of the file system
+- [`Router`](/docs/components/framework/router): Provides the context for routing in your Hydrogen storefront
+- [`FileRoutes`](/docs/components/framework/fileroutes): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method
+- [`Route`](/docs/components/framework/route): Used to set up a route in Hydrogen that's independent of the file system
 
 ## API routes
 
@@ -138,16 +138,16 @@ export async function api(
 
 ## Related components and hooks
 
-- [`Link`](/api/hydrogen/components/framework/link)
-- [`Router`](/api/hydrogen/components/framework/router)
-- [`FileRoutes`](/api/hydrogen/components/framework/fileroutes)
-- [`Route`](/api/hydrogen/components/framework/route)
-- [`useNavigate`](/api/hydrogen/hooks/framework/usenavigate)
-- [`useRouteParams`](/api/hydrogen/hooks/framework/userouteparams)
-- [`useQuery`](/api/hydrogen/hooks/global/usequery)
-- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery)
-- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync)
-- [`Form`](/api/hydrogen/components/framework/form)
+- [`Link`](/docs/components/framework/link)
+- [`Router`](/docs/components/framework/router)
+- [`FileRoutes`](/docs/components/framework/fileroutes)
+- [`Route`](/docs/components/framework/route)
+- [`useNavigate`](/docs/hooks/framework/usenavigate)
+- [`useRouteParams`](/docs/hooks/framework/userouteparams)
+- [`useQuery`](/docs/hooks/global/usequery)
+- [`useShopQuery`](/docs/hooks/global/useshopquery)
+- [`fetchSync`](/docs/hooks/global/fetchsync)
+- [`Form`](/docs/components/framework/form)
 
 ## Next steps
 

@@ -113,9 +113,9 @@ A cache control header report displays for each page request. The report include
 Learn common tasks for [managing caching in production](/docs/tutorials/querying/manage-caching#caching-in-production).
 ## Related hooks
 
-- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery)
-- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync)
-- [`useQuery`](/api/hydrogen/hooks/global/usequery)
+- [`useShopQuery`](/docs/hooks/global/useshopquery)
+- [`fetchSync`](/docs/hooks/global/fetchsync)
+- [`useQuery`](/docs/hooks/global/usequery)
 
 ## Next steps
 

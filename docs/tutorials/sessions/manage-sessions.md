@@ -57,7 +57,7 @@ export const CookieSessionStorage = function (name, options) {
 
 ## Reading and updating session data
 
-In Hydrogen, you can use the [`useSession`](/api/hydrogen/hooks/framework/usesession) hook to read session data. You can update session data within [API routes](/docs/tutorials/routing#api-routes). API routes are passed a session object for interacting with the session. The session object has the following keys:
+In Hydrogen, you can use the [`useSession`](/docs/hooks/framework/usesession) hook to read session data. You can update session data within [API routes](/docs/tutorials/routing#api-routes). API routes are passed a session object for interacting with the session. The session object has the following keys:
 
 | Key       | Description                                                     |
 | --------- | --------------------------------------------------------------- |
@@ -111,15 +111,15 @@ export async function MyComponent() {
 
 ## Building custom session implementations
 
-Hydrogen provides a [`Cookie`](/api/hydrogen/components/framework/cookie) component for building your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](/docs/tutorials/sessions#types-of-session-storage) use the same configuration options as `Cookie`.
+Hydrogen provides a [`Cookie`](/docs/components/framework/cookie) component for building your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](/docs/tutorials/sessions#types-of-session-storage) use the same configuration options as `Cookie`.
 
 ## Related components and hooks
 
-- [`Cookie`](/api/hydrogen/components/framework/cookie)
-- [`CookieSessionStorage`](/api/hydrogen/components/framework/cookiesessionstorage)
-- [`MemorySessionStorage`](/api/hydrogen/components/framework/memorysessionstorage)
-- [`FileSessionStorage`](/api/hydrogen/components/framework/filesessionstorage)
-- [`useSession`](/api/hydrogen/hooks/framework/usesession)
+- [`Cookie`](/docs/components/framework/cookie)
+- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage)
+- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage)
+- [`FileSessionStorage`](/docs/components/framework/filesessionstorage)
+- [`useSession`](/docs/hooks/framework/usesession)
 
 ## Next steps
 

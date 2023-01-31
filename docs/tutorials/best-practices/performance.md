@@ -222,7 +222,7 @@ export default function Example() {
 
 Requesting too much data from the Storefront API or from other resources can slow down your Hydrogen storefront. You should make sure that your Hydrogen app is only requesting that data it needs to render a route.
 
-To help you request only the data that you need, Hydrogen includes a [`log`](/api/hydrogen/utilities/log) utility that identifies unused data returned from [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery). The `log` utility prints unused query properties in the server console to highlight potential data over-fetching.
+To help you request only the data that you need, Hydrogen includes a [`log`](/docs/utilities/log) utility that identifies unused data returned from [`useShopQuery`](/docs/hooks/global/useshopquery). The `log` utility prints unused query properties in the server console to highlight potential data over-fetching.
 
 To enable logging for unused query properties, set the `logger.showUnusedQueryProperties` option to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration#logger).
 
@@ -454,7 +454,7 @@ function ProductPage() {
 
 Sometimes it makes sense to split queries, and other times it makes more sense to combine and re-use queries. You can experiment with combining or splitting your queries to see what approach works better for your use case.
 
-Hydrogen de-duplicates identical requests made to [`fetchSync`](/api/hydrogen/hooks/global/fetchsync), [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) and [`useQuery`](/api/hydrogen/hooks/global/usequery). This means that if you fetch a data resource in one component, then fetching an identical data resource in another component won't result in an additional API request.
+Hydrogen de-duplicates identical requests made to [`fetchSync`](/docs/hooks/global/fetchsync), [`useShopQuery`](/docs/hooks/global/useshopquery) and [`useQuery`](/docs/hooks/global/usequery). This means that if you fetch a data resource in one component, then fetching an identical data resource in another component won't result in an additional API request.
 
 You can use this behavior to your advantage. For example, the following components request very similar data, but they're not identical:
 

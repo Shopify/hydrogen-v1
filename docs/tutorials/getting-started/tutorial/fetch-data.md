@@ -20,7 +20,7 @@ You want to retrieve specific data from your storefront, including your store’
 In this tutorial, you’ll learn how to do the following tasks:
 
 - Make a GraphQL query using the [Shopify Storefront API GraphiQL explorer](/custom-storefronts/tools/graphiql-storefront-api).
-- Implement the [useShopQuery](/api/hydrogen/hooks/global/useshopquery) hook to fetch storefront data from inside your Hydrogen app.
+- Implement the [useShopQuery](/docs/hooks/global/useshopquery) hook to fetch storefront data from inside your Hydrogen app.
 - Generate default SEO tags.
 - Improve the loading sequence of your app using Suspense.
 
@@ -247,7 +247,7 @@ You can explore the [Storefront API](https://shopify.dev/api/storefront) and run
 
 Now that you’ve tested your query in the GraphiQL explorer and verified that it works, you can move the query into your Hydrogen app to display the shop name.
 
-Hydrogen offers the [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) hook to fetch data from your storefront from within [server components](/docs/tutorials/react-server-components#component-types). In this step, you'll create a new `Layout` component that renders your shop name, and you'll use the `useShopQuery` hook within `Layout` to pass in a GraphQL query that retrieves your shop's name.
+Hydrogen offers the [`useShopQuery`](/docs/hooks/global/useshopquery) hook to fetch data from your storefront from within [server components](/docs/tutorials/react-server-components#component-types). In this step, you'll create a new `Layout` component that renders your shop name, and you'll use the `useShopQuery` hook within `Layout` to pass in a GraphQL query that retrieves your shop's name.
 
 > Tip:
 > Hydrogen contains a set of Shopify-specific commerce components, hooks, and utilities that help accelerate your development process. You can refer to the [Hydrogen reference](/api/hydrogen) to determine which fields need to be queried for each component.
@@ -354,9 +354,9 @@ The home page renders the name of your shop and a **Hello world!** message:
 
 ## Step 3: Generate SEO tags
 
-Hydrogen includes an [Seo](/api/hydrogen/components/primitive/seo) client component that renders SEO information on a webpage. The `Seo` client component uses the data from Storefront API to generate the `<head>` tags that search engines look for.
+Hydrogen includes an [Seo](/docs/components/primitive/seo) client component that renders SEO information on a webpage. The `Seo` client component uses the data from Storefront API to generate the `<head>` tags that search engines look for.
 
-To generate SEO tags for search engines, add an [`Seo`](/api/hydrogen/components/primitive/seo) component to your layout, and pass the shop `title` and `description` to the `data` prop:
+To generate SEO tags for search engines, add an [`Seo`](/docs/components/primitive/seo) component to your layout, and pass the shop `title` and `description` to the `data` prop:
 
 ```jsx
 // /src/components/Layout.server.jsx
@@ -447,10 +447,10 @@ Collections make it easier for customers to find products by category. For examp
 
 To list some collections on the home page, you’ll create a `FeaturedCollections` component. This component will query for the first three collections on your storefront.
 
-1. Create a new server component called `FeaturedCollections.server.jsx`. Add the [useShopQuery](/api/hydrogen/hooks/global/useshopquery) hook to your component so that you can query the Storefront API:
+1. Create a new server component called `FeaturedCollections.server.jsx`. Add the [useShopQuery](/docs/hooks/global/useshopquery) hook to your component so that you can query the Storefront API:
 
 > Tip:
-> In the following code sample, you’ll notice a reference to a [`Link`](/api/hydrogen/components/framework/link) component. The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all properties available to the `<a>` element are also available to the `Link` component.
+> In the following code sample, you’ll notice a reference to a [`Link`](/docs/components/framework/link) component. The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all properties available to the `<a>` element are also available to the `Link` component.
 
 ```jsx
 // /src/components/FeaturedCollections.server.jsx
@@ -532,7 +532,7 @@ Next, you'll fetch the image associated with each collection.
 In `FeaturedCollections.server.jsx`, update your GraphQL query to retrieve collection images and use an `Image` component to display the image:
 
 > Tip:
-> In the following code sample, you’ll notice a reference to an [`Image`] (/api/hydrogen/components/primitive/image) component. The `Image` component renders an image for the Storefront API's [Image object](https://shopify.dev/api/storefront/latest/objects/image) by using the `data` prop, or a custom location by using the `src` prop.
+> In the following code sample, you’ll notice a reference to an [`Image`] (/docs/components/primitive/image) component. The `Image` component renders an image for the Storefront API's [Image object](https://shopify.dev/api/storefront/latest/objects/image) by using the `data` prop, or a custom location by using the `src` prop.
 
 ```jsx
 // /src/components/FeaturedCollections.server.jsx

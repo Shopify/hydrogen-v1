@@ -478,7 +478,7 @@ In this step, you'll create your first [client component](/docs/tutorials/react-
 Similar to [querying all products and variants that belong to a collection](/docs/tutorials/getting-started/tutorial/collections#step-4-query-products-and-variants), you can set up a GraphQL query to retrieve detailed information about products and variants.
 
 > Tip:
-> In the following code sample, you’ll notice a reference to a [`ProductOptionsProvider`](/api/hydrogen/components/product-variant/productoptionsprovider) component. The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](/api/hydrogen/hooks/product-variant/useproductoptions) hook.
+> In the following code sample, you’ll notice a reference to a [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider) component. The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](/docs/hooks/product-variant/useproductoptions) hook.
 
 1. Create a `ProductDetails` component to display product information, such as the description, title, and image of the product:
 
@@ -655,7 +655,7 @@ Similar to [querying all products and variants that belong to a collection](/doc
 
 ## Step 4: Add a product gallery
 
-In this step, you'll use a [`MediaFile`](/api/hydrogen/components/primitive/mediafile) component to render media for your product pages. The `MediaFile` component renders an `Image`, a `Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the `media` provided as a prop. The `MediaFile` component is also compatible with 3D models.
+In this step, you'll use a [`MediaFile`](/docs/components/primitive/mediafile) component to render media for your product pages. The `MediaFile` component renders an `Image`, a `Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the `media` provided as a prop. The `MediaFile` component is also compatible with 3D models.
 
 ```jsx
 // /src/components/ProductDetails.client.jsx
@@ -757,9 +757,9 @@ The page now renders an image next to the details about the product:
 
 Next, you'll create a product form that includes a variant selector, product price, and buy button:
 
-- The variant selector will use the [`useProductOptions`](/api/hydrogen/hooks/product-variant/useproductoptions) hook to retrieve selected options.
-- The [`ProductPrice`](/api/hydrogen/components/product-variant/productprice) component will render a [`Money`](/api/hydrogen/components/primitive/money) component with the product [`priceRange`](https://shopify.dev/api/storefront/latest/objects/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
-- The [`BuyNowButton`](/api/hydrogen/components/cart/buynowbutton) component will render a button that adds an item to the cart and redirects the custom to checkout.
+- The variant selector will use the [`useProductOptions`](/docs/hooks/product-variant/useproductoptions) hook to retrieve selected options.
+- The [`ProductPrice`](/docs/components/product-variant/productprice) component will render a [`Money`](/docs/components/primitive/money) component with the product [`priceRange`](https://shopify.dev/api/storefront/latest/objects/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
+- The [`BuyNowButton`](/docs/components/cart/buynowbutton) component will render a button that adds an item to the cart and redirects the custom to checkout.
 
 > Tip:
 > Consider styling the buy button to be unique and prominent so that it’s easy for customers to make purchases.

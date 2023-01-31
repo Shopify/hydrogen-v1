@@ -73,7 +73,7 @@ Learn about [displaying performance metrics](/docs/tutorials/analytics/configure
 
 ## Related components
 
-- [`ShopifyAnalytics`](/api/hydrogen/components/framework/shopifyanalytics)
+- [`ShopifyAnalytics`](/docs/components/framework/shopifyanalytics)
 
 ## Next steps
 

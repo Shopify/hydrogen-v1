@@ -18,9 +18,9 @@ All data fetching happens on the server and is never exposed to the client, unle
 
 Hydrogen provides the following ways to fetch data from server components:
 
-- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery): A hook that makes server-only GraphQL queries to the Storefront API.
-- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync): A hook that makes API requests and is the recommended way to make simple fetch calls on the server and the client.
-- [`useQuery`](/api/hydrogen/hooks/global/usequery): A hook that executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs or perform any async tasks.
+- [`useShopQuery`](/docs/hooks/global/useshopquery): A hook that makes server-only GraphQL queries to the Storefront API.
+- [`fetchSync`](/docs/hooks/global/fetchsync): A hook that makes API requests and is the recommended way to make simple fetch calls on the server and the client.
+- [`useQuery`](/docs/hooks/global/usequery): A hook that executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs or perform any async tasks.
 
 To learn how to fetch data from third-party sources, refer to [Data sources](/docs/tutorials/data-sources).
 
@@ -68,7 +68,7 @@ export default function WishListButton({product}) {
 
 ## Fetching data on the client
 
-To make a third-party HTTP request on the client, use the [`fetchSync`](/api/hydrogen/hooks/global/fetchsync) hook within a Suspense boundary:
+To make a third-party HTTP request on the client, use the [`fetchSync`](/docs/hooks/global/fetchsync) hook within a Suspense boundary:
 
 ```js
 // PostDetails.client.jsx
@@ -211,10 +211,10 @@ export default function App() {
 
 ## Related hooks
 
-- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery)
-- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync)
-- [`useQuery`](/api/hydrogen/hooks/global/usequery)
-- [`useServerProps`](/api/hydrogen/hooks/global/useserverprops)
+- [`useShopQuery`](/docs/hooks/global/useshopquery)
+- [`fetchSync`](/docs/hooks/global/fetchsync)
+- [`useQuery`](/docs/hooks/global/usequery)
+- [`useServerProps`](/docs/hooks/global/useserverprops)
 
 ## Next steps
 

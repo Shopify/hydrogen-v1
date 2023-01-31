@@ -13,7 +13,7 @@ The Hydrogen framework uses a [file-based routing system](/docs/tutorials/routin
 
 The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` to `:handle`. [Refer to an example](/docs/tutorials/routing#example).
 
-You can retrieve the `handle` property by using the [`useRouteParams` hook](/api/hydrogen/hooks/framework/userouteparams):
+You can retrieve the `handle` property by using the [`useRouteParams` hook](/docs/hooks/framework/userouteparams):
 
 ```jsx
 // [handle].server.jsx
@@ -57,7 +57,7 @@ By default, when a user hovers or focuses on the link for more than 100ms, a pre
 
 ## Disable prefetching link sources
 
-The [`Link`](/api/hydrogen/components/framework/link) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
+The [`Link`](/docs/components/framework/link) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
 
 If you want to disable link prefetching, then pass `prefetch={false}` to the `Link` component:
 

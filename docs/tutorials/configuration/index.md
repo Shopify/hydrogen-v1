@@ -62,9 +62,9 @@ The following groupings of configuration properties can exist in Hydrogen:
 
 ### `logger`
 
-The default behavior of the [`log` utility](/api/hydrogen/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
+The default behavior of the [`log` utility](/docs/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
 
-You can pass [any method](/api/hydrogen/utilities/log#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
+You can pass [any method](/docs/utilities/log#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
 
 ```tsx
 // hydrogen.config.ts
@@ -209,7 +209,7 @@ export default defineConfig({
 
 ### `shopify`
 
-The `shopify` property contains all the information that your app needs to connect to the Storefront API. This configuration is passed automatically to the [`ShopifyProvider`](/api/hydrogen/components/global/shopifyprovider) component in your app.
+The `shopify` property contains all the information that your app needs to connect to the Storefront API. This configuration is passed automatically to the [`ShopifyProvider`](/docs/components/global/shopifyprovider) component in your app.
 
 ```tsx
 // hydrogen.config.ts
@@ -270,7 +270,7 @@ export default defineConfig({
 
 
 
-The function is called inside the [`ShopifyProvider`](/api/hydrogen/components/global/shopifyprovider) component in your app. This means that Suspense fallbacks are shown while resolving the configuration if a promise is returned.
+The function is called inside the [`ShopifyProvider`](/docs/components/global/shopifyprovider) component in your app. This means that Suspense fallbacks are shown while resolving the configuration if a promise is returned.
 
 > Tip:
 > Consider caching the result of the function to speed up subsequent requests.
@@ -300,7 +300,7 @@ If you don't want the Hydrogen configuration file located at the root of your pr
 
 ## Related components
 
-- [`ShopifyProvider`](/api/hydrogen/components/global/shopifyprovider)
+- [`ShopifyProvider`](/docs/components/global/shopifyprovider)
 
 ## Next steps
 

@@ -79,5 +79,5 @@ The `useDelay` hook returns the result of either `useShopQuery` or `useQuery` af
 
 ## Related hooks
 
-- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery)
-- [`useQuery`](/api/hydrogen/hooks/global/usequery)
+- [`useShopQuery`](/docs/hooks/global/useshopquery)
+- [`useQuery`](/docs/hooks/global/usequery)

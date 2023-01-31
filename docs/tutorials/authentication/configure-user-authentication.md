@@ -11,7 +11,7 @@ Hydrogen includes built-in support for [managing user authentication](/docs/tuto
 
 ## Retrieve a customer access token
 
-You can retrieve a customer access token using the [`useSession`](/api/hydrogen/hooks/framework/usesession) hook. If the `customerAccessToken` isn't defined, then the user isn't logged in.
+You can retrieve a customer access token using the [`useSession`](/docs/hooks/framework/usesession) hook. If the `customerAccessToken` isn't defined, then the user isn't logged in.
 
 ```js
 // component.server.jsx
@@ -35,5 +35,5 @@ Pages that require authentication shouldn't be indexed by bots. For example, bot
 
 ## Related components and hooks
 
-- [`Seo`](/api/hydrogen/components/primitive/seo)
-- [`useSession`](/api/hydrogen/hooks/framework/usesession)
+- [`Seo`](/docs/components/primitive/seo)
+- [`useSession`](/docs/hooks/framework/usesession)

@@ -740,9 +740,9 @@ function ProductGallery({ media }) {
 
 You can make a cart context available to your entire Hydrogen app by wrapping your app in the `CartProvider` component.
 
-The [`CartProvider`](/api/hydrogen/components/cart/cartprovider) component creates a cart object and callbacks that can be accessed by any descendent component using the [`useCart`](/api/hydrogen/hooks/cart/usecart) hook and related hooks. `CartProvider` also carries out any callback props when a relevant action is performed.
+The [`CartProvider`](/docs/components/cart/cartprovider) component creates a cart object and callbacks that can be accessed by any descendent component using the [`useCart`](/docs/hooks/cart/usecart) hook and related hooks. `CartProvider` also carries out any callback props when a relevant action is performed.
 
-In `/src/App.server.jsx`, import the `CartProvider` component and make it a descendent of the [`ShopifyProvider`](/api/hydrogen/components/global/shopifyprovider) component:
+In `/src/App.server.jsx`, import the `CartProvider` component and make it a descendent of the [`ShopifyProvider`](/docs/components/global/shopifyprovider) component:
 
 ```jsx
 // /src/App.server.jsx
