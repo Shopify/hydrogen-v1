@@ -7,7 +7,7 @@ This guide describes how to customize the output of SEO-related tags in your cli
 
 ## Customize SEO at the route level
 
-At the route level, you can customize [the `<head>` tags](/docs/tutorials/seo#seo-client-component) that search engines look for.
+At the route level, you can customize [the `<head>` tags](/docs/tutorials/seo.md#seo-client-component) that search engines look for.
 
 - [Home page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/index.server.tsx)
 - [Pages page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/pages/%5Bhandle%5D.server.tsx)
@@ -107,7 +107,7 @@ export default function App({log, ...serverProps}) {
 
 ## Overwriting title template
 
-In the [Demo Store template](/docs/tutorials/getting-started/templates#demo-store-template), the titles for all pages are `%s - ${data.title}`, where `%s` is the title of children components. If you want to use a different pattern, then you can overwrite the title template for all pages using a `defaultSeo` type `Seo` component, or for a single page by updating the `Head` title.
+In the [Demo Store template](/docs/tutorials/getting-started/templates.md#demo-store-template), the titles for all pages are `%s - ${data.title}`, where `%s` is the title of children components. If you want to use a different pattern, then you can overwrite the title template for all pages using a `defaultSeo` type `Seo` component, or for a single page by updating the `Head` title.
 
 > Note:
 > **Hydrogen** is the default label that displays on the browser tab. You can edit the label by updating the text in the `<title>` tag in `index.html`.
@@ -163,7 +163,7 @@ To imitate the behavior of an SEO bot and show the page content fully from serve
 
 ### Check for custom robots
 
-If you find a bot that's not recognized by Hydrogen's bot detection algorithm, then you can [manually disable streaming](/docs/tutorials/routing/manage-routes#disable-streaming-for-routes) to buffer the response and make the content immediately available to bots:
+If you find a bot that's not recognized by Hydrogen's bot detection algorithm, then you can [manually disable streaming](/docs/tutorials/routing/manage-routes.md#disable-streaming-for-routes) to buffer the response and make the content immediately available to bots:
 
 ```jsx
 // App.server.jsx

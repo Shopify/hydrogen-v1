@@ -132,7 +132,7 @@ The following components render specific pieces of content on a page:
 
 ### Routes
 
-Hydrogen uses [file-based routing](/docs/tutorials/routing). Any pages added to the `src/routes` directory will be automatically registered as routes by the app. The following routes are included in the Demo Store template:
+Hydrogen uses [file-based routing](/docs/tutorials/routing.md). Any pages added to the `src/routes` directory will be automatically registered as routes by the app. The following routes are included in the Demo Store template:
 
 <ul style="column-count: auto;column-width: 12rem;">
 <li><a href="/templates/demo-store/src/routes/account">Account</a></li>

@@ -4,7 +4,7 @@
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-Previously, you [began developing a Hydrogen storefront](/docs/tutorials/getting-started/tutorial/begin). You have a minimal Hydrogen storefront running locally. You’re now ready to fetch data from your storefront.
+Previously, you [began developing a Hydrogen storefront](/docs/tutorials/getting-started/tutorial/begin.md). You have a minimal Hydrogen storefront running locally. You’re now ready to fetch data from your storefront.
 
 In this tutorial, you'll connect your Hydrogen app to your storefront and fetch data using the [Storefront API](https://shopify.dev/api/storefront).
 
@@ -17,7 +17,7 @@ You want to retrieve specific data from your storefront, including your store’
 In this tutorial, you’ll learn how to do the following tasks:
 
 - Make a GraphQL query using the [Shopify Storefront API GraphiQL explorer](/custom-storefronts/tools/graphiql-storefront-api).
-- Implement the [useShopQuery](/docs/hooks/global/useshopquery) hook to fetch storefront data from inside your Hydrogen app.
+- Implement the [useShopQuery](/docs/hooks/global/useshopquery.md) hook to fetch storefront data from inside your Hydrogen app.
 - Generate default SEO tags.
 - Improve the loading sequence of your app using Suspense.
 
@@ -25,7 +25,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 ## Requirements
 
-- You’ve completed the [Begin developing a Hydrogen storefront](/docs/tutorials/getting-started/tutorial/begin) tutorial.
+- You’ve completed the [Begin developing a Hydrogen storefront](/docs/tutorials/getting-started/tutorial/begin.md) tutorial.
 
 ## Sample code
 
@@ -217,7 +217,7 @@ const QUERY = gql`
 ## Step 1: Visit the GraphiQL explorer
 
 > Note:
-> By default, your Hydrogen app is connected to a Demo Store and uses a demo Storefront API access token. For the purposes of this tutorial, you'll use the Demo Store configuration. After you've finished this tutorial series, you can create a new Hydrogen app and [connect it to your own storefront](/docs/tutorials/configuration).
+> By default, your Hydrogen app is connected to a Demo Store and uses a demo Storefront API access token. For the purposes of this tutorial, you'll use the Demo Store configuration. After you've finished this tutorial series, you can create a new Hydrogen app and [connect it to your own storefront](/docs/tutorials/configuration.md).
 
 You can explore the [Storefront API](https://shopify.dev/api/storefront) and run test queries in your Hydrogen app. When you're running the Hydrogen local development server, you can load an interactive GraphiQL explorer that's connected to your shop.
 
@@ -244,16 +244,16 @@ You can explore the [Storefront API](https://shopify.dev/api/storefront) and run
 
 Now that you’ve tested your query in the GraphiQL explorer and verified that it works, you can move the query into your Hydrogen app to display the shop name.
 
-Hydrogen offers the [`useShopQuery`](/docs/hooks/global/useshopquery) hook to fetch data from your storefront from within [server components](/docs/tutorials/react-server-components#component-types). In this step, you'll create a new `Layout` component that renders your shop name, and you'll use the `useShopQuery` hook within `Layout` to pass in a GraphQL query that retrieves your shop's name.
+Hydrogen offers the [`useShopQuery`](/docs/hooks/global/useshopquery.md) hook to fetch data from your storefront from within [server components](/docs/tutorials/react-server-components.md#component-types). In this step, you'll create a new `Layout` component that renders your shop name, and you'll use the `useShopQuery` hook within `Layout` to pass in a GraphQL query that retrieves your shop's name.
 
 > Tip:
 > Hydrogen contains a set of Shopify-specific commerce components, hooks, and utilities that help accelerate your development process. You can refer to the [Hydrogen reference](/api/hydrogen) to determine which fields need to be queried for each component.
 
 ### Create a `Layout` component
 
-Hydrogen is modelled after [React Server Components](/docs/tutorials/react-server-components), an approach that offers an opinionated data-fetching and rendering workflow for React apps. It includes server, client, and shared component types.
+Hydrogen is modelled after [React Server Components](/docs/tutorials/react-server-components.md), an approach that offers an opinionated data-fetching and rendering workflow for React apps. It includes server, client, and shared component types.
 
-The first [server component](/docs/tutorials/react-server-components#component-types) that you’ll build is a layout component. The layout component will be a server component because it doesn't require any client-side interactivity. Server components end in `.server.jsx`.
+The first [server component](/docs/tutorials/react-server-components.md#component-types) that you’ll build is a layout component. The layout component will be a server component because it doesn't require any client-side interactivity. Server components end in `.server.jsx`.
 
 1. Create a new server component named `Layout.server.jsx` and move your GraphQL query to the `useShopQuery` hook:
 
@@ -351,9 +351,9 @@ The home page renders the name of your shop and a **Hello world!** message:
 
 ## Step 3: Generate SEO tags
 
-Hydrogen includes an [Seo](/docs/components/primitive/seo) client component that renders SEO information on a webpage. The `Seo` client component uses the data from Storefront API to generate the `<head>` tags that search engines look for.
+Hydrogen includes an [Seo](/docs/components/primitive/seo.md) client component that renders SEO information on a webpage. The `Seo` client component uses the data from Storefront API to generate the `<head>` tags that search engines look for.
 
-To generate SEO tags for search engines, add an [`Seo`](/docs/components/primitive/seo) component to your layout, and pass the shop `title` and `description` to the `data` prop:
+To generate SEO tags for search engines, add an [`Seo`](/docs/components/primitive/seo.md) component to your layout, and pass the shop `title` and `description` to the `data` prop:
 
 ```jsx
 // /src/components/Layout.server.jsx
@@ -444,10 +444,10 @@ Collections make it easier for customers to find products by category. For examp
 
 To list some collections on the home page, you’ll create a `FeaturedCollections` component. This component will query for the first three collections on your storefront.
 
-1. Create a new server component called `FeaturedCollections.server.jsx`. Add the [useShopQuery](/docs/hooks/global/useshopquery) hook to your component so that you can query the Storefront API:
+1. Create a new server component called `FeaturedCollections.server.jsx`. Add the [useShopQuery](/docs/hooks/global/useshopquery.md) hook to your component so that you can query the Storefront API:
 
 > Tip:
-> In the following code sample, you’ll notice a reference to a [`Link`](/docs/components/framework/link) component. The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all properties available to the `<a>` element are also available to the `Link` component.
+> In the following code sample, you’ll notice a reference to a [`Link`](/docs/components/framework/link.md) component. The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all properties available to the `<a>` element are also available to the `Link` component.
 
 ```jsx
 // /src/components/FeaturedCollections.server.jsx
@@ -602,7 +602,7 @@ The home page renders the following featured collections section that contains t
 
 ## Step 5: Improve the loading sequence with Suspense
 
-[Suspense](/docs/tutorials/streaming-ssr) is a feature of React that governs the appearance and behavior of placeholder content inside components while asynchronous data-fetching is in progress. React 18 introduced [Suspense for data fetching to complement streaming SSR](https://nextjs.org/docs/advanced-features/react-18/streaming). Learn more about [how to use Suspense](/docs/tutorials/best-practices/performance#suspense-boundaries).
+[Suspense](/docs/tutorials/streaming-ssr.md) is a feature of React that governs the appearance and behavior of placeholder content inside components while asynchronous data-fetching is in progress. React 18 introduced [Suspense for data fetching to complement streaming SSR](https://nextjs.org/docs/advanced-features/react-18/streaming). Learn more about [how to use Suspense](/docs/tutorials/best-practices/performance.md#suspense-boundaries).
 
 `FeaturedCollections` is a server component that fetches data from the Storefront API. Until the component finishes loading, React looks for the closest `Suspense` boundary to display the specified loading fallback.
 

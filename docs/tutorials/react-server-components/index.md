@@ -9,7 +9,7 @@ Hydrogen is modelled after [React Server Components](https://reactjs.org/blog/20
 This guide provides information about how React Server Components work in the context of Hydrogen.
 
 > Note:
-> Hydrogen's [implementation](/docs/tutorials/react-server-components/work-with-rsc) of server components is a modified version of React Server Components, which are currently in [Alpha](https://reactjs.org/blog/2022/06/15/react-labs-what-we-have-been-working-on-june-2022.html#server-components). Shopify provides a layer of abstractions to make server components stable for use in Hydrogen apps.
+> Hydrogen's [implementation](/docs/tutorials/react-server-components/work-with-rsc.md) of server components is a modified version of React Server Components, which are currently in [Alpha](https://reactjs.org/blog/2022/06/15/react-labs-what-we-have-been-working-on-june-2022.html#server-components). Shopify provides a layer of abstractions to make server components stable for use in Hydrogen apps.
 >
 > Shopify is currently working with Vercel and the React team to align on enhancements to server components, and will release a future version of Hydrogen with tools for migrating existing Hydrogen apps.
 
@@ -22,7 +22,7 @@ For example, the following React element tree is [composed of React components](
 ![A diagram that illustrates a React element tree composed of server, client, and shared components](https://shopify.dev/assets/custom-storefronts/hydrogen/react-element-tree.png)
 
 > Note:
-> You can't import a server component into a client component. However, you can pass a server component into a client component using [passthrough props](/docs/components#customizing-hydrogen-components).
+> You can't import a server component into a client component. However, you can pass a server component into a client component using [passthrough props](/docs/components.md#customizing-hydrogen-components).
 
 ### Component types
 
@@ -218,5 +218,5 @@ export {Widget} from './Widget.server.jsx'
 
 ## Next steps
 
-- Learn how to [work with React Server Components](/docs/tutorials/react-server-components/work-with-rsc).
-- Improve your app's loading performance with [streaming SSR and Suspense](/docs/tutorials/streaming-ssr).
+- Learn how to [work with React Server Components](/docs/tutorials/react-server-components/work-with-rsc.md).
+- Improve your app's loading performance with [streaming SSR and Suspense](/docs/tutorials/streaming-ssr.md).

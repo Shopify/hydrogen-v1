@@ -3,12 +3,12 @@
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
-Hydrogen includes built-in support for [managing user authentication](/docs/tutorials/authentication), including account creation, login, password reset, and logout. This guide describes additional configurations for user authentication.
+Hydrogen includes built-in support for [managing user authentication](/docs/tutorials/authentication.md), including account creation, login, password reset, and logout. This guide describes additional configurations for user authentication.
 
 
 ## Retrieve a customer access token
 
-You can retrieve a customer access token using the [`useSession`](/docs/hooks/framework/usesession) hook. If the `customerAccessToken` isn't defined, then the user isn't logged in.
+You can retrieve a customer access token using the [`useSession`](/docs/hooks/framework/usesession.md) hook. If the `customerAccessToken` isn't defined, then the user isn't logged in.
 
 ```js
 // component.server.jsx
@@ -32,5 +32,5 @@ Pages that require authentication shouldn't be indexed by bots. For example, bot
 
 ## Related components and hooks
 
-- [`Seo`](/docs/components/primitive/seo)
-- [`useSession`](/docs/hooks/framework/usesession)
+- [`Seo`](/docs/components/primitive/seo.md)
+- [`useSession`](/docs/hooks/framework/usesession.md)

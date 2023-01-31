@@ -4,7 +4,7 @@
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-Hydrogen includes [support for analytics](/docs/tutorials/analytics) that give you insight into how customers are interacting with a custom storefront.
+Hydrogen includes [support for analytics](/docs/tutorials/analytics.md) that give you insight into how customers are interacting with a custom storefront.
 
 This guide describes how to subscribe to the default events that Hydrogen offers, configure custom events, send analytics data from the server-side, and unsubscribe from events. It also provides example implementations of client analytics connectors, and shows how to write an end-to-end (E2E) for testing analytics connectors.
 
@@ -92,7 +92,7 @@ useEffect(() => {
 
 ## Configure custom events
 
-Aside from the [default events](/docs/tutorials/analytics#default-events) that Hydrogen supports, you can also configure custom events. For example, you might want to configure a custom event that tracks the pages where a promotional banner is being clicked the most.
+Aside from the [default events](/docs/tutorials/analytics.md#default-events) that Hydrogen supports, you can also configure custom events. For example, you might want to configure a custom event that tracks the pages where a promotional banner is being clicked the most.
 
 1. Emit a custom event by using the publish method and specifying a custom event name:
 
@@ -334,11 +334,11 @@ To send analytics data from the server-side, complete the following steps:
 
 
     > Tip:
-    > Refer to the [request function parameters](/docs/tutorials/analytics#parameters) for `ServerAnalyticsConnector`.
+    > Refer to the [request function parameters](/docs/tutorials/analytics.md#parameters) for `ServerAnalyticsConnector`.
 
 ## Performance metrics
 
-Hydrogen's [performance metrics](/docs/tutorials/analytics) provide insight into how fast pages are loading in your Hydrogen storefront.
+Hydrogen's [performance metrics](/docs/tutorials/analytics.md) provide insight into how fast pages are loading in your Hydrogen storefront.
 
 ### Opt-in to page load performance metrics
 
@@ -428,7 +428,7 @@ export function GoogleAnalytics() {
 
 
 > Note:
-> The code calls `loadScript` instead of [`useLoadScript`](/docs/hooks/primitive/useloadscript). `useLoadScript` is a hook and can't be called inside `useEffect`.
+> The code calls `loadScript` instead of [`useLoadScript`](/docs/hooks/primitive/useloadscript.md). `useLoadScript` is a hook and can't be called inside `useEffect`.
 
 The following example shows an implementation of a client analytics connector using the [getanalytics.io Google Tag Manager package](https://getanalytics.io/plugins/google-tag-manager/):
 

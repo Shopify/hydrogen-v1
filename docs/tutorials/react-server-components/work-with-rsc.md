@@ -4,7 +4,7 @@
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-This guide provides information about working with React Server Components in your Hydrogen app. To learn how React Server Components work in the context of Hydrogen, refer to [React Server Components overview](/docs/tutorials/react-server-components).
+This guide provides information about working with React Server Components in your Hydrogen app. To learn how React Server Components work in the context of Hydrogen, refer to [React Server Components overview](/docs/tutorials/react-server-components.md).
 
 > Note:
 > React Server Components are currently in Alpha. However, Hydrogen includes a built-in layer of abstraction that provides stability, regardless of the state of React Server Components.
@@ -15,11 +15,11 @@ All data fetching happens on the server and is never exposed to the client, unle
 
 Hydrogen provides the following ways to fetch data from server components:
 
-- [`useShopQuery`](/docs/hooks/global/useshopquery): A hook that makes server-only GraphQL queries to the Storefront API.
-- [`fetchSync`](/docs/hooks/global/fetchsync): A hook that makes API requests and is the recommended way to make simple fetch calls on the server and the client.
-- [`useQuery`](/docs/hooks/global/usequery): A hook that executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs or perform any async tasks.
+- [`useShopQuery`](/docs/hooks/global/useshopquery.md): A hook that makes server-only GraphQL queries to the Storefront API.
+- [`fetchSync`](/docs/hooks/global/fetchsync.md): A hook that makes API requests and is the recommended way to make simple fetch calls on the server and the client.
+- [`useQuery`](/docs/hooks/global/usequery.md): A hook that executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs or perform any async tasks.
 
-To learn how to fetch data from third-party sources, refer to [Data sources](/docs/tutorials/data-sources).
+To learn how to fetch data from third-party sources, refer to [Data sources](/docs/tutorials/data-sources.md).
 
 ### Example
 
@@ -65,7 +65,7 @@ export default function WishListButton({product}) {
 
 ## Fetching data on the client
 
-To make a third-party HTTP request on the client, use the [`fetchSync`](/docs/hooks/global/fetchsync) hook within a Suspense boundary:
+To make a third-party HTTP request on the client, use the [`fetchSync`](/docs/hooks/global/fetchsync.md) hook within a Suspense boundary:
 
 ```js
 // PostDetails.client.jsx
@@ -136,7 +136,7 @@ function Details() {
 > Note:
 > The functionality described in this section is unique to Hydrogen's React Server Components implementation.
 
-Hydrogen provides a [`useServerProps()` hook with a `setServerProps()` helper function](/docs/tutorials/server-props), which allows you to re-render server components with new data. You can use `setServerProps()` for UI states that shouldn't persist in the URL. Any data set with `setServerProps()` will be reset when the user navigates to a new page.
+Hydrogen provides a [`useServerProps()` hook with a `setServerProps()` helper function](/docs/tutorials/server-props.md), which allows you to re-render server components with new data. You can use `setServerProps()` for UI states that shouldn't persist in the URL. Any data set with `setServerProps()` will be reset when the user navigates to a new page.
 
 ## Using `Context` in React Server Components
 
@@ -208,12 +208,12 @@ export default function App() {
 
 ## Related hooks
 
-- [`useShopQuery`](/docs/hooks/global/useshopquery)
-- [`fetchSync`](/docs/hooks/global/fetchsync)
-- [`useQuery`](/docs/hooks/global/usequery)
-- [`useServerProps`](/docs/hooks/global/useserverprops)
+- [`useShopQuery`](/docs/hooks/global/useshopquery.md)
+- [`fetchSync`](/docs/hooks/global/fetchsync.md)
+- [`useQuery`](/docs/hooks/global/usequery.md)
+- [`useServerProps`](/docs/hooks/global/useserverprops.md)
 
 ## Next steps
 
-- Improve your app's loading performance with [streaming SSR and Suspense](/docs/tutorials/streaming-ssr).
-- Learn about how Hydrogen consumes data from different [sources](/docs/tutorials/data-sources).
+- Improve your app's loading performance with [streaming SSR and Suspense](/docs/tutorials/streaming-ssr.md).
+- Learn about how Hydrogen consumes data from different [sources](/docs/tutorials/data-sources.md).

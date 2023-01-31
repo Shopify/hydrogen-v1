@@ -4,7 +4,7 @@
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-Hydrogen's [Demo Store template](/docs/tutorials/getting-started/templates) is styled using the [Tailwind CSS](https://tailwindcss.com/) utility library. This guide describes the benefits of using Tailwind and how to remove it if you prefer to use another CSS framework.
+Hydrogen's [Demo Store template](/docs/tutorials/getting-started/templates.md) is styled using the [Tailwind CSS](https://tailwindcss.com/) utility library. This guide describes the benefits of using Tailwind and how to remove it if you prefer to use another CSS framework.
 
 ## How it works
 
@@ -15,7 +15,7 @@ You can build with Tailwind's library or use other methods of styling like vanil
 
 ## Tailwind
 
-Tailwind is a CSS framework that is composed of classes. It offers developers a set of guardrails by providing a limited set of spacing, color, and responsive layout utilities. If you don't want to use Tailwind, you can [remove it](/docs/tutorials/css-support/remove-tailwind)
+Tailwind is a CSS framework that is composed of classes. It offers developers a set of guardrails by providing a limited set of spacing, color, and responsive layout utilities. If you don't want to use Tailwind, you can [remove it](/docs/tutorials/css-support/remove-tailwind.md)
 
 ### Styling components
 
@@ -51,12 +51,12 @@ If you use Tailwind with [Visual Studio Code](https://code.visualstudio.com/), t
 
 ## Custom fonts
 
-If you want to use a font that's not included in Shopify's font library, then you can use fonts from third-party solutions such as [Typekit](https://fonts.adobe.com/fonts). Learn how to [create custom fonts](/docs/tutorials/css-support/create-custom-fonts)
+If you want to use a font that's not included in Shopify's font library, then you can use fonts from third-party solutions such as [Typekit](https://fonts.adobe.com/fonts). Learn how to [create custom fonts](/docs/tutorials/css-support/create-custom-fonts.md)
 
 ## Using CSS
 
-Hydrogen collects styles for each CSS file imported in your client and server components. You can [modify the modes](/docs/tutorials/css-support/import-css-in-rsc) for CSS support.
+Hydrogen collects styles for each CSS file imported in your client and server components. You can [modify the modes](/docs/tutorials/css-support/import-css-in-rsc.md) for CSS support.
 
 ## Next steps
 
-- Learn how to [modify the modes](/docs/tutorials/css-support/import-css-in-rsc) for CSS support.
+- Learn how to [modify the modes](/docs/tutorials/css-support/import-css-in-rsc.md) for CSS support.

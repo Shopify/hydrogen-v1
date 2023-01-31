@@ -114,5 +114,5 @@ When a `Suspense` component is wrapped around a group of components that fetch d
 
 ## Next steps
 
-- Learn about [React Server Components](/docs/tutorials/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [work with React Server Components](/docs/tutorials/react-server-components/work-with-rsc) in your Hydrogen app.
+- Learn about [React Server Components](/docs/tutorials/react-server-components.md), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to [work with React Server Components](/docs/tutorials/react-server-components/work-with-rsc.md) in your Hydrogen app.

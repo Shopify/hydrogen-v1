@@ -4,13 +4,13 @@
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-As you build your Hydrogen app with [React Server Components](/docs/tutorials/react-server-components), you might need to update `props` on the server. Sharing data between the client and server is important for common tasks, such as [page routing](/docs/tutorials/routing).
+As you build your Hydrogen app with [React Server Components](/docs/tutorials/react-server-components.md), you might need to update `props` on the server. Sharing data between the client and server is important for common tasks, such as [page routing](/docs/tutorials/routing.md).
 
 This guide describes how to manage server props during your development process.
 
 ## How server props work
 
-Server `props` are props that are passed to your root server component route. Hydrogen provides a [`useServerProps`](/docs/hooks/global/useserverprops) hook with a `setServerProps` helper function, which allows you to re-render the server component with new `props`. This is useful to paginate within collections, switch product variants, or do anything that requires new data from the server.
+Server `props` are props that are passed to your root server component route. Hydrogen provides a [`useServerProps`](/docs/hooks/global/useserverprops.md) hook with a `setServerProps` helper function, which allows you to re-render the server component with new `props`. This is useful to paginate within collections, switch product variants, or do anything that requires new data from the server.
 
 For example, you can use geolocation co-ordinates as server props to provide a new hydrated experience for the current location:
 
@@ -87,9 +87,9 @@ When the user navigates to a new page in your app, the server props will reset. 
 
 ## Related hooks
 
-- [`useServerProps`](/docs/hooks/global/useserverprops)
+- [`useServerProps`](/docs/hooks/global/useserverprops.md)
 
 ## Next steps
 
-- Learn about [React Server Components](/docs/tutorials/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [work with React Server Components](/docs/tutorials/react-server-components/work-with-rsc).
+- Learn about [React Server Components](/docs/tutorials/react-server-components.md), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to [work with React Server Components](/docs/tutorials/react-server-components/work-with-rsc.md).

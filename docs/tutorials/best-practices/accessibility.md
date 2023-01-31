@@ -93,7 +93,7 @@ The following sections provides best practices for specific elements of your Hyd
 
 ### Controls
 
-* The [`Link` component](/docs/components/framework/link) is used to navigate between routes. Your storefront should use links for navigation, loading a new page, or shifting keyboard focus from one element to another.
+* The [`Link` component](/docs/components/framework/link.md) is used to navigate between routes. Your storefront should use links for navigation, loading a new page, or shifting keyboard focus from one element to another.
 * The `button` element is used for on-screen actions such as launching a modal window and sorting a data table.
 * The destination of your link should be clear from the text alone.
 * Links that open a new window include a warning. Your storefront should include a visual icon with alternative text to help screen reader and sighted, keyboard-only users understand that clicking the link opens a new window.
@@ -129,11 +129,11 @@ Media can be distracting, disruptive, or unexpected. All the media in your store
 
 ### Images and icons
 
-- The [`Image` component](/docs/components/primitive/image) is used to render an `image` for the Storefront API's [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
+- The [`Image` component](/docs/components/primitive/image.md) is used to render an `image` for the Storefront API's [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
 
 ### Video
 
-- The [`Video` component](/docs/components/primitive/video) is used to render a `video` for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video).
+- The [`Video` component](/docs/components/primitive/video.md) is used to render a `video` for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video).
 - Closed captions are available.
 - Descriptive audio is available.
 - If an auto-playing video is required, including videos in slideshows, then the sound should be muted.
@@ -173,4 +173,4 @@ Dynamic components such as slideshows, predictive search, modal windows, and tab
 
 - Review the [Polaris guidelines for accessibility](https://polaris.shopify.com/foundations/accessibility).
 - Learn how to design apps with [keyboard accessibility](https://www.shopify.com/partners/blog/keyboard-accessibility) in mind.
-- Learn about [best practices for making your Hydrogen custom storefront performant](/docs/tutorials/best-practices/performance).
+- Learn about [best practices for making your Hydrogen custom storefront performant](/docs/tutorials/best-practices/performance.md).

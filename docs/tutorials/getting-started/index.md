@@ -11,7 +11,7 @@ Learn about the different resources that are available to help you get started w
 Get started quickly or follow an end-to-end tutorial to learn how to build a Hydrogen storefront.
 
 - [Learn how to scaffold a new Hydrogen app and start a development server](/docs/tutorials/getting-started/quickstart.md).
-- [Follow the Hydrogen tutorial series to go from "Hello World" to a fully built out Shopify custom storefront](/docs/tutorials/getting-started/tutorial/).
+- [Follow the Hydrogen tutorial series to go from "Hello World" to a fully built out Shopify custom storefront](/docs/tutorials/getting-started/tutorial/index.md).
 
 ## Reference
 

@@ -19,16 +19,16 @@ Hydrogen is the approach you use to build a custom storefront. It contains a fra
 ![A diagram that shows what Hydrogen includes: Vite offerings and Shopify-specific components, hooks, and utilities](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-overview.png)
 
 > Note:
-> The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](/docs/tutorials/react-server-components), which affects SSR.
+> The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](/docs/tutorials/react-server-components.md), which affects SSR.
 
 ## Templates
 
 Hydrogen provides the following templates to help you get started building Shopify custom storefronts:
 
-- [**Hello World**](/docs/tutorials/getting-started/templates#hello-world-template): A minimal template for developers who want to build their Hydrogen storefront from the very beginning.
-- [**Demo Store**](/docs/tutorials/getting-started/templates#demo-store-template): The default template installed when creating a new Hydrogen storefront. It’s a full-featured Hydrogen storefront that uses live production data provided by Shopify. The demo store is an opinionated, production-ready Hydrogen storefront with the full purchase journey out-of-the-box.
+- [**Hello World**](/docs/tutorials/getting-started/templates.md#hello-world-template): A minimal template for developers who want to build their Hydrogen storefront from the very beginning.
+- [**Demo Store**](/docs/tutorials/getting-started/templates.md#demo-store-template): The default template installed when creating a new Hydrogen storefront. It’s a full-featured Hydrogen storefront that uses live production data provided by Shopify. The demo store is an opinionated, production-ready Hydrogen storefront with the full purchase journey out-of-the-box.
 
-For more information, refer to [Hydrogen templates](/docs/tutorials/getting-started/templates).
+For more information, refer to [Hydrogen templates](/docs/tutorials/getting-started/templates.md).
 
 <figure class="figure">
   <img src="/assets/custom-storefronts/hydrogen/hydrogen-starter-template.gif" alt="The Demo Store template" />
@@ -39,7 +39,7 @@ For more information, refer to [Hydrogen templates](/docs/tutorials/getting-star
 
 Hydrogen is built and optimized to use data coming from Shopify's [Storefront API](https://shopify.dev/api/storefront). The shape of the data passed to components, hooks, and utilities corresponds and conforms to the structure based on the GraphQL types from the Storefront API.
 
-Hydrogen can also support data from third-party sources. If you want to use Hydrogen components with a third-party data source, then data from the third-party source must first be transformed into the types expected by the Hydrogen components, hooks, and utilities, and then passed on to the components, hooks, and utilities.{% if includes.prop == 'concept' %} Learn more about [working with third-party data sources](/docs/tutorials/data-sources/work-with-3p-data-sources).{% endif %}
+Hydrogen can also support data from third-party sources. If you want to use Hydrogen components with a third-party data source, then data from the third-party source must first be transformed into the types expected by the Hydrogen components, hooks, and utilities, and then passed on to the components, hooks, and utilities.{% if includes.prop == 'concept' %} Learn more about [working with third-party data sources](/docs/tutorials/data-sources/work-with-3p-data-sources.md).{% endif %}
 
 ![A diagram that shows how the Hydrogen components, hooks, and utilities consume data](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-data-sources.png)
 
@@ -47,11 +47,11 @@ Hydrogen can also support data from third-party sources. If you want to use Hydr
 
 Hydrogen's architecture enables a mix of static and dynamic data fetching between client- and server-side for optimized performance. It's built on top of newer web technology, and takes a modern approach to web development to offer the following:
 
-- **[Built-in caching controls](/docs/tutorials/querying/cache)** to handle dynamic content and minimize API calls for speed and performance.
+- **[Built-in caching controls](/docs/tutorials/querying/cache.md)** to handle dynamic content and minimize API calls for speed and performance.
 
-- **[Server-side rendering](/docs/tutorials/streaming-ssr)** to optimize the initial load.
+- **[Server-side rendering](/docs/tutorials/streaming-ssr.md)** to optimize the initial load.
 
-- **[React Server Components](/docs/tutorials/react-server-components)**, an opinionated data-fetching and rendering flow for React apps. React Server Components offer an improved development experience. Components render fast, which allows you to see your work instantly as you’re building it.
+- **[React Server Components](/docs/tutorials/react-server-components.md)**, an opinionated data-fetching and rendering flow for React apps. React Server Components offer an improved development experience. Components render fast, which allows you to see your work instantly as you’re building it.
 
 ## Request workflow for Hydrogen apps
 
@@ -61,13 +61,13 @@ The following diagram shows the request workflow for Hydrogen apps, based on the
 
 ### Node.js runtime
 
-The Hydrogen app is hosted on a Node.js platform like Heroku, Vercel, or Netlify. If you've [generated a Node.js server](/docs/tutorials/deployment#deploy-to-node-js), then you can run it inside a [Docker container](/docs/tutorials/deployment#deploy-to-docker) like GCP, AWS, Azure, or Fly.io.
+The Hydrogen app is hosted on a Node.js platform like Heroku, Vercel, or Netlify. If you've [generated a Node.js server](/docs/tutorials/deployment.md#deploy-to-node-js), then you can run it inside a [Docker container](/docs/tutorials/deployment.md#deploy-to-docker) like GCP, AWS, Azure, or Fly.io.
 
 By default, Hydrogen includes a [`@shopify/hydrogen/platforms/node`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) package, which is a [Connect-based](https://github.com/senchalabs/connect) Node.js server. Alternatively, you can use your own server.
 
 ### Worker (v8) runtime
 
-The Hydrogen app is hosted on a worker platform like [Oxygen](/docs/tutorials/deployment#deploy-to-oxygen), [Netlify](/docs/tutorials/deployment#deploy-to-netlify), [Vercel](/docs/tutorials/deployment#deploy-to-vercel), or [Cloudflare](/docs/tutorials/deployment#deploy-to-cloudflare-workers).
+The Hydrogen app is hosted on a worker platform like [Oxygen](/docs/tutorials/deployment.md#deploy-to-oxygen), [Netlify](/docs/tutorials/deployment.md#deploy-to-netlify), [Vercel](/docs/tutorials/deployment.md#deploy-to-vercel), or [Cloudflare](/docs/tutorials/deployment.md#deploy-to-cloudflare-workers).
 
 By default, Hydrogen includes a [`@shopify/hydrogen/platforms/worker`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/worker.ts) package for server-side rendering. The Cache API and KV API are powered by Oxygen, Cloudflare, or another runtime adapter.
 
@@ -76,7 +76,7 @@ Hydrogen includes the following default entry points for your app:
 - **Client entry point**: [`@shopify/hydrogen/entry-client`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/entry-client.tsx), which is included in [`index.html`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/index.html) and used for hydration purposes
 - **Server entry point**: [`App.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/App.server.jsx)
 
-You can [configure the default entry points](/docs/tutorials/data-sources/configure-default-entry-points) for your app.
+You can [configure the default entry points](/docs/tutorials/data-sources/configure-default-entry-points.md) for your app.
 ## Oxygen
 
 [Oxygen](/custom-storefronts/oxygen) is Shopify's recommended deployment platform for Hydrogen storefronts. Oxygen removes the need to maintain server infrastructure, and enables you to manage and deploy Hydrogen storefronts. You can deploy different Hydrogen storefronts to Oxygen environments, enabling you to preview and share different versions of storefronts.
@@ -87,6 +87,6 @@ Hydrogen can only be used to build Shopify web storefronts. Currently, Hydrogen 
 
 ## Next steps
 
-- [Get started](/docs/tutorials/getting-started/) with Hydrogen and begin building a custom storefront.
-- Learn about [React Server Components](/docs/tutorials/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [deploy your Hydrogen storefront](/docs/tutorials/deployment) to Oxygen and other runtimes.
+- [Get started](/docs/tutorials/getting-started/index.md) with Hydrogen and begin building a custom storefront.
+- Learn about [React Server Components](/docs/tutorials/react-server-components.md), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to [deploy your Hydrogen storefront](/docs/tutorials/deployment.md) to Oxygen and other runtimes.

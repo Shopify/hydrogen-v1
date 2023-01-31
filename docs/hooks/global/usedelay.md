@@ -76,5 +76,5 @@ The `useDelay` hook returns the result of either `useShopQuery` or `useQuery` af
 
 ## Related hooks
 
-- [`useShopQuery`](/docs/hooks/global/useshopquery)
-- [`useQuery`](/docs/hooks/global/usequery)
+- [`useShopQuery`](/docs/hooks/global/useshopquery.md)
+- [`useQuery`](/docs/hooks/global/usequery.md)

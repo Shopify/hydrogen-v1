@@ -10,7 +10,7 @@ This guide describes best practices for making your Hydrogen custom storefront p
 
 ## React Server Components
 
-Hydrogen is modelled after [React Server Components](/docs/tutorials/react-server-components), an approach that offers an opinionated data-fetching and rendering workflow for React apps.
+Hydrogen is modelled after [React Server Components](/docs/tutorials/react-server-components.md), an approach that offers an opinionated data-fetching and rendering workflow for React apps.
 
 As you develop your Hydrogen custom storefront, you'll need to determine what to render on the server, what to the render on the client, and what to render on both the server and client. Making the right choices will result in performance benefits.
 
@@ -113,15 +113,15 @@ Generally, you don't need to convert the entire component into a client componen
 
 ## Data fetching
 
-Delivering fast server-side responses requires fast and efficient [first-party (Shopify)](/docs/tutorials/data-sources#shopify-data-source) and [third-party data access](/docs/tutorials/data-sources/work-with-3p-data-sources).
+Delivering fast server-side responses requires fast and efficient [first-party (Shopify)](/docs/tutorials/data-sources.md#shopify-data-source) and [third-party data access](/docs/tutorials/data-sources/work-with-3p-data-sources.md).
 
 ### First-party (Shopify) data source
 
-Consider [deploying your Hydrogen custom storefront on Oxygen](/docs/tutorials/deployment#deploy-to-oxygen), Shopify's recommended deployment platform for Hydrogen storefronts. Oxygen provides caching out of the box for routes and sub-requests.
+Consider [deploying your Hydrogen custom storefront on Oxygen](/docs/tutorials/deployment.md#deploy-to-oxygen), Shopify's recommended deployment platform for Hydrogen storefronts. Oxygen provides caching out of the box for routes and sub-requests.
 
 ### Third-party data source
 
-If you're fetching from a third-party data source, then the runtime exposes the standard [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) enhanced with smart cache defaults and [configurable caching strategies](/docs/tutorials/querying/cache).
+If you're fetching from a third-party data source, then the runtime exposes the standard [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) enhanced with smart cache defaults and [configurable caching strategies](/docs/tutorials/querying/cache.md).
 
 The following example shows how to fetch from a third-party data source and make sure that customers get the quickest response possible while also displaying the latest data:
 
@@ -140,13 +140,13 @@ function MyServerComponent() {
 
 ### Caching and stale-while-revalidate
 
-[Caching](/docs/tutorials/querying/cache) is a fundamental building block of a good shopping experience. By configuring `maxAge` and `staleWhileRevalidate`, you have full control over data freshness and the revalidation strategy.
+[Caching](/docs/tutorials/querying/cache.md) is a fundamental building block of a good shopping experience. By configuring `maxAge` and `staleWhileRevalidate`, you have full control over data freshness and the revalidation strategy.
 
 For example, if a response is considered stale due to being older than `maxAge`, but it's still within the additional time window provided by `staleWhileRevalidate`, then the response is used. The data is also asynchronously revalidated in preparation for the next request. This keeps your content fresh and your store performant.
 
 If a stale response falls outside the `staleWhileRevalidate` window, then the response is revalidated before being delivered.
 
-Hydrogen's [caching strategies](/docs/tutorials/querying/cache#caching-strategies) include `maxAge` and `staleWhileRevalidate` values by default:
+Hydrogen's [caching strategies](/docs/tutorials/querying/cache.md#caching-strategies) include `maxAge` and `staleWhileRevalidate` values by default:
 
 ```js
 // data-fetching-caching-strategies.js
@@ -213,15 +213,15 @@ export default function Example() {
 
 
 > Note:
-> Sub-request caching is disabled by default during development. To learn how to enable sub-request caching, refer to [Sub-request caching](/docs/tutorials/querying/cache#sub-request-caching).
+> Sub-request caching is disabled by default during development. To learn how to enable sub-request caching, refer to [Sub-request caching](/docs/tutorials/querying/cache.md#sub-request-caching).
 
 ### Avoid overfetching
 
 Requesting too much data from the Storefront API or from other resources can slow down your Hydrogen storefront. You should make sure that your Hydrogen app is only requesting that data it needs to render a route.
 
-To help you request only the data that you need, Hydrogen includes a [`log`](/docs/utilities/log) utility that identifies unused data returned from [`useShopQuery`](/docs/hooks/global/useshopquery). The `log` utility prints unused query properties in the server console to highlight potential data over-fetching.
+To help you request only the data that you need, Hydrogen includes a [`log`](/docs/utilities/log.md) utility that identifies unused data returned from [`useShopQuery`](/docs/hooks/global/useshopquery.md). The `log` utility prints unused query properties in the server console to highlight potential data over-fetching.
 
-To enable logging for unused query properties, set the `logger.showUnusedQueryProperties` option to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration#logger).
+To enable logging for unused query properties, set the `logger.showUnusedQueryProperties` option to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration.md#logger).
 
 Then, visit your terminal that's running the development server to see any notices printed by the utility:
 
@@ -244,9 +244,9 @@ Examine the list of fields above to confirm that they are being used
 
 ## Pages and subrequests
 
-Hydrogen doesn't require that all requests are server-rendered. [Routes and subrequests](/docs/tutorials/routing) with static or infrequently updated content can be served from the edge.
+Hydrogen doesn't require that all requests are server-rendered. [Routes and subrequests](/docs/tutorials/routing.md) with static or infrequently updated content can be served from the edge.
 
-For example, a marketing page that’s typically static can be [cached](/docs/tutorials/querying/cache), served directly from the CDN edge, and asynchronously revalidated with the help of the `CacheLong()` caching strategy:
+For example, a marketing page that’s typically static can be [cached](/docs/tutorials/querying/cache.md), served directly from the CDN edge, and asynchronously revalidated with the help of the `CacheLong()` caching strategy:
 
 ```js
 // routes/products/[handle].server.jsx
@@ -451,7 +451,7 @@ function ProductPage() {
 
 Sometimes it makes sense to split queries, and other times it makes more sense to combine and re-use queries. You can experiment with combining or splitting your queries to see what approach works better for your use case.
 
-Hydrogen de-duplicates identical requests made to [`fetchSync`](/docs/hooks/global/fetchsync), [`useShopQuery`](/docs/hooks/global/useshopquery) and [`useQuery`](/docs/hooks/global/usequery). This means that if you fetch a data resource in one component, then fetching an identical data resource in another component won't result in an additional API request.
+Hydrogen de-duplicates identical requests made to [`fetchSync`](/docs/hooks/global/fetchsync.md), [`useShopQuery`](/docs/hooks/global/useshopquery.md) and [`useQuery`](/docs/hooks/global/usequery.md). This means that if you fetch a data resource in one component, then fetching an identical data resource in another component won't result in an additional API request.
 
 You can use this behavior to your advantage. For example, the following components request very similar data, but they're not identical:
 
@@ -535,7 +535,7 @@ export default function ProductVendor() {
 
 ### Use a preload cache
 
-Hydrogen offers a [preload cache](/docs/tutorials/querying/preloaded-queries) that you should enable for non-personalized data resources. This allows Hydrogen to start loading all of the required resources for a given page immediately, rather than after the entire app tree has been resolved and rendered.
+Hydrogen offers a [preload cache](/docs/tutorials/querying/preloaded-queries.md) that you should enable for non-personalized data resources. This allows Hydrogen to start loading all of the required resources for a given page immediately, rather than after the entire app tree has been resolved and rendered.
 
 ```tsx
 // components/Marketing.server.jsx
@@ -589,4 +589,4 @@ export default function Product() {
 
 ## Next steps
 
-- Learn about [best practices for making your Hydrogen custom storefront accessible](/docs/tutorials/best-practices/accessibility).
+- Learn about [best practices for making your Hydrogen custom storefront accessible](/docs/tutorials/best-practices/accessibility.md).
