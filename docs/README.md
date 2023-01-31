@@ -1,3 +1,138 @@
-## Welcome to the Hydrogen docs!
+> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
-Feel free to browse through the docs here or at: https://shopify.dev/api/hydrogen/
+## Welcome to the Hydrogen 1.0 docs
+
+### Tutorials
+
+[All tutorials](tutorials/index.md)
+- [Getting started](tutorials/getting-started/index.md)
+  - [Quickstart](tutorials/getting-started/quickstart.md)
+  - [Templates](tutorials/getting-started/templates.md)
+  - [Tutorial](tutorials/getting-started/tutorial/index.md)
+     - [Begin](tutorials/getting-started/tutorial/begin.md)
+     - [Cart](tutorials/getting-started/tutorial/cart.md)
+     - [Collections](tutorials/getting-started/tutorial/collections.md)
+     - [Fetch-data](tutorials/getting-started/tutorial/fetch-data.md)
+     - [Products](tutorials/getting-started/tutorial/products.md)
+- [Analytics](tutorials/analytics/index.md)
+  - [Configure Analytics](tutorials/analytics/configure-analytics.md)
+- [Authentication](tutorials/authentication/index.md)
+  - [Configure user authentication](tutorials/authentication/configure-user-authentication.md)
+- [Best practices](tutorials/best-practices/index.md)
+  - [Accessibility](tutorials/best-practices/accessibility.md)
+  - [Examples](tutorials/best-practices/examples.md)
+  - [Performance](tutorials/best-practices/performance.md)
+  - [Testing](tutorials/best-practices/testing.md)
+- [Configuration](tutorials/configuration/index.md)
+  - [Change config file location](tutorials/configuration/change-config-file-location.md)
+- [Ccontent](tutorials/content.md)
+- [CSS support](tutorials/css-support/index.md)
+  - [Create custom fonts](tutorials/css-support/create-custom-fonts.md)
+  - [Import CSS in RSC](tutorials/css-support/import-css-in-rsc.md)
+  - [Remove Tailwind](tutorials/css-support/remove-tailwind.md)
+- [Data sources](tutorials/data-sources/index.md)
+  - [Configure default entry points](tutorials/data-sources/configure-default-entry-points.md)
+  - [Work with third-party data sources](tutorials/data-sources/work-with-3p-data-sources.md)
+- [Deployment](tutorials/deployment.md)
+- [ESlint](tutorials/eslint.md)
+- [Proxy routes to online store](tutorials/proxy-routes-to-online-store.md)
+- [Querying](tutorials/querying/index.md)
+  - [Cache](tutorials/querying/cache.md)
+  - [Manage caching](tutorials/querying/manage-caching.md)
+  - [Preload queries](tutorials/querying/preload-queries.md)
+  - [Preloaded queries](tutorials/querying/preloaded-queries.md)
+- [React Server Components](tutorials/react-server-components/index.md)
+  - [Work with RSC](tutorials/react-server-components/work-with-rsc.md)
+- [Routing](tutorials/routing/index.md)
+  - [Manage routes](tutorials/routing/manage-routes.md)
+- [SEO](tutorials/seo/index.md)
+  - [Manage SEO](tutorials/seo/manage-seo.md)
+- [Server props](tutorials/server-props.md)
+- [Sessions](tutorials/sessions/index.md)
+  - [Manage sessions](tutorials/sessions/manage-sessions.md)
+- [Static assets](tutorials/static-assets/index.md)
+  - [Manage static assets](tutorials/static-assets/manage-static-assets.md)
+- [Streaming SSR](tutorials/streaming-ssr.md)
+- [Third-party dependencies](tutorials/third-party-dependencies.md)
+
+### Hydrogen API reference
+
+**Components**
+- Cart
+  - [`AddToCartButton`](/docs/components/cart/addtocartbutton.md)
+  - [`BuyNowButton`](/docs/components/cart/buynowbutton.md)
+  - [`CartCheckoutButton`](/docs/components/cart/cartcheckoutbutton.md)
+  - [`Cartcost`](/docs/components/cart/cartcost.md)
+  - [`CartLineImage`](/docs/components/cart/cartlineimage.md)
+  - [`CartLinePrice`](/docs/components/cart/cartlineprice.md)
+  - [`CartLineProductTitle`](/docs/components/cart/cartlineproducttitle.md)
+  - [`CartLineProvider`](/docs/components/cart/cartlineprovider.md)
+  - [`CartLineQuantity`](/docs/components/cart/cartlinequantity.md)
+  - [`CartLineQuantityAdjustButton`](/docs/components/cart/cartlinequantityadjustbutton.md)
+  - [`CartLines`](/docs/components/cart/cartlines.md)
+  - [`CartProvider`](/docs/components/cart/cartprovider.md)
+  - [`CartShopPayButton`](/docs/components/cart/cartshoppaybutton.md)
+- Framework
+  - [`Cookie`](/docs/components/framework/cookie.md)
+  - [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage.md)
+  - [`FileRoutes`](/docs/components/framework/fileroutes.md)
+  - [`FileSessionStorage`](/docs/components/framework/filesessionstorage.md)
+  - [`Form`](/docs/components/framework/form.md)
+  - [`Link`](/docs/components/framework/link.md)
+  - [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage.md)
+  - [`Route`](/docs/components/framework/route.md)
+  - [`Router`](/docs/components/framework/router.md)
+  - [`ShopifyAnalytics`](/docs/components/framework/shopifyanalytics.md)
+- Global
+  - [`ShopifyProvider`](/docs/components/global/shopifyprovider.md)
+- Primitive
+  - [`ExternalVideo`](/docs/components/primitive/externalvideo.md)
+  - [`Image`](/docs/components/primitive/image.md)
+  - [`MediaFile`](/docs/components/primitive/mediafile.md)
+  - [`Metafield`](/docs/components/primitive/metafield.md)
+  - [`ModelViewer`](/docs/components/primitive/modelviewer.md)
+  - [`Money`](/docs/components/primitive/money.md)
+  - [`Seo`](/docs/components/primitive/seo.md)
+  - [`ShopPayButton`](/docs/components/primitive/shoppaybutton.md)
+  - [`Video`](/docs/components/primitive/video.md)
+- Products and variants
+  - [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider.md)
+  - [`ProductPrice`](/docs/components/product-variant/productprice.md)
+  - [`ProductProvider`](/docs/components/product-variant/productprovider.md)
+
+**Hooks**
+- Cart
+  - [`useCart`](/docs/hooks/cart/usecart.md)
+  - [`useCartLine`](/docs/hooks/cart/usecartline.md)
+- Framework
+  - [`useFlashSession`](/docs/hooks/framework/useflashsession.md)
+  - [`useNavigate`](/docs/hooks/framework/usenavigate.md)
+  - [`useRequestContext`](/docs/hooks/framework/userequestcontext.md)
+  - [`useRouteparams`](/docs/hooks/framework/userouteparams.md)
+  - [`useSession`](/docs/hooks/framework/usesession.md)
+- Global
+  - [`fetchSync`](/docs/hooks/global/fetchsync.md)
+  - [`useDelay`](/docs/hooks/global/usedelay.md)
+  - [`useQuery`](/docs/hooks/global/usequery.md)
+  - [`useServerProps`](/docs/hooks/global/useserverprops.md)
+  - [`useShop`](/docs/hooks/global/useshop.md)
+  - [`useShopQuery`](/docs/hooks/global/useshopquery.md)
+  - [`useUrl`](/docs/hooks/global/useurl.md)
+- Localization
+  - [`useLocalization`](/docs/hooks/localization/uselocalization.md)
+- Primitive
+  - [`useLoadScript`](/docs/hooks/primitive/useloadscript.md)
+  - [`useMoney`](/docs/hooks/primitive/usemoney.md)
+- Product-variant
+  - [`useProduct`](/docs/hooks/product-variant/useproduct.md)
+  - [`useProductOptions`](/docs/hooks/product-variant/useproductoptions.md)
+
+**Utilities**
+- [`flattenConnection`](/docs/utilities/flattenconnection.md)
+- [`gql`](/docs/utilities/gql.md)
+- [`isBrowser`](/docs/utilities/isbrowser.md)
+- [`isServer`](/docs/utilities/isserver.md)
+- [`log`](/docs/utilities/log.md)
+- [`parseMetafield`](/docs/utilities/parsemetafield.md)
+- [`parseMetafieldValue`](/docs/utilities/parsemetafieldvalue.md)
+- [`queryShop`](/docs/utilities/queryshop.md)
