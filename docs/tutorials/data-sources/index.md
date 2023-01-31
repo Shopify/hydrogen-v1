@@ -1,8 +1,5 @@
----
-gid: 473df70d-1ca3-4d90-ab92-0d91efb8c97c
-title: Data sources
-description: Get familiar with how Hydrogen consumes data from different sources.
----
+# Data sources
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

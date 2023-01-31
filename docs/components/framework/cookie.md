@@ -1,8 +1,5 @@
----
-gid: dcb66133-905b-4574-b854-1de3f6230492
-title: Cookie
-description: The Cookie component helps you build your own custom cookie and session implementations.
----
+# Cookie
+
 
 The `Cookie` component helps you build your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/sessions#types-of-session-storage) use the same configuration options as `Cookie`.
 

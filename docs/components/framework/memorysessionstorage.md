@@ -1,8 +1,5 @@
----
-gid: 0bd2dbee-c0ed-4e7c-8659-6697696d945a
-title: MemorySessionStorage
-description: The MemorySessionStorage component stores session data within Hydrogen runtime memory.
----
+# MemorySessionStorage
+
 
 The `MemorySessionStorage` component stores session data within Hydrogen runtime memory.
 

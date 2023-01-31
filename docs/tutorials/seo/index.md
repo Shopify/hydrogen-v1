@@ -1,8 +1,5 @@
----
-gid: f89f8b4b-65b3-4942-b597-3de1093c8f1f
-title: SEO
-description: Learn about SEO-related tags in your Hydrogen client and server components.
----
+# SEO
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

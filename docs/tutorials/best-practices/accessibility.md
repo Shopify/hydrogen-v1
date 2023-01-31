@@ -1,8 +1,5 @@
----
-gid: 97dbff38-7d3d-4e75-86cf-1b1d07bc2583
-title: Accessibility best practices for Hydrogen
-description: Learn about best practices for making your Hydrogen custom storefront accessible.
----
+# Accessibility best practices for Hydrogen
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

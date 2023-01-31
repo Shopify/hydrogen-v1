@@ -1,8 +1,5 @@
----
-gid: d949700d-70ca-4821-89cf-a6c6ad51b558
-title: Fetch storefront data
-description: Connect your Hydrogen app to your storefront and fetch data using the Storefront API.
----
+# Fetch storefront data
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

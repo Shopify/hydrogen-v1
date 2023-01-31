@@ -1,8 +1,5 @@
----
-gid: d5a8c1e3-1b18-42d2-900d-aa2a2d067e7e
-title: Route
-description: The Route component is used to set up a route in Hydrogen that's independent of the file system.
----
+# Route
+
 
 The `Route` component is used to set up a route in Hydrogen that's independent of the file system. Routes are matched in the order that they're defined.
 

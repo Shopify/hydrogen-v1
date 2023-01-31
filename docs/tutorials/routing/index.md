@@ -1,8 +1,5 @@
----
-gid: 0234b80e-9e17-468d-aa73-5a269d407d58
-title: Routing
-description: Get familiar with the file-based routing system that Hydrogen uses.
----
+# Routing
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

@@ -1,8 +1,5 @@
----
-gid: 232fa7f6-5c17-4659-b8c8-4466be88d602
-title: gql
-description: The gql literal utility adds syntax highlighting to your GraphQL queries.
----
+# gql
+
 
 The `gql` literal utility adds syntax highlighting to your GraphQL queries. You can use `gql` to pass queries to the [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery) hook.
 

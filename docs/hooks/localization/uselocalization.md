@@ -1,8 +1,5 @@
----
-gid: 9f04886e-d3f9-490d-87aa-7e655a0fbcf9
-title: useLocalization
-description: The useLocalization hook returns the locale, country, and language of the current page.
----
+# useLocalization
+
 
 The `useLocalization` hook returns the locale, country, and language of the current page. It can be used within server or client components and it must be a descendent of a [`ShopifyProvider`](https://shopify.dev/api/hydrogen/components/global/shopifyprovider) component.
 

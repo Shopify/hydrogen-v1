@@ -1,8 +1,5 @@
----
-gid: 17707d5c-4c7c-49f0-8cff-e29d15dfa2f9
-title: useFlashSession
-description: The useFlashSession hook reads session data and subsequently clears it in server components.
----
+# useFlashSession
+
 
 <aside class="note beta">
 <h4>Experimental feature</h4>

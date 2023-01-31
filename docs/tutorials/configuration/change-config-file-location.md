@@ -1,8 +1,5 @@
----
-gid: 922f748a-d0cc-4d97-b9b8-67adf9d22970
-title: Change the configuration file location
-description: Learn how to change the Hydrogen configuration file location.
----
+# Change the configuration file location
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

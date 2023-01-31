@@ -1,8 +1,5 @@
----
-gid: ed301667-de50-4bca-a848-b22d27b23e7e
-title: Manage caching
-description:  Learn how to manage cache options for Hydrogen storefronts.
----
+# Manage caching
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

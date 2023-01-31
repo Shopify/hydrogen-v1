@@ -1,8 +1,5 @@
----
-gid: 939381b8-6caf-4567-b3f8-df5d68c81888
-title: Hydrogen configuration
-description: Learn about Hydrogen's configuration properties.
----
+# Hydrogen configuration
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

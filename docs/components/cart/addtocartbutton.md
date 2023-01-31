@@ -1,8 +1,5 @@
----
-gid: 116ab024-c977-495d-b483-33d626d17f1d
-title: AddToCartButton
-description: The AddToCartButton component renders a button that adds an item to the cart when pressed.
----
+# AddToCartButton
+
 
 The `AddToCartButton` component renders a button that adds an item to the cart when pressed.
 It must be a descendent of the `CartProvider` component.

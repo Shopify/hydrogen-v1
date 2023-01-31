@@ -1,8 +1,5 @@
----
-gid: e7573d51-169c-43d4-a6c3-5618a8d169fb
-title: isServer
-description: The isServer utility is a function that returns a boolean indicating if the code was run on the server.
----
+# isServer
+
 
 The `isServer` utility is a function that returns a `boolean` indicating
 if the code was run on the server.

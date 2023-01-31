@@ -1,8 +1,5 @@
----
-gid: 748604aa-fd0d-4444-af0e-c2565206a87d
-title: parseMetafieldValue
-description: The parseMetafieldValue function parses a Metafield's value from a string into a sensible type corresponding to the Metafield's type.
----
+# parseMetafieldValue
+
 
 The `parseMetafieldValue` function parses a [Metafield](https://shopify.dev/api/storefront/reference/common-objects/metafield)'s `value` from a string into a sensible type corresponding to the [Metafield](https://shopify.dev/api/storefront/reference/common-objects/metafield)'s `type`.
 

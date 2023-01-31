@@ -1,8 +1,5 @@
----
-gid: 7747799d-6d2a-4b21-bc57-a152b4a8bdf1
-title: Manage SEO
-description: Learn how to customize the output of SEO-related tags in your Hydrogen client and server components.
----
+# Manage SEO
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

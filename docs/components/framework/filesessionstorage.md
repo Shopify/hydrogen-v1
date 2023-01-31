@@ -1,8 +1,5 @@
----
-gid: 91585e67-f496-4612-8db2-a9ca37a23021
-title: FileSessionStorage
-description: The FileSessionStorage component persists session data to the file system.
----
+# FileSessionStorage
+
 
 The `FileSessionStorage` component persists session data to the file system.
 

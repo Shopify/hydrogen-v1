@@ -1,8 +1,5 @@
----
-gid: 4eae60cf-7fcb-45a4-9875-bb32245cee83
-title: Server props
-description: Learn how to manage your server props during your development process.
----
+# Server props
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

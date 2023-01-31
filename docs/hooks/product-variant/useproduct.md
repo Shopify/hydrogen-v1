@@ -1,8 +1,5 @@
----
-gid: c850ae3e-fafd-11eb-9a03-0242ac130005
-title: useProduct
-description: The useProduct hook returns an object that enables you to keep track of the selected variant and/or selling plan state, as well as callbacks for modifying the state.
----
+# useProduct
+
 
 > Note:
 > `useProduct` is only available as part of the [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit) package, which is in beta. If you’re building with Hydrogen, then use [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions)

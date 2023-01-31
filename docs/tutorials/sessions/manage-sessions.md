@@ -1,8 +1,5 @@
----
-gid: 9b0e7d26-de66-4163-8ac1-69057f2f4146
-title: Manage sessions
-description: Learn how to work with Hydrogen's built-in support for session management.
----
+# Manage sessions
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

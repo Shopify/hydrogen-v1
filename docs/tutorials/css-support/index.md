@@ -1,8 +1,5 @@
----
-gid: ea75625d-0b47-4f83-a010-848f7eb8d273
-title: Built-in CSS support
-description: Learn about the CSS support that's built into Hydrogen.
----
+# Built-in CSS support
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

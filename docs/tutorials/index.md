@@ -1,8 +1,5 @@
----
-gid: 271ca2e1-7842-4954-ab8c-6ba9e19c80ad
-title: Hydrogen overview
-description: Learn about Hydrogen, a front-end web development framework that you can use to build fast and dynamic Shopify custom storefronts.
----
+# Hydrogen overview
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

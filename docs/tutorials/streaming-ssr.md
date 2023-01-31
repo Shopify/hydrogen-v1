@@ -1,8 +1,5 @@
----
-gid: cf5bb36c-a4f1-4498-91df-334e66d26750
-title: Streaming server-side rendering (SSR)
-description: Improve your app's loading performance by rendering components on the server and streaming them to the client.
----
+# Streaming server-side rendering (SSR)
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

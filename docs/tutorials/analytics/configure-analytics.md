@@ -1,8 +1,5 @@
----
-gid: b27c310a-4e4e-4b26-9fdd-3ebc722db4dd
-title: Configure analytics
-description: Learn how to work with analytics in Hydrogen, such as subscribing and unsubscribing from events, configuring custom events, and sending analytics data server side. Learn about client analytics connectors, including testing.
----
+# Configure analytics
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

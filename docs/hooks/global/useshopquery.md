@@ -1,8 +1,5 @@
----
-gid: c850ae3e-fafd-11eb-9a03-0242ac130008
-title: useShopQuery
-description: The useShopQuery hook allows you to make server-only GraphQL queries to the Storefront API.
----
+# useShopQuery
+
 
 The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
 

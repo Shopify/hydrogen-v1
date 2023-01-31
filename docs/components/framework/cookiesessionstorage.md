@@ -1,8 +1,5 @@
----
-gid: 8e7f9698-406d-4f42-b895-0ab3973599c1
-title: CookieSessionStorage
-description: The CookieSessionStorage component is the default session storage mechanism for Hydrogen.
----
+# CookieSessionStorage
+
 
 The `CookieSessionStorage` component is the default session storage mechanism for Hydrogen.
 

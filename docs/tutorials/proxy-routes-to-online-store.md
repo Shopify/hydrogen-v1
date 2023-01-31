@@ -1,9 +1,5 @@
----
-gid: 74d24949-28e4-4837-b2a4-bbec291fc972
-title: Incrementally adopt Hydrogen with route proxies
-description: Learn how you can adopt Hydrogen incrementally when you use the online store by proxying routes.
-hidden: true
----
+# Incrementally adopt Hydrogen with route proxies
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

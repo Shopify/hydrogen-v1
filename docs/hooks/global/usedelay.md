@@ -1,8 +1,5 @@
----
-gid: 2efaf024-c436-4d4e-9130-cf0b0c9cb843
-title: useDelay
-description: Add an artificial delay within server components.
----
+# useDelay
+
 
 The `useDelay` hook adds an artificial delay within your server components. This is useful to debug timing issues and to design fallback UI states at suspense boundaries.
 

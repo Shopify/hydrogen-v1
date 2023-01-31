@@ -1,8 +1,5 @@
----
-gid: d4e863e6-c587-45d6-970e-31418bd5e597
-title: Remove Tailwind
-description: Learn how to remove Tailwind's library from Hydrogen if you want to write your own CSS.
----
+# Remove Tailwind
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

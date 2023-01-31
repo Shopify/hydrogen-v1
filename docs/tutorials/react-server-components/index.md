@@ -1,8 +1,5 @@
----
-gid: 30ba6db5-9196-467b-b9c6-886ca42c45ad
-title: React Server Components overview
-description: Learn about React Server Components, an opinionated data-fetching and rendering workflow for React apps.
----
+# React Server Components overview
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

@@ -1,8 +1,5 @@
----
-gid: 39996b9c-4da8-4b5e-99c5-169753f71d44
-title: Getting started with Hydrogen
-description: Learn about the different resources that are available to help you get started with Hydrogen.
----
+# Getting started with Hydrogen
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

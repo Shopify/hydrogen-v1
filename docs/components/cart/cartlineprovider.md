@@ -1,8 +1,5 @@
----
-gid: bbddd38e-fafd-11eb-9a03-0242ac130003
-title: CartLineProvider
-description: The CartLineProvider component creates a context for using a cart line.
----
+# CartLineProvider
+
 
 The `CartLineProvider` component creates a context for using a cart line.
 

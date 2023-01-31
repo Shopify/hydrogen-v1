@@ -1,8 +1,5 @@
----
-gid: 30ba6db5-9196-467b-b9c6-994ca42c45ad
-title: Working with React Server Components
-description: Learn how to work with React Server Components in your Hydrogen app.
----
+# Working with React Server Components
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

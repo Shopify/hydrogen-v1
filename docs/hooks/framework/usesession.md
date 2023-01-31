@@ -1,8 +1,5 @@
----
-gid: 17707d5c-4c7c-49d0-8cff-e29d15dfa2f9
-title: useSession
-description: The useSession hook reads session data in server components.
----
+# useSession
+
 
 The `useSession` hook reads session data in server components.
 

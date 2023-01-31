@@ -1,8 +1,5 @@
----
-gid: c850ae3e-fafd-11eb-9a03-0242ac130005
-title: useProductOptions
-description: The useProductOptions hook returns an object that enables you to keep track of the selected variant and/or selling plan state, as well as callbacks for modifying the state.
----
+# useProductOptions
+
 
 The `useProductOptions` hook returns an object that enables you to keep track of the
 selected variant and/or selling plan state, as well as callbacks for modifying the state. The `useProductOptions` hook must be a child of the [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider) component.

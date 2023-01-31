@@ -1,8 +1,5 @@
----
-gid: dd59167b-31e2-4252-8dc8-f80902439af6
-title: Build a collection page
-description: Build a page that renders a collection and products that belong to the collection.
----
+# Build a collection page
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

@@ -1,8 +1,5 @@
----
-gid: c850ae3e-fafd-11eb-9a03-0242ac130003
-title: CartLineQuantityAdjustButton
-description: The CartLineQuantityAdjustButton component renders a button that adjusts the cart line's quantity when pressed.
----
+# CartLineQuantityAdjustButton
+
 
 The `CartLineQuantityAdjustButton` component renders a button that adjusts the cart line's quantity when pressed.
 It must be a descendent of a `CartLineProvider` component.

@@ -1,9 +1,5 @@
----
-gid: bf2cb121-f051-4eb2-bb37-aa1738361b23
-title: Integrate content in Hydrogen
-description: Learn how to integrate content on your Hydrogen storefront.
-hidden: true
----
+# Integrate content in Hydrogen
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

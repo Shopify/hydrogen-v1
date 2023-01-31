@@ -1,8 +1,5 @@
----
-gid: fa707408-fafd-11eb-9a03-0242ac130003
-title: CartShopPayButton
-description: The CartShopPayButton component renders a ShopPayButton for the items in the cart.
----
+# CartShopPayButton
+
 
 The `CartShopPayButton` component renders a `ShopPayButton` for the items in the cart.
 It must be a descendent of a `CartProvider` component.

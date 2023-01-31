@@ -1,8 +1,5 @@
----
-gid: 61164af3-9b44-4302-b45d-b820c0b64534
-title: Deploy a Hydrogen storefront
-description: Learn how to deploy your Hydrogen storefront to Oxygen and other runtimes.
----
+# Deploy a Hydrogen storefront
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

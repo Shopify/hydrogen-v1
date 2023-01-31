@@ -1,8 +1,5 @@
----
-gid: 244ea786-fafe-11eb-9a03-0242ac130003
-title: Image
-description: The Image component renders an image for the Storefront API's Image object.
----
+# Image
+
 
 The `Image` component renders an image for the Storefront API's [Image object](https://shopify.dev/api/storefront/reference/common-objects/image) by using the `data` prop, or a custom location by using the `src` prop.
 

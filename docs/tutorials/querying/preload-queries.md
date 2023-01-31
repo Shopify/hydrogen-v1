@@ -1,8 +1,5 @@
----
-gid: bc9000cb-57b1-4100-a9ca-48ab0f59bb87
-title: Preload queries
-description: Learn how to configure queries to preload in your Hydrogen app.
----
+# Preload queries
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

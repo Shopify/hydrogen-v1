@@ -1,8 +1,5 @@
----
-gid: c7df6e06-3c6c-4c35-b6fe-82bfac8b6b95
-title: CartCheckoutButton
-description: The CartCheckoutButton renders a button that redirects to checkoutUrl for the cart.
----
+# CartCheckoutButton
+
 
 The `CartCheckoutButton` component renders a button that redirects to the checkout URL for the cart. It must be a descendent of a `CartProvider` component.
 

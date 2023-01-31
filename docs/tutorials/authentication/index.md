@@ -1,8 +1,5 @@
----
-gid: 1c9b880d-65d4-47bf-b797-0f675de00265
-title: User authentication
-description: Learn about user authentication in your Hydrogen storefront.
----
+# User authentication
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

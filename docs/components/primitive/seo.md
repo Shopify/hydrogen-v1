@@ -1,8 +1,5 @@
----
-gid: 1e35ff3e-fafe-11eb-9a03-0242ac175349
-title: Seo
-description: The Seo component renders SEO information on a webpage.
----
+# Seo
+
 
 The `Seo` component renders SEO information on a webpage. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 

@@ -1,8 +1,5 @@
----
-gid: 65300b34-b199-4ca7-a1db-7ae3d766b449
-title: Build a product page
-description: Build a page that shows detailed product information.
----
+# Build a product page
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

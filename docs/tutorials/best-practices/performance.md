@@ -1,8 +1,5 @@
----
-gid: 6ab83ef7-b9d3-4523-bc11-27ca21dcc5ef
-title: Performance best practices for Hydrogen
-description: Learn about best practices for making your Hydrogen custom storefront performant.
----
+# Performance best practices for Hydrogen
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

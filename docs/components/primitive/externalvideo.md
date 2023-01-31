@@ -1,8 +1,5 @@
----
-gid: 1e35ff3e-fafe-11eb-9a03-0242ac130003
-title: ExternalVideo
-description: The ExternalVideo component renders an embedded video for the Storefront API's ExternalVideo object.
----
+# ExternalVideo
+
 
 The `ExternalVideo` component renders an embedded video for the Storefront
 API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).

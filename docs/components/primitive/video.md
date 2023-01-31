@@ -1,8 +1,5 @@
----
-gid: c0d06be4-fafe-11eb-9a03-0242ac130003
-title: Video
-description: The Video component renders a video for the Storefront API's Video object.
----
+# Video
+
 
 The `Video` component renders a video for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video).
 

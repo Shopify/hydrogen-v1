@@ -1,8 +1,5 @@
----
-gid: 7f04886e-d3f9-490d-87aa-7e655a0fbcf2
-title: useCart
-description: The useCart hook provides access to the cart object.
----
+# useCart
+
 
 The `useCart` hook provides access to the cart object. It must be a descendent of a `CartProvider` component.
 

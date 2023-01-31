@@ -1,8 +1,5 @@
----
-gid: ba42bfc0-fafe-11eb-9a03-0242ac130003
-title: ShopPayButton
-description: The ShopPayButton component renders a button that redirects to the Shop Pay checkout.
----
+# ShopPayButton
+
 
 The `ShopPayButton` component renders a button that redirects to the Shop Pay checkout. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 

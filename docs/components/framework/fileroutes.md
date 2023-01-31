@@ -1,8 +1,5 @@
----
-gid: 182b039d-d09d-4513-8759-b51412cc8293
-title: FileRoutes
-description: The FileRoutes component builds a set of Hydrogen routes.
----
+# FileRoutes
+
 
 The `FileRoutes` component builds a set of Hydrogen routes. By default, it loads the routes specified in [the Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/configuration) when no props are passed.
 

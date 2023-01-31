@@ -1,8 +1,5 @@
----
-gid: e5eb16de-f020-4770-9625-a84c5c95a24e
-title: Hydrogen templates
-description: Learn about the different templates that help you get started with Hydrogen.
----
+# Hydrogen templates
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

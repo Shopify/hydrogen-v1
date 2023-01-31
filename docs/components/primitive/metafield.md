@@ -1,8 +1,5 @@
----
-gid: 236ac5ed-1449-47db-9d0a-b89025b58380
-title: Metafield
-description: The Metafield component renders the value of a Storefront API's Metafield object.
----
+# Metafield
+
 
 The `Metafield` component renders the value of a Storefront
 API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).

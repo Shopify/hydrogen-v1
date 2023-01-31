@@ -1,8 +1,5 @@
----
-gid: 58ebcc3d-0001-4fb0-9f17-0cc87bb9d40a
-title: Link
-description: The Link component is used to navigate between routes.
----
+# Link
+
 
 The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all properties available to the `<a>` element are also available to the `Link` component. For more information, refer to the [`<a>` element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).
 

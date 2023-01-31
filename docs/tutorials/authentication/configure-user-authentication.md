@@ -1,8 +1,5 @@
----
-gid: c47a0e1c-8694-4b5c-bdfb-7fe061ba017b
-title: Configure user authentication
-description: Learn how to build user authentication in your Hydrogen storefront, including account creation, login, password reset, and logout.
----
+# Configure user authentication
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

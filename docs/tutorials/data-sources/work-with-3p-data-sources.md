@@ -1,8 +1,5 @@
----
-gid: 66e91353-d7d2-4c36-a993-cc128c2c4a4c
-title: Work with third-party data
-description: Learn some common tasks for working with third-party data sources in your Hydrogen storefront.
----
+# Work with third-party data
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

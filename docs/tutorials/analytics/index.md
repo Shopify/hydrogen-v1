@@ -1,8 +1,5 @@
----
-gid: 044c475e-f28g-444b-a984-26e7ebb8bec4
-title: Analytics
-description: Learn about the analytics support built into Hydrogen.
----
+# Analytics
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

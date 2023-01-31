@@ -1,8 +1,5 @@
----
-gid: ebf858a1-e179-449e-87c4-7c498db4731f
-title: Hydrogen quickstart
-description: Learn how to scaffold a new Hydrogen app and start a developer server.
----
+# Hydrogen quickstart
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

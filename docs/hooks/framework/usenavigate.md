@@ -1,8 +1,5 @@
----
-gid: 3fd2294b-4172-4185-81c9-501a41c6bd6c
-title: useNavigate
-description: The useNavigate hook imperatively navigates between routes.
----
+# useNavigate
+
 
 The `useNavigate` hook imperatively navigates between routes.
 

@@ -1,8 +1,5 @@
----
-gid: 32d96b9c-fafe-11eb-9a03-0242ac130003
-title: MediaFile
-description: The MediaFile component renders the media for the Storefront API's Media object.
----
+# MediaFile
+
 
 The `MediaFile` component renders the media for the Storefront API's
 [Media object](https://shopify.dev/api/storefront/reference/products/media). It renders an [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image), a

@@ -1,9 +1,5 @@
----
-gid: 80d51c7e-fafe-11eb-9a03-0242ac130003
-title: ProductProvider
-description: The ProductProvider component sets up a context with state that tracks the selected variant and options.
-hidden: true
----
+# ProductProvider
+
 
 > Note:
 > `ProductProvider` is only available as part of the [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit) package, which is in beta. If you’re building with Hydrogen, then use [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)

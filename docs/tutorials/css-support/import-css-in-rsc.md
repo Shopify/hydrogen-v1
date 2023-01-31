@@ -1,9 +1,5 @@
----
-gid: 70c82731-ca4d-45cd-acda-57ad541e75e5
-title: Importing CSS in React Server Components
-description: Learn how to modify modes for CSS support with the Hydrogen Vite plugin.
+# Importing CSS in React Server Components
 
----
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

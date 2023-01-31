@@ -1,8 +1,5 @@
----
-gid: 7326d7ca-fafe-11eb-9a03-0242ac130003
-title: ProductPrice
-description: The ProductPrice component renders a Money component with the product priceRange's maxVariantPrice or minVariantPrice, for either the regular price or compare at price range.
----
+# ProductPrice
+
 
 The `ProductPrice` component renders a [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money) component with the product
 [`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.

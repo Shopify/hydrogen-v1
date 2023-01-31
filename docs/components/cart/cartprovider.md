@@ -1,8 +1,5 @@
----
-gid: f51e68fc-fafd-11eb-9a03-0242ac130003
-title: CartProvider
-description: The CartProvider component creates a context for using a cart.
----
+# CartProvider
+
 
 The `CartProvider` component creates a context for using a cart. It creates a cart object and callbacks
 that any descendent component can access using the `useCart` hook and related hooks. `CartProvider` also carries out

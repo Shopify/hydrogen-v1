@@ -1,8 +1,5 @@
----
-gid: f0257fae-85fc-4199-a74e-aa9e0a32d99c
-title: Static assets
-description: Get familiar with static assets and how they work in Hydrogen and Oxygen.
----
+# Static assets
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

@@ -1,8 +1,5 @@
----
-gid: b54e4a9f-a6e0-4ec4-a64f-059b0be3ab22
-title: Configure default entry points
-description: Learn how to configure the default client and server entry points for your Hydrogen app.
----
+# Configure default entry points
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

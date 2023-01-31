@@ -1,8 +1,5 @@
----
-gid: d194b88a-27c2-4168-b6d7-6a77074f4159
-title: Testing best practices for Hydrogen
-description: Learn about best practices for testing your Hydrogen storefront.
----
+# Testing best practices for Hydrogen
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

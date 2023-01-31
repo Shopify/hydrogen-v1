@@ -1,8 +1,5 @@
----
-gid: 574c35e8-209f-8fv2-b896-b3763d8c060c
-title: queryShop
-description: The queryShop utility is a function that helps you query the Storefront API within API routes.
----
+# queryShop
+
 
 The `queryShop` utility is a function that helps you query the Storefront API within `API` routes. `queryShop` is the `API` route version of [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery), which is available in server components.
 

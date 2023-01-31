@@ -1,8 +1,5 @@
----
-gid: 29aaf497-9b71-4dca-9999-1919e0af06c1
-title: Build a cart
-description: Build a cart that contains the merchandise that a customer intends to purchase, and the estimated cost associated with the cart.
----
+# Build a cart
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

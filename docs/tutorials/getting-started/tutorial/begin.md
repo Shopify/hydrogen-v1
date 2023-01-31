@@ -1,8 +1,5 @@
----
-gid: 97747e09-a83e-4759-82f1-cf27cd494cc5
-title: Begin developing a Hydrogen storefront
-description: Create a Hydrogen app locally to begin developing a Hydrogen storefront.
----
+# Begin developing a Hydrogen storefront
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 

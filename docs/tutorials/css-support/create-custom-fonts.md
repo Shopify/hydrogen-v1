@@ -1,9 +1,5 @@
----
-# `gid` (required): must be a unique string. Typically this is a UUID. (Use https://www.uuidgenerator.net if creating manually)
-gid: 04f57bec-3cdf-45e8-a2e1-4f28b2dee39a
-title: Create custom fonts
-description: Learn how to create custom fonts for your Hydrogen storefront.
----
+# Create custom fonts
+
 
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
