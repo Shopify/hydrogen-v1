@@ -33,10 +33,10 @@ The `useSession` hook returns all data within the current session. The return ty
 
 ## Related components
 
-- [`Cookie`](/docs/components/framework/cookie)
-- [`FileSessionStorage`](/docs/components/framework/filesessionstorage)
-- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage)
-- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage)
+- [`Cookie`](/docs/components/framework/cookie.md)
+- [`FileSessionStorage`](/docs/components/framework/filesessionstorage.md)
+- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage.md)
+- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage.md)
 
 ## Related framework topics
 

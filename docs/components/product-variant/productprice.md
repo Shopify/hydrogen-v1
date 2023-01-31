@@ -1,7 +1,7 @@
 # ProductPrice
 
 
-The `ProductPrice` component renders a [`Money`](/docs/components/primitive/money) component with the product
+The `ProductPrice` component renders a [`Money`](/docs/components/primitive/money.md) component with the product
 [`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
 
 ## Example code
@@ -292,5 +292,5 @@ The `ProductPrice` component is a client component, which means that it renders 
 
 ## Related components
 
-- [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider)
-- [`Money`](/docs/components/primitive/money)
+- [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider.md)
+- [`Money`](/docs/components/primitive/money.md)

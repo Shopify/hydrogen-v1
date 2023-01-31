@@ -31,4 +31,4 @@ The `ShopPayButton` component is a client component, which means that it renders
 
 ## Used by
 
-- [`CartShopPayButton`](/docs/components/cart/cartshoppaybutton)
+- [`CartShopPayButton`](/docs/components/cart/cartshoppaybutton.md)

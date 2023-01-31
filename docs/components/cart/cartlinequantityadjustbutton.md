@@ -125,4 +125,4 @@ The `CartLineQuantityAdjustButton` component is a shared component, which means 
 
 ## Related components
 
-- [`CartLineProvider`](/docs/components/cart/cartlineprovider)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider.md)

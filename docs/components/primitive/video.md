@@ -80,5 +80,5 @@ The `Video` component is a shared component, which means that it renders on both
 
 ## Related components
 
-- [`MediaFile`](/docs/components/primitive/mediafile)
-- [`Image`](/docs/components/primitive/image)
+- [`MediaFile`](/docs/components/primitive/mediafile.md)
+- [`Image`](/docs/components/primitive/image.md)

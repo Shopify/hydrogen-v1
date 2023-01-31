@@ -149,7 +149,7 @@ export default defineConfig({
 
 ### `serverAnalyticsConnectors`
 
-The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](/docs/tutorials/analytics/index.md#analytics-sent-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](/docs/tutorials/analytics/index.md).
+The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](/docs/tutorials/analytics/index.md#analytics-sent-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](/docs/tutorials/analytics/index).
 
 ### `serverErrorPage`
 

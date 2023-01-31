@@ -16,7 +16,7 @@ Hydrogen includes an [`Seo`](/docs/components/primitive/seo.md) client component
 
 ### `Seo` client component
 
-The [`Seo`](/docs/components/primitive/seo.md) client component uses the data from Storefront API to generate the `<head>` tags that search engines look for. For example, [`Product.Seo`](https://shopify.dev/api/storefront/latest/objects/Product) is used to generate the `<head>` tags for the products page.
+The [`Seo`](/docs/components/primitive/seo.md) client component uses the data from Storefront API to generate the `<head>` tags that search engines look for. For example, [`Product.Seo`](https://shopify.dev/api/storefront/latest/objects/Product.md) is used to generate the `<head>` tags for the products page.
 
 Learn how to [customize `<head>` tags](/docs/tutorials/seo/manage-seo.md#customize-seo-at-the-route-level) at the route level.
 

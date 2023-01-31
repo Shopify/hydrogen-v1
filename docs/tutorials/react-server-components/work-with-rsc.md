@@ -17,7 +17,7 @@ Hydrogen provides the following ways to fetch data from server components:
 
 - [`useShopQuery`](/docs/hooks/global/useshopquery.md): A hook that makes server-only GraphQL queries to the Storefront API.
 - [`fetchSync`](/docs/hooks/global/fetchsync.md): A hook that makes API requests and is the recommended way to make simple fetch calls on the server and the client.
-- [`useQuery`](/docs/hooks/global/usequery.md): A hook that executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs or perform any async tasks.
+- [`useQuery`](/docs/hooks/global/usequery.md): A hook that executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html.md). You can use this function to call any third-party APIs or perform any async tasks.
 
 To learn how to fetch data from third-party sources, refer to [Data sources](/docs/tutorials/data-sources/index.md).
 

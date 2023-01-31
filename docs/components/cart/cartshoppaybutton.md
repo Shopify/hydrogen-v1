@@ -31,4 +31,4 @@ The `CartShopPayButton` component is a client component, which means that it ren
 
 ## Related components
 
-- [ShopPayButton](/docs/components/primitive/shoppaybutton)
+- [ShopPayButton](/docs/components/primitive/shoppaybutton.md)

@@ -36,7 +36,7 @@ Hydrogen provides an [ESLint plugin](/docs/tutorials/eslint.md) that enforces Sh
 
 ### Hydrogen rules
 
-If you [install the ESLint plugin](/docs/tutorials/eslint.md#installation) and enable the [Hydrogen configuration](/docs/tutorials/eslint.md#hydrogen-configuration), then the following Hydrogen rules are included:
+If you [install the ESLint plugin](/docs/tutorials/eslint.md#installation) and enable the [Hydrogen configuration](/docs/tutorials/eslint#hydrogen-configuration), then the following Hydrogen rules are included:
 
 | Rule            | Description |
 | -------------- | -------- |

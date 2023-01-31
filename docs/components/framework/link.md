@@ -44,7 +44,7 @@ export default function Index({request}) {
 
 ## Base path
 
-The `<Link>` component automatically prepends a `basePath` to the destination URL. That `basePath` is inherited from the [`<FileRoutes>` component](/docs/components/framework/fileroutes) it is rendered within. You can override this default behavior by passing a custom `basePath` prop to the `<Link>` component.
+The `<Link>` component automatically prepends a `basePath` to the destination URL. That `basePath` is inherited from the [`<FileRoutes>` component](/docs/components/framework/fileroutes.md) it is rendered within. You can override this default behavior by passing a custom `basePath` prop to the `<Link>` component.
 
 ## Props
 
@@ -64,7 +64,7 @@ The `Link` component is a client component, which means that it renders on the c
 
 ## Related hooks
 
-- [`useNavigate`](/docs/hooks/framework/usenavigate)
+- [`useNavigate`](/docs/hooks/framework/usenavigate.md)
 
 ## Related framework topics
 

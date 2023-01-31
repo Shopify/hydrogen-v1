@@ -18,7 +18,7 @@ Hydrogen is built and optimized to use data coming from Shopify's [Storefront AP
 
 You can pass data from the Storefront API directly into [components](/docs/components.md), [hooks](/docs/hooks.md), and [utilities](/docs/utilities.md).
 
-For example, the [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider.md) component expects product data to have the following structure, which corresponds to the [`Product`](https://shopify.dev/api/storefront/reference/products/product) object type returned from the Storefront API:
+For example, the [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider.md) component expects product data to have the following structure, which corresponds to the [`Product`](https://shopify.dev/api/storefront/reference/products/product.md) object type returned from the Storefront API:
 
 ```json
 {

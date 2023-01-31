@@ -755,7 +755,7 @@ The page now renders an image next to the details about the product:
 Next, you'll create a product form that includes a variant selector, product price, and buy button:
 
 - The variant selector will use the [`useProductOptions`](/docs/hooks/product-variant/useproductoptions.md) hook to retrieve selected options.
-- The [`ProductPrice`](/docs/components/product-variant/productprice.md) component will render a [`Money`](/docs/components/primitive/money.md) component with the product [`priceRange`](https://shopify.dev/api/storefront/latest/objects/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
+- The [`ProductPrice`](/docs/components/product-variant/productprice.md) component will render a [`Money`](/docs/components/primitive/money.md) component with the product [`priceRange`](https://shopify.dev/api/storefront/latest/objects/productpricerange.md)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
 - The [`BuyNowButton`](/docs/components/cart/buynowbutton.md) component will render a button that adds an item to the cart and redirects the custom to checkout.
 
 > Tip:

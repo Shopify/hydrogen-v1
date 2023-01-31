@@ -38,4 +38,4 @@ The `CartLineProductTitle` component is a client component, which means that it 
 
 ## Related components
 
-- [`CartLineProvider`](/docs/components/cart/cartlineprovider)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider.md)

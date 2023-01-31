@@ -63,7 +63,7 @@ Hydrogen provides the following built-in routes:
 By default, Hydrogen uses a file-based routing system, but you can customize routes in `App.server.jsx` using the following components:
 
 - [`Router`](/docs/components/framework/router.md): Provides the context for routing in your Hydrogen storefront
-- [`FileRoutes`](/docs/components/framework/fileroutes.md): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method
+- [`FileRoutes`](/docs/components/framework/fileroutes.md): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html.md#glob-import) method
 - [`Route`](/docs/components/framework/route.md): Used to set up a route in Hydrogen that's independent of the file system
 
 ## API routes

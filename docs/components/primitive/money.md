@@ -3,7 +3,7 @@
 
 The `Money` component renders a string of the Storefront API's
 [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) according to the
-`locale` in the [`ShopifyProvider` component](/docs/components/global/shopifyprovider).
+`locale` in the [`ShopifyProvider` component](/docs/components/global/shopifyprovider.md).
 
 The component outputs a `<div>`. You can [customize this component](/docs/components#customizing-hydrogen-components) using passthrough props.
 
@@ -104,4 +104,4 @@ The `Money` component is a client component, which means that it renders on the 
 
 ## Related hooks
 
-- [`useMoney`](/docs/hooks/primitive/usemoney)
+- [`useMoney`](/docs/hooks/primitive/usemoney.md)

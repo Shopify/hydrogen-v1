@@ -1,7 +1,7 @@
 # useLocalization
 
 
-The `useLocalization` hook returns the locale, country, and language of the current page. It can be used within server or client components and it must be a descendent of a [`ShopifyProvider`](/docs/components/global/shopifyprovider) component.
+The `useLocalization` hook returns the locale, country, and language of the current page. It can be used within server or client components and it must be a descendent of a [`ShopifyProvider`](/docs/components/global/shopifyprovider.md) component.
 
 ## Example code
 
@@ -57,7 +57,7 @@ Alternatively if the `language` contains a language tag extension, then we use i
 `language` is `PT_BR` (Brazilian Portuguese) and `countryCode` is `US` (United States), then `locale` is `PT_BR`
 ## Related components
 
-- [`ShopifyProvider`](/docs/components/global/shopifyprovider)
+- [`ShopifyProvider`](/docs/components/global/shopifyprovider.md)
 
 ## Related framework topics
 

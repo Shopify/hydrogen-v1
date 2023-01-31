@@ -28,4 +28,4 @@ A Boolean indicating if the code was run on the server.
 
 ## Related utilities
 
-- [`isBrowser`](/docs/utilities/isbrowser)
+- [`isBrowser`](/docs/utilities/isbrowser.md)

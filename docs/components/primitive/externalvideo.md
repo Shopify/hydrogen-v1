@@ -73,4 +73,4 @@ The `ExternalVideo` component is a shared component, which means that it renders
 
 ## Related components
 
-- [`MediaFile`](/docs/components/primitive/mediafile)
+- [`MediaFile`](/docs/components/primitive/mediafile.md)

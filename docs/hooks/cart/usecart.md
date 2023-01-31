@@ -59,4 +59,4 @@ The `useCart` hook returns an object with the following keys:
 
 ## Related components
 
-- [`CartProvider`](/docs/components/cart/cartprovider)
+- [`CartProvider`](/docs/components/cart/cartprovider.md)

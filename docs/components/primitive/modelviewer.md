@@ -129,4 +129,4 @@ The `ModelViewer` component is a client component, which means that it renders o
 
 ## Related components
 
-- [`MediaFile`](/docs/components/primitive/mediafile)
+- [`MediaFile`](/docs/components/primitive/mediafile.md)

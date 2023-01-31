@@ -90,8 +90,8 @@ A flat array that contains elements that correspond to the `node` value in each 
 
 ## Related components
 
-- [ProductOptionsProvider](/docs/components/product-variant/productoptionsprovider)
+- [ProductOptionsProvider](/docs/components/product-variant/productoptionsprovider.md)
 
 ## Related hooks
 
-- [useProductOptions](/docs/hooks/product-variant/useproductoptions)
+- [useProductOptions](/docs/hooks/product-variant/useproductoptions.md)

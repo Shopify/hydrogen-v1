@@ -61,13 +61,13 @@ The following diagram shows the request workflow for Hydrogen apps, based on the
 
 ### Node.js runtime
 
-The Hydrogen app is hosted on a Node.js platform like Heroku, Vercel, or Netlify. If you've [generated a Node.js server](/docs/tutorials/deployment.md#deploy-to-node-js), then you can run it inside a [Docker container](/docs/tutorials/deployment.md#deploy-to-docker) like GCP, AWS, Azure, or Fly.io.
+The Hydrogen app is hosted on a Node.js platform like Heroku, Vercel, or Netlify. If you've [generated a Node.js server](/docs/tutorials/deployment.md#deploy-to-node-js), then you can run it inside a [Docker container](/docs/tutorials/deployment#deploy-to-docker) like GCP, AWS, Azure, or Fly.io.
 
 By default, Hydrogen includes a [`@shopify/hydrogen/platforms/node`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) package, which is a [Connect-based](https://github.com/senchalabs/connect) Node.js server. Alternatively, you can use your own server.
 
 ### Worker (v8) runtime
 
-The Hydrogen app is hosted on a worker platform like [Oxygen](/docs/tutorials/deployment.md#deploy-to-oxygen), [Netlify](/docs/tutorials/deployment.md#deploy-to-netlify), [Vercel](/docs/tutorials/deployment.md#deploy-to-vercel), or [Cloudflare](/docs/tutorials/deployment.md#deploy-to-cloudflare-workers).
+The Hydrogen app is hosted on a worker platform like [Oxygen](/docs/tutorials/deployment.md#deploy-to-oxygen), [Netlify](/docs/tutorials/deployment.md#deploy-to-netlify), [Vercel](/docs/tutorials/deployment.md#deploy-to-vercel), or [Cloudflare](/docs/tutorials/deployment#deploy-to-cloudflare-workers).
 
 By default, Hydrogen includes a [`@shopify/hydrogen/platforms/worker`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/worker.ts) package for server-side rendering. The Cache API and KV API are powered by Oxygen, Cloudflare, or another runtime adapter.
 

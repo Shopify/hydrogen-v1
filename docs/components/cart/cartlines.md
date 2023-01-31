@@ -51,13 +51,13 @@ The `CartLines` component is a shared component, which means that it renders on 
 
 ## Related components
 
-- [`CartLineImage`](/docs/components/cart/cartlineimage)
-- [`CartLinePrice`](/docs/components/cart/cartlineprice)
-- [`CartLineProvider`](/docs/components/cart/cartlineprovider)
-- [`CartLineProductTitle`](/docs/components/cart/cartlineproducttitle)
-- [`CartLineQuantity`](/docs/components/cart/cartlinequantity)
-- [`CartLineQuantityAdjustButton`](/docs/components/cart/cartlinequantityadjustbutton)
+- [`CartLineImage`](/docs/components/cart/cartlineimage.md)
+- [`CartLinePrice`](/docs/components/cart/cartlineprice.md)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider.md)
+- [`CartLineProductTitle`](/docs/components/cart/cartlineproducttitle.md)
+- [`CartLineQuantity`](/docs/components/cart/cartlinequantity.md)
+- [`CartLineQuantityAdjustButton`](/docs/components/cart/cartlinequantityadjustbutton.md)
 
 ## Related hooks
 
-- [`useCartLine`](/docs/hooks/cart/usecart)
+- [`useCartLine`](/docs/hooks/cart/usecart.md)

@@ -129,11 +129,11 @@ Media can be distracting, disruptive, or unexpected. All the media in your store
 
 ### Images and icons
 
-- The [`Image` component](/docs/components/primitive/image.md) is used to render an `image` for the Storefront API's [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
+- The [`Image` component](/docs/components/primitive/image.md) is used to render an `image` for the Storefront API's [Image object](https://shopify.dev/api/storefront/reference/common-objects/image.md).
 
 ### Video
 
-- The [`Video` component](/docs/components/primitive/video.md) is used to render a `video` for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video).
+- The [`Video` component](/docs/components/primitive/video.md) is used to render a `video` for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video.md).
 - Closed captions are available.
 - Descriptive audio is available.
 - If an auto-playing video is required, including videos in slideshows, then the sound should be muted.

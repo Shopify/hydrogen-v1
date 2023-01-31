@@ -29,7 +29,7 @@ export default defineConfig({
 | Prop     | Type                       | Description                                                                                                                                                |
 | -------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | name     | <code>string</code>        | The name of the cookie stored in the browser.                                                                                                              |
-| options? | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/docs/components/framework/cookie#cookie-options). |
+| options? | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/docs/components/framework/cookie.md#cookie-options). |
 
 ## Component type
 
@@ -42,13 +42,13 @@ The `MemorySessionStorage` component is a server component that renders inside `
 
 ## Related components
 
-- [`Cookie`](/docs/components/framework/cookie)
-- [`FileSessionStorage`](/docs/components/framework/filesessionstorage)
-- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage)
+- [`Cookie`](/docs/components/framework/cookie.md)
+- [`FileSessionStorage`](/docs/components/framework/filesessionstorage.md)
+- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage.md)
 
 ## Related hooks
 
-- [`useSession`](/docs/hooks/framework/usesession)
+- [`useSession`](/docs/hooks/framework/usesession.md)
 
 ## Related framework topics
 

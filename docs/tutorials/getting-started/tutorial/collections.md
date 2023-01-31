@@ -284,7 +284,7 @@ The collection page renders the following dynamic content:
 
 In [Step 4 of the previous tutorial](/docs/tutorials/getting-started/tutorial/fetch-data.md#step-3-generate-seo-tags), you added an SEO component to your Layout component, which allowed you to generate a series of default SEO tags in the `<head>` tag. In this step, you'll generate SEO tags that are specific to the collections page.
 
-You'll also implement [Shopify Analytics](/docs/components/framework/shopifyanalytics.md) to send commerce-related analytics to Shopify. By adding the `ShopifyAnalytics` component to your Hydrogen storefront, you can view key sales, orders, and online store visitor data from the [Analytics dashboard in your Shopify admin](https://help.shopify.com/en/manual/reports-and-analytics/shopify-reports/overview-dashboard).
+You'll also implement [Shopify Analytics](/docs/components/framework/shopifyanalytics.md) to send commerce-related analytics to Shopify. By adding the `ShopifyAnalytics` component to your Hydrogen storefront, you can view key sales, orders, and online store visitor data from the [Analytics dashboard in your Shopify admin](https://help.shopify.com/en/manual/reports-and-analytics/shopify-reports/overview-dashboard.md).
 
 ```jsx
 // /src/routes/collections/[handle].server.jsx
@@ -372,7 +372,7 @@ If you inspect the dynamic collection page, then you can find the collection SEO
 Products are the goods, digital downloads, services, and gift cards that a merchant sells. If a product has options, like size or color, then merchants can add a variant for each combination of options. For example, a snowboard might be available for purchase in blue and green. The blue snowboard and the green snowboard are variants.
 
 > Tip:
-> In the following code samples, you’ll notice a reference to a [`Money`](/docs/components/primitive/money.md) component. The `Money` component renders a string of the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) according to the `defaultLocale` in the [Hydrogen configuration file](/docs/tutorials/configuration/index.md).
+> In the following code samples, you’ll notice a reference to a [`Money`](/docs/components/primitive/money.md) component. The `Money` component renders a string of the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2.md) according to the `defaultLocale` in the [Hydrogen configuration file](/docs/tutorials/configuration/index.md).
 
 1. Create a `ProductCard` component to display the title, price, and image of each product within the collection:
 

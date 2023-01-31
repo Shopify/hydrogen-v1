@@ -38,7 +38,7 @@ In the following example, any requests to `/products/hoodie` are rendered using 
 
 ### Prefetch a link source
 
-The [`Link`](/docs/components/framework/link) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
+The [`Link`](/docs/components/framework/link.md) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
 
 If you want to disable link prefetching, then pass `prefetch={false}` to the `Link` component:
 
@@ -91,7 +91,7 @@ export default function({request}) {
 ## API routes
 
 > Note:
-> If you want to use a third-party data source to render Hydrogen components, then refer to [Using Hydrogen components with a third-party data source](/docs/tutorials/data-sources/work-with-3p-data-sources.md#use-hydrogen-components-with-a-third-party-data-source). If you want to fetch data that goes alongside your Shopify product data and shopping experience, then refer to [Fetching supplementary data](/docs/tutorials/data-sources/work-with-3p-data-sources.md#fetch-supplementary-data).
+> If you want to use a third-party data source to render Hydrogen components, then refer to [Using Hydrogen components with a third-party data source](/docs/tutorials/data-sources/work-with-3p-data-sources.md#use-hydrogen-components-with-a-third-party-data-source). If you want to fetch data that goes alongside your Shopify product data and shopping experience, then refer to [Fetching supplementary data](/docs/tutorials/data-sources/work-with-3p-data-sources#fetch-supplementary-data).
 
 Any server component within the `src/routes` directory that exports an API function will become an API route.
 

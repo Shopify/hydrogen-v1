@@ -1,7 +1,7 @@
 # gql
 
 
-The `gql` literal utility adds syntax highlighting to your GraphQL queries. You can use `gql` to pass queries to the [`useShopQuery`](/docs/hooks/global/useshopquery) hook.
+The `gql` literal utility adds syntax highlighting to your GraphQL queries. You can use `gql` to pass queries to the [`useShopQuery`](/docs/hooks/global/useshopquery.md) hook.
 
 The difference between the `gql` utility and [`graphql-tag`](https://github.com/apollographql/graphql-tag) is that `gql` never parses strings into ASTNodes in production. As a result, it makes the production bundle smaller by dropping certain AST-related dependencies. In development, however, `gql` uses ASTNodes to provide better errors in your queries.
 
@@ -26,4 +26,4 @@ useShopQuery({
 
 ## Related hooks
 
-- [`useShopQuery`](/docs/hooks/global/useshopquery)
+- [`useShopQuery`](/docs/hooks/global/useshopquery.md)

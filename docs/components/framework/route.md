@@ -57,8 +57,8 @@ The `Route` component is a server component that renders inside `App.server.jsx`
 
 ## Related components
 
-- [`FileRoutes`](/docs/components/framework/fileroutes)
-- [`Router`](/docs/components/framework/router)
+- [`FileRoutes`](/docs/components/framework/fileroutes.md)
+- [`Router`](/docs/components/framework/router.md)
 
 ## Related framework topics
 

@@ -44,12 +44,12 @@ The `Router` component is a server component that renders inside `App.server.jsx
 ## Considerations
 
 - You should only have one `Router` component in your app.
-- All [`FileRoutes`](/docs/components/framework/fileroutes) and [`Route`](/docs/components/framework/route) components must be children of `Router`.
+- All [`FileRoutes`](/docs/components/framework/fileroutes.md) and [`Route`](/docs/components/framework/route.md) components must be children of `Router`.
 
 ## Related components
 
-- [`FileRoutes`](/docs/components/framework/fileroutes)
-- [`Route`](/docs/components/framework/route)
+- [`FileRoutes`](/docs/components/framework/fileroutes.md)
+- [`Route`](/docs/components/framework/route.md)
 
 ## Related framework topics
 

@@ -56,4 +56,4 @@ The `useCartLine` hook returns an object with the following keys:
 
 ## Related components
 
-- [`CartLineProvider`](/docs/components/cart/cartprovider)
+- [`CartLineProvider`](/docs/components/cart/cartprovider.md)

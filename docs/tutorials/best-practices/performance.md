@@ -71,7 +71,7 @@ Generally, you don't need to convert the entire component into a client componen
 
 ## Data fetching
 
-Delivering fast server-side responses requires fast and efficient [first-party (Shopify)](/docs/tutorials/data-sources/index.md#shopify-data-source) and [third-party data access](/docs/tutorials/data-sources/work-with-3p-data-sources.md).
+Delivering fast server-side responses requires fast and efficient [first-party (Shopify)](/docs/tutorials/data-sources/index.md#shopify-data-source) and [third-party data access](/docs/tutorials/data-sources/work-with-3p-data-sources).
 
 ### First-party (Shopify) data source
 

@@ -114,4 +114,4 @@ You can change the size and format of the image returned by the Shopify CDN.
 
 ## Related components
 
-- [`MediaFile`](/docs/components/primitive/mediafile)
+- [`MediaFile`](/docs/components/primitive/mediafile.md)
