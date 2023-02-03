@@ -33,8 +33,8 @@ export function CartLineQuantityAdjustButton<
       return;
     }
 
-    linesUpdate([{id: cartLine.id, quantity}]);
-  }, [adjust, cartLine.id, cartLine.quantity, linesRemove, linesUpdate]);
+    linesUpdate([{id: cartLine.id, quantity, attributes: cartLine.attributes}]);
+  }, [adjust, cartLine.id, cartLine.quantity, cartLine.attributes, linesRemove, linesUpdate]);
 
   return (
     <BaseButton
