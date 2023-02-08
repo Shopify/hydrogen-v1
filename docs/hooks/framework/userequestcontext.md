@@ -1,8 +1,5 @@
----
-gid: 3fd2294b-4172-4185-81c9-501a41c6bd6c
-title: useRequestContext
-description: The useRequestContext hook provides access to a request-scoped context.
----
+# useRequestContext
+
 
 <aside class="note beta">
 <h4>Experimental feature</h4>

@@ -1,8 +1,5 @@
----
-gid: a5606662-fafd-11eb-9a03-0242ac130003
-title: CartLineImage
-description: The CartLineImage component renders an Image component for the cart line merchandise's image.
----
+# CartLineImage
+
 
 The `CartLineImage` component renders an `Image` component for the cart line merchandise's image.
 It must be a descendent of a `CartLineProvider` component.
@@ -31,5 +28,5 @@ The `CartLineImage` component is a client component, which means that it renders
 
 ## Related components
 
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
-- [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider.md)
+- [`Image`](/docs/components/primitive/image.md)

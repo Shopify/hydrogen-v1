@@ -1,8 +1,5 @@
----
-gid: d8cc3aa8-cdc9-4f9e-8148-7f8ec47aad44
-title: useLoadScript
-description: The useLoadScript hook loads an external script tag on the client-side.
----
+# useLoadScript
+
 
 The `useLoadScript` hook loads an external script tag on the client-side.
 

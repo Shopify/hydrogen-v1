@@ -1,8 +1,5 @@
----
-gid: c850ae3e-fafd-11eb-9a03-0242ac130006
-title: useServerProps
-description: The useServerProps hook allows you to manage the server props passed to your server components when using Hydrogen as a React Server Component framework.
----
+# useServerProps
+
 
 The `useServerProps` hook allows you to manage the [server props](https://shopify.dev/custom-storefronts/hydrogen/server-props) passed to your server components when using Hydrogen as a React Server Component framework. The server props get cleared when you navigate from one route to another.
 

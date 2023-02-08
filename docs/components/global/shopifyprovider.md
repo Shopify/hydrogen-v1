@@ -1,8 +1,5 @@
----
-gid: b4dc58a2-fafe-11eb-9a03-0242ac130003
-title: ShopifyProvider
-description: The ShopifyProvider component wraps your entire app and provides support for hooks.
----
+# ShopifyProvider
+
 
 The `ShopifyProvider` component wraps your entire app and provides functionality for many components, hooks, and utilities. The `ShopifyProvider` component also provides localization data for the app. You should place it in your app's entry point component.
 

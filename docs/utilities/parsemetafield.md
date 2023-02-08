@@ -1,8 +1,5 @@
----
-gid: ec647578-6ab7-40ca-87e5-8a559eca548e
-title: parseMetafield
-description: The parseMetafield utility creates a new metafield object with a value that has been parsed according to the metafield type.
----
+# parseMetafield
+
 
 The `parseMetafield` utility creates a new metafield object with a value that has been parsed according to the metafield type.
 
@@ -49,12 +46,12 @@ This hook takes a single object with the following key:
 
 ## Return type
 
-This hook returns an array of metafields whose `values` have been parsed according to the metafield `type`. For details on the parsed value, refer to the [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue) utility.
+This hook returns an array of metafields whose `values` have been parsed according to the metafield `type`. For details on the parsed value, refer to the [`parseMetafieldValue`](/docs/utilities/parsemetafieldvalue.md) utility.
 
 ## Related components
 
-- [`Metafield`](https://shopify.dev/api/hydrogen/components/primitive/metafield)
+- [`Metafield`](/docs/components/primitive/metafield.md)
 
 ## Related utilities
 
-- [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue)
+- [`parseMetafieldValue`](/docs/utilities/parsemetafieldvalue.md)

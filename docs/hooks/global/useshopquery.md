@@ -1,13 +1,10 @@
----
-gid: c850ae3e-fafd-11eb-9a03-0242ac130008
-title: useShopQuery
-description: The useShopQuery hook allows you to make server-only GraphQL queries to the Storefront API.
----
+# useShopQuery
+
 
 The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
 
 > Note:
-> `queryShop` is the `API` route version of `useShopQuery`. Use [`queryShop`](https://shopify.dev/api/hydrogen/utilities/queryshop) to query the Storefront API within `API` routes.
+> `queryShop` is the `API` route version of `useShopQuery`. Use [`queryShop`](/docs/utilities/queryshop.md) to query the Storefront API within `API` routes.
 
 ## Example code
 
@@ -71,16 +68,16 @@ The `useShopQuery` returns an object with the following key:
 
 ## Related components
 
-- [`ShopifyProvider`](https://shopify.dev/api/hydrogen/components/global/shopifyprovider)
+- [`ShopifyProvider`](/docs/components/global/shopifyprovider.md)
 
 ## Related utilities
 
-- [`queryShop`](https://shopify.dev/api/hydrogen/utilities/queryshop)
+- [`queryShop`](/docs/utilities/queryshop.md)
 
 ## Related hooks
 
-- [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
-- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
+- [`fetchSync`](/docs/hooks/global/fetchsync.md)
+- [`useQuery`](/docs/hooks/global/usequery.md)
 
 ## Related framework topics
 

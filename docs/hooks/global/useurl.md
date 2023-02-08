@@ -1,8 +1,5 @@
----
-gid: 52c23dd1-465a-499f-8085-c696dbc4679e
-title: useUrl
-description: The useUrl hook retrieves the current URL in a server or client component.
----
+# useUrl
+
 
 The `useUrl` hook retrieves the current URL in a server or client component.
 

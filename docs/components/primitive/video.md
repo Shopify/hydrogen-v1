@@ -1,12 +1,9 @@
----
-gid: c0d06be4-fafe-11eb-9a03-0242ac130003
-title: Video
-description: The Video component renders a video for the Storefront API's Video object.
----
+# Video
+
 
 The `Video` component renders a video for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video).
 
-The component outputs a `video` element. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+The component outputs a `video` element. You can [customize this component](/docs/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
@@ -83,5 +80,5 @@ The `Video` component is a shared component, which means that it renders on both
 
 ## Related components
 
-- [`MediaFile`](https://shopify.dev/api/hydrogen/components/primitive/mediafile)
-- [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image)
+- [`MediaFile`](/docs/components/primitive/mediafile.md)
+- [`Image`](/docs/components/primitive/image.md)

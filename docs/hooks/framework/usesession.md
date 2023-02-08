@@ -1,8 +1,5 @@
----
-gid: 17707d5c-4c7c-49d0-8cff-e29d15dfa2f9
-title: useSession
-description: The useSession hook reads session data in server components.
----
+# useSession
+
 
 The `useSession` hook reads session data in server components.
 
@@ -36,10 +33,10 @@ The `useSession` hook returns all data within the current session. The return ty
 
 ## Related components
 
-- [`Cookie`](https://shopify.dev/api/hydrogen/components/framework/cookie)
-- [`FileSessionStorage`](https://shopify.dev/api/hydrogen/components/framework/filesessionstorage)
-- [`CookieSessionStorage`](https://shopify.dev/api/hydrogen/components/framework/cookiesessionstorage)
-- [`MemorySessionStorage`](https://shopify.dev/api/hydrogen/components/framework/memorysessionstorage)
+- [`Cookie`](/docs/components/framework/cookie.md)
+- [`FileSessionStorage`](/docs/components/framework/filesessionstorage.md)
+- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage.md)
+- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage.md)
 
 ## Related framework topics
 

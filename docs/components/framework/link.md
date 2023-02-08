@@ -1,8 +1,5 @@
----
-gid: 58ebcc3d-0001-4fb0-9f17-0cc87bb9d40a
-title: Link
-description: The Link component is used to navigate between routes.
----
+# Link
+
 
 The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all properties available to the `<a>` element are also available to the `Link` component. For more information, refer to the [`<a>` element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).
 
@@ -47,7 +44,7 @@ export default function Index({request}) {
 
 ## Base path
 
-The `<Link>` component automatically prepends a `basePath` to the destination URL. That `basePath` is inherited from the [`<FileRoutes>` component](https://shopify.dev/api/hydrogen/components/framework/fileroutes) it is rendered within. You can override this default behavior by passing a custom `basePath` prop to the `<Link>` component.
+The `<Link>` component automatically prepends a `basePath` to the destination URL. That `basePath` is inherited from the [`<FileRoutes>` component](/docs/components/framework/fileroutes.md) it is rendered within. You can override this default behavior by passing a custom `basePath` prop to the `<Link>` component.
 
 ## Props
 
@@ -67,7 +64,7 @@ The `Link` component is a client component, which means that it renders on the c
 
 ## Related hooks
 
-- [`useNavigate`](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate)
+- [`useNavigate`](/docs/hooks/framework/usenavigate.md)
 
 ## Related framework topics
 

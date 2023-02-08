@@ -1,8 +1,5 @@
----
-gid: 14b85ca8-3d11-45e4-b260-df0c67c4669c
-title: CartCost
-description: The CartCost component renders a Money component with the cost associated with the amountType prop.
----
+# CartCost
+
 
 The `CartCost` component renders a `Money` component with the
 cost associated with the `amountType` prop. If no `amountType` prop is specified, then it defaults to `totalAmount`.
@@ -35,8 +32,8 @@ For more information about component types, refer to [React Server Components](h
 
 ## Related components
 
-- [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money)
+- [`Money`](/docs/components/primitive/money.md)
 
 ## Related hooks
 
-- [`useCart`](https://shopify.dev/api/hydrogen/hooks/cart/usecart)
+- [`useCart`](/docs/hooks/cart/usecart.md)

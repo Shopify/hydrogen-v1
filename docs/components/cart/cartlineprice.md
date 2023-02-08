@@ -1,8 +1,5 @@
----
-gid: af2afb1c-fafd-11eb-9a03-0242ac130003
-title: CartLinePrice
-description: The CartLinePrice component renders a Money component for the cart line merchandise's price or compare at price.
----
+# CartLinePrice
+
 
 The `CartLinePrice` component renders a `Money` component for the cart line merchandise's price or
 compare at price. It must be a descendent of a `CartLineProvider` component.
@@ -37,5 +34,5 @@ The `CartLinePrice` component is a client component, which means that it renders
 
 ## Related components
 
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
-- [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider.md)
+- [`Money`](/docs/components/primitive/money.md)

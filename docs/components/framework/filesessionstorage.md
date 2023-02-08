@@ -1,8 +1,5 @@
----
-gid: 91585e67-f496-4612-8db2-a9ca37a23021
-title: FileSessionStorage
-description: The FileSessionStorage component persists session data to the file system.
----
+# FileSessionStorage
+
 
 The `FileSessionStorage` component persists session data to the file system.
 
@@ -34,7 +31,7 @@ export default defineConfig({
 | ------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | name          | <code>string</code>        | The name of the cookie stored in the browser.                                                                                           |
 | dir           | <code>string</code>        | A directory to store the session files in. Each session is stored in a separate file on the file system.                                |
-| cookieOptions | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/api/hydrogen/components/framework/cookie#cookie-options). |
+| cookieOptions | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/docs/components/framework/cookie.md#cookie-options). |
 
 ## Component type
 
@@ -46,13 +43,13 @@ Because `FileSessionStorage` relies on the file system, it shouldn't be used in 
 
 ## Related components
 
-- [`Cookie`](https://shopify.dev/api/hydrogen/components/framework/cookie)
-- [`MemorySessionStorage`](https://shopify.dev/api/hydrogen/components/framework/memorysessionstorage)
-- [`CookieSessionStorage`](https://shopify.dev/api/hydrogen/components/framework/cookiesessionstorage)
+- [`Cookie`](/docs/components/framework/cookie.md)
+- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage.md)
+- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage.md)
 
 ## Related hooks
 
-- [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession)
+- [`useSession`](/docs/hooks/framework/usesession.md)
 
 ## Related framework topics
 

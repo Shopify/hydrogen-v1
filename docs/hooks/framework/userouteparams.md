@@ -1,8 +1,5 @@
----
-gid: a84d7f1f-c1f4-419c-badc-a79835b39c88
-title: useRouteParams
-description: The useRouteParams hook retrieves the parameters of an active route.
----
+# useRouteParams
+
 
 The `useRouteParams` hook retrieves the parameters of an active route. The hook is available in both server and client components. For example, if your file route has the name `[handle].server.jsx`, then `useRouteParams` returns an object with a key `handle` inside it.
 
@@ -40,14 +37,14 @@ The `useRouteParams` hook returns an object with key values for each matching ro
 
 ## Related components
 
-- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router)
-- [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes)
-- [`Route`](https://shopify.dev/api/hydrogen/components/framework/route)
-- [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)
+- [`Router`](/docs/components/framework/router.md)
+- [`FileRoutes`](/docs/components/framework/fileroutes.md)
+- [`Route`](/docs/components/framework/route.md)
+- [`Link`](/docs/components/framework/link.md)
 
 ## Related hooks
 
-- [`useNavigate`](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate)
+- [`useNavigate`](/docs/hooks/framework/usenavigate.md)
 
 ## Related framework topics
 

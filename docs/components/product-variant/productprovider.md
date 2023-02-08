@@ -1,14 +1,10 @@
----
-gid: 80d51c7e-fafe-11eb-9a03-0242ac130003
-title: ProductProvider
-description: The ProductProvider component sets up a context with state that tracks the selected variant and options.
-hidden: true
----
+# ProductProvider
+
 
 > Note:
-> `ProductProvider` is only available as part of the [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit) package, which is in beta. If you’re building with Hydrogen, then use [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
+> `ProductProvider` is only available as part of the [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit) package, which is in beta. If you’re building with Hydrogen, then use [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider.md)
 
-The `ProductProvider` component sets up a context with state that tracks the selected variant and options. Descendants of this component can use the [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions) hook.
+The `ProductProvider` component sets up a context with state that tracks the selected variant and options. Descendants of this component can use the [`useProductOptions`](/docs/hooks/product-variant/useproductoptions.md) hook.
 
 ## Example code
 
@@ -298,9 +294,9 @@ The `ProductProvider` component is a client component, which means that it rende
 
 ## Related components
 
-- [`ProductPrice`](https://shopify.dev/api/hydrogen/components/product-variant/productprice)
-- [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
+- [`ProductPrice`](/docs/components/product-variant/productprice.md)
+- [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider.md)
 
 ## Related hooks
 
-- [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions)
+- [`useProductOptions`](/docs/hooks/product-variant/useproductoptions.md)

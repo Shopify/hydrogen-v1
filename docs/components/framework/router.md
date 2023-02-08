@@ -1,8 +1,5 @@
----
-gid: ec1dd90e-87b0-4bd7-88ed-74d71a52cca5
-title: Router
-description: The Router component provides the context for routing in your Hydrogen storefront.
----
+# Router
+
 
 The `Router` component provides the context for routing in your Hydrogen storefront.
 
@@ -47,12 +44,12 @@ The `Router` component is a server component that renders inside `App.server.jsx
 ## Considerations
 
 - You should only have one `Router` component in your app.
-- All [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes) and [`Route`](https://shopify.dev/api/hydrogen/components/framework/route) components must be children of `Router`.
+- All [`FileRoutes`](/docs/components/framework/fileroutes.md) and [`Route`](/docs/components/framework/route.md) components must be children of `Router`.
 
 ## Related components
 
-- [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes)
-- [`Route`](https://shopify.dev/api/hydrogen/components/framework/route)
+- [`FileRoutes`](/docs/components/framework/fileroutes.md)
+- [`Route`](/docs/components/framework/route.md)
 
 ## Related framework topics
 

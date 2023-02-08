@@ -1,8 +1,5 @@
----
-gid: d13f165c-fafd-11eb-9a03-0242ac130003
-title: CartLines
-description: The CartLines component iterates over each cart line and renders its children within a CartLineProvider for each cart line.
----
+# CartLines
+
 
 The `CartLines` component iterates over each cart line and renders its `children` within
 a `CartLineProvider` for each cart line.
@@ -54,13 +51,13 @@ The `CartLines` component is a shared component, which means that it renders on 
 
 ## Related components
 
-- [`CartLineImage`](https://shopify.dev/api/hydrogen/components/cart/cartlineimage)
-- [`CartLinePrice`](https://shopify.dev/api/hydrogen/components/cart/cartlineprice)
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
-- [`CartLineProductTitle`](https://shopify.dev/api/hydrogen/components/cart/cartlineproducttitle)
-- [`CartLineQuantity`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantity)
-- [`CartLineQuantityAdjustButton`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantityadjustbutton)
+- [`CartLineImage`](/docs/components/cart/cartlineimage.md)
+- [`CartLinePrice`](/docs/components/cart/cartlineprice.md)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider.md)
+- [`CartLineProductTitle`](/docs/components/cart/cartlineproducttitle.md)
+- [`CartLineQuantity`](/docs/components/cart/cartlinequantity.md)
+- [`CartLineQuantityAdjustButton`](/docs/components/cart/cartlinequantityadjustbutton.md)
 
 ## Related hooks
 
-- [`useCartLine`](https://shopify.dev/api/hydrogen/hooks/cart/usecart)
+- [`useCartLine`](/docs/hooks/cart/usecart.md)

@@ -1,12 +1,9 @@
----
-gid: 244ea786-fafe-11eb-9a03-0242ac130003
-title: Image
-description: The Image component renders an image for the Storefront API's Image object.
----
+# Image
+
 
 The `Image` component renders an image for the Storefront API's [Image object](https://shopify.dev/api/storefront/reference/common-objects/image) by using the `data` prop, or a custom location by using the `src` prop.
 
-The component outputs an `<img>` element. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+The component outputs an `<img>` element. You can [customize this component](/docs/components#customizing-hydrogen-components) using passthrough props.
 
 An image's width and height are determined using the following priority list:
 
@@ -117,4 +114,4 @@ You can change the size and format of the image returned by the Shopify CDN.
 
 ## Related components
 
-- [`MediaFile`](https://shopify.dev/api/hydrogen/components/primitive/mediafile)
+- [`MediaFile`](/docs/components/primitive/mediafile.md)

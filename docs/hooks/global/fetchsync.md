@@ -1,8 +1,5 @@
----
-gid: 61a65cab-2745-412a-91ab-ab15b15424z5
-title: fetchSync
-description: The fetchSync hook makes API requests and is the recommended way to make simple fetch calls on the server and on the client.
----
+# fetchSync
+
 
 The `fetchSync` hook makes API requests and is the recommended way to make simple fetch calls on the server and on the client. It's designed similar to the [Web API's `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch), only in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html).
 
@@ -34,7 +31,7 @@ function MyThings() {
 
 ## `fetchSync` in server components
 
-If you're using `fetchSync` in a server component, then you provide options for caching and preloading. This is similar to the [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery) hook:
+If you're using `fetchSync` in a server component, then you provide options for caching and preloading. This is similar to the [`useQuery`](/docs/hooks/global/usequery.md) hook:
 
 {% codeblock file, filename: "MyComponent.server.js" %}
 
@@ -149,8 +146,8 @@ The following considerations apply to `fetchSync` in server and client component
 
 ## Related hooks
 
-- [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
-- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
+- [`useShopQuery`](/docs/hooks/global/useshopquery.md)
+- [`useQuery`](/docs/hooks/global/usequery.md)
 
 ## Related framework topics
 

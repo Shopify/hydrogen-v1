@@ -1,8 +1,5 @@
----
-gid: 7f04886e-d3f9-490d-87aa-7e655a0fbcf8
-title: useCartLine
-description: The useCartLine hook provides access to the cart line object.
----
+# useCartLine
+
 
 The `useCartLine` hook provides access to the cart line object. It must be a descendent of a `CartProvider` component.
 
@@ -59,4 +56,4 @@ The `useCartLine` hook returns an object with the following keys:
 
 ## Related components
 
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartprovider)
+- [`CartLineProvider`](/docs/components/cart/cartprovider.md)

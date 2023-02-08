@@ -1,8 +1,5 @@
----
-gid: b5a21e4e-fafd-11eb-9a03-0242ac130003
-title: CartLineProductTitle
-description: The CartLineProductTitle component renders a span element (or the type of HTML element specified by the as prop) with the cart line merchandise's title.
----
+# CartLineProductTitle
+
 
 The `CartLineProductTitle` component renders a `span` element (or the type of HTML element specified by
 the `as` prop) with the cart line merchandise's title. It must be a descendent of a `CartLineProvider` component.
@@ -41,4 +38,4 @@ The `CartLineProductTitle` component is a client component, which means that it 
 
 ## Related components
 
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
+- [`CartLineProvider`](/docs/components/cart/cartlineprovider.md)

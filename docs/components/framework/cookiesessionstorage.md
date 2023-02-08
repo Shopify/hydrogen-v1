@@ -1,8 +1,5 @@
----
-gid: 8e7f9698-406d-4f42-b895-0ab3973599c1
-title: CookieSessionStorage
-description: The CookieSessionStorage component is the default session storage mechanism for Hydrogen.
----
+# CookieSessionStorage
+
 
 The `CookieSessionStorage` component is the default session storage mechanism for Hydrogen.
 
@@ -32,7 +29,7 @@ export default defineConfig({
 | Prop           | Type                       | Description                                                                                                                             |
 | -------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | cookieName     | <code>string</code>        | The name of the cookie stored in the browser.                                                                                           |
-| cookieOptions? | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/api/hydrogen/components/framework/cookie#cookie-options). |
+| cookieOptions? | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/docs/components/framework/cookie.md#cookie-options). |
 
 ## Component type
 
@@ -44,13 +41,13 @@ Don't use `CookieSessionStorage` if you expect to have more than 4kb of data wit
 
 ## Related components
 
-- [`Cookie`](https://shopify.dev/api/hydrogen/components/framework/cookie)
-- [`MemorySessionStorage`](https://shopify.dev/api/hydrogen/components/framework/memorysessionstorage)
-- [`FileSessionStorage`](https://shopify.dev/api/hydrogen/components/framework/filesessionstorage)
+- [`Cookie`](/docs/components/framework/cookie.md)
+- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage.md)
+- [`FileSessionStorage`](/docs/components/framework/filesessionstorage.md)
 
 ## Related hooks
 
-- [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession)
+- [`useSession`](/docs/hooks/framework/usesession.md)
 
 ## Related framework topics
 

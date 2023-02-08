@@ -1,13 +1,10 @@
----
-gid: 51a65cab-8245-412a-91ab-ab15b15165d5
-title: useQuery
-description: The useQuery hook executes an asynchronous operation like fetch in a way that supports Suspense.
----
+# useQuery
+
 
 The `useQuery` hook executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this hook to call any third-party APIs from a server component.
 
 > Note:
-> If you're making a simple fetch call on the server, then we recommend using the [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync) hook instead.
+> If you're making a simple fetch call on the server, then we recommend using the [`fetchSync`](/docs/hooks/global/fetchsync.md) hook instead.
 
 ## Example code
 
@@ -57,8 +54,8 @@ The `useQuery` returns an object with the following key:
 
 ## Related hooks
 
-- [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
-- [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
+- [`fetchSync`](/docs/hooks/global/fetchsync.md)
+- [`useShopQuery`](/docs/hooks/global/useshopquery.md)
 
 ## Related framework topics
 

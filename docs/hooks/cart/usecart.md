@@ -1,8 +1,5 @@
----
-gid: 7f04886e-d3f9-490d-87aa-7e655a0fbcf2
-title: useCart
-description: The useCart hook provides access to the cart object.
----
+# useCart
+
 
 The `useCart` hook provides access to the cart object. It must be a descendent of a `CartProvider` component.
 
@@ -62,4 +59,4 @@ The `useCart` hook returns an object with the following keys:
 
 ## Related components
 
-- [`CartProvider`](https://shopify.dev/api/hydrogen/components/cart/cartprovider)
+- [`CartProvider`](/docs/components/cart/cartprovider.md)

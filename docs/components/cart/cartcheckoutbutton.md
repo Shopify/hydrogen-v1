@@ -1,8 +1,5 @@
----
-gid: c7df6e06-3c6c-4c35-b6fe-82bfac8b6b95
-title: CartCheckoutButton
-description: The CartCheckoutButton renders a button that redirects to checkoutUrl for the cart.
----
+# CartCheckoutButton
+
 
 The `CartCheckoutButton` component renders a button that redirects to the checkout URL for the cart. It must be a descendent of a `CartProvider` component.
 
@@ -32,8 +29,8 @@ The `CartCheckoutButton` component is a client component, which means that it re
 
 ## Related components
 
-- [CartProvider](https://shopify.dev/api/hydrogen/components/cart/cartprovider)
+- [CartProvider](/docs/components/cart/cartprovider.md)
 
 ## Related hooks
 
-- [useCart](https://shopify.dev/api/hydrogen/hooks/cart/usecart)
+- [useCart](/docs/hooks/cart/usecart.md)

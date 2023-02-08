@@ -1,8 +1,5 @@
----
-gid: 17707d5c-4c7c-49f0-8cff-e29d15dfa2f9
-title: useFlashSession
-description: The useFlashSession hook reads session data and subsequently clears it in server components.
----
+# useFlashSession
+
 
 <aside class="note beta">
 <h4>Experimental feature</h4>
@@ -58,13 +55,13 @@ The `useFlashSession` hook returns data from the session. It also clears that da
 
 ## Considerations
 
-The `useFlashSession` hook is best used for form validation in the [`Form`](https://shopify.dev/api/hydrogen/components/framework/form) component.
+The `useFlashSession` hook is best used for form validation in the [`Form`](/docs/components/framework/form.md) component.
 
 ## Related components
 
-- [`Form`](https://shopify.dev/api/hydrogen/components/framework/form)
+- [`Form`](/docs/components/framework/form.md)
 
 ## Related framework topics
 
-- [`Forms`](https://shopify.dev/api/hydrogen/components/framework/form)
+- [`Forms`](/docs/components/framework/form.md)
 - [Session management](https://shopify.dev/custom-storefronts/hydrogen/sessions)

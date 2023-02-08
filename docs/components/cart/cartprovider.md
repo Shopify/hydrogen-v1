@@ -1,8 +1,5 @@
----
-gid: f51e68fc-fafd-11eb-9a03-0242ac130003
-title: CartProvider
-description: The CartProvider component creates a context for using a cart.
----
+# CartProvider
+
 
 The `CartProvider` component creates a context for using a cart. It creates a cart object and callbacks
 that any descendent component can access using the `useCart` hook and related hooks. `CartProvider` also carries out
@@ -176,9 +173,9 @@ The `CartProvider` component is a client component, which means that it renders 
 
 ## Related components
 
-- [`AddToCartButton`](https://shopify.dev/api/hydrogen/components/cart/addtocartbutton)
-- [`CartCheckoutButton`](https://shopify.dev/api/hydrogen/components/cart/cartcheckoutbutton)
+- [`AddToCartButton`](/docs/components/cart/addtocartbutton.md)
+- [`CartCheckoutButton`](/docs/components/cart/cartcheckoutbutton.md)
 
 ## Related hooks
 
-- [`useCart`](https://shopify.dev/api/hydrogen/hooks/cart/usecart)
+- [`useCart`](/docs/hooks/cart/usecart.md)

@@ -1,8 +1,5 @@
----
-gid: bbddd38e-fafd-11eb-9a03-0242ac130003
-title: CartLineProvider
-description: The CartLineProvider component creates a context for using a cart line.
----
+# CartLineProvider
+
 
 The `CartLineProvider` component creates a context for using a cart line.
 
@@ -37,12 +34,12 @@ The `CartLineProvider` component is a client component, which means that it rend
 
 ## Related components
 
-- [`CartLineImage`](https://shopify.dev/api/hydrogen/components/cart/cartlineimage)
-- [`CartLinePrice`](https://shopify.dev/api/hydrogen/components/cart/cartlineprice)
-- [`CartLineProductTitle`](https://shopify.dev/api/hydrogen/components/cart/cartlineproducttitle)
-- [`CartLineQuantity`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantity)
-- [`CartLineQuantityAdjustButton`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantityadjustbutton)
+- [`CartLineImage`](/docs/components/cart/cartlineimage.md)
+- [`CartLinePrice`](/docs/components/cart/cartlineprice.md)
+- [`CartLineProductTitle`](/docs/components/cart/cartlineproducttitle.md)
+- [`CartLineQuantity`](/docs/components/cart/cartlinequantity.md)
+- [`CartLineQuantityAdjustButton`](/docs/components/cart/cartlinequantityadjustbutton.md)
 
 ## Related hooks
 
-- [`useCartLine`](https://shopify.dev/api/hydrogen/hooks/cart/usecartline)
+- [`useCartLine`](/docs/hooks/cart/usecartline.md)
