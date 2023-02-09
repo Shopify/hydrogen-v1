@@ -1,17 +1,6 @@
-<p align="center">
-    <a href="https://hydrogen.shopify.dev"><img src="./.github/images/hydrogen-logo.svg" alt="Hydrogen Logo"/></a>
-</p>
-<p align="center">
-    <a href="https://www.npmjs.com/package/@shopify/hydrogen"><img src="https://img.shields.io/npm/v/@shopify/hydrogen.svg?sanitize=true" alt="Version"></a>
-    <a href="https://github.com/Shopify/hydrogen/blob/main/LICENSE.md"><img src="https://img.shields.io/npm/l/@shopify/hydrogen.svg?sanitize=true" alt="License"></a>
-    <a href="https://npmcharts.com/compare/@shopify/hydrogen?minimal=true"><img src="https://img.shields.io/npm/dm/@shopify/hydrogen.svg?sanitize=true" alt="Downloads"></a>
- </p>
+### ⚠️ This is a legacy version of Hydrogen. See the latest available at https://github.com/Shopify/hydrogen ⚠️
 
-<div align="center">
-
-📚 [Docs](https://shopify.dev/custom-storefronts/hydrogen) | 🗣 [Discord](https://discord.gg/Hefq6w5c5d) | 💬 [Discussions](https://github.com/Shopify/hydrogen/discussions) | 📝 [Changelog](./packages/hydrogen/CHANGELOG.md) | 😎 [Awesome Hydrogen](https://github.com/Shopify/awesome-hydrogen)
-
-</div>
+---
 
 Hydrogen is a **React-based framework** for building dynamic, **Shopify-powered** custom storefronts.
 
