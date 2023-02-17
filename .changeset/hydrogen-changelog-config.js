@@ -7,7 +7,7 @@ const {
 
 config();
 
-const repo = 'shopify/hydrogen';
+const repo = 'shopify/hydrogen-v1';
 
 const changelogFunctions = {
   getDependencyReleaseLine: async (changesets, dependenciesUpdated) => {
