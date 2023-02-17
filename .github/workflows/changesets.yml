@@ -131,4 +131,4 @@ jobs:
           DISCORD_AVATAR: https://cdn.discordapp.com/avatars/905537246990590012/0f6a687b93ef3f81a036c817fb02ccbf.webp
         uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
         with:
-          args: "Hydrogen ${{ env.HYDROGEN_VERSION }} has been released.\nhttps://github.com/Shopify/hydrogen/releases/tag/@shopify/hydrogen@${{ env.HYDROGEN_VERSION }}"
+          args: "Hydrogen ${{ env.HYDROGEN_VERSION }} has been released.\nhttps://github.com/Shopify/hydrogen-v1/releases/tag/@shopify/hydrogen@${{ env.HYDROGEN_VERSION }}"
