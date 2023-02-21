@@ -42,7 +42,7 @@ This hook takes a single object with the following key:
 
 | Key         | Type                                                  | Description                                                                                               |
 | ----------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| metafields? | <code>PartialDeep&#60;MetafieldConnection&#62;</code> | A [MetafieldConnection](https://shopify.dev/api/storefront/reference/common-objects/metafieldconnection). |
+| metafields? | `PartialDeep&#60;MetafieldConnection&#62;` | A [MetafieldConnection](https://shopify.dev/api/storefront/reference/common-objects/metafieldconnection). |
 
 ## Return type
 

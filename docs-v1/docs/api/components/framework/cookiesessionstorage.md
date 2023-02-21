@@ -28,8 +28,8 @@ export default defineConfig({
 
 | Prop           | Type                       | Description                                                                                                                             |
 | -------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| cookieName     | <code>string</code>        | The name of the cookie stored in the browser.                                                                                           |
-| cookieOptions? | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/docs/components/framework/cookie.md#cookie-options). |
+| cookieName     | `string`        | The name of the cookie stored in the browser.                                                                                           |
+| cookieOptions? | `CookieOptions` | An optional object to configure [how the cookie is persisted in the browser](/docs/components/framework/cookie.md#cookie-options). |
 
 ## Component type
 

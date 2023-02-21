@@ -26,7 +26,7 @@ export function App() {
 
 | Name | Type              | Description                                                                   |
 | ---- | ----------------- | ----------------------------------------------------------------------------- |
-| `as` | <code>TTag</code> | An HTML tag to be rendered as the base element wrapper. The default is `div`. |
+| `as` | `TTag` | An HTML tag to be rendered as the base element wrapper. The default is `div`. |
 
 ## Component type
 

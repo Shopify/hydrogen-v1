@@ -35,7 +35,7 @@ function NotFound() {
 
 | Name     | Type                                                         | Description         |
 | -------- | ------------------------------------------------------------ | ------------------- |
-| children | <code>Array&#60;ReactElement&#62; &#124; ReactElement</code> | Any React elements. |
+| children | `Array&#60;ReactElement&#62; &#124; ReactElement` | Any React elements. |
 
 ## Component type
 

@@ -23,7 +23,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 - Fetch products that belong to a collection.
 
 <video style="width: 100%; height: auto;" autoplay muted loop controls>
-  <source src="/assets/custom-storefronts/hydrogen/build-a-collection-page.mp4">
+  <source src="https://shopify.dev/assets/custom-storefronts/hydrogen/build-a-collection-page.mp4" />
 </video>
 
 ## Requirements
@@ -550,7 +550,7 @@ Products are the goods, digital downloads, services, and gift cards that a merch
     The page renders the following products that belong to the collection:
 
     <video style="width: 100%; height: auto;" autoplay muted loop controls>
-      <source src="/assets/custom-storefronts/hydrogen/build-a-collection-page.mp4">
+      <source src="https://shopify.dev/assets/custom-storefronts/hydrogen/build-a-collection-page.mp4" />
     </video>
 
 ## Next steps

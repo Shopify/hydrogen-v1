@@ -22,8 +22,8 @@ export function Product({product}) {
 
 | Name | Type                         | Description                                                                                                                                                  |
 | ---- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| data | <code>PartialDeep<<wbr>Metafield<wbr>> &#124; null</code> | An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).     |
-| as?  | <code>TTag</code>            | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](https://shopify.dev/apps/metafields/types). |
+| data | `PartialDeep<<wbr>Metafield<wbr>> &#124; null` | An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).     |
+| as?  | `TTag`            | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](https://shopify.dev/apps/metafields/types). |
 
 ## Default output
 

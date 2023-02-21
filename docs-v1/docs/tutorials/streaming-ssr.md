@@ -49,9 +49,9 @@ The following table describes different strategies for implementing the product 
     <th> ✅ Streaming SSR strategy</th>
   </tr>
   <tr>
-    <td><p>A client-side strategy might result in a fast render of an empty product page skeleton, with a series of post-render, browser-initiated fetches to retrieve and render the required content.</p><br><p>However, client-initiated roundtrips usually result in a subpar user experience.</p></td>
-    <td><p>A server-side strategy might fetch the data on the server and return it in the response.</p><br><p>However, server-side rendering offers a slow TTFB because the server is blocked on the data.</p></td>
-    <td><p>With a streaming SSR strategy in Hydrogen, you can stream, progressively hydrate, and render the product page to load content fast and efficiently.</p><br><p>Streaming SSR contrasts with standard SSR, where TTFB is blocked until all data queries are resolved. Individual components can also show custom loading states as the page is streamed and constructed by the browser.</p></td>
+    <td><p>A client-side strategy might result in a fast render of an empty product page skeleton, with a series of post-render, browser-initiated fetches to retrieve and render the required content.</p><br /><p>However, client-initiated roundtrips usually result in a subpar user experience.</p></td>
+    <td><p>A server-side strategy might fetch the data on the server and return it in the response.</p><br /><p>However, server-side rendering offers a slow TTFB because the server is blocked on the data.</p></td>
+    <td><p>With a streaming SSR strategy in Hydrogen, you can stream, progressively hydrate, and render the product page to load content fast and efficiently.</p><br /><p>Streaming SSR contrasts with standard SSR, where TTFB is blocked until all data queries are resolved. Individual components can also show custom loading states as the page is streamed and constructed by the browser.</p></td>
   </tr>
 </table>
 

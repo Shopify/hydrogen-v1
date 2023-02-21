@@ -25,8 +25,8 @@ export function App() {
 
 | Name     | Type                          | Description               |
 | -------- | ----------------------------- | ------------------------- |
-| children | <code>ReactNode</code>        | Any `ReactNode` elements. |
-| line     | <code>Cart['lines'][1]</code> | A cart line object.       |
+| children | `ReactNode`        | Any `ReactNode` elements. |
+| line     | `Cart['lines'][1]` | A cart line object.       |
 
 ## Component type
 

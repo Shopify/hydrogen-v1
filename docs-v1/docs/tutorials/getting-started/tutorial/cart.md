@@ -1060,7 +1060,7 @@ const SHOP_QUERY = gql`
 The cart now renders on any page in your app:
 
 <video style="width: 100%; height: auto;" autoplay muted loop controls>
-  <source src="/assets/custom-storefronts/hydrogen/cart-open-close.mp4">
+  <source src="https://shopify.dev/assets/custom-storefronts/hydrogen/cart-open-close.mp4" />
 </video>
 
 ## Step 4: Build the cart

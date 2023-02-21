@@ -23,10 +23,10 @@ export default function App() {
 
 | Name           | Type                                                   | Description                                                                                                                                                                       |
 | -------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| shopifyConfig? | <code>ShopifyConfig &#124; ShopifyConfigFetcher</code> | Shopify connection information. Defaults to [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/configuration). |
-| countryCode?   | <code>string</code>                                    | The [code](https://shopify.dev/api/storefront/latest/enums/CountryCode) designating a country or region, which generally follows ISO 3166-1 alpha-2 guidelines.                   |
-| languageCode?  | <code>string</code>                                    | The ISO 639-1 [language codes](https://shopify.dev/api/storefront/latest/enums/LanguageCode) supported by Shopify.                                                                |
-| children?      | <code>React</code>                                     | Any `ReactNode` elements.                                                                                                                                                         |
+| shopifyConfig? | `ShopifyConfig &#124; ShopifyConfigFetcher` | Shopify connection information. Defaults to [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/configuration). |
+| countryCode?   | `string`                                    | The [code](https://shopify.dev/api/storefront/latest/enums/CountryCode) designating a country or region, which generally follows ISO 3166-1 alpha-2 guidelines.                   |
+| languageCode?  | `string`                                    | The ISO 639-1 [language codes](https://shopify.dev/api/storefront/latest/enums/LanguageCode) supported by Shopify.                                                                |
+| children?      | `React`                                     | Any `ReactNode` elements.                                                                                                                                                         |
 
 ### Component type
 
@@ -59,13 +59,13 @@ export default function App() {
 
 | Name | Type | Description |
 |---|---|---|
-| storefrontId? | <code>string</code> | The globally unique identifier for the Shop |
-| storeDomain | <code>string</code> | The host name of the domain (eg: `{shop}.myshopify.com`). If a URL with a scheme (for example `https://`) is passed in, then the scheme is removed. |
-| storefrontToken | <code>string</code> | The Storefront API public access token. Refer to the [authentication](https://shopify.dev/api/storefront#authentication) documentation for more details. |
-| storefrontApiVersion | <code>string</code> | The Storefront API version. This should almost always be the same as the version React Storefront Kit was built for. Learn more about Shopify [API versioning](https://shopify.dev/api/usage/versioning) for more details. |
-| country? | <code>{isoCode: CountryCode}</code>  | The code designating a country, which generally follows ISO 3166-1 alpha-2 guidelines. If a territory doesn't have a country code value in the `CountryCode` enum, it might be considered a subdivision of another country. For example, the territories associated with Spain are represented by the country code `ES`, and the territories associated with the United States of America are represented by the country code `US`. |
-| language? | <code>{isoCode: LanguageCode}</code> | `ISO 369` language codes supported by Shopify.
-| locale? | <code>string</code> | The locale string based on `country` and `language`. | Any `ReactNode` elements.
+| storefrontId? | `string` | The globally unique identifier for the Shop |
+| storeDomain | `string` | The host name of the domain (eg: `{shop}.myshopify.com`). If a URL with a scheme (for example `https://`) is passed in, then the scheme is removed. |
+| storefrontToken | `string` | The Storefront API public access token. Refer to the [authentication](https://shopify.dev/api/storefront#authentication) documentation for more details. |
+| storefrontApiVersion | `string` | The Storefront API version. This should almost always be the same as the version React Storefront Kit was built for. Learn more about Shopify [API versioning](https://shopify.dev/api/usage/versioning) for more details. |
+| country? | `{isoCode: CountryCode}`  | The code designating a country, which generally follows ISO 3166-1 alpha-2 guidelines. If a territory doesn't have a country code value in the `CountryCode` enum, it might be considered a subdivision of another country. For example, the territories associated with Spain are represented by the country code `ES`, and the territories associated with the United States of America are represented by the country code `US`. |
+| language? | `{isoCode: LanguageCode}` | `ISO 369` language codes supported by Shopify.
+| locale? | `string` | The locale string based on `country` and `language`. | Any `ReactNode` elements.
 
 ### Considerations
 

@@ -26,7 +26,7 @@ export function App() {
 
 | Name       | Type                                      | Description                                                         |
 | ---------- | ----------------------------------------- | ------------------------------------------------------------------- |
-| priceType? | <code>"regular" &#124; "compareAt"</code> | The type of price. Valid values:`regular` (default) or `compareAt`. |
+| priceType? | `"regular" &#124; "compareAt"` | The type of price. Valid values:`regular` (default) or `compareAt`. |
 
 ## Component type
 

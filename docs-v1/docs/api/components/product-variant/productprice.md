@@ -281,10 +281,10 @@ export function Product() {
 
 | Name       | Type                                          | Description                                                          |
 | ---------- | --------------------------------------------- | -------------------------------------------------------------------- |
-| data | <code>PartialDeep<<wbr>Product<wbr>></code>  | An object with fields that correspond to the Storefront API's [Product object](/api/storefront/reference/products/product). |
-| priceType? | <code>"regular" &#124; "compareAt"</code>     | The type of price. Valid values: `regular` (default) or `compareAt`. |
-| valueType? | <code>"max" &#124; "min" &#124; "unit"</code> | The type of value. Valid values: `min` (default), `max`, or `unit`.  |
-| variantId? | <code>string</code>                           | The ID of the variant.                                               |
+| data | `PartialDeep<<wbr>Product<wbr>>`  | An object with fields that correspond to the Storefront API's [Product object](/api/storefront/reference/products/product). |
+| priceType? | `"regular" &#124; "compareAt"`     | The type of price. Valid values: `regular` (default) or `compareAt`. |
+| valueType? | `"max" &#124; "min" &#124; "unit"` | The type of value. Valid values: `min` (default), `max`, or `unit`.  |
+| variantId? | `string`                           | The ID of the variant.                                               |
 
 ## Component type
 

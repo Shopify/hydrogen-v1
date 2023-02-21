@@ -29,9 +29,9 @@ export default defineConfig({
 
 | Prop          | Type                       | Description                                                                                                                             |
 | ------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| name          | <code>string</code>        | The name of the cookie stored in the browser.                                                                                           |
-| dir           | <code>string</code>        | A directory to store the session files in. Each session is stored in a separate file on the file system.                                |
-| cookieOptions | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/docs/components/framework/cookie.md#cookie-options). |
+| name          | `string`        | The name of the cookie stored in the browser.                                                                                           |
+| dir           | `string`        | A directory to store the session files in. Each session is stored in a separate file on the file system.                                |
+| cookieOptions | `CookieOptions` | An optional object to configure [how the cookie is persisted in the browser](/docs/components/framework/cookie.md#cookie-options). |
 
 ## Component type
 

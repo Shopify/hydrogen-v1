@@ -21,7 +21,7 @@ export class MyComponent() {
 
 | Name     | Type                   | Description            |
 | -------- | ---------------------- | ---------------------- |
-| children | <code>ReactNode</code> | A `ReactNode` element. |
+| children | `ReactNode` | A `ReactNode` element. |
 
 ## Component type
 
