@@ -10,7 +10,7 @@ The Hydrogen framework uses a file-based routing system. This guide provides an 
 
 All components added to the `src/routes` directory are registered as routes in `App.server.jsx`. Any filenames with brackets, like `[handle]`, are converted to a route parameter called `:handle`.
 
-You can navigate between routes using the [`Link`](/docs/components/framework/link.md) component or the [`useNavigate`](/docs/hooks/framework/usenavigate.md) hook. You can use the [`useRouteParams`](/docs/hooks/framework/userouteparams.md) hook to retrieve the parameters of an active route.
+You can navigate between routes using the [`Link`](/docs/components/framework/link/) component or the [`useNavigate`](/docs/hooks/framework/usenavigate/) hook. You can use the [`useRouteParams`](/docs/hooks/framework/userouteparams/) hook to retrieve the parameters of an active route.
 
 The following example shows how each `*.server.jsx` file maps to a different route in the Hydrogen app:
 
@@ -62,9 +62,9 @@ Hydrogen provides the following built-in routes:
 
 By default, Hydrogen uses a file-based routing system, but you can customize routes in `App.server.jsx` using the following components:
 
-- [`Router`](/docs/components/framework/router.md): Provides the context for routing in your Hydrogen storefront
-- [`FileRoutes`](/docs/components/framework/fileroutes.md): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html.md#glob-import) method
-- [`Route`](/docs/components/framework/route.md): Used to set up a route in Hydrogen that's independent of the file system
+- [`Router`](/docs/components/framework/router/): Provides the context for routing in your Hydrogen storefront
+- [`FileRoutes`](/docs/components/framework/fileroutes/): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html.md#glob-import) method
+- [`Route`](/docs/components/framework/route/): Used to set up a route in Hydrogen that's independent of the file system
 
 ## API routes
 
@@ -135,22 +135,22 @@ export async function api(
 
 ## Related components and hooks
 
-- [`Link`](/docs/components/framework/link.md)
-- [`Router`](/docs/components/framework/router.md)
-- [`FileRoutes`](/docs/components/framework/fileroutes.md)
-- [`Route`](/docs/components/framework/route.md)
-- [`useNavigate`](/docs/hooks/framework/usenavigate.md)
-- [`useRouteParams`](/docs/hooks/framework/userouteparams.md)
-- [`useQuery`](/docs/hooks/global/usequery.md)
-- [`useShopQuery`](/docs/hooks/global/useshopquery.md)
-- [`fetchSync`](/docs/hooks/global/fetchsync.md)
-- [`Form`](/docs/components/framework/form.md)
+- [`Link`](/docs/components/framework/link/)
+- [`Router`](/docs/components/framework/router/)
+- [`FileRoutes`](/docs/components/framework/fileroutes/)
+- [`Route`](/docs/components/framework/route/)
+- [`useNavigate`](/docs/hooks/framework/usenavigate/)
+- [`useRouteParams`](/docs/hooks/framework/userouteparams/)
+- [`useQuery`](/docs/hooks/global/usequery/)
+- [`useShopQuery`](/docs/hooks/global/useshopquery/)
+- [`fetchSync`](/docs/hooks/global/fetchsync/)
+- [`Form`](/docs/components/framework/form/)
 
 ## Next steps
 
-- Learn how to perform common tasks for [managing routes in Hydrogen](/docs/tutorials/routing/manage-routes.md).
-- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration/index.md) and how to change the location of the configuration file.
-- Learn about how Hydrogen consumes data from different [sources](/docs/tutorials/data-sources/index.md).
-- Learn how to manage [cache options](/docs/tutorials/querying/cache.md) for Hydrogen storefronts.
-- Improve your app's loading performance with [streaming SSR and Suspense](/docs/tutorials/streaming-ssr.md).
-- Learn how to [manage your server props](/docs/tutorials/server-props.md) during your development process.
+- Learn how to perform common tasks for [managing routes in Hydrogen](/docs/tutorials/routing/manage-routes/).
+- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration/) and how to change the location of the configuration file.
+- Learn about how Hydrogen consumes data from different [sources](/docs/tutorials/data-sources/).
+- Learn how to manage [cache options](/docs/tutorials/querying/cache/) for Hydrogen storefronts.
+- Improve your app's loading performance with [streaming SSR and Suspense](/docs/tutorials/streaming-ssr/).
+- Learn how to [manage your server props](/docs/tutorials/server-props/) during your development process.

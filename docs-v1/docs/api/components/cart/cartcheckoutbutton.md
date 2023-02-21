@@ -29,8 +29,8 @@ The `CartCheckoutButton` component is a client component, which means that it re
 
 ## Related components
 
-- [CartProvider](/docs/components/cart/cartprovider.md)
+- [CartProvider](/docs/components/cart/cartprovider/)
 
 ## Related hooks
 
-- [useCart](/docs/hooks/cart/usecart.md)
+- [useCart](/docs/hooks/cart/usecart/)

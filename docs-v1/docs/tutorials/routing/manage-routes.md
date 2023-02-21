@@ -4,13 +4,13 @@
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-The Hydrogen framework uses a [file-based routing system](/docs/tutorials/routing/index.md). This guide explains how to perform some common tasks for managing routes.
+The Hydrogen framework uses a [file-based routing system](/docs/tutorials/routing/). This guide explains how to perform some common tasks for managing routes.
 
 ## Retrieve the `handle` property
 
 The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` to `:handle`. [Refer to an example](/docs/tutorials/routing/index.md#example).
 
-You can retrieve the `handle` property by using the [`useRouteParams` hook](/docs/hooks/framework/userouteparams.md):
+You can retrieve the `handle` property by using the [`useRouteParams` hook](/docs/hooks/framework/userouteparams/):
 
 ```jsx
 // [handle].server.jsx
@@ -38,7 +38,7 @@ In the following example, any requests to `/products/hoodie` are rendered using 
 
 ### Prefetch a link source
 
-The [`Link`](/docs/components/framework/link.md) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
+The [`Link`](/docs/components/framework/link/) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
 
 If you want to disable link prefetching, then pass `prefetch={false}` to the `Link` component:
 
@@ -54,7 +54,7 @@ By default, when a user hovers or focuses on the link for more than 100ms, a pre
 
 ## Disable prefetching link sources
 
-The [`Link`](/docs/components/framework/link.md) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
+The [`Link`](/docs/components/framework/link/) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
 
 If you want to disable link prefetching, then pass `prefetch={false}` to the `Link` component:
 
@@ -229,7 +229,7 @@ function MyPage({request}) {
 
 
 
-In some cases, you might want to use `HydrogenRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](/docs/tutorials/react-server-components/index.md):
+In some cases, you might want to use `HydrogenRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](/docs/tutorials/react-server-components/):
 
 ```jsx
 
@@ -259,7 +259,7 @@ All server components receive a `response` prop containing a Hydrogen-specific v
 
 **Prop**: `response.cache()`
 
-If you want to modify the [full-page cache options](/docs/tutorials/querying/cache.md), then you can call `cache()` on the response object:
+If you want to modify the [full-page cache options](/docs/tutorials/querying/cache/), then you can call `cache()` on the response object:
 
 ```jsx
 
@@ -279,11 +279,11 @@ export default function MyProducts({response}) {
 ### Disable streaming for routes
 
 > Caution:
-> There are [performance benefits](/docs/tutorials/best-practices/performance.md) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
+> There are [performance benefits](/docs/tutorials/best-practices/performance/) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
 
 **Prop**: `response.doNotStream()`
 
-By default, Hydrogen [streams SSR responses](/docs/tutorials/streaming-ssr.md). However, you can also disable streaming for each route and return a fully buffered response. This is helpful in scenarios like [handling custom SEO bots](/docs/tutorials/seo/manage-seo.md#check-for-custom-robots).
+By default, Hydrogen [streams SSR responses](/docs/tutorials/streaming-ssr/). However, you can also disable streaming for each route and return a fully buffered response. This is helpful in scenarios like [handling custom SEO bots](/docs/tutorials/seo/manage-seo.md#check-for-custom-robots).
 
 To disable streaming, call `response.doNotStream()`:
 
@@ -355,7 +355,7 @@ return response.redirect('https://yoursite.com/new-page', 301);
 
 ### Server props
 
-In addition to `request` and `response` props, any props you manage with [`setServerProps`](/docs/tutorials/server-props.md) are passed to each of your server components as props:
+In addition to `request` and `response` props, any props you manage with [`setServerProps`](/docs/tutorials/server-props/) are passed to each of your server components as props:
 
 ```jsx
 

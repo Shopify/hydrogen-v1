@@ -41,13 +41,13 @@ Don't use `CookieSessionStorage` if you expect to have more than 4kb of data wit
 
 ## Related components
 
-- [`Cookie`](/docs/components/framework/cookie.md)
-- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage.md)
-- [`FileSessionStorage`](/docs/components/framework/filesessionstorage.md)
+- [`Cookie`](/docs/components/framework/cookie/)
+- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage/)
+- [`FileSessionStorage`](/docs/components/framework/filesessionstorage/)
 
 ## Related hooks
 
-- [`useSession`](/docs/hooks/framework/usesession.md)
+- [`useSession`](/docs/hooks/framework/usesession/)
 
 ## Related framework topics
 

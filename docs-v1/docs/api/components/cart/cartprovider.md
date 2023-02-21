@@ -173,9 +173,9 @@ The `CartProvider` component is a client component, which means that it renders 
 
 ## Related components
 
-- [`AddToCartButton`](/docs/components/cart/addtocartbutton.md)
-- [`CartCheckoutButton`](/docs/components/cart/cartcheckoutbutton.md)
+- [`AddToCartButton`](/docs/components/cart/addtocartbutton/)
+- [`CartCheckoutButton`](/docs/components/cart/cartcheckoutbutton/)
 
 ## Related hooks
 
-- [`useCart`](/docs/hooks/cart/usecart.md)
+- [`useCart`](/docs/hooks/cart/usecart/)

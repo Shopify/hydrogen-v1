@@ -55,13 +55,13 @@ The `useFlashSession` hook returns data from the session. It also clears that da
 
 ## Considerations
 
-The `useFlashSession` hook is best used for form validation in the [`Form`](/docs/components/framework/form.md) component.
+The `useFlashSession` hook is best used for form validation in the [`Form`](/docs/components/framework/form/) component.
 
 ## Related components
 
-- [`Form`](/docs/components/framework/form.md)
+- [`Form`](/docs/components/framework/form/)
 
 ## Related framework topics
 
-- [`Forms`](/docs/components/framework/form.md)
+- [`Forms`](/docs/components/framework/form/)
 - [Session management](https://shopify.dev/custom-storefronts/hydrogen/sessions)

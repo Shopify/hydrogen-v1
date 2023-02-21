@@ -70,12 +70,12 @@ If a query is being double loaded, then a warning displays in the server log. Th
 
 ## Related components and hooks
 
-- [`ShopifyProvider`](/docs/components/global/shopifyprovider.md)
-- [`fetchSync`](/docs/hooks/global/fetchsync.md)
-- [`useShopQuery`](/docs/hooks/global/useshopquery.md)
-- [`useQuery`](/docs/hooks/global/usequery.md)
+- [`ShopifyProvider`](/docs/components/global/shopifyprovider/)
+- [`fetchSync`](/docs/hooks/global/fetchsync/)
+- [`useShopQuery`](/docs/hooks/global/useshopquery/)
+- [`useQuery`](/docs/hooks/global/usequery/)
 
 ## Next steps
 
-- Learn how to perform common tasks for [preloading queries](/docs/tutorials/querying/preload-queries.md).
-- Learn about the [analytics support](/docs/tutorials/analytics/index.md) built into Hydrogen.
+- Learn how to perform common tasks for [preloading queries](/docs/tutorials/querying/preload-queries/).
+- Learn about the [analytics support](/docs/tutorials/analytics/) built into Hydrogen.

@@ -88,5 +88,5 @@ The [Metafield object](https://shopify.dev/api/storefront/reference/common-objec
 
 ## Related utilities
 
-- [`parseMetafield`](/docs/utilities/parsemetafield.md)
-- [`parseMetafieldValue`](/docs/utilities/parsemetafieldvalue.md)
+- [`parseMetafield`](/docs/utilities/parsemetafield/)
+- [`parseMetafieldValue`](/docs/utilities/parsemetafieldvalue/)

@@ -49,6 +49,6 @@ You should only import assets, such as styles or images, from [client components
 
 ## Next steps
 
-- Learn how to perform common tasks for [managing static assets in Hydrogen](/docs/tutorials/static-assets/manage-static-assets.md).
-- Learn about [React Server Components](/docs/tutorials/react-server-components/index.md), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [deploy your Hydrogen storefront](/docs/tutorials/deployment.md) to Oxygen and other runtimes.
+- Learn how to perform common tasks for [managing static assets in Hydrogen](/docs/tutorials/static-assets/manage-static-assets/).
+- Learn about [React Server Components](/docs/tutorials/react-server-components/), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to [deploy your Hydrogen storefront](/docs/tutorials/deployment/) to Oxygen and other runtimes.

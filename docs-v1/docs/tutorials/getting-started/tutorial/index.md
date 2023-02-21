@@ -10,8 +10,8 @@ Learn how to build a Hydrogen storefront and access resources to learn more abou
 
 Follow the Hydrogen tutorial series to go from "Hello World" to a fully built out Shopify custom storefront.
 
-1. [Begin development](/docs/tutorials/getting-started/tutorial/begin.md)
-1. [Fetch storefront data](/docs/tutorials/getting-started/tutorial/fetch-data.md)
-1. [Build a collection page](/docs/tutorials/getting-started/tutorial/collections.md)
-1. [Build a product page](/docs/tutorials/getting-started/tutorial/products.md)
-1. [Build a cart](/docs/tutorials/getting-started/tutorial/cart.md)
+1. [Begin development](/docs/tutorials/getting-started/tutorial/begin/)
+1. [Fetch storefront data](/docs/tutorials/getting-started/tutorial/fetch-data/)
+1. [Build a collection page](/docs/tutorials/getting-started/tutorial/collections/)
+1. [Build a product page](/docs/tutorials/getting-started/tutorial/products/)
+1. [Build a cart](/docs/tutorials/getting-started/tutorial/cart/)

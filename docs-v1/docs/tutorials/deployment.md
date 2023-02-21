@@ -223,7 +223,7 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 > Note:
 > Requirements might be different for Cloudflare enterprise accounts.
 
-1. [Create a Hydrogen storefront locally](/docs/tutorials/getting-started/quickstart.md).
+1. [Create a Hydrogen storefront locally](/docs/tutorials/getting-started/quickstart/).
 
 1. Create a `wrangler.toml` file in the root of your project.
 

@@ -46,12 +46,12 @@ This hook takes a single object with the following key:
 
 ## Return type
 
-This hook returns an array of metafields whose `values` have been parsed according to the metafield `type`. For details on the parsed value, refer to the [`parseMetafieldValue`](/docs/utilities/parsemetafieldvalue.md) utility.
+This hook returns an array of metafields whose `values` have been parsed according to the metafield `type`. For details on the parsed value, refer to the [`parseMetafieldValue`](/docs/utilities/parsemetafieldvalue/) utility.
 
 ## Related components
 
-- [`Metafield`](/docs/components/primitive/metafield.md)
+- [`Metafield`](/docs/components/primitive/metafield/)
 
 ## Related utilities
 
-- [`parseMetafieldValue`](/docs/utilities/parsemetafieldvalue.md)
+- [`parseMetafieldValue`](/docs/utilities/parsemetafieldvalue/)

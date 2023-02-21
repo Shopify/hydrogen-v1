@@ -4,7 +4,7 @@
 The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
 
 > Note:
-> `queryShop` is the `API` route version of `useShopQuery`. Use [`queryShop`](/docs/utilities/queryshop.md) to query the Storefront API within `API` routes.
+> `queryShop` is the `API` route version of `useShopQuery`. Use [`queryShop`](/docs/utilities/queryshop/) to query the Storefront API within `API` routes.
 
 ## Example code
 
@@ -68,16 +68,16 @@ The `useShopQuery` returns an object with the following key:
 
 ## Related components
 
-- [`ShopifyProvider`](/docs/components/global/shopifyprovider.md)
+- [`ShopifyProvider`](/docs/components/global/shopifyprovider/)
 
 ## Related utilities
 
-- [`queryShop`](/docs/utilities/queryshop.md)
+- [`queryShop`](/docs/utilities/queryshop/)
 
 ## Related hooks
 
-- [`fetchSync`](/docs/hooks/global/fetchsync.md)
-- [`useQuery`](/docs/hooks/global/usequery.md)
+- [`fetchSync`](/docs/hooks/global/fetchsync/)
+- [`useQuery`](/docs/hooks/global/usequery/)
 
 ## Related framework topics
 

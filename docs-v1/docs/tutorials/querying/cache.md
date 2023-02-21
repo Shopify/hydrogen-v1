@@ -4,7 +4,7 @@
 > ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
 
 
-Caching is a fundamental building block of a good shopping experience. Combined with [streaming server-side rendering](/docs/tutorials/streaming-ssr.md), caching ensures that buyers get the quickest response possible while also displaying the latest data.
+Caching is a fundamental building block of a good shopping experience. Combined with [streaming server-side rendering](/docs/tutorials/streaming-ssr/), caching ensures that buyers get the quickest response possible while also displaying the latest data.
 
 Hydrogen provides two mechanisms for cache within applications:
 
@@ -110,10 +110,10 @@ A cache control header report displays for each page request. The report include
 Learn common tasks for [managing caching in production](/docs/tutorials/querying/manage-caching.md#caching-in-production).
 ## Related hooks
 
-- [`useShopQuery`](/docs/hooks/global/useshopquery.md)
-- [`fetchSync`](/docs/hooks/global/fetchsync.md)
-- [`useQuery`](/docs/hooks/global/usequery.md)
+- [`useShopQuery`](/docs/hooks/global/useshopquery/)
+- [`fetchSync`](/docs/hooks/global/fetchsync/)
+- [`useQuery`](/docs/hooks/global/usequery/)
 
 ## Next steps
 
-- Learn how to perform common tasks for [managing caching in Hydrogen](/docs/tutorials/querying/manage-caching.md).
+- Learn how to perform common tasks for [managing caching in Hydrogen](/docs/tutorials/querying/manage-caching/).

@@ -38,7 +38,7 @@ By default, Hydrogen publishes the following events to subscribers (`ClientAnaly
 > Note:
 > The event name constants are available in `ClientAnalytics.eventNames`.
 
-Learn how to [subscribe and unsubscribe](/docs/tutorials/analytics/configure-analytics.md) to events, and learn how to [configure custom events](/docs/tutorials/analytics/configure-analytics.md#configure-custom-events)
+Learn how to [subscribe and unsubscribe](/docs/tutorials/analytics/configure-analytics/) to events, and learn how to [configure custom events](/docs/tutorials/analytics/configure-analytics.md#configure-custom-events)
 
 ## Analytics sent from the server-side
 
@@ -70,11 +70,11 @@ Learn about [displaying performance metrics](/docs/tutorials/analytics/configure
 
 ## Related components
 
-- [`ShopifyAnalytics`](/docs/components/framework/shopifyanalytics.md)
+- [`ShopifyAnalytics`](/docs/components/framework/shopifyanalytics/)
 
 ## Next steps
 
-- Learn how to perform common tasks for [configuring analytics](/docs/tutorials/analytics/configure-analytics.md).
-- Learn how to [configure queries to preload](/docs/tutorials/querying/preloaded-queries.md) in your Hydrogen app.
-- Learn how to customize the output of [SEO-related tags](/docs/tutorials/seo/manage-seo.md) in your Hydrogen client and server components.
-- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration/index.md) and how to change the location of the configuration file.
+- Learn how to perform common tasks for [configuring analytics](/docs/tutorials/analytics/configure-analytics/).
+- Learn how to [configure queries to preload](/docs/tutorials/querying/preloaded-queries/) in your Hydrogen app.
+- Learn how to customize the output of [SEO-related tags](/docs/tutorials/seo/manage-seo/) in your Hydrogen client and server components.
+- Learn about [Hydrogen's configuration properties](/docs/tutorials/configuration/) and how to change the location of the configuration file.

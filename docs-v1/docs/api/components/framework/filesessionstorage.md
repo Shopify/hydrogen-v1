@@ -43,13 +43,13 @@ Because `FileSessionStorage` relies on the file system, it shouldn't be used in 
 
 ## Related components
 
-- [`Cookie`](/docs/components/framework/cookie.md)
-- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage.md)
-- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage.md)
+- [`Cookie`](/docs/components/framework/cookie/)
+- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage/)
+- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage/)
 
 ## Related hooks
 
-- [`useSession`](/docs/hooks/framework/usesession.md)
+- [`useSession`](/docs/hooks/framework/usesession/)
 
 ## Related framework topics
 

@@ -42,13 +42,13 @@ The `MemorySessionStorage` component is a server component that renders inside `
 
 ## Related components
 
-- [`Cookie`](/docs/components/framework/cookie.md)
-- [`FileSessionStorage`](/docs/components/framework/filesessionstorage.md)
-- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage.md)
+- [`Cookie`](/docs/components/framework/cookie/)
+- [`FileSessionStorage`](/docs/components/framework/filesessionstorage/)
+- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage/)
 
 ## Related hooks
 
-- [`useSession`](/docs/hooks/framework/usesession.md)
+- [`useSession`](/docs/hooks/framework/usesession/)
 
 ## Related framework topics
 
