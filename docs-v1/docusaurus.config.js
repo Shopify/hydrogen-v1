@@ -72,13 +72,24 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'index',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Overview',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            type: 'doc',
+            docId: 'tutorials/index',
+            position: 'left',
+            label: 'Tutorials',
+          },
+          {
+            type: 'doc',
+            docId: 'api/index',
+            position: 'left',
+            label: 'API reference',
+          },
+          {
+            href: 'https://github.com/shopify/hydrogen-v1',
             label: 'GitHub',
             position: 'right',
           },
