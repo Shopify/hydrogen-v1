@@ -66,12 +66,6 @@ const config = {
             label: 'Tutorials',
           },
           {
-            type: 'doc',
-            docId: 'api/index',
-            position: 'left',
-            label: 'API reference',
-          },
-          {
             href: 'https://github.com/shopify/hydrogen-v1',
             label: 'GitHub',
             position: 'right',
