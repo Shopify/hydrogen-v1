@@ -1,7 +1,10 @@
 # Hydrogen quickstart
 
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+:::tip
+[Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+:::
+
 
 
 In this quickstart, you'll create a Hydrogen app locally. [Hydrogen](/custom-storefronts/hydrogen) is a front-end web development framework used for building Shopify custom storefronts.

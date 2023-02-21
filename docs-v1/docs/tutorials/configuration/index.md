@@ -1,7 +1,10 @@
 # Hydrogen configuration
 
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+:::tip
+[Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+:::
+
 
 
 The configuration properties for Hydrogen are located in the `hydrogen.config.js` or `hydrogen.config.ts` file at the root of your project.

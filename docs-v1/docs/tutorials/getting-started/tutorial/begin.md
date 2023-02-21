@@ -1,7 +1,10 @@
 # Begin developing a Hydrogen storefront
 
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+:::tip
+[Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+:::
+
 
 
 You're ready to develop a Hydrogen storefront. You want to set up your development environment so that you can begin coding.

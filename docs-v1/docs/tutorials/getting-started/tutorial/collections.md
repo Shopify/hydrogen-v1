@@ -1,7 +1,10 @@
 # Build a collection page
 
 
-> ⚠️ **Important:** [Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+:::tip
+[Hydrogen 2.0](https://hydrogen.shopify.dev) is out now. These archival Hydrogen 1.0 docs are provided only to assist developers during their upgrade process. Please migrate to Hydrogen 2.0 as soon as possible.
+:::
+
 
 
 Previously, you [fetched data from your storefront](/docs/tutorials/getting-started/tutorial/fetch-data/), including your store’s name and collections. Your home page is rendering a featured collections section. You’re now ready to build a collection page.

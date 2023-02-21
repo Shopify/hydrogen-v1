@@ -39,6 +39,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          sidebarCollapsible: true,
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -61,9 +62,15 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'tutorials/index',
+            docId: 'tutorials',
             position: 'left',
             label: 'Tutorials',
+          },
+          {
+            type: 'doc',
+            docId: 'api',
+            position: 'left',
+            label: 'API reference',
           },
           {
             href: 'https://github.com/shopify/hydrogen-v1',
