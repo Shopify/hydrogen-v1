@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.7
+
+### Patch Changes
+
+- Fixed a bug when using <CartLineQuantityAdjustButton /> that caused CartLine Attributes to be erased. CartLine Attributes should now be persisted when using that component. ([#2480](https://github.com/Shopify/hydrogen-v1/pull/2480)) by [@blittle](https://github.com/blittle)
+
 ## 1.6.6
 
 ### Patch Changes
@@ -546,7 +552,7 @@ If your Store is based on the "Demo Store" tempate, and you are using the `test:
   } from '@shopify/hydrogen/platforms';
 
   // Platform entry handler
-  export default function(request) {
+  export default function (request) {
     if (isAsset(new URL(request.url).pathname)) {
       return platformAssetHandler(request);
     }
