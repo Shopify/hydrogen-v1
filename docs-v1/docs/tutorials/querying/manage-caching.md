@@ -7,7 +7,7 @@
 
 
 
-Combined with [streaming server-side rendering](/docs/tutorials/streaming-ssr/), caching ensures that buyers get the quickest response possible while also displaying the latest data.
+Combined with [streaming server-side rendering](/tutorials/streaming-ssr/), caching ensures that buyers get the quickest response possible while also displaying the latest data.
 
 ## Disable caching
 
@@ -17,7 +17,7 @@ To disable caching, use the `CacheNone()` caching strategy.
 
 ## Create a caching strategy
 
-If you don't want to use the [caching strategies provided by Hydrogen](/docs/tutorials/querying/cache.md#caching-strategies), then you can create your own to use in your project.
+If you don't want to use the [caching strategies provided by Hydrogen](/tutorials/querying/cache.md#caching-strategies), then you can create your own to use in your project.
 
 For example, you can create a cache control header with `max-age=30, must-revalidate, no-transform`:
 
@@ -36,7 +36,7 @@ Sub-request caching keeps pages loading quickly for end-users. All sub-request h
 
 ### `useShopQuery`
 
-The following example shows how to implement [`useShopQuery`](/docs/hooks/global/useshopquery/) for Shopify Storefront API queries:
+The following example shows how to implement [`useShopQuery`](/hooks/global/useshopquery/) for Shopify Storefront API queries:
 
 ```jsx
 // /routes/my-products.server.jsx
@@ -52,7 +52,7 @@ const {data} = useShopQuery({
 
 ### `fetchSync`
 
-The following example shows how to implement [`fetchSync`](/docs/hooks/global/fetchsync/) for third-party requests:
+The following example shows how to implement [`fetchSync`](/hooks/global/fetchsync/) for third-party requests:
 
 ```jsx
 // /routes/my-products.server.jsx
@@ -105,7 +105,7 @@ The following are common tasks for managing caching in development:
 
 ### Enable logging for the cache API status
 
-Set `logger.showCacheApiStatus` to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration/index.md#logger). The status of the cache updates on each query:
+Set `logger.showCacheApiStatus` to `true` in your [Hydrogen configuration file](/tutorials/configuration/index.md#logger). The status of the cache updates on each query:
 
 ```sh
 [Cache] MISS   query shopInfo
@@ -116,7 +116,7 @@ Set `logger.showCacheApiStatus` to `true` in your [Hydrogen configuration file](
 
 ### Enable logging for cache control headers
 
-Set `logger.showCacheControlHeader` to `true` in your [Hydrogen configuration file](/docs/tutorials/configuration/index.md#logger).
+Set `logger.showCacheControlHeader` to `true` in your [Hydrogen configuration file](/tutorials/configuration/index.md#logger).
 
 ### Bust query cache busting on build
 
@@ -180,10 +180,10 @@ Full-page caching is powered completely by [`cache-control` headers on the Hydro
 
 ## Related hooks
 
-- [`useShopQuery`](/docs/hooks/global/useshopquery/)
-- [`fetchSync`](/docs/hooks/global/fetchsync/)
-- [`useQuery`](/docs/hooks/global/usequery/)
+- [`useShopQuery`](/hooks/global/useshopquery/)
+- [`fetchSync`](/hooks/global/fetchsync/)
+- [`useQuery`](/hooks/global/usequery/)
 
 ## Next steps
 
-- Improve your app's loading performance with [streaming SSR and Suspense](/docs/tutorials/streaming-ssr/).
+- Improve your app's loading performance with [streaming SSR and Suspense](/tutorials/streaming-ssr/).

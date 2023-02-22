@@ -32,8 +32,8 @@ For more information about component types, refer to [React Server Components](h
 
 ## Related components
 
-- [`Money`](/docs/components/primitive/money/)
+- [`Money`](/components/primitive/money/)
 
 ## Related hooks
 
-- [`useCart`](/docs/hooks/cart/usecart/)
+- [`useCart`](/hooks/cart/usecart/)

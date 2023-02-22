@@ -7,7 +7,7 @@
 
 
 
-Previously, you [built a collection page](/docs/tutorials/getting-started/tutorial/collections/). Your Hydrogen storefront sorts products within your collections, using [server props](/docs/tutorials/server-props/) and [file-based routing](/docs/tutorials/routing/). Now that you have a collections page that renders your products, you’re ready to build a product page.
+Previously, you [built a collection page](/tutorials/getting-started/tutorial/collections/). Your Hydrogen storefront sorts products within your collections, using [server props](/tutorials/server-props/) and [file-based routing](/tutorials/routing/). Now that you have a collections page that renders your products, you’re ready to build a product page.
 
 In this tutorial, you'll build a page that shows detailed product information.
 
@@ -34,7 +34,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 ## Requirements
 
-- You’ve completed the [build a collection page](/docs/tutorials/getting-started/tutorial/collections/) tutorial.
+- You’ve completed the [build a collection page](/tutorials/getting-started/tutorial/collections/) tutorial.
 
 ## Sample code
 
@@ -362,7 +362,7 @@ function ProductGallery({ media }) {
 
 ## Step 1: Create a products route
 
-You can create a products route similar to how you previously created [a collections route](/docs/tutorials/getting-started/tutorial/collections.md#step-1-create-a-collections-route).
+You can create a products route similar to how you previously created [a collections route](/tutorials/getting-started/tutorial/collections.md#step-1-create-a-collections-route).
 
 To begin building your product page, create a file called `/src/routes/products/[handle].server.jsx` that registers a new products route. Then, display the dynamic handle on the page within a layout component.
 
@@ -396,11 +396,11 @@ The products route is registered. Clicking a product takes you to a dynamic prod
 
 ## Step 2: Query a product by handle
 
-Similar to [querying a collection by its handle](/docs/tutorials/getting-started/tutorial/collections.md#step-2-query-a-collection-by-handle), you can use a product’s handle to query a product.
+Similar to [querying a collection by its handle](/tutorials/getting-started/tutorial/collections.md#step-2-query-a-collection-by-handle), you can use a product’s handle to query a product.
 
 If a handle isn't specified when a product is created, then the handle is generated from the product's original title, replacing any spaces with hyphens. For example, a product that was created with the title **The Full Stack** might have the handle **the-full-stack**.
 
-At the bottom of your `/src/routes/products/[handle].server.jsx` file, add a GraphQL query that retrieves a product by its handle. You'll also set up an `Seo` component and implement Shopify Analytics, [similar to how you did this for collection pages](/docs/tutorials/getting-started/tutorial/collections.md#step-3-generate-seo-tags-and implement-shopify-analytics).
+At the bottom of your `/src/routes/products/[handle].server.jsx` file, add a GraphQL query that retrieves a product by its handle. You'll also set up an `Seo` component and implement Shopify Analytics, [similar to how you did this for collection pages](/tutorials/getting-started/tutorial/collections.md#step-3-generate-seo-tags-and implement-shopify-analytics).
 
 ```jsx
 // /src/routes/products/[handle].server.jsx
@@ -473,12 +473,12 @@ The product page renders the following dynamic content:
 
 ## Step 3: Query product and variant details
 
-In this step, you'll create your first [client component](/docs/tutorials/react-server-components/index.md#component-types) - `ProductDetails`. Client components render on the client, enabling a client-side state. Client components end in `.client.jsx`.
+In this step, you'll create your first [client component](/tutorials/react-server-components/index.md#component-types) - `ProductDetails`. Client components render on the client, enabling a client-side state. Client components end in `.client.jsx`.
 
-Similar to [querying all products and variants that belong to a collection](/docs/tutorials/getting-started/tutorial/collections.md#step-4-query-products-and-variants), you can set up a GraphQL query to retrieve detailed information about products and variants.
+Similar to [querying all products and variants that belong to a collection](/tutorials/getting-started/tutorial/collections.md#step-4-query-products-and-variants), you can set up a GraphQL query to retrieve detailed information about products and variants.
 
 > Tip:
-> In the following code sample, you’ll notice a reference to a [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider/) component. The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](/docs/hooks/product-variant/useproductoptions/) hook.
+> In the following code sample, you’ll notice a reference to a [`ProductOptionsProvider`](/components/product-variant/productoptionsprovider/) component. The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](/hooks/product-variant/useproductoptions/) hook.
 
 1. Create a `ProductDetails` component to display product information, such as the description, title, and image of the product:
 
@@ -655,7 +655,7 @@ Similar to [querying all products and variants that belong to a collection](/doc
 
 ## Step 4: Add a product gallery
 
-In this step, you'll use a [`MediaFile`](/docs/components/primitive/mediafile/) component to render media for your product pages. The `MediaFile` component renders an `Image`, a `Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the `media` provided as a prop. The `MediaFile` component is also compatible with 3D models.
+In this step, you'll use a [`MediaFile`](/components/primitive/mediafile/) component to render media for your product pages. The `MediaFile` component renders an `Image`, a `Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the `media` provided as a prop. The `MediaFile` component is also compatible with 3D models.
 
 ```jsx
 // /src/components/ProductDetails.client.jsx
@@ -757,9 +757,9 @@ The page now renders an image next to the details about the product:
 
 Next, you'll create a product form that includes a variant selector, product price, and buy button:
 
-- The variant selector will use the [`useProductOptions`](/docs/hooks/product-variant/useproductoptions/) hook to retrieve selected options.
-- The [`ProductPrice`](/docs/components/product-variant/productprice/) component will render a [`Money`](/docs/components/primitive/money/) component with the product [`priceRange`](https://shopify.dev/api/storefront/latest/objects/productpricerange/)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
-- The [`BuyNowButton`](/docs/components/cart/buynowbutton/) component will render a button that adds an item to the cart and redirects the custom to checkout.
+- The variant selector will use the [`useProductOptions`](/hooks/product-variant/useproductoptions/) hook to retrieve selected options.
+- The [`ProductPrice`](/components/product-variant/productprice/) component will render a [`Money`](/components/primitive/money/) component with the product [`priceRange`](https://shopify.dev/api/storefront/latest/objects/productpricerange/)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
+- The [`BuyNowButton`](/components/cart/buynowbutton/) component will render a button that adds an item to the cart and redirects the custom to checkout.
 
 > Tip:
 > Consider styling the buy button to be unique and prominent so that it’s easy for customers to make purchases.
@@ -955,10 +955,10 @@ function ProductGallery({ media }) {
 
 
 
-The product page now renders all of the details for a product and its variants. It also includes a button to purchase the product. In the [next tutorial](/docs/tutorials/getting-started/tutorial/cart/), you’ll define the context for interacting with a cart and add an **Add to cart** button, which allows customers to choose products to purchase without completing the payment process.
+The product page now renders all of the details for a product and its variants. It also includes a button to purchase the product. In the [next tutorial](/tutorials/getting-started/tutorial/cart/), you’ll define the context for interacting with a cart and add an **Add to cart** button, which allows customers to choose products to purchase without completing the payment process.
 
 ![The details for a product and its variants, and a button to purchase the product](https://shopify.dev/assets/custom-storefronts/hydrogen/product-variants-purchase-button.png)
 
 ## Next steps
 
-- Learn how to [build a cart](/docs/tutorials/getting-started/tutorial/cart/).
+- Learn how to [build a cart](/tutorials/getting-started/tutorial/cart/).

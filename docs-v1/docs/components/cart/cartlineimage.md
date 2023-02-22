@@ -28,5 +28,5 @@ The `CartLineImage` component is a client component, which means that it renders
 
 ## Related components
 
-- [`CartLineProvider`](/docs/components/cart/cartlineprovider/)
-- [`Image`](/docs/components/primitive/image/)
+- [`CartLineProvider`](/components/cart/cartlineprovider/)
+- [`Image`](/components/primitive/image/)

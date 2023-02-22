@@ -25,24 +25,24 @@ The following table describes the types of session storage available by default 
 
 | Type                      | Component                                                                                          | Description                                                                                                                                                                                                                                                                                                                                                                         |
 | ------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Cookie session storage    | [CookieSessionStorage](/docs/components/framework/cookiesessionstorage/) | The default session storage mechanism for Hydrogen. Cookies are convenient because you don't need a database or another backend service to persist the data.                                                                                                                                                                                                                        |
-| In-memory session storage | [MemorySessionStorage](/docs/components/framework/memorysessionstorage/) | Stores the session data within Hydrogen runtime memory. You still need to configure cookies because a unique session ID is stored within the browser cookie, even though associated session data is stored in memory.                                                                                                                                                               |
-| File session storage      | [FileSessionStorage](/docs/components/framework/filesessionstorage/)     | Persists session data to the file system. This is useful if you need to store a lot of data in the session (more than the 4kb cookie limit/) and also have the data persist when Hydrogen restarts. <br />Cookie configuration is still necessary because a unique session ID is stored within the browser cookie, although associated session data is stored in the file system. |
+| Cookie session storage    | [CookieSessionStorage](/components/framework/cookiesessionstorage/) | The default session storage mechanism for Hydrogen. Cookies are convenient because you don't need a database or another backend service to persist the data.                                                                                                                                                                                                                        |
+| In-memory session storage | [MemorySessionStorage](/components/framework/memorysessionstorage/) | Stores the session data within Hydrogen runtime memory. You still need to configure cookies because a unique session ID is stored within the browser cookie, even though associated session data is stored in memory.                                                                                                                                                               |
+| File session storage      | [FileSessionStorage](/components/framework/filesessionstorage/)     | Persists session data to the file system. This is useful if you need to store a lot of data in the session (more than the 4kb cookie limit/) and also have the data persist when Hydrogen restarts. <br />Cookie configuration is still necessary because a unique session ID is stored within the browser cookie, although associated session data is stored in the file system. |
 
 ## Configuring sessions
 
-The [Demo Store template](/docs/tutorials/getting-started/templates/) comes pre-configured with session support.
+The [Demo Store template](/tutorials/getting-started/templates/) comes pre-configured with session support.
 
-By default, session data is persisted within a cookie. You can adjust the session cookie configuration within your Hydrogen configuration file for an in-memory storage or file-based storage (NodeJS only), or build your own storage adapter. [Learn how](/docs/tutorials/sessions/manage-sessions/).
+By default, session data is persisted within a cookie. You can adjust the session cookie configuration within your Hydrogen configuration file for an in-memory storage or file-based storage (NodeJS only), or build your own storage adapter. [Learn how](/tutorials/sessions/manage-sessions/).
 
 ## Related components and hooks
 
-- [`Cookie`](/docs/components/framework/cookie/)
-- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage/)
-- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage/)
-- [`FileSessionStorage`](/docs/components/framework/filesessionstorage/)
-- [`useSession`](/docs/hooks/framework/usesession/)
+- [`Cookie`](/components/framework/cookie/)
+- [`CookieSessionStorage`](/components/framework/cookiesessionstorage/)
+- [`MemorySessionStorage`](/components/framework/memorysessionstorage/)
+- [`FileSessionStorage`](/components/framework/filesessionstorage/)
+- [`useSession`](/hooks/framework/usesession/)
 
 ## Next steps
 
-- Learn how to perform common tasks for [managing sessions in Hydrogen](/docs/tutorials/sessions/manage-sessions/).
+- Learn how to perform common tasks for [managing sessions in Hydrogen](/tutorials/sessions/manage-sessions/).

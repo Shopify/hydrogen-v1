@@ -1,7 +1,7 @@
 # ProductOptionsProvider
 
 
-The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](/docs/hooks/product-variant/useproductoptions/) hook.
+The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](/hooks/product-variant/useproductoptions/) hook.
 
 ## Example code
 
@@ -290,8 +290,8 @@ The `ProductOptionsProvider` component is a client component, which means that i
 
 ## Related components
 
-- [`ProductPrice`](/docs/components/product-variant/productprice/)
+- [`ProductPrice`](/components/product-variant/productprice/)
 
 ## Related hooks
 
-- [`useProductOptions`](/docs/hooks/product-variant/useproductoptions/)
+- [`useProductOptions`](/hooks/product-variant/useproductoptions/)

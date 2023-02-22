@@ -7,7 +7,7 @@
 
 
 
-Caching is a fundamental building block of a good shopping experience. Combined with [streaming server-side rendering](/docs/tutorials/streaming-ssr/), caching ensures that buyers get the quickest response possible while also displaying the latest data.
+Caching is a fundamental building block of a good shopping experience. Combined with [streaming server-side rendering](/tutorials/streaming-ssr/), caching ensures that buyers get the quickest response possible while also displaying the latest data.
 
 Hydrogen provides two mechanisms for cache within applications:
 
@@ -30,7 +30,7 @@ Hydrogen includes recommended caching strategies to help you determine which cac
 | `CacheNone()`    | `no-store`                                           | No cache       |
 | `CacheCustom()`  | Define your own cache control header                 | Custom         |
 
-Learn how to [build your own caching strategy](/docs/tutorials/querying/manage-caching.md#create-a-caching-strategy).
+Learn how to [build your own caching strategy](/tutorials/querying/manage-caching.md#create-a-caching-strategy).
 
 ### Example
 
@@ -68,7 +68,7 @@ export interface AllCacheOptions {
 
 While rendering a page in your Hydrogen storefront, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users. All sub-request have the default `CacheShort` strategy.
 
- Learn how to [modify sub-request caching](/docs/tutorials/querying/manage-caching.md#modify-sub-request-caching).
+ Learn how to [modify sub-request caching](/tutorials/querying/manage-caching.md#modify-sub-request-caching).
 
 ## Full-page caching
 
@@ -76,7 +76,7 @@ In addition to sub-request caching, it’s helpful to cache the entire page resp
 
 Full-page caching is powered completely by [`cache-control` headers on the Hydrogen response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control). By default, full-page caching is enabled as long as there is a `cache` available.
 
-Learn how to [modify full-page caching](/docs/tutorials/querying/manage-caching.md#modify-full-page-caching)
+Learn how to [modify full-page caching](/tutorials/querying/manage-caching.md#modify-full-page-caching)
 
 ## Default values
 
@@ -106,17 +106,17 @@ A cache control header report displays for each page request. The report include
 > Note:
 > During development, disable cache in your browser's developer tools to make sure the latest changes are visible in your browser. For example, you can [disable cache in Chrome DevTools](https://developer.chrome.com/docs/devtools/network/reference/#disable-cache) by visiting the **Network** tab.
 
-> Sub-request caching is disabled by default during development. Learn how to [enable sub-request caching](/docs/tutorials/querying/manage-caching.md#enable-sub-request-caching).
+> Sub-request caching is disabled by default during development. Learn how to [enable sub-request caching](/tutorials/querying/manage-caching.md#enable-sub-request-caching).
 
 ## Caching in production
 
-Learn common tasks for [managing caching in production](/docs/tutorials/querying/manage-caching.md#caching-in-production).
+Learn common tasks for [managing caching in production](/tutorials/querying/manage-caching.md#caching-in-production).
 ## Related hooks
 
-- [`useShopQuery`](/docs/hooks/global/useshopquery/)
-- [`fetchSync`](/docs/hooks/global/fetchsync/)
-- [`useQuery`](/docs/hooks/global/usequery/)
+- [`useShopQuery`](/hooks/global/useshopquery/)
+- [`fetchSync`](/hooks/global/fetchsync/)
+- [`useQuery`](/hooks/global/usequery/)
 
 ## Next steps
 
-- Learn how to perform common tasks for [managing caching in Hydrogen](/docs/tutorials/querying/manage-caching/).
+- Learn how to perform common tasks for [managing caching in Hydrogen](/tutorials/querying/manage-caching/).

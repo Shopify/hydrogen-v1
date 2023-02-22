@@ -11,7 +11,7 @@ This guide how SEO works in Hydrogen and the output of SEO-related tags in your 
 
 ## How SEO works in Hydrogen
 
-Hydrogen includes an [`Seo`](/docs/components/primitive/seo/) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](/docs/tutorials/getting-started/templates/):
+Hydrogen includes an [`Seo`](/components/primitive/seo/) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](/tutorials/getting-started/templates/):
 
 - [`Sitemap.xml.server.ts`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/sitemap.xml.server.ts): A file that generates all products, collections, and pages URLs using the Storefront API
 
@@ -19,15 +19,15 @@ Hydrogen includes an [`Seo`](/docs/components/primitive/seo/) client component t
 
 ### `Seo` client component
 
-The [`Seo`](/docs/components/primitive/seo/) client component uses the data from Storefront API to generate the `<head>` tags that search engines look for. For example, [`Product.Seo`](https://shopify.dev/api/storefront/latest/objects/Product/) is used to generate the `<head>` tags for the products page.
+The [`Seo`](/components/primitive/seo/) client component uses the data from Storefront API to generate the `<head>` tags that search engines look for. For example, [`Product.Seo`](https://shopify.dev/api/storefront/latest/objects/Product/) is used to generate the `<head>` tags for the products page.
 
-Learn how to [customize `<head>` tags](/docs/tutorials/seo/manage-seo.md#customize-seo-at-the-route-level) at the route level.
+Learn how to [customize `<head>` tags](/tutorials/seo/manage-seo.md#customize-seo-at-the-route-level) at the route level.
 
 ## SEO bot behavior
 
 By default, all routes in Hydrogen are stream rendered. However, Hydrogen supports SEO by inspecting the `user-agent` for every request, disabling streaming, and buffering the response to fully render it on the server-side. This enables you to properly inject `head` tags when the page is being served to SEO crawlers and bots.
 
-Learn how to [customize bot behavior](/docs/tutorials/seo/manage-seo.md#seo-bots).
+Learn how to [customize bot behavior](/tutorials/seo/manage-seo.md#seo-bots).
 
 ## Limitations and considerations
 
@@ -46,9 +46,9 @@ The following limitations and considerations apply to the [XML sitemap](https://
 
 ## Related components
 
-- [`Seo`](/docs/components/primitive/seo/)
+- [`Seo`](/components/primitive/seo/)
 
 ## Next steps
 
-- Learn how to perform common tasks for [managing routes SEO in Hydrogen](/docs/tutorials/seo/manage-seo/).
-- Learn about the [analytics support](/docs/tutorials/analytics/) built into Hydrogen.
+- Learn how to perform common tasks for [managing routes SEO in Hydrogen](/tutorials/seo/manage-seo/).
+- Learn about the [analytics support](/tutorials/analytics/) built into Hydrogen.

@@ -34,12 +34,12 @@ The `CartLineProvider` component is a client component, which means that it rend
 
 ## Related components
 
-- [`CartLineImage`](/docs/components/cart/cartlineimage/)
-- [`CartLinePrice`](/docs/components/cart/cartlineprice/)
-- [`CartLineProductTitle`](/docs/components/cart/cartlineproducttitle/)
-- [`CartLineQuantity`](/docs/components/cart/cartlinequantity/)
-- [`CartLineQuantityAdjustButton`](/docs/components/cart/cartlinequantityadjustbutton/)
+- [`CartLineImage`](/components/cart/cartlineimage/)
+- [`CartLinePrice`](/components/cart/cartlineprice/)
+- [`CartLineProductTitle`](/components/cart/cartlineproducttitle/)
+- [`CartLineQuantity`](/components/cart/cartlinequantity/)
+- [`CartLineQuantityAdjustButton`](/components/cart/cartlinequantityadjustbutton/)
 
 ## Related hooks
 
-- [`useCartLine`](/docs/hooks/cart/usecartline/)
+- [`useCartLine`](/hooks/cart/usecartline/)

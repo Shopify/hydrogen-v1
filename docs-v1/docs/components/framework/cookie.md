@@ -43,13 +43,13 @@ The `Cookie` component is a server component. For more information about compone
 
 ## Related components
 
-- [`FileSessionStorage`](/docs/components/framework/filesessionstorage/)
-- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage/)
-- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage/)
+- [`FileSessionStorage`](/components/framework/filesessionstorage/)
+- [`CookieSessionStorage`](/components/framework/cookiesessionstorage/)
+- [`MemorySessionStorage`](/components/framework/memorysessionstorage/)
 
 ## Related hooks
 
-- [`useSession`](/docs/hooks/framework/usesession/)
+- [`useSession`](/hooks/framework/usesession/)
 
 ## Related framework topics
 

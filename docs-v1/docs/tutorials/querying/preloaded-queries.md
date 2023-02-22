@@ -40,7 +40,7 @@ In development mode, Hydrogen detects request waterfalls, and warns you that the
 
 ![Shows a screenshot of request waterfall warning](https://shopify.dev/assets/custom-storefronts/hydrogen/suspense-waterfall.png)
 
-Learn how to [disable preloaded queries](/docs/tutorials/querying/preload-queries.md#disable-preloaded-queries).
+Learn how to [disable preloaded queries](/tutorials/querying/preload-queries.md#disable-preloaded-queries).
 
 ### Routes with parameters
 
@@ -50,7 +50,7 @@ For example, the first time a user visits `/collections/freestyle-collection`, n
 
 ## Preload everywhere
 
-You can tell Hydrogen to [preload a query everywhere](/docs/tutorials/querying/preload-queries.md#preload-everywhere). This option can be helpful for menu links in your navigation, because it allows you to preload a query on button click or while you animate a transition to another page.
+You can tell Hydrogen to [preload a query everywhere](/tutorials/querying/preload-queries.md#preload-everywhere). This option can be helpful for menu links in your navigation, because it allows you to preload a query on button click or while you animate a transition to another page.
 
 ## Debug query timings
 
@@ -61,9 +61,9 @@ You can tell Hydrogen to [preload a query everywhere](/docs/tutorials/querying/p
 
 </aside>
 
-If you have a suspense waterfall detected, then you can log request timing information by enabling the `logger.showQueryTiming` property in your [Hydrogen configuration file](/docs/tutorials/configuration/index.md#logger).
+If you have a suspense waterfall detected, then you can log request timing information by enabling the `logger.showQueryTiming` property in your [Hydrogen configuration file](/tutorials/configuration/index.md#logger).
 
-The [`showQueryTiming`](/docs/tutorials/configuration/index.md#logger) property logs the timeline of when queries are being requested, resolved, and rendered. If a query is preloaded, but isn't being used, then a warning displays in the server log:
+The [`showQueryTiming`](/tutorials/configuration/index.md#logger) property logs the timeline of when queries are being requested, resolved, and rendered. If a query is preloaded, but isn't being used, then a warning displays in the server log:
 
 ![Shows a screenshot of preloaded query warning](https://shopify.dev/assets/custom-storefronts/hydrogen/preload-query-warning.png)
 
@@ -73,12 +73,12 @@ If a query is being double loaded, then a warning displays in the server log. Th
 
 ## Related components and hooks
 
-- [`ShopifyProvider`](/docs/components/global/shopifyprovider/)
-- [`fetchSync`](/docs/hooks/global/fetchsync/)
-- [`useShopQuery`](/docs/hooks/global/useshopquery/)
-- [`useQuery`](/docs/hooks/global/usequery/)
+- [`ShopifyProvider`](/components/global/shopifyprovider/)
+- [`fetchSync`](/hooks/global/fetchsync/)
+- [`useShopQuery`](/hooks/global/useshopquery/)
+- [`useQuery`](/hooks/global/usequery/)
 
 ## Next steps
 
-- Learn how to perform common tasks for [preloading queries](/docs/tutorials/querying/preload-queries/).
-- Learn about the [analytics support](/docs/tutorials/analytics/) built into Hydrogen.
+- Learn how to perform common tasks for [preloading queries](/tutorials/querying/preload-queries/).
+- Learn about the [analytics support](/tutorials/analytics/) built into Hydrogen.

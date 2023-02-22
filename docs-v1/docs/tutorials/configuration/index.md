@@ -62,9 +62,9 @@ The following groupings of configuration properties can exist in Hydrogen:
 
 ### `logger`
 
-The default behavior of the [`log` utility](/docs/utilities/log/) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
+The default behavior of the [`log` utility](/utilities/log/) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
 
-You can pass [any method](/docs/utilities/log.md#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
+You can pass [any method](/utilities/log.md#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
 
 ```tsx
 // hydrogen.config.ts
@@ -152,7 +152,7 @@ export default defineConfig({
 
 ### `serverAnalyticsConnectors`
 
-The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](/docs/tutorials/analytics/index.md#analytics-sent-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](/docs/tutorials/analytics/index).
+The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](/tutorials/analytics/index.md#analytics-sent-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](/tutorials/analytics/index).
 
 ### `serverErrorPage`
 
@@ -181,7 +181,7 @@ export default function Error({error}) {
 
 ### `session`
 
-The `session` property allows you to configure sessions support in your Hydrogen storefront. Learn moore about configuring [sessions support](/docs/tutorials/sessions/) in Hydrogen storefronts.
+The `session` property allows you to configure sessions support in your Hydrogen storefront. Learn moore about configuring [sessions support](/tutorials/sessions/) in Hydrogen storefronts.
 
 ```tsx
 // hydrogen.config.ts
@@ -209,7 +209,7 @@ export default defineConfig({
 
 ### `shopify`
 
-The `shopify` property contains all the information that your app needs to connect to the Storefront API. This configuration is passed automatically to the [`ShopifyProvider`](/docs/components/global/shopifyprovider/) component in your app.
+The `shopify` property contains all the information that your app needs to connect to the Storefront API. This configuration is passed automatically to the [`ShopifyProvider`](/components/global/shopifyprovider/) component in your app.
 
 ```tsx
 // hydrogen.config.ts
@@ -270,7 +270,7 @@ export default defineConfig({
 
 
 
-The function is called inside the [`ShopifyProvider`](/docs/components/global/shopifyprovider/) component in your app. This means that Suspense fallbacks are shown while resolving the configuration if a promise is returned.
+The function is called inside the [`ShopifyProvider`](/components/global/shopifyprovider/) component in your app. This means that Suspense fallbacks are shown while resolving the configuration if a promise is returned.
 
 > Tip:
 > Consider caching the result of the function to speed up subsequent requests.
@@ -296,15 +296,15 @@ export default defineConfig({
 
 ## Change the configuration file location
 
-If you don't want the Hydrogen configuration file located at the root of your project, then you can [change the config file location](/docs/tutorials/configuration/change-config-file-location/).
+If you don't want the Hydrogen configuration file located at the root of your project, then you can [change the config file location](/tutorials/configuration/change-config-file-location/).
 
 ## Related components
 
-- [`ShopifyProvider`](/docs/components/global/shopifyprovider/)
+- [`ShopifyProvider`](/components/global/shopifyprovider/)
 
 ## Next steps
 
-- Learn about [React Server Components](/docs/tutorials/react-server-components/), an opinionated data-fetching and rendering workflow for React apps.
-- Get familiar with the [file-based routing system](/docs/tutorials/routing/) that Hydrogen uses.
-- Learn about the Hydrogen framework's built-in support for [session management](/docs/tutorials/sessions/).
-- Learn about the [analytics support](/docs/tutorials/analytics/) built into Hydrogen.
+- Learn about [React Server Components](/tutorials/react-server-components/), an opinionated data-fetching and rendering workflow for React apps.
+- Get familiar with the [file-based routing system](/tutorials/routing/) that Hydrogen uses.
+- Learn about the Hydrogen framework's built-in support for [session management](/tutorials/sessions/).
+- Learn about the [analytics support](/tutorials/analytics/) built into Hydrogen.

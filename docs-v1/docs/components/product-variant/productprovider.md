@@ -2,9 +2,9 @@
 
 
 > Note:
-> `ProductProvider` is only available as part of the [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit) package, which is in beta. If you’re building with Hydrogen, then use [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider/)
+> `ProductProvider` is only available as part of the [React Storefront Kit](https://shopify.dev/custom-storefronts/react-storefront-kit) package, which is in beta. If you’re building with Hydrogen, then use [`ProductOptionsProvider`](/components/product-variant/productoptionsprovider/)
 
-The `ProductProvider` component sets up a context with state that tracks the selected variant and options. Descendants of this component can use the [`useProductOptions`](/docs/hooks/product-variant/useproductoptions/) hook.
+The `ProductProvider` component sets up a context with state that tracks the selected variant and options. Descendants of this component can use the [`useProductOptions`](/hooks/product-variant/useproductoptions/) hook.
 
 ## Example code
 
@@ -294,9 +294,9 @@ The `ProductProvider` component is a client component, which means that it rende
 
 ## Related components
 
-- [`ProductPrice`](/docs/components/product-variant/productprice/)
-- [`ProductOptionsProvider`](/docs/components/product-variant/productoptionsprovider/)
+- [`ProductPrice`](/components/product-variant/productprice/)
+- [`ProductOptionsProvider`](/components/product-variant/productoptionsprovider/)
 
 ## Related hooks
 
-- [`useProductOptions`](/docs/hooks/product-variant/useproductoptions/)
+- [`useProductOptions`](/hooks/product-variant/useproductoptions/)

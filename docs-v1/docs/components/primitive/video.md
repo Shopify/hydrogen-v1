@@ -3,7 +3,7 @@
 
 The `Video` component renders a video for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video).
 
-The component outputs a `video` element. You can [customize this component](/docs/components#customizing-hydrogen-components) using passthrough props.
+The component outputs a `video` element. You can [customize this component](/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
@@ -80,5 +80,5 @@ The `Video` component is a shared component, which means that it renders on both
 
 ## Related components
 
-- [`MediaFile`](/docs/components/primitive/mediafile/)
-- [`Image`](/docs/components/primitive/image/)
+- [`MediaFile`](/components/primitive/mediafile/)
+- [`Image`](/components/primitive/image/)

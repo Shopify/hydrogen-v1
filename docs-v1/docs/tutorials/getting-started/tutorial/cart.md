@@ -7,7 +7,7 @@
 
 
 
-Previously, you [built a product page](/docs/tutorials/getting-started/tutorial/products/). Your Hydrogen storefront now renders detailed information about products and provides a purchasing option, **Buy it now**, to customers. You're now ready to build a cart in your app.
+Previously, you [built a product page](/tutorials/getting-started/tutorial/products/). Your Hydrogen storefront now renders detailed information about products and provides a purchasing option, **Buy it now**, to customers. You're now ready to build a cart in your app.
 
 In this tutorial, you'll build a cart that contains the merchandise that a customer wants to buy, and the estimated cost that's associated with the cart.
 
@@ -27,7 +27,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 ## Requirements
 
-You’ve completed [Build a product page](/docs/tutorials/getting-started/tutorial/products/).
+You’ve completed [Build a product page](/tutorials/getting-started/tutorial/products/).
 
 ## Sample code
 
@@ -740,9 +740,9 @@ function ProductGallery({ media }) {
 
 You can make a cart context available to your entire Hydrogen app by wrapping your app in the `CartProvider` component.
 
-The [`CartProvider`](/docs/components/cart/cartprovider/) component creates a cart object and callbacks that can be accessed by any descendent component using the [`useCart`](/docs/hooks/cart/usecart/) hook and related hooks. `CartProvider` also carries out any callback props when a relevant action is performed.
+The [`CartProvider`](/components/cart/cartprovider/) component creates a cart object and callbacks that can be accessed by any descendent component using the [`useCart`](/hooks/cart/usecart/) hook and related hooks. `CartProvider` also carries out any callback props when a relevant action is performed.
 
-In `/src/App.server.jsx`, import the `CartProvider` component and make it a descendent of the [`ShopifyProvider`](/docs/components/global/shopifyprovider/) component:
+In `/src/App.server.jsx`, import the `CartProvider` component and make it a descendent of the [`ShopifyProvider`](/components/global/shopifyprovider/) component:
 
 ```jsx
 // /src/App.server.jsx
@@ -1672,6 +1672,6 @@ If you add a product to your cart, and click the cart icon, then the product dis
 ## Next steps
 
 - Explore the source code of the [example Hydrogen demo store](https://github.com/Shopify/hydrogen/tree/main/templates/demo-store) in GitHub.
-- Get familiar with [React Server Components](/docs/tutorials/react-server-components/).
+- Get familiar with [React Server Components](/tutorials/react-server-components/).
 - Learn more about the [Shopify-specific commerce components, hooks, and utilities](https://shopify.dev/docs/api/hydrogen) included in Hydrogen.
-- Build your own API using [API routes](/docs/tutorials/routing/index.md#api-routes).
+- Build your own API using [API routes](/tutorials/routing/index.md#api-routes).

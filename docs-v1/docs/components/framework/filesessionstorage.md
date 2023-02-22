@@ -31,7 +31,7 @@ export default defineConfig({
 | ------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | name          | `string`        | The name of the cookie stored in the browser.                                                                                           |
 | dir           | `string`        | A directory to store the session files in. Each session is stored in a separate file on the file system.                                |
-| cookieOptions | `CookieOptions` | An optional object to configure [how the cookie is persisted in the browser](/docs/components/framework/cookie.md#cookie-options). |
+| cookieOptions | `CookieOptions` | An optional object to configure [how the cookie is persisted in the browser](/components/framework/cookie.md#cookie-options). |
 
 ## Component type
 
@@ -43,13 +43,13 @@ Because `FileSessionStorage` relies on the file system, it shouldn't be used in 
 
 ## Related components
 
-- [`Cookie`](/docs/components/framework/cookie/)
-- [`MemorySessionStorage`](/docs/components/framework/memorysessionstorage/)
-- [`CookieSessionStorage`](/docs/components/framework/cookiesessionstorage/)
+- [`Cookie`](/components/framework/cookie/)
+- [`MemorySessionStorage`](/components/framework/memorysessionstorage/)
+- [`CookieSessionStorage`](/components/framework/cookiesessionstorage/)
 
 ## Related hooks
 
-- [`useSession`](/docs/hooks/framework/usesession/)
+- [`useSession`](/hooks/framework/usesession/)
 
 ## Related framework topics
 

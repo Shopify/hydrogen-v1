@@ -37,14 +37,14 @@ The `useRouteParams` hook returns an object with key values for each matching ro
 
 ## Related components
 
-- [`Router`](/docs/components/framework/router/)
-- [`FileRoutes`](/docs/components/framework/fileroutes/)
-- [`Route`](/docs/components/framework/route/)
-- [`Link`](/docs/components/framework/link/)
+- [`Router`](/components/framework/router/)
+- [`FileRoutes`](/components/framework/fileroutes/)
+- [`Route`](/components/framework/route/)
+- [`Link`](/components/framework/link/)
 
 ## Related hooks
 
-- [`useNavigate`](/docs/hooks/framework/usenavigate/)
+- [`useNavigate`](/hooks/framework/usenavigate/)
 
 ## Related framework topics
 

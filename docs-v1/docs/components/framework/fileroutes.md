@@ -52,8 +52,8 @@ The `FileRoutes` component is a server component that renders inside `App.server
 
 ## Related components
 
-- [`Router`](/docs/components/framework/router/)
-- [`Route`](/docs/components/framework/route/)
+- [`Router`](/components/framework/router/)
+- [`Route`](/components/framework/route/)
 
 ## Related framework topics
 
