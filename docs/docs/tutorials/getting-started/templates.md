@@ -12,8 +12,8 @@ Hydrogen offers different templates that provide paths to building Shopify custo
 
 Hydrogen provides the following templates to help you get started:
 
-- **[Hello World](/templates/hello-world/)**: A minimal template for developers who want to build their Hydrogen storefront from the very beginning. Pick this template to start building from scratch.
-- **[Demo Store](/templates/demo-store/)**: The default template installed when creating a new Hydrogen storefront. It’s a complete Hydrogen storefront that uses live production data provided by Shopify. Pick this template to inspect a working Hydrogen codebase, or to use as a starting point for your own build.
+- **[Hello World](https://github.com/Shopify/hydrogen-v1/tree/main/templates/hello-world/)**: A minimal template for developers who want to build their Hydrogen storefront from the very beginning. Pick this template to start building from scratch.
+- **[Demo Store](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/)**: The default template installed when creating a new Hydrogen storefront. It’s a complete Hydrogen storefront that uses live production data provided by Shopify. Pick this template to inspect a working Hydrogen codebase, or to use as a starting point for your own build.
 
 ### Components
 
@@ -25,130 +25,127 @@ The Demo Store template includes different categories of components.
 
 The following components render account information:
 
-<ul style="column-count: auto;column-width: 12rem;">
-<li><a href="/templates/demo-store/src/components/account/AccountActivateForm.client.tsx">AccountActivateForm</a></li>
-<li><a href="/templates/demo-store/src/components/account/AccountAddressBook.client.tsx">AccountAddressBook</a></li>
-<li><a href="/templates/demo-store/src/components/account/AccountAddressEdit.client.tsx">AccountAddressEdit</a></li>
-<li><a href="/templates/demo-store/src/components/account/AccountCreateForm.client.tsx">AccountCreateForm</a></li>
-<li><a href="/templates/demo-store/src/components/account/AccountDeleteAddress.client.tsx">AccountDeleteAddress</a></li>
-<li><a href="/templates/demo-store/src/components/account/AccountDetails.client.tsx">AccountDetails</a></li>
-<li><a href="/templates/demo-store/src/components/account/AccountDetailsEdit.client.tsx">AccountDetailsEdit</a></li>
-<li><a href="/templates/demo-store/src/components/account/AccountLoginForm.client.tsx">AccountLoginForm</a></li>
-<li><a href="/templates/demo-store/src/components/account/AccountOrderHistory.client.tsx">AccountOrderHistory</a></li>
-<li><a href="/templates/demo-store/src/components/account/AccountPasswordResetForm.client.tsx">AccountPasswordResetForm</a></li>
-<li><a href="/templates/demo-store/src/components/account/AccountRecoverForm.client.tsx">AccountRecoverForm</a></li>
-</ul>
+
+- [AccountActivateForm](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountActivateForm.client.tsx)
+- [AccountAddressBook](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountAddressBook.client.tsx)
+- [AccountAddressEdit](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountAddressEdit.client.tsx)
+- [AccountCreateForm](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountCreateForm.client.tsx)
+- [AccountDeleteAddress](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountDeleteAddress.client.tsx)
+- [AccountDetails](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountDetails.client.tsx)
+- [AccountDetailsEdit](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountDetailsEdit.client.tsx)
+- [AccountLoginForm](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountLoginForm.client.tsx)
+- [AccountOrderHistory](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountOrderHistory.client.tsx)
+- [AccountPasswordResetForm](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountPasswordResetForm.client.tsx)
+- [AccountRecoverForm](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/account/AccountRecoverForm.client.tsx)
 
 #### Cards
 
 The following components render card elements:
 
-<ul style="column-count: auto;column-width: 12rem;">
-<li><a href="/templates/demo-store/src/components/cards/ArticleCard.tsx">ArticleCard</a></li>
-<li><a href="/templates/demo-store/src/components/cards/CollectionCard.server.tsx">CollectionCard</a></li>
-<li><a href="/templates/demo-store/src/components/cards/OrderCard.client.tsx">OrderCard</a></li>
-<li><a href="/templates/demo-store/src/components/cards/ProductCard.client.tsx">ProductCard</a></li>
-</ul>
+- [ArticleCard](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/cards/ArticleCard.tsx)
+- [CollectionCard](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/cards/CollectionCard.server.tsx)
+- [OrderCard](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/cards/OrderCard.client.tsx)
+- [ProductCard](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/cards/ProductCard.client.tsx)
 
 #### Cart
 
 The following components render cart elements:
 
-<ul style="column-count: auto;column-width: 12rem;">
-<li><a href="/templates/demo-store/src/components/cart/CartDetails.client.tsx">CartDetails</a></li>
-<li><a href="/templates/demo-store/src/components/cart/CartEmpty.client.tsx">CartEmpty</a></li>
-<li><a href="/templates/demo-store/src/components/cart/CartLineItem.client.tsx">CartLineItem</a></li>
-</ul>
+
+- [CartDetails](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/cart/CartDetails.client.tsx)
+- [CartEmpty](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/cart/CartEmpty.client.tsx)
+- [CartLineItem](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/cart/CartLineItem.client.tsx)
+
 
 #### Elements
 
 The following components render small chunks of reusable content:
 
-<ul style="column-count: auto;column-width: 12rem;">
-<li><a href="/templates/demo-store/src/components/elements/Button.tsx">Button</a></li>
-<li><a href="/templates/demo-store/src/components/elements/Grid.tsx">Grid</a></li>
-<li><a href="/templates/demo-store/src/components/elements/Heading.tsx">Heading</a></li>
-<li><a href="/templates/demo-store/src/components/elements/Icon.tsx">Icon</a></li>
-<li><a href="/templates/demo-store/src/components/elements/Input.tsx">Input</a></li>
-<li><a href="/templates/demo-store/src/components/elements/LogoutButton.client.tsx">LogoutButton</a></li>
-<li><a href="/templates/demo-store/src/components/elements/Section.tsx">Section</a></li>
-<li><a href="/templates/demo-store/src/components/elements/Skeleton.tsx">Skeleton</a></li>
-<li><a href="/templates/demo-store/src/components/elements/Text.tsx">Text</a></li>
-</ul>
+
+- [Button](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/elements/Button.tsx)
+- [Grid](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/elements/Grid.tsx)
+- [Heading](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/elements/Heading.tsx)
+- [Icon](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/elements/Icon.tsx)
+- [Input](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/elements/Input.tsx)
+- [LogoutButton](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/elements/LogoutButton.client.tsx)
+- [Section](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/elements/Section.tsx)
+- [Skeleton](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/elements/Skeleton.tsx)
+- [Text](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/elements/Text.tsx)
+
 
 #### Global
 
 The following components render global elements:
 
-<ul style="column-count: auto;column-width: 12rem;">
-<li><a href="/templates/demo-store/src/components/global/CartDrawer.client.tsx">CartDrawer</a></li>
-<li><a href="/templates/demo-store/src/components/global/Drawer.client.tsx">Drawer</a></li>
-<li><a href="/templates/demo-store/src/components/global/Footer.server.tsx">Footer</a></li>
-<li><a href="/templates/demo-store/src/components/global/FooterMenu.client.tsx">FooterMenu</a></li>
-<li><a href="/templates/demo-store/src/components/global/Header.client.tsx">Header</a></li>
-<li><a href="/templates/demo-store/src/components/global/Layout.server.tsx">Layout</a></li>
-<li><a href="/templates/demo-store/src/components/global/MenuDrawer.client.tsx">MenuDrawer</a></li>
-<li><a href="/templates/demo-store/src/components/global/Modal.client.tsx">Modal</a></li>
-<li><a href="/templates/demo-store/src/components/global/NotFound.server.tsx">NotFound</a></li>
-<li><a href="/templates/demo-store/src/components/global/PageHeader.tsx">PageHeader</a></li>
-</ul>
+
+- [CartDrawer](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/global/CartDrawer.client.tsx)
+- [Drawer](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/global/Drawer.client.tsx)
+- [Footer](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/global/Footer.server.tsx)
+- [FooterMenu](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/global/FooterMenu.client.tsx)
+- [Header](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/global/Header.client.tsx)
+- [Layout](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/global/Layout.server.tsx)
+- [MenuDrawer](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/global/MenuDrawer.client.tsx)
+- [Modal](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/global/Modal.client.tsx)
+- [NotFound](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/global/NotFound.server.tsx)
+- [PageHeader](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/global/PageHeader.tsx)
+
 
 #### Product
 
 The following components render product information:
 
-<ul style="column-count: auto;column-width: 12rem;">
-<li><a href="/templates/demo-store/src/components/product/ProductDetail.client.tsx">ProductDetail</a></li>
-<li><a href="/templates/demo-store/src/components/product/ProductForm.client.tsx">ProductForm</a></li>
-<li><a href="/templates/demo-store/src/components/product/ProductGallery.client.tsx">ProductGallery</a></li>
-<li><a href="/templates/demo-store/src/components/product/ProductGrid.client.tsx">ProductGrid</a></li>
-<li><a href="/templates/demo-store/src/components/product/ProductOptions.client.tsx">ProductOptions</a></li>
-</ul>
+
+- [ProductDetail](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/product/ProductDetail.client.tsx)
+- [ProductForm](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/product/ProductForm.client.tsx)
+- [ProductGallery](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/product/ProductGallery.client.tsx)
+- [ProductGrid](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/product/ProductGrid.client.tsx)
+- [ProductOptions](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/product/ProductOptions.client.tsx)
+
 
 #### Search
 
 The following components render search functionality:
 
-<ul style="column-count: auto;column-width: 12rem;">
-<li><a href="/templates/demo-store/src/components/search/NoResultRecommendations.server.tsx">NoResultRecommendations</a></li>
-<li><a href="/templates/demo-store/src/components/search/SearchPage.server.tsx">SearchPage</a></li>
-</ul>
+
+- [NoResultRecommendations](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/search/NoResultRecommendations.server.tsx)
+- [SearchPage](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/search/SearchPage.server.tsx)
+
 
 #### Sections
 
 The following components render specific pieces of content on a page:
 
-<ul style="column-count: auto;column-width: 12rem;">
-<li><a href="/templates/demo-store/src/components/sections/FeaturedCollections.tsx">FeaturedCollections</a></li>
-<li><a href="/templates/demo-store/src/components/sections/Hero.tsx">Hero</a></li>
-<li><a href="/templates/demo-store/src/components/sections/ProductCards.tsx">ProductCards</a></li>
-<li><a href="/templates/demo-store/src/components/sections/ProductSwimlane.server.tsx">ProductSwimlane</a></li>
-</ul>
+
+- [FeaturedCollections](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/sections/FeaturedCollections.tsx)
+- [Hero](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/sections/Hero.tsx)
+- [ProductCards](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/sections/ProductCards.tsx)
+- [ProductSwimlane](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/sections/ProductSwimlane.server.tsx)
+
 
 #### Additional components
 
-<ul style="column-count: auto;column-width: 12rem;">
-<li><a href="/templates/demo-store/src/components/CountrySelector.client.tsx">CountrySelector</a></li>
-<li><a href="/templates/demo-store/src/components/CustomFont.client.tsx">CustomFont</a></li>
-<li><a href="/templates/demo-store/src/components/HeaderFallback.tsx">HeaderFallback</a></li>
-</ul>
+
+- [CountrySelector](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/CountrySelector.client.tsx)
+- [CustomFont](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/CustomFont.client.tsx)
+- [HeaderFallback](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/components/HeaderFallback.tsx)
+
 
 ### Routes
 
 Hydrogen uses [file-based routing](/tutorials/routing/). Any pages added to the `src/routes` directory will be automatically registered as routes by the app. The following routes are included in the Demo Store template:
 
-<ul style="column-count: auto;column-width: 12rem;">
-<li><a href="/templates/demo-store/src/routes/account">Account</a></li>
-<li><a href="/templates/demo-store/src/routes/api">API</a></li>
-<li><a href="/templates/demo-store/src/routes/collections">Collections</a></li>
-<li><a href="/templates/demo-store/src/routes/journal">Journal</a></li>
-<li><a href="/templates/demo-store/src/routes/pages">Pages</a></li>
-<li><a href="/templates/demo-store/src/routes/policies">Policies</a></li>
-<li><a href="/templates/demo-store/src/routes/products">Products</a></li>
-<li><a href="/templates/demo-store/src/routes/admin.server.tsx">Admin</a></li>
-<li><a href="/templates/demo-store/src/routes/cart.server.tsx">Cart</a></li>
-<li><a href="/templates/demo-store/src/routes/index.server.tsx">Index</a></li>
-<li><a href="/templates/demo-store/src/routes/robots.txt.server.ts">Robots</a></li>
-<li><a href="/templates/demo-store/src/routes/search.server.tsx">Search</a></li>
-<li><a href="/templates/demo-store/src/routes/sitemap.xml.server.ts">Sitemap</a></li>
-</ul>
+
+- [Account](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/account)
+- [API](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/api)
+- [Collections](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/collections)
+- [Journal](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/journal)
+- [Pages](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/pages)
+- [Policies](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/policies)
+- [Products](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/products)
+- [Admin](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/admin.server.tsx)
+- [Cart](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/cart.server.tsx)
+- [Index](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/index.server.tsx)
+- [Robots](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/robots.txt.server.ts)
+- [Search](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/search.server.tsx)
+- [Sitemap](https://github.com/Shopify/hydrogen-v1/tree/main/templates/demo-store/src/routes/sitemap.xml.server.ts)
+
