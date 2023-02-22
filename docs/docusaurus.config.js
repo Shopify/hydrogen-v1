@@ -73,6 +73,11 @@ const config = {
             label: 'API reference',
           },
           {
+            href: 'https://shopify.dev/docs/custom-storefronts/hydrogen/migrate-hydrogen-remix',
+            label: 'Migrate to Hydrogen 2',
+            position: 'left',
+          },
+          {
             href: 'https://github.com/shopify/hydrogen-v1',
             label: 'GitHub',
             position: 'right',
