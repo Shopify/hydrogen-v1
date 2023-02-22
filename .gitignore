@@ -22,6 +22,10 @@ lib-cov
 coverage
 *.lcov
 
+# Docusaurus generated files
+.docusaurus
+.cache-loader
+
 # nyc test coverage
 .nyc_output
 
