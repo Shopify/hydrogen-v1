@@ -33,7 +33,7 @@ Learn how to [customize bot behavior](/docs/tutorials/seo/manage-seo.md#seo-bots
 
 The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/sitemap.xml.server.ts) that's included in the Demo Store template:
 
-- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources.
+- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](https://shopify.dev/docs/api/usage/pagination-graphql) if your store has more than 250 resources.
 
   > Tip:
   > If your store has more resources than the limit, and you haven't customized the URLs of the resources, then we recommend using the Online Store version of the sitemap at `https://{store-domain}/sitemap.xml`.

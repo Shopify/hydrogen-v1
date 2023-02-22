@@ -7,7 +7,7 @@
 
 
 
-Hydrogen contains a set of [Shopify-specific commerce components, hooks, and utilities](/api/hydrogen) that help accelerate your development process. This guide describes how Hydrogen consumes data from different sources.
+Hydrogen contains a set of [Shopify-specific commerce components, hooks, and utilities](https://shopify.dev/docs/api/hydrogen) that help accelerate your development process. This guide describes how Hydrogen consumes data from different sources.
 
 ## How it works
 
@@ -41,5 +41,5 @@ Hydrogen can also support data from third-party sources. If you want to use Hydr
 ## Next steps
 
 - Learn how to perform common tasks for [working with third-party data sources in Hydrogen](/docs/tutorials/data-sources/work-with-3p-data-sources/).
-- Get familiar with the [Shopify-specific commerce components, hooks, and utilities](/api/hydrogen) included in Hydrogen.
-- Learn about [Hydrogen's architecture and framework](/custom-storefronts/hydrogen).
+- Get familiar with the [Shopify-specific commerce components, hooks, and utilities](https://shopify.dev/docs/api/hydrogen) included in Hydrogen.
+- Learn about [Hydrogen's architecture and framework](https://shopify.dev/docs/custom-storefronts/hydrogen).

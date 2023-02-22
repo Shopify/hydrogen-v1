@@ -7,7 +7,7 @@
 
 
 
-In this quickstart, you'll create a Hydrogen app locally. [Hydrogen](/custom-storefronts/hydrogen) is a front-end web development framework used for building Shopify custom storefronts.
+In this quickstart, you'll create a Hydrogen app locally. [Hydrogen](https://shopify.dev/docs/custom-storefronts/hydrogen) is a front-end web development framework used for building Shopify custom storefronts.
 
 ## Requirements
 

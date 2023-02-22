@@ -82,7 +82,7 @@ export function Product({handle}) {
 
 | Argument                                                                                                                                          | Required |
 | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| A connection object with the field `nodes` or `edges`. For example, any of the [Product connections](/api/storefront/reference/products/product). | Yes      |
+| A connection object with the field `nodes` or `edges`. For example, any of the [Product connections](https://shopify.dev/docs/api/storefront/reference/products/product). | Yes      |
 
 ## Return type
 

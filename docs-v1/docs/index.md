@@ -11,7 +11,7 @@ slug: /
 
 
 
-Hydrogen is a front-end web development framework used for building [Shopify custom storefronts](/custom-storefronts/getting-started). It includes the structure, components, and tooling you need to get started so you can spend your time styling and designing features that make your brand unique.
+Hydrogen is a front-end web development framework used for building [Shopify custom storefronts](https://shopify.dev/docs/custom-storefronts/getting-started). It includes the structure, components, and tooling you need to get started so you can spend your time styling and designing features that make your brand unique.
 
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/Su-x4Mo5xmU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
@@ -21,7 +21,7 @@ Hydrogen is the approach you use to build a custom storefront. It contains a fra
 
 - **Hydrogen framework**: Hydrogen provides a [Vite](https://vitejs.dev/) plugin which offers server-side rendering (SSR), hydration middleware, and client component code transformations.
 
-- **[Hydrogen components, hooks, and utilities](/api/hydrogen)**: Hydrogen includes components, hooks, and utilities that support features and concepts that exist in Shopify. They're accessible, performant, and ready for use. They also help to reduce the initial complexity and boilerplate needed for building a custom storefront.
+- **[Hydrogen components, hooks, and utilities](https://shopify.dev/docs/api/hydrogen)**: Hydrogen includes components, hooks, and utilities that support features and concepts that exist in Shopify. They're accessible, performant, and ready for use. They also help to reduce the initial complexity and boilerplate needed for building a custom storefront.
 
 ![A diagram that shows what Hydrogen includes: Vite offerings and Shopify-specific components, hooks, and utilities](https://shopify.dev/assets/custom-storefronts/hydrogen/hydrogen-overview.png)
 
@@ -86,7 +86,7 @@ Hydrogen includes the following default entry points for your app:
 You can [configure the default entry points](/docs/tutorials/data-sources/configure-default-entry-points/) for your app.
 ## Oxygen
 
-[Oxygen](/custom-storefronts/oxygen) is Shopify's recommended deployment platform for Hydrogen storefronts. Oxygen removes the need to maintain server infrastructure, and enables you to manage and deploy Hydrogen storefronts. You can deploy different Hydrogen storefronts to Oxygen environments, enabling you to preview and share different versions of storefronts.
+[Oxygen](https://shopify.dev/docs/custom-storefronts/oxygen) is Shopify's recommended deployment platform for Hydrogen storefronts. Oxygen removes the need to maintain server infrastructure, and enables you to manage and deploy Hydrogen storefronts. You can deploy different Hydrogen storefronts to Oxygen environments, enabling you to preview and share different versions of storefronts.
 
 ## Limitations
 

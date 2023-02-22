@@ -7,7 +7,7 @@
 
 
 
-You can deploy a Hydrogen storefront to most [Worker and Node.js runtimes](/custom-storefronts/hydrogen#request-workflow-for-hydrogen-apps). This guide describes how to deploy a Hydrogen storefront to [Oxygen](#deploy-to-oxygen), [Netlify](#deploy-to-netlify), [Vercel](#deploy-to-vercel), [Node.js](#deploy-to-node-js), [Docker](#deploy-to-docker), and [Cloudflare Workers](#deploy-to-cloudflare-workers).
+You can deploy a Hydrogen storefront to most [Worker and Node.js runtimes](https://shopify.dev/docs/custom-storefronts/hydrogen#request-workflow-for-hydrogen-apps). This guide describes how to deploy a Hydrogen storefront to [Oxygen](#deploy-to-oxygen), [Netlify](#deploy-to-netlify), [Vercel](#deploy-to-vercel), [Node.js](#deploy-to-node-js), [Docker](#deploy-to-docker), and [Cloudflare Workers](#deploy-to-cloudflare-workers).
 
 ## Requirements
 
@@ -17,7 +17,7 @@ You can deploy a Hydrogen storefront to most [Worker and Node.js runtimes](/cust
 
 ## Deploy to Oxygen
 
-Oxygen is Shopify's recommended deployment platform for Hydrogen storefronts. To learn how to deploy a Hydrogen storefront to Oxygen, refer to [Getting started with Oxygen](/custom-storefronts/oxygen/getting-started).
+Oxygen is Shopify's recommended deployment platform for Hydrogen storefronts. To learn how to deploy a Hydrogen storefront to Oxygen, refer to [Getting started with Oxygen](https://shopify.dev/docs/custom-storefronts/oxygen/getting-started).
 
 ## Deploy to Netlify
 

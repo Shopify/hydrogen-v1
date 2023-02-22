@@ -19,7 +19,7 @@ You want to retrieve specific data from your storefront, including your store’
 
 In this tutorial, you’ll learn how to do the following tasks:
 
-- Make a GraphQL query using the [Shopify Storefront API GraphiQL explorer](/custom-storefronts/tools/graphiql-storefront-api).
+- Make a GraphQL query using the [Shopify Storefront API GraphiQL explorer](https://shopify.dev/docs/custom-storefronts/tools/graphiql-storefront-api).
 - Implement the [useShopQuery](/docs/hooks/global/useshopquery/) hook to fetch storefront data from inside your Hydrogen app.
 - Generate default SEO tags.
 - Improve the loading sequence of your app using Suspense.
@@ -250,7 +250,7 @@ Now that you’ve tested your query in the GraphiQL explorer and verified that i
 Hydrogen offers the [`useShopQuery`](/docs/hooks/global/useshopquery/) hook to fetch data from your storefront from within [server components](/docs/tutorials/react-server-components/index.md#component-types). In this step, you'll create a new `Layout` component that renders your shop name, and you'll use the `useShopQuery` hook within `Layout` to pass in a GraphQL query that retrieves your shop's name.
 
 > Tip:
-> Hydrogen contains a set of Shopify-specific commerce components, hooks, and utilities that help accelerate your development process. You can refer to the [Hydrogen reference](/api/hydrogen) to determine which fields need to be queried for each component.
+> Hydrogen contains a set of Shopify-specific commerce components, hooks, and utilities that help accelerate your development process. You can refer to the [Hydrogen reference](https://shopify.dev/docs/api/hydrogen) to determine which fields need to be queried for each component.
 
 ### Create a `Layout` component
 

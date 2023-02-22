@@ -37,7 +37,7 @@ You can [configure user authentication](/docs/tutorials/authentication/configure
 
 ## Next steps
 
-- Learn how to [manage customer accounts](/custom-storefronts/customer-accounts) with the Storefront API.
+- Learn how to [manage customer accounts](https://shopify.dev/docs/custom-storefronts/customer-accounts) with the Storefront API.
 - Get familiar with the [file-based routing system](/docs/tutorials/routing/) that Hydrogen uses.
 - Learn about the Hydrogen framework's built-in support for [session management](/docs/tutorials/sessions/).
 - Learn how to customize the output of [SEO-related tags](/docs/tutorials/seo/manage-seo/) in your Hydrogen client and server components.

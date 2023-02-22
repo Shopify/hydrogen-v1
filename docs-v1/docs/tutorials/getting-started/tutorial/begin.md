@@ -9,7 +9,7 @@
 
 You're ready to develop a Hydrogen storefront. You want to set up your development environment so that you can begin coding.
 
-In this tutorial, you'll create a Hydrogen app locally to begin developing a Hydrogen storefront. [Hydrogen](/custom-storefronts/hydrogen) is a front-end web development framework that's optimized for commerce by Shopify.
+In this tutorial, you'll create a Hydrogen app locally to begin developing a Hydrogen storefront. [Hydrogen](https://shopify.dev/docs/custom-storefronts/hydrogen) is a front-end web development framework that's optimized for commerce by Shopify.
 
 ## Scenario
 
@@ -45,7 +45,7 @@ In this tutorial, you’ll learn how to do the following tasks:
 
 You can create a Hydrogen storefront locally using `yarn`, `npm`, `pnpm`, or `npx`.
 
-If you want to [integrate with an existing React framework](/custom-storefronts/react-storefront-kit), like [Next.js](https://nextjs.org/) or [Gatsby](https://www.gatsbyjs.com/), then you can add the [@shopify/storefront-kit-react](https://www.npmjs.com/package/@shopify/storefront-kit-react) `npm` package to your project.
+If you want to [integrate with an existing React framework](https://shopify.dev/docs/custom-storefronts/react-storefront-kit), like [Next.js](https://nextjs.org/) or [Gatsby](https://www.gatsbyjs.com/), then you can add the [@shopify/storefront-kit-react](https://www.npmjs.com/package/@shopify/storefront-kit-react) `npm` package to your project.
 
 1. Change to the directory where you want to create your project:
 

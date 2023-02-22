@@ -1673,5 +1673,5 @@ If you add a product to your cart, and click the cart icon, then the product dis
 
 - Explore the source code of the [example Hydrogen demo store](https://github.com/Shopify/hydrogen/tree/main/templates/demo-store) in GitHub.
 - Get familiar with [React Server Components](/docs/tutorials/react-server-components/).
-- Learn more about the [Shopify-specific commerce components, hooks, and utilities](/api/hydrogen) included in Hydrogen.
+- Learn more about the [Shopify-specific commerce components, hooks, and utilities](https://shopify.dev/docs/api/hydrogen) included in Hydrogen.
 - Build your own API using [API routes](/docs/tutorials/routing/index.md#api-routes).
