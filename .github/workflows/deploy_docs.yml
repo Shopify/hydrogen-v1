@@ -37,6 +37,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # Build output to publish to the `gh-pages` branch:
+          # NOTE: This action doesn't inherit <job_id>.defaults.run.working-directory
+          # so you have to call the publish directory from the project root.
           publish_dir: ./docs/build
           # The following lines assign commit authorship to the official
           # GH-Actions bot for deploys to `gh-pages` branch:
