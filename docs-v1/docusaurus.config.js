@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Hydrogen v1',
-  tagline: 'Dinosaurs are cool',
+  tagline: 'Archived documentation for Hydrogen 1',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -18,8 +18,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'shopify', // Usually your GitHub org/user name.
+  projectName: 'hydrogen-v1', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -38,6 +38,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
         },
         theme: {
@@ -82,15 +83,19 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Community',
+            title: 'Links',
             items: [
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Shopify.dev',
+                href: 'https://shopify.dev',
               },
               {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
+                label: 'Discord',
+                href: 'https://discord.gg/shopifydevs',
+              },
+              {
+                label: '@shopifydevs',
+                href: 'https://twitter.com/shopifydevs',
               },
             ],
           },
@@ -104,7 +109,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Shopify. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Shopify.`,
       },
       prism: {
         theme: lightCodeTheme,

@@ -1,3 +1,7 @@
+---
+slug: /
+---
+
 # Hydrogen overview
 
 
