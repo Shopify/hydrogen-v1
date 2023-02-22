@@ -21,6 +21,10 @@ const config = {
   organizationName: 'shopify', // Usually your GitHub org/user name.
   projectName: 'hydrogen-v1', // Usually your repo name.
 
+  // https://docusaurus.io/docs/deployment#deploying-to-github-pages
+  deploymentBranch: 'gh-pages',
+  trailingSlash: false,
+
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
