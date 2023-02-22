@@ -5,9 +5,7 @@ The `Router` component provides the context for routing in your Hydrogen storefr
 
 ## Example code
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
-```jsx
+```jsx title="App.server.jsx"
 import {Router, FileRoutes, Route} from '@shopify/hydrogen';
 function App() {
   return (
@@ -29,7 +27,7 @@ function NotFound() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Props
 

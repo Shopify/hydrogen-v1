@@ -7,9 +7,7 @@ You can override the default behavior and use custom routes based on the output 
 
 ## Example code
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
-```jsx
+```jsx title="App.server.jsx"
 import {Router, FileRoutes, Route} from '@shopify/hydrogen';
 
 function App() {
@@ -36,7 +34,7 @@ function NotFound() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Props
 

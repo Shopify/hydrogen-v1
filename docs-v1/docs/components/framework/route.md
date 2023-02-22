@@ -5,9 +5,7 @@ The `Route` component is used to set up a route in Hydrogen that's independent o
 
 ## Example code
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
-```tsx
+```tsx title="App.server.jsx"
 import {Router, Route} from '@shopify/hydrogen';
 function App() {
   return (
@@ -36,7 +34,7 @@ function NotFound() {
 export default renderHydrogen(App);
 ```
 
-{% endcodeblock %}
+
 
 ## Props
 

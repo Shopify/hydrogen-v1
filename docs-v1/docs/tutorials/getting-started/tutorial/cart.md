@@ -89,10 +89,10 @@ export function Layout({ children }) {
       <Suspense>
         <Seo
           type="defaultSeo"
-          data={% raw %}{{
+          data={{
             title: shop.name,
             description: shop.description,
-          }}{% endraw %}
+          }}
         />
       </Suspense>
       <div className="flex flex-col min-h-screen antialiased bg-neutral-50">
@@ -558,7 +558,7 @@ export default function ProductDetails({ product }) {
             <div className="mt-8">
               <div
                 className="prose border-t border-gray-200 pt-6 text-black text-md"
-                dangerouslySetInnerHTML={% raw %}{{ __html: product.descriptionHtml }}{% endraw %}
+                dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
               ></div>
             </div>
           </div>
@@ -721,9 +721,9 @@ function ProductGallery({ media }) {
               tabIndex="0"
               className={`w-full h-full aspect-square object-cover`}
               data={data}
-              options={% raw %}{{
+              options={{
                 crop: "center",
-              }}{% endraw %}
+              }}
               {...extraProps}
             />
           </div>
@@ -1026,10 +1026,10 @@ export function Layout({ children }) {
       <Suspense>
         <Seo
           type="defaultSeo"
-          data={% raw %}{{
+          data={{
             title: shop.name,
             description: shop.description,
-          }}{% endraw %}
+          }}
         />
       </Suspense>
       <div className="flex flex-col min-h-screen antialiased bg-neutral-50">
@@ -1483,7 +1483,7 @@ export default function ProductDetails({ product }) {
             <div className="mt-8">
               <div
                 className="prose border-t border-gray-200 pt-6 text-black text-md"
-                dangerouslySetInnerHTML={% raw %}{{ __html: product.descriptionHtml }}{% endraw %}
+                dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
               ></div>
             </div>
           </div>
@@ -1646,9 +1646,9 @@ function ProductGallery({ media }) {
               tabIndex="0"
               className={`w-full h-full aspect-square object-cover`}
               data={data}
-              options={% raw %}{{
+              options={{
                 crop: "center",
-              }}{% endraw %}
+              }}
               {...extraProps}
             />
           </div>

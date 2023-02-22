@@ -12,9 +12,7 @@ The `useRequestContext` hook provides access to a request-scoped context to shar
 
 ## Example code
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
-```jsx
+```jsx title="App.server.jsx"
 import {useRequestContext} from '@shopify/hydrogen';
 
 const pluginName = 'my-plugin';
@@ -40,7 +38,7 @@ function SomeOtherServerComponent() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Arguments
 

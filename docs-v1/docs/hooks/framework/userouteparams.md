@@ -5,9 +5,7 @@ The `useRouteParams` hook retrieves the parameters of an active route. The hook 
 
 ## Example code
 
-{% codeblock file, filename: '[handle].server.jsx' %}
-
-```jsx
+```jsx title="[handle].server.jsx"
 import {useRouteParams} from '@shopify/hydrogen';
 // Server component
 export default function Page() {
@@ -16,11 +14,9 @@ export default function Page() {
 }
 ```
 
-{% endcodeblock %}
 
-{% codeblock file, filename: 'component.client.jsx' %}
 
-```jsx
+```jsx title="component.client.jsx"
 import {useRouteParams} from '@shopify/hydrogen';
 // Client component
 export default function Component() {
@@ -29,7 +25,7 @@ export default function Component() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Return value
 

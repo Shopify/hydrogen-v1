@@ -7,9 +7,7 @@ The `ShopifyAnalytics` component sends commerce-related analytics to Shopify. By
 
 Add the `ShopifyAnalytics` component in `App.server.jsx`:
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
-```jsx
+```jsx title="App.server.jsx"
 function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
@@ -22,26 +20,22 @@ function App() {
 }
 ```
 
-{% endcodeblock %}
+
 
 If you have a custom domain or you're using sub-domains, then you can set the cookie domain of
 the `ShopifyAnalytics` component so that cookies persists for your root domain:
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
-```jsx
+```jsx title="App.server.jsx"
 <ShopifyAnalytics cookieDomain="my-shop.com" />
 ```
 
-{% endcodeblock %}
+
 
 If you're not using custom domains or sub-domains, then the `ShopifyAnalytics` component uses the `storeDomain` value in the Hydrogen configuration file as the default cookie domain or leaves it blank when the specified cookie domain doesn't match `window.location.hostname`.
 
 If you have customer login, then make sure that `customerAccessToken` is passed to the `<CartProvider>`:
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
-```jsx
+```jsx title="App.server.jsx"
 const {customerAccessToken} = useSession();
 
 useServerAnalytics({
@@ -59,7 +53,7 @@ return (
       >
 ```
 
-{% endcodeblock %}
+
 
 ### Connecting Hydrogen analytics with Shopify checkout
 
@@ -103,9 +97,7 @@ Provide the following data to `useServerAnalytics` to view information from the 
 
 ### Home page
 
-{% codeblock file, filename: 'src/routes/index.server.jsx' %}
-
-```jsx
+```jsx title="src/routes/index.server.jsx"
 export default function Homepage() {
   useServerAnalytics({
     shopify: {
@@ -115,13 +107,11 @@ export default function Homepage() {
   });
 ```
 
-{% endcodeblock %}
+
 
 ### Collection page
 
-{% codeblock file, filename: 'src/routes/collections/[handle].server.jsx' %}
-
-```jsx
+```jsx title="src/routes/collections/[handle].server.jsx"
 export default function Collection() {
   const {handle} = useRouteParams();
   ...
@@ -135,13 +125,11 @@ export default function Collection() {
   });
 ```
 
-{% endcodeblock %}
+
 
 ### Product page
 
-{% codeblock file, filename: 'src/routes/products/[handle].server.jsx' %}
-
-```jsx
+```jsx title="src/routes/products/[handle].server.jsx"
 export default function Product() {
   const {handle} = useRouteParams();
   ...
@@ -166,13 +154,11 @@ export default function Product() {
   });
 ```
 
-{% endcodeblock %}
+
 
 ### Search page
 
-{% codeblock file, filename: 'src/routes/search.server.jsx' %}
-
-```jsx
+```jsx title="src/routes/search.server.jsx"
 export default function Search() {
   ...
   const {searchParams} = useUrl();
@@ -187,13 +173,11 @@ export default function Search() {
   });
 ```
 
-{% endcodeblock %}
+
 
 ### Account index page
 
-{% codeblock file, filename: 'src/routes/account/index.server.jsx' %}
-
-```jsx
+```jsx title="src/routes/account/index.server.jsx"
 export default function Account({response}: HydrogenRouteProps) {
   ...
   if (!customer) return response.redirect('/account/login');
@@ -206,7 +190,7 @@ export default function Account({response}: HydrogenRouteProps) {
   });
 ```
 
-{% endcodeblock %}
+
 
 ### Cart Fragment
 

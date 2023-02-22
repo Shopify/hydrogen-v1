@@ -79,7 +79,7 @@ The following example shows how to include a catch-all SEO component with the ty
 ```jsx
 // App.server.jsx
 
-{% raw %}
+
 import {Suspense} from 'react';
 
 import LoadingFallback from './components/LoadingFallback';
@@ -103,7 +103,7 @@ export default function App({log, ...serverProps}) {
     </>
   );
 }
-{% endraw %}
+
 ```
 
 
@@ -126,11 +126,11 @@ The following example shows how to overwrite title template for all pages (for e
   return (
     <Seo
       type="defaultSeo"
-      data={% raw %}{{
+      data={{
         title: name,
         description,
 +       titleTemplate: `%s | ${name}`
-      }}{% endraw %}
+      }}
     />
   );
 ...
@@ -191,7 +191,7 @@ Pages that require authentication shouldn't be indexed by bots. For example, bot
 ```jsx
 // /account/login.server.jsx
 
-<Seo type="noindex" data={% raw %}{{title: 'Login'}}{% endraw %} />
+<Seo type="noindex" data={{title: 'Login'}} />
 ```
 
 

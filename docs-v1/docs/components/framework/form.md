@@ -14,9 +14,7 @@ Within a Hydrogen app, [React Server Components](https://shopify.dev/custom-stor
 
 The `Form` component builds on the native HTML `<form>` element. The following is an example:
 
-{% codeblock file, filename: 'index.html' %}
-
-```html
+```html title="index.html"
 <form action="/login" method="post">
   <label> Username <input type="text" name="username" /> </label>
   <label> Password <input type="password" name="password" /> </label>
@@ -24,7 +22,7 @@ The `Form` component builds on the native HTML `<form>` element. The following i
 </form>
 ```
 
-{% endcodeblock %}
+
 
 This example HTML doesn't run any JavaScript. When **Submit** is clicked, the browser sends a `POST` request to `/login` with each form field encoded. The browser also reloads the entire page to display the server's response. Learn more about [native HTML forms](https://developer.mozilla.org/en-US/docs/Learn/Forms).
 
@@ -47,9 +45,7 @@ The following example rewrites the [example form element](#html-form-element) by
 
 Because the `Form` is within a client component, `children` can be a render prop. This enables you to give users feedback while the form is submitting.
 
-{% codeblock file, filename: 'LoginForm.client.jsx' %}
-
-```tsx
+```tsx title="LoginForm.client.jsx"
 import {Form} from '@shopify/hydrogen/experimental';
 
 export default function Login() {
@@ -77,7 +73,7 @@ export default function Login() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Hidden fields
 
@@ -85,9 +81,7 @@ You can use the `Form` component for any mutation that doesn't include a text fi
 
 For example, the following uses a `Form` component for adding items an item to a cart:
 
-{% codeblock file, filename: 'Product.server.jsx' %}
-
-```tsx
+```tsx title="Product.server.jsx"
 import {Form} from '@shopify/hydrogen/experimental';
 
 export default function Product({product}) {
@@ -102,7 +96,7 @@ export default function Product({product}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 The hidden input field for the `productId` is sent to the server when the **Add to cart** button is clicked. The API route at `/addToCart` can contain all the logic to add the product to the cart and re-render the page. The button is actionable before the page fully loads and the JavaScript is hydrated.
 
@@ -110,9 +104,7 @@ The hidden input field for the `productId` is sent to the server when the **Add 
 
 We recommend that you use `Form` in client components for the best user experience. However, you can use `Form` in server components if required. The following is an example:
 
-{% codeblock file, filename: 'login.server.jsx' %}
-
-```tsx
+```tsx title="login.server.jsx"
 import {Form} from '@shopify/hydrogen/experimental';
 
 export default function Login() {
@@ -130,15 +122,13 @@ export default function Login() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### `Form` requires an API route
 
 The `action` attribute must point to an API route. The following is an example implementation:
 
-{% codeblock file, filename: 'login.server.jsx' %}
-
-```tsx
+```tsx title="login.server.jsx"
 export async function api(request, {session}) {
   // Access the form data
   const data = await request.formData();
@@ -163,15 +153,13 @@ export async function api(request, {session}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 Read data in the API route from the `Form` by using the [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) API. The API route must respond with a `new Request()`. This renders the server components for the given page. You can re-render the current page, or render an entirely different page in the app.
 
 In the previous example, when the user is not found, the current page is re-rendered with an error set on the session. The following code updates the server component to render the login error:
 
-{% codeblock file, filename: 'login.server.jsx' %}
-
-```tsx
+```tsx title="login.server.jsx"
 import {Form, useFlashSession} from '@shopify/hydrogen/experimental';
 
 export default function Login() {
@@ -196,7 +184,7 @@ export default function Login() {
 }
 ```
 
-{% endcodeblock %}
+
 
 The page initially loads without a session `loginError` value. If the login mutation fails, then the server components re-render with the `loginError` session value and display a message to the user. Because the component uses `useFlashSession` instead of `useSession`, the value is subsequently cleared. If the user refreshes the page, then the validation error goes away.
 

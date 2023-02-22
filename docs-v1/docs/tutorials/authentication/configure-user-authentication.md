@@ -28,7 +28,7 @@ Pages that require authentication shouldn't be indexed by bots. For example, bot
 ```jsx
 // /account/login.server.jsx
 
-<Seo type="noindex" data={% raw %}{{title: 'Login'}}{% endraw %} />
+<Seo type="noindex" data={{title: 'Login'}} />
 ```
 
 

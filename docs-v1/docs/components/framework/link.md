@@ -5,16 +5,14 @@ The `Link` component is used to navigate between routes. Because it renders an u
 
 ## Example code
 
-{% codeblock file, filename: 'index.server.jsx' %}
-
-```jsx
+```jsx title="index.server.jsx"
 import {Link} from '@shopify/hydrogen';
 export default function Index() {
   return <Link to="/products/hydrogen">Hydrogen</Link>;
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Scroll restoration
 
@@ -22,9 +20,7 @@ By default, when you click a `<Link>` component, Hydrogen emulates default brows
 
 However, if you want to build a user interface that re-renders server components and updates the URL, but doesn't modify the scroll position, then you can disable scroll restoration using the `scroll` prop:
 
-{% codeblock file, filename: 'index.server.jsx' %}
-
-```jsx
+```jsx title="index.server.jsx"
 import {Link} from '@shopify/hydrogen';
 export default function Index({request}) {
   const url = new URL(request.normalizedUrl);
@@ -40,7 +36,7 @@ export default function Index({request}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Base path
 

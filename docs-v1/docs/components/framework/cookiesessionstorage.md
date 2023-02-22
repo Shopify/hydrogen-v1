@@ -5,9 +5,7 @@ The `CookieSessionStorage` component is the default session storage mechanism fo
 
 ## Example code
 
-{% codeblock file, filename: 'hydrogen.config.js' %}
-
-```jsx
+```jsx title="hydrogen.config.js"
 import {defineConfig, CookieSessionStorage} from '@shopify/hydrogen/config';
 
 export default defineConfig({
@@ -22,7 +20,7 @@ export default defineConfig({
 });
 ```
 
-{% endcodeblock %}
+
 
 ## Props
 

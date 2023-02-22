@@ -12,9 +12,7 @@ The `useFlashSession` hook reads session data and subsequently clears it in serv
 
 ## Example code
 
-{% codeblock file, filename: 'src/component.server.jsx' %}
-
-```jsx
+```jsx title="src/component.server.jsx"
 import {Form, useFlashSession} from '@shopify/hydrogen/experimental';
 
 export default function Login() {
@@ -47,7 +45,7 @@ export async function api(request, {session}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Return value
 

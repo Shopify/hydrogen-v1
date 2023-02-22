@@ -5,9 +5,7 @@ The `FileSessionStorage` component persists session data to the file system.
 
 ## Example code
 
-{% codeblock file, filename: 'hydrogen.config.js' %}
-
-```jsx
+```jsx title="hydrogen.config.js"
 import {defineConfig} from '@shopify/hydrogen/config';
 import {FileSessionStorage} from '@shopify/hydrogen/FileSessionStorage';
 
@@ -23,7 +21,7 @@ export default defineConfig({
 });
 ```
 
-{% endcodeblock %}
+
 
 ## Props
 

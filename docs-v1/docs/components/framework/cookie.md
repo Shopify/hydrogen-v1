@@ -5,9 +5,7 @@ The `Cookie` component helps you build your own custom cookie and session implem
 
 ## Example code
 
-{% codeblock file, filename: 'custom.js' %}
-
-```js
+```js title="custom.js"
 import {Cookie} from '@shopify/hydrogen';
 let cookie = new Cookie('__session', {
   path: '/',
@@ -21,7 +19,7 @@ cookie.set('new', 'data');
 response.headers.set('Set-Cookie', cookie.serialize());
 ```
 
-{% endcodeblock %}
+
 
 ## Cookie options
 

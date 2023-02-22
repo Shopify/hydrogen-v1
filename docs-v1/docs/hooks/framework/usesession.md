@@ -5,9 +5,7 @@ The `useSession` hook reads session data in server components.
 
 ## Example code
 
-{% codeblock file, filename: 'component.server.jsx' %}
-
-```jsx
+```jsx title="component.server.jsx"
 import {useSession} from '@shopify/hydrogen';
 export default function ServerComponent() {
   const {countryCode} = useSession();
@@ -15,7 +13,7 @@ export default function ServerComponent() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Return value
 

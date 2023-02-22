@@ -5,9 +5,7 @@ The `MemorySessionStorage` component stores session data within Hydrogen runtime
 
 ## Example code
 
-{% codeblock file, filename: 'App.server.jsx' %}
-
-```jsx
+```jsx title="App.server.jsx"
 import {defineConfig, MemorySessionStorage} from '@shopify/hydrogen/config';
 
 export default defineConfig({
@@ -22,7 +20,7 @@ export default defineConfig({
 });
 ```
 
-{% endcodeblock %}
+
 
 ## Props
 

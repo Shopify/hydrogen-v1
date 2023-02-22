@@ -79,7 +79,7 @@ export default renderHydrogen(App);
 ```
 
 ```javascript?filename: '/src/components/Layout.server.jsx', title: 'Layout'
-{% raw %}
+
 import {
   useShopQuery,
   CacheLong,
@@ -151,7 +151,7 @@ const SHOP_QUERY = gql`
     }
   }
 `;
-{% endraw %}
+
 ```
 
 ```javascript?filename: '/src/components/FeaturedCollections.server.jsx', title: 'FeaturedCollections'
@@ -361,7 +361,7 @@ To generate SEO tags for search engines, add an [`Seo`](/components/primitive/se
 ```jsx
 // /src/components/Layout.server.jsx
 
-{% raw %}
+
 import {
   useShopQuery,
   CacheLong,
@@ -430,7 +430,7 @@ const SHOP_QUERY = gql`
     }
   }
 `;
-{% endraw %}
+
 ```
 
 
@@ -639,7 +639,7 @@ export default function Home() {
 ```jsx
 // /src/components/Layout.server.jsx
 
-{% raw %}
+
 import {
   useShopQuery,
   CacheLong,
@@ -710,7 +710,7 @@ const SHOP_QUERY = gql`
     }
   }
 `;
-{% endraw %}
+
 ```
 
 

@@ -5,9 +5,7 @@ The `fetchSync` hook makes API requests and is the recommended way to make simpl
 
 ## Example code
 
-{% codeblock file, filename: "MyComponent.server.js" %}
-
-```jsx
+```jsx title="MyComponent.server.js"
 import {fetchSync} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 // Use `Suspense` boundaries to define where you want your app to display a loading indicator while your data is being accessed.
@@ -27,15 +25,13 @@ function MyThings() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## `fetchSync` in server components
 
 If you're using `fetchSync` in a server component, then you provide options for caching and preloading. This is similar to the [`useQuery`](/hooks/global/usequery/) hook:
 
-{% codeblock file, filename: "MyComponent.server.js" %}
-
-```jsx
+```jsx title="MyComponent.server.js"
 import {fetchSync, CacheLong} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 export function MyComponent() {
@@ -54,7 +50,7 @@ function MyThings() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Arguments
 
@@ -86,9 +82,7 @@ The `fetchSync` function returns a [Response object and its properties](https://
 
 If you're using `fetchSync` in a client component, then you can't provide options for caching and preloading in client components:
 
-{% codeblock file, filename: "MyComponent.client.js" %}
-
-```jsx
+```jsx title="MyComponent.client.js"
 import {fetchSync} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 export function MyComponent() {
@@ -104,7 +98,7 @@ function MyThings() {
 }
 ```
 
-{% endcodeblock %}
+
 
 ### Arguments
 

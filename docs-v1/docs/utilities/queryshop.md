@@ -5,9 +5,7 @@ The `queryShop` utility is a function that helps you query the Storefront API wi
 
 ## Example code
 
-{% codeblock file, filename: 'my-api.server.js' %}
-
-```jsx
+```jsx title="my-api.server.js"
 export default function api(request, {queryShop}) {
   return await queryShop({
     query: `query ShopName { shop { name } }`,
@@ -15,7 +13,7 @@ export default function api(request, {queryShop}) {
 }
 ```
 
-{% endcodeblock %}
+
 
 ## Arguments
 
