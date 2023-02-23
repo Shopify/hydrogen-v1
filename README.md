@@ -4,7 +4,7 @@
 
 Hydrogen is a **React-based framework** for building dynamic, **Shopify-powered** custom storefronts.
 
-Spin up a Hydrogen app in your browser with our [playground](https://hydrogen.new/) or set up your local environment with the instructions below ⬇️
+Set up your local environment with the instructions below ⬇️
 
 ## Getting Started
 
@@ -42,21 +42,4 @@ npm run dev
 
 2. Visit the development environment running at http://localhost:3000.
 
-Learn more about [getting started with Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/templates).
-
-## Contributing to Hydrogen
-
-[Read our contributing guide](./.github/contributing.md)
-
-## Other handy links
-
-[Learn more about Hydrogen](https://shopify.dev/hydrogen).
-
-[Awesome Hydrogen](https://github.com/Shopify/awesome-hydrogen) - A curated list of awesome Hydrogen things.
-
-👷‍♀️ Add `npm` packages to your project:
-
-- [`@shopify/hydrogen`](https://www.npmjs.com/package/@shopify/hydrogen)
-- [`@shopify/create-hydrogen`](https://www.npmjs.com/package/@shopify/create-hydrogen)
-- [`@shopify/cli-hydrogen`](https://www.npmjs.com/package/@shopify/cli-hydrogen)
-- [`eslint-plugin-hydrogen`](https://www.npmjs.com/package/eslint-plugin-hydrogen)
+Learn more about [getting started with Hydrogen](https://shopify.github.io/hydrogen-v1/tutorials/getting-started).
