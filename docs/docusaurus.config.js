@@ -128,7 +128,12 @@ const config = {
         sidebar: {
           autoCollapseCategories: true
         }
-      }
+      },
+      algolia: {
+        appId: 'G3N23JDU81',
+        apiKey: 'fd4ebf5b6925a67f3e21d78c89977d97',
+        indexName: 'hydrogen-v1',
+      },
     }),
 };
 
