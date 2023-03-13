@@ -6,6 +6,10 @@ import {
   STOREFRONT_API_BUYER_IP_HEADER,
   SHOPIFY_STOREFRONT_ID_VARIABLE,
   SHOPIFY_STOREFRONT_ID_HEADER,
+  SHOPIFY_STOREFRONT_Y_HEADER,
+  SHOPIFY_STOREFRONT_S_HEADER,
+  SHOPIFY_Y,
+  SHOPIFY_S,
 } from '../constants.js';
 import {log} from './log/log.js';
 
@@ -17,11 +21,13 @@ export function getStorefrontApiRequestHeaders({
   publicStorefrontToken,
   privateStorefrontToken,
   storefrontId,
+  cookieData,
 }: {
   buyerIp?: string | null;
   publicStorefrontToken: string;
   privateStorefrontToken: string | undefined;
   storefrontId: string | undefined;
+  cookieData: Record<string, string>;
 }) {
   const headers = {} as Record<string, any>;
 
@@ -73,6 +79,11 @@ export function getStorefrontApiRequestHeaders({
 
   if (storefrontId) {
     headers[SHOPIFY_STOREFRONT_ID_HEADER] = storefrontId;
+  }
+
+  if (cookieData[SHOPIFY_Y] && cookieData[SHOPIFY_S]) {
+    headers[SHOPIFY_STOREFRONT_Y_HEADER] = cookieData[SHOPIFY_Y];
+    headers[SHOPIFY_STOREFRONT_S_HEADER] = cookieData[SHOPIFY_S];
   }
 
   return headers;

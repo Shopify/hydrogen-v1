@@ -11,6 +11,7 @@ import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi.js';
 import {parseJSON} from '../../utilities/parse.js';
 import {useQuery} from '../../foundation/useQuery/hooks.js';
 import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.js';
+import {parse} from 'worktop/cookie';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -232,6 +233,7 @@ function useCreateShopRequest({
   privateStorefrontToken?: string;
 }) {
   const buyerIp = request.getBuyerIp();
+  const cookieData = parse(request.headers.get('cookie') || '');
 
   let headers: Record<string, string> = {
     'X-SDK-Variant': 'hydrogen',
@@ -248,6 +250,7 @@ function useCreateShopRequest({
     publicStorefrontToken: storefrontToken,
     privateStorefrontToken,
     storefrontId,
+    cookieData,
   });
 
   headers = {...headers, ...extraHeaders};

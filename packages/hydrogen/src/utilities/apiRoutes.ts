@@ -19,6 +19,7 @@ import type {
 import {emptySessionImplementation} from '../foundation/session/session.js';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
 import {FORM_REDIRECT_COOKIE, RSC_PATHNAME} from '../constants.js';
+import {parse} from 'worktop/cookie';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
@@ -180,12 +181,14 @@ function queryShopBuilder(
       storefrontId,
     } = shopifyConfig;
     const buyerIp = request.getBuyerIp();
+    const cookieData = parse(request.headers.get('cookie') || '');
 
     const extraHeaders = getStorefrontApiRequestHeaders({
       buyerIp,
       publicStorefrontToken: storefrontToken,
       privateStorefrontToken,
       storefrontId,
+      cookieData,
     });
 
     const fetcher = fetchBuilder<T>(
