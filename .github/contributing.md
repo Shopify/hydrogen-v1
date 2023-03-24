@@ -61,7 +61,13 @@ Hydrogen uses ESLint for linting and Prettier for code formatting.
 
 [Yorkie](https://github.com/yyx990803/yorkie) is used to install a Git precommit hook, which lints and formats staged commits automatically.
 
-To manually lint and format:
+To manually lint and format, first build your Hydrogen app:
+
+```bash
+yarn build
+```
+
+And run:
 
 ```bash
 yarn lint
