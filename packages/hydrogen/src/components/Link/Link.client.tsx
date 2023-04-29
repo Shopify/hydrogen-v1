@@ -145,6 +145,10 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       props.onTouchStart,
       signalPrefetchIntent
     );
+    const onTouchEnd = composeEventHandlers(
+      props.onTouchEnd,
+      cancelPrefetchIntent
+    );
 
     return (
       <>
@@ -170,6 +174,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           onFocus={onFocus}
           onBlur={onBlur}
           onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
           href={to}
         >
           {props.children}
