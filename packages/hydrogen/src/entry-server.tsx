@@ -323,7 +323,10 @@ async function processRequest(
     });
   }
 
-  if (isBotUA(url, request.headers.get('user-agent'))) {
+  if (
+    request.headers.get('oxygen-do-not-stream-response') === 'true' ||
+    isBotUA(url, request.headers.get('user-agent'))
+  ) {
     response.doNotStream();
   }
 
