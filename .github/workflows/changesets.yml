@@ -50,7 +50,7 @@ jobs:
         uses: changesets/action@v1
         with:
           version: yarn run version
-          publish: yarn changeset publish
+          publish: yarn changeset publish --tag h1
           commit: '[ci] release ${{ github.ref_name }}'
           title: '[ci] release ${{ github.ref_name }}'
         env:
