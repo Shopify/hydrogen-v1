@@ -136,7 +136,7 @@ export const renderHydrogen = (App: any) => {
 
     if (hydrogenConfig.poweredByHeader ?? true) {
       // If undefined in the config, then always show the header
-      response.headers.set('powered-by', 'Shopify-Hydrogen');
+      response.headers.set('powered-by', 'Shopify, Hydrogen');
     }
 
     sessionApi ??= hydrogenConfig.session?.(log);
