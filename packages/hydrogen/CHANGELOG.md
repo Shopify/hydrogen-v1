@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.8
+
+### Patch Changes
+
+- Update bot detection list and add support for oxygen-do-not-stream-response header ([#2514](https://github.com/Shopify/hydrogen-v1/pull/2514)) by [@blittle](https://github.com/blittle)
+
 ## 1.6.7
 
 ### Patch Changes
