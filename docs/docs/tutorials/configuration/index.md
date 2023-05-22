@@ -104,7 +104,7 @@ export default defineConfig({
 
 ### `poweredByHeader`
 
-By default, Hydrogen responds with the `powered-by: Shopify, Hydrogen` header. You can disable this by adding `poweredByHeader: false` to your config:
+By default, Hydrogen responds with the `powered-by: Hydrogen` header. You can disable this by adding `poweredByHeader: false` to your config:
 
 ```tsx
 // hydrogen.config.ts
