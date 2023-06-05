@@ -34,6 +34,7 @@ import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.
 import {useCartAPIStateMachine} from './useCartAPIStateMachine.client.js';
 import {CART_ID_STORAGE_KEY} from './constants.js';
 import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
+import {useLocalization, useShop} from '../../client.js';
 
 export function CartProvider({
   children,
@@ -57,7 +58,7 @@ export function CartProvider({
   data: cart,
   cartFragment = defaultCartFragment,
   customerAccessToken,
-  countryCode = CountryCode.Us,
+  countryCode,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
@@ -104,6 +105,12 @@ export function CartProvider({
   /** The ISO country code for i18n. */
   countryCode?: CountryCode;
 }) {
+  const {country} = useLocalization();
+
+  countryCode = (
+    (countryCode as string) ?? country.isoCode
+  ).toUpperCase() as CountryCode;
+
   if (countryCode) countryCode = countryCode.toUpperCase() as CountryCode;
   const [prevCountryCode, setPrevCountryCode] = useState(countryCode);
   const [prevCustomerAccessToken, setPrevCustomerAccessToken] =
