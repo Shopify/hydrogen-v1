@@ -34,7 +34,7 @@ import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation.
 import {useCartAPIStateMachine} from './useCartAPIStateMachine.client.js';
 import {CART_ID_STORAGE_KEY} from './constants.js';
 import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
-import {useLocalization, useShop} from '../../client.js';
+import {useLocalization} from '../../client.js';
 
 export function CartProvider({
   children,
