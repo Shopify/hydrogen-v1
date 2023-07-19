@@ -2,4 +2,4 @@
 '@shopify/hydrogen': patch
 ---
 
-Fix an issue where cache failed to match requests
+Fix an issue where cache doesn't properly match requests
