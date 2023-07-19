@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.7.0
+
+### Minor Changes
+
+- Updates default `powered-by` header output to `Shopify, Hydrogen`, and updates associateed documentation. ([#2518](https://github.com/Shopify/hydrogen-v1/pull/2518)) by [@benjaminsehl](https://github.com/benjaminsehl)
+
+### Patch Changes
+
+- Fix the `<CartProvider>` to by default pull localization from `<ShopifyProvider>`. You can still override the countryCode by passing a prop directly to `<CartProvider>`. Resolves https://github.com/Shopify/hydrogen/issues/622 ([#2521](https://github.com/Shopify/hydrogen-v1/pull/2521)) by [@blittle](https://github.com/blittle)
+
+- Fix an issue where cache doesn't properly match requests ([#2530](https://github.com/Shopify/hydrogen-v1/pull/2530)) by [@blittle](https://github.com/blittle)
+
 ## 1.6.8
 
 ### Patch Changes
