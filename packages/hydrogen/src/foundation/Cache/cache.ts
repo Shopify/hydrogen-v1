@@ -110,9 +110,7 @@ export async function setItemInCache(
   );
 
   // The cache-control we want to set on response
-  const cacheControlString = generateDefaultCacheControlHeader(
-    getCacheControlSetting(cacheControl)
-  );
+  const cacheControlString = generateDefaultCacheControlHeader(cacheControl);
 
   // CF will override cache-control, so we need to keep a
   // non-modified real-cache-control
