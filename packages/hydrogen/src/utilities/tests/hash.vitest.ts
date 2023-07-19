@@ -11,7 +11,9 @@ describe('Hash key for subrequests', () => {
   });
 
   it('supports arrays of strings and objects', () => {
-    expect(hashKey(['hello', {world: true}])).toEqual('hello{"world":true}');
+    expect(hashKey(['hello', {world: true}])).toEqual(
+      'hello%7B%22world%22%3Atrue%7D'
+    );
   });
 
   it('supports useShopQuery-like keys', () => {
@@ -43,6 +45,8 @@ describe('Hash key for subrequests', () => {
         NaN,
         ['subarray'],
       ])
-    ).toEqual('hello() => "world"11Infinity{}NaN["subarray"]');
+    ).toEqual(
+      'hello()%20%3D%3E%20%22world%2211Infinity%7B%7DNaN%5B%22subarray%22%5D'
+    );
   });
 });
