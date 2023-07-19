@@ -102,15 +102,13 @@ export async function setItemInCache(
   const cacheControl = getCacheControlSetting(userCacheOptions);
 
   // The padded cache-control to mimic stale-while-revalidate
-  request.headers.set(
-    'cache-control',
-    generateDefaultCacheControlHeader(
-      getCacheControlSetting(cacheControl, {
-        maxAge:
-          (cacheControl.maxAge || 0) + (cacheControl.staleWhileRevalidate || 0),
-      })
-    )
+  const paddedCacheControlString = generateDefaultCacheControlHeader(
+    getCacheControlSetting(cacheControl, {
+      maxAge:
+        (cacheControl.maxAge || 0) + (cacheControl.staleWhileRevalidate || 0),
+    })
   );
+
   // The cache-control we want to set on response
   const cacheControlString = generateDefaultCacheControlHeader(
     getCacheControlSetting(cacheControl)
@@ -118,6 +116,7 @@ export async function setItemInCache(
 
   // CF will override cache-control, so we need to keep a
   // non-modified real-cache-control
+  response.headers.set('cache-control', paddedCacheControlString);
   response.headers.set('real-cache-control', cacheControlString);
   response.headers.set('cache-put-date', new Date().toUTCString());
 
