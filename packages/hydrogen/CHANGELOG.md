@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.1
+
+### Patch Changes
+
+- Add support for `languageCode` to the `CartProvider` component ([#2531](https://github.com/Shopify/hydrogen-v1/pull/2531)) by [@blittle](https://github.com/blittle)
+
 ## 1.7.0
 
 ### Minor Changes
