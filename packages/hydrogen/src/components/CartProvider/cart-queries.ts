@@ -117,7 +117,6 @@ fragment CartFragment on Cart {
   totalQuantity
   buyerIdentity {
     countryCode
-    languageCode
     customer {
       id
       email
