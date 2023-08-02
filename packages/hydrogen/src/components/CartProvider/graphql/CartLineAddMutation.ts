@@ -3,13 +3,15 @@
  * Instead, you can edit the associated .graphql file to query for additional fields and this file will be updated when you run `yarn graphql-types`
  */
 // @ts-nocheck
-import * as Types from '../../../storefront-api-types.js';
+// eslint-disable-next-line import/extensions
+import * as Types from '../../../storefront-api-types';
 
 export type CartLineAddMutationVariables = Types.Exact<{
   cartId: Types.Scalars['ID'];
   lines: Array<Types.CartLineInput> | Types.CartLineInput;
   numCartLines?: Types.InputMaybe<Types.Scalars['Int']>;
   country?: Types.InputMaybe<Types.CountryCode>;
+  language?: Types.InputMaybe<Types.LanguageCode>;
 }>;
 
 export type CartLineAddMutation = {__typename?: 'Mutation'} & {

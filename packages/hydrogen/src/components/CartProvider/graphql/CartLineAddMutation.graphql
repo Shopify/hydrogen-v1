@@ -5,7 +5,8 @@ mutation CartLineAdd(
   $lines: [CartLineInput!]!
   $numCartLines: Int = 250
   $country: CountryCode = ZZ
-) @inContext(country: $country) {
+  $language: LanguageCode
+) @inContext(country: $country, language: $language) {
   cartLinesAdd(cartId: $cartId, lines: $lines) {
     cart {
       ...CartFragment

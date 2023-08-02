@@ -14,7 +14,7 @@ import {flattenConnection} from '../../utilities/flattenConnection/index.js';
 import {useCartActions} from './CartActions.client.js';
 import {useMemo} from 'react';
 import {InitEvent} from '@xstate/fsm/lib/types.js';
-import {CountryCode} from '../../storefront-api-types.js';
+import {CountryCode, LanguageCode} from '../../storefront-api-types.js';
 
 function invokeCart(
   action: keyof CartMachineActions,
@@ -174,6 +174,7 @@ export function useCartAPIStateMachine({
   data: cart,
   cartFragment,
   countryCode,
+  languageCode,
 }: {
   /**  Maximum number of cart lines to fetch. Defaults to 250 cart lines. */
   numCartLines?: number;
@@ -198,6 +199,8 @@ export function useCartAPIStateMachine({
   cartFragment: string;
   /** The ISO country code for i18n. */
   countryCode?: CountryCode;
+  /** The ISO country code for i18n. */
+  languageCode?: LanguageCode;
 }) {
   const {
     cartFetch,
@@ -213,6 +216,7 @@ export function useCartAPIStateMachine({
     numCartLines,
     cartFragment,
     countryCode,
+    languageCode,
   });
 
   const cartMachine = useMemo(() => createCartMachine(cart), [cart]);

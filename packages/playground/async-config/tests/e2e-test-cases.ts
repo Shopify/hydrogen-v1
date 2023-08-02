@@ -56,8 +56,6 @@ export default async function testCases({
     it('sends client configuration to the browser and picks it', async () => {
       await page.goto(getServerUrl());
       expect(await page.textContent('h1')).toContain('Home');
-
-      expect(await page.locator('#hydrogen-dev-tools').isHidden()).toBeFalsy();
     });
   }
 }

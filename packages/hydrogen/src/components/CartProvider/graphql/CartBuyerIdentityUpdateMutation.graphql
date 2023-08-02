@@ -5,7 +5,8 @@ mutation CartBuyerIdentityUpdate(
   $buyerIdentity: CartBuyerIdentityInput!
   $numCartLines: Int = 250
   $country: CountryCode = ZZ
-) @inContext(country: $country) {
+  $language: LanguageCode
+) @inContext(country: $country, language: $language) {
   cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
     cart {
       ...CartFragment

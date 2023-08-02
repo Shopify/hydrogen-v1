@@ -5,7 +5,8 @@ mutation CartLineRemove(
   $lines: [ID!]!
   $numCartLines: Int = 250
   $country: CountryCode = ZZ
-) @inContext(country: $country) {
+  $language: LanguageCode
+) @inContext(country: $country, language: $language) {
   cartLinesRemove(cartId: $cartId, lineIds: $lines) {
     cart {
       ...CartFragment
