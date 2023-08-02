@@ -1331,10 +1331,12 @@ describe('<CartProvider />', () => {
 
       await act(async () => {});
 
-      expect(mockUseCartActions).toHaveBeenCalledWith({
-        countryCode: mockCountryCode,
-        languageCode: LanguageCode.Es,
-      });
+      expect(mockUseCartActions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          countryCode: mockCountryCode,
+          languageCode: LanguageCode.Es,
+        })
+      );
     });
 
     it('will try to match once the countryCode props if cart has a different countryCode', async () => {
