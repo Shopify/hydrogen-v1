@@ -43,11 +43,14 @@ const defaultLogger: Logger = {
   },
   error(context, error, ...extra) {
     const url = context ? ` ${context.url}` : '';
+    const extraMessage = extra.length ? `\n${extra.join('\n')}` : '';
 
     if (error instanceof Error) {
-      console.error(red(`Error processing route:${url}\n${error.stack}`));
+      console.error(
+        red(`Error processing route:${url}\n${error.stack}${extraMessage}`)
+      );
     } else {
-      console.error(red(`Error:${url} ${error}`));
+      console.error(red(`Error:${url} ${error}${extraMessage}`));
     }
   },
   fatal(context, ...args) {
