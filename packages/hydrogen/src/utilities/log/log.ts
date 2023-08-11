@@ -154,4 +154,3 @@ export function logServerResponse(
     } ${paddedTiming} ${url}`
   );
 }
-
