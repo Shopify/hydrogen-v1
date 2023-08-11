@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.2
+
+### Patch Changes
+
+- Log extra params in default error logger ([#2533](https://github.com/Shopify/hydrogen-v1/pull/2533)) by [@juanpprieto](https://github.com/juanpprieto)
+
 ## 1.7.1
 
 ### Patch Changes
