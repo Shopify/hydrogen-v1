@@ -299,7 +299,7 @@ export async function renderApiRoute(
       return new Request(getRscUrl(url, newUrl), {
         headers: response.headers,
       });
-    } else {
+    } else if (!response.headers.get('hydrogen-concatenate')) {
       // This request was made by a native form presumably because the client components had yet to hydrate,
       // Because of this, we need to redirect instead of just rendering the response.
       // Doing so prevents odd refresh / back behavior. The redirect response also should *never* be cached.
