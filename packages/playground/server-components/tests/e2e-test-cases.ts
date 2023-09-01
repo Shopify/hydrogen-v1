@@ -624,13 +624,18 @@ export default async function testCases({
       expect(await page.textContent('*')).toContain('fname=sometext');
     });
 
-    it('can concatenate requests', async () => {
+    it('can concatenate form requests', async () => {
       await page.goto(getServerUrl() + '/html-form');
       expect(await page.textContent('#counter')).toEqual('0');
       await page.click('#increase');
       expect(await page.textContent('#counter')).toEqual('1');
       await page.click('#increase');
       expect(await page.textContent('#counter')).toEqual('2');
+    });
+
+    it('can concatenate requests', async () => {
+      await page.goto(getServerUrl() + '/concatenate');
+      expect(await page.textContent('body')).toContain('About');
     });
 
     it('responds with RSC', async () => {
