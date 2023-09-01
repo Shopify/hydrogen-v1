@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.7.3
+
+### Patch Changes
+
+- Allow concatenating requests with a header. For example, if you want the route `/shop` to proxy render everything on `/products`, setup an API route at `/routes/shop.server.jsx` with the following: ([#2536](https://github.com/Shopify/hydrogen-v1/pull/2536)) by [@blittle](https://github.com/blittle)
+
+  ```jsx
+  export async function api(request) {
+    return new Request(new URL(request.url).origin + '/products', {
+      headers: {
+        'Hydrogen-Concatenate': 'true',
+      },
+    });
+  }
+  ```
+
 ## 1.7.2
 
 ### Patch Changes
