@@ -1,14 +1,13 @@
-import {useCallback, useState, Suspense} from 'react';
+import {useCallback, useMemo, useState, Suspense} from 'react';
 import {useLocalization, fetchSync} from '@shopify/hydrogen';
-// @ts-expect-error @headlessui/react incompatibility with node16 resolution
-import {Listbox} from '@headlessui/react';
-
-import {IconCheck, IconCaret} from '~/components';
-import {useMemo} from 'react';
 import type {
   Country,
   CountryCode,
 } from '@shopify/hydrogen/storefront-api-types';
+// @ts-expect-error @headlessui/react incompatibility with node16 resolution
+import {Listbox} from '@headlessui/react';
+
+import {IconCheck, IconCaret} from '~/components';
 
 /**
  * A client component that selects the appropriate country to display for products on a website

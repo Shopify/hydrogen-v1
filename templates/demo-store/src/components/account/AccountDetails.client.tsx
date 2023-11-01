@@ -1,7 +1,7 @@
 import {Seo} from '@shopify/hydrogen';
 import {useState} from 'react';
-import {Modal} from '../index';
-import {AccountDetailsEdit} from './AccountDetailsEdit.client';
+
+import {AccountDetailsEdit, Modal} from '~/components';
 
 export function AccountDetails({
   firstName,

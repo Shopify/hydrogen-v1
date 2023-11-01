@@ -1,4 +1,5 @@
 import {Seo} from '@shopify/hydrogen';
+
 import {PageHeader, Section, CartDetails} from '~/components';
 import {Layout} from '~/components/index.server';
 

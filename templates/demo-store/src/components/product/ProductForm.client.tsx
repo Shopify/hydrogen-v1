@@ -1,5 +1,4 @@
 import {useEffect, useCallback, useState} from 'react';
-
 import {
   useProductOptions,
   isBrowser,
