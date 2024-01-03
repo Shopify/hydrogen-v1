@@ -160,6 +160,14 @@ export default async function testCases({
     expect(body).toContain('>footer!<');
   });
 
+  it('disables streaming with a top level async operation', async () => {
+    const response = await fetch(getServerUrl() + '/top-level-async').then(
+      (resp) => resp.text()
+    );
+
+    expect(response).toContain('<meta data-flight="S2');
+  });
+
   it('streams if server component calls doNotStream after stream has already started', async () => {
     const response = await fetch(getServerUrl() + '/midwaynostream');
     const streamedChunks = [];

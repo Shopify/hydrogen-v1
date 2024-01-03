@@ -5,6 +5,8 @@ import {
   FileRoutes,
   ShopifyProvider,
   useRequestContext,
+  useUrl,
+  useSession,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import Custom1 from './customRoutes/custom1.server';
@@ -15,6 +17,11 @@ import ServerParams from './customRoutes/params.server';
 export default renderHydrogen(({request, response}) => {
   if (request.headers.get('user-agent') === 'custom bot') {
     response.doNotStream();
+  }
+
+  const url = useUrl();
+  if (url.href.includes('top-level-async')) {
+    useSession();
   }
 
   useRequestContext().test1 = true;
