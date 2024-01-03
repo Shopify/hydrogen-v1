@@ -50,6 +50,7 @@ export function ProductForm() {
           );
       }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = useCallback(
