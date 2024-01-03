@@ -19,6 +19,8 @@ import type {
 import {emptySessionImplementation} from '../foundation/session/session.js';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
 import {FORM_REDIRECT_COOKIE, RSC_PATHNAME} from '../constants.js';
+import {TypedDocumentNode} from '@graphql-typed-document-node/core';
+import {print} from 'graphql';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
@@ -27,7 +29,9 @@ type RouteParams = Record<string, string>;
 export type RequestOptions = {
   log: Logger;
   params: RouteParams;
-  queryShop: <T>(args: QueryShopArgs) => Promise<UseShopQueryResponse<T>>;
+  queryShop: <Data, Variables extends Record<string, any> = {}>(
+    args: QueryShopArgs<Data, Variables>
+  ) => Promise<UseShopQueryResponse<Data>>;
   session: SessionApi | null;
   hydrogenConfig: ResolvedHydrogenConfig;
 };
@@ -144,23 +148,23 @@ export function getApiRouteFromURL(
  * It's similar to the `useShopQuery` hook, which is available in server components.
  * To use `queryShop`, pass `shopifyConfig` to `renderHydrogen` inside `App.server.jsx`.
  */
-interface QueryShopArgs {
+interface QueryShopArgs<Data, Variables extends Record<string, any>> {
   /** A string of the GraphQL query.
    * If no query is provided, then the `useShopQuery` makes no calls to the Storefront API.
    */
-  query: string;
+  query: string | TypedDocumentNode<Data, Variables>;
   /** An object of the variables for the GraphQL query. */
-  variables?: Record<string, any>;
+  variables?: Variables;
 }
 
 function queryShopBuilder(
   shopifyConfigGetter: ResolvedHydrogenConfig['shopify'],
   request: HydrogenRequest
 ) {
-  return async function queryShop<T>({
+  return async function queryShop<Data, Variables extends Record<string, any>>({
     query,
     variables,
-  }: QueryShopArgs): Promise<T> {
+  }: QueryShopArgs<Data, Variables>): Promise<UseShopQueryResponse<Data>> {
     const shopifyConfig =
       typeof shopifyConfigGetter === 'function'
         ? await shopifyConfigGetter(request)
@@ -188,11 +192,14 @@ function queryShopBuilder(
       storefrontId,
     });
 
-    const fetcher = fetchBuilder<T>(
+    const fetcher = fetchBuilder<UseShopQueryResponse<Data>>(
       `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
       {
         method: 'POST',
-        body: graphqlRequestBody(query, variables),
+        body: graphqlRequestBody(
+          typeof query === 'string' ? query : print(query),
+          variables
+        ),
         headers: {
           'Content-Type': 'application/json',
           ...extraHeaders,
