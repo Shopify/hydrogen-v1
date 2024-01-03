@@ -1,20 +1,15 @@
 import React from 'react';
-import {Locale} from '../../ShopifyProvider/types.js';
 import {Table} from './Table.js';
 
 interface Props {
-  locale: Locale;
-  storeDomain: string;
-  storefrontApiVersion: string;
+  session: any;
 }
 
 const KEY_MAP = {
-  locale: 'Locale',
-  storeDomain: 'Domain',
-  storefrontApiVersion: 'API Version',
+  session: 'Session',
 };
 
-export function Settings(props: Props) {
+export function Storage(props: Props) {
   const items = Object.entries(props).map(([key, value]) => {
     return {
       id: KEY_MAP[key as keyof typeof KEY_MAP],

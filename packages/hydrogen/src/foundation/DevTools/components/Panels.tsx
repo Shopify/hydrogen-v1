@@ -2,10 +2,12 @@ import React, {ComponentProps, useState, useEffect} from 'react';
 import {ClientAnalytics} from '../../Analytics/index.js';
 import {Performance} from './Performance.client.js';
 import {Settings} from './Settings.client.js';
+import {Storage} from './Storage.client.js';
 
 export interface Props {
   settings: ComponentProps<typeof Settings>;
   performance: ComponentProps<typeof Performance>;
+  storage: ComponentProps<typeof Storage>;
 }
 
 interface BasePanel {
@@ -25,6 +27,7 @@ type Navigations = Props['performance']['navigations'];
 interface Panels {
   performance: ComponentPanel;
   settings: ComponentPanel;
+  storage: ComponentPanel;
   graphiql: ExternalPanel;
 }
 
@@ -32,7 +35,7 @@ const isComponentPanel = (
   panel: ComponentPanel | ExternalPanel
 ): panel is ComponentPanel => (panel as ComponentPanel).component !== undefined;
 
-export function Panels({settings}: Props) {
+export function Panels({settings, storage}: Props) {
   const [selectedPanel, setSelectedPanel] = useState<number>(0);
   const [navigations, setNavigations] = useState<Navigations>([]);
   useEffect(() => {
@@ -64,7 +67,7 @@ export function Panels({settings}: Props) {
     );
   }, [setNavigations, navigations]);
 
-  const panels = getPanels({settings, performance: {navigations}});
+  const panels = getPanels({settings, storage, performance: {navigations}});
   const panelComponents = panels.map((obj, index) =>
     isComponentPanel(obj) ? (
       <div
@@ -122,7 +125,7 @@ export function Panels({settings}: Props) {
   );
 }
 
-function getPanels({settings, performance}: Props) {
+function getPanels({settings, storage, performance}: Props) {
   const panels: Panels = {
     settings: {
       content: 'Settings',
@@ -131,6 +134,10 @@ function getPanels({settings, performance}: Props) {
     performance: {
       content: 'Performance',
       component: <Performance {...performance} />,
+    },
+    storage: {
+      content: 'Storage',
+      component: <Storage {...storage} />,
     },
     graphiql: {
       content: 'GraphiQL',
