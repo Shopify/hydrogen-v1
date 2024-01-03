@@ -35,6 +35,7 @@ export function BaseButton<AsType extends React.ElementType = 'button'>(
     defaultOnClick,
     children,
     buttonRef,
+    type,
     ...passthroughProps
   } = props;
 
@@ -56,9 +57,15 @@ export function BaseButton<AsType extends React.ElementType = 'button'>(
   );
 
   const Component = as || 'button';
+  const componentType = type || (Component === 'button' ? 'button' : undefined);
 
   return (
-    <Component ref={buttonRef} onClick={handleOnClick} {...passthroughProps}>
+    <Component
+      ref={buttonRef}
+      onClick={handleOnClick}
+      type={componentType}
+      {...passthroughProps}
+    >
       {children}
     </Component>
   );

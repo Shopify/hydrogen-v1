@@ -99,5 +99,34 @@ describe('<BaseButton/>', () => {
         expect(mockDefaultOnClick).not.toBeCalled();
       });
     });
+
+    describe('base button type attribute', () => {
+      it('is a button by default given the component is a button', () => {
+        render(<BaseButton>Base Button</BaseButton>, {
+          wrapper: ShopifyTestProviders,
+        });
+
+        expect(screen.getByRole('button')).toHaveAttribute('type', 'button');
+      });
+
+      it('is not a button by default given the component is not a button', () => {
+        render(<BaseButton as="p">Base Button</BaseButton>, {
+          wrapper: ShopifyTestProviders,
+        });
+
+        expect(screen.getByText('Base Button')).not.toHaveAttribute(
+          'type',
+          'button'
+        );
+      });
+
+      it('respects user provided type', () => {
+        render(<BaseButton type="submit">Base Button</BaseButton>, {
+          wrapper: ShopifyTestProviders,
+        });
+
+        expect(screen.getByRole('button')).toHaveAttribute('type', 'submit');
+      });
+    });
   });
 });
