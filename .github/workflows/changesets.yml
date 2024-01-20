@@ -24,7 +24,7 @@ jobs:
         run: |
           # IMPORTANT: Update this variable whenever we move to a new major version:
           latest_branch=v1.x-2022-07
-          echo "::set-output name=latest::${{ github.ref_name == 'v1.x-2022-07' }}"
+          echo "latest=${{ github.ref_name == 'v1.x-2022-07' }}" >> "$GITHUB_OUTPUT"
 
       - name: Checkout the code
         uses: actions/checkout@v2
@@ -120,7 +120,7 @@ jobs:
   #         content="${content//$'\n'/'%0A'}"
   #         content="${content//$'\r'/'%0D'}"
   #         # end of handling multi line json
-  #         echo "::set-output name=packageJson::$content"
+  #         echo "packageJson=$content" >> "$GITHUB_OUTPUT"
   #     - run: |
   #         echo "HYDROGEN_VERSION=${{fromJSON(steps.read_package_json.outputs.packageJson).version}}" >> $GITHUB_ENV
 
