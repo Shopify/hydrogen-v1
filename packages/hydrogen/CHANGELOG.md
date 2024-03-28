@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.7.3
+
+### Patch Changes
+
+- Allow concatenating requests with a header. For example, if you want the route `/shop` to proxy render everything on `/products`, setup an API route at `/routes/shop.server.jsx` with the following: ([#2536](https://github.com/Shopify/hydrogen-v1/pull/2536)) by [@blittle](https://github.com/blittle)
+
+  ```jsx
+  export async function api(request) {
+    return new Request(new URL(request.url).origin + '/products', {
+      headers: {
+        'Hydrogen-Concatenate': 'true',
+      },
+    });
+  }
+  ```
+
+## 1.7.2
+
+### Patch Changes
+
+- Log extra params in default error logger ([#2533](https://github.com/Shopify/hydrogen-v1/pull/2533)) by [@juanpprieto](https://github.com/juanpprieto)
+
+## 1.7.1
+
+### Patch Changes
+
+- Add support for `languageCode` to the `CartProvider` component ([#2531](https://github.com/Shopify/hydrogen-v1/pull/2531)) by [@blittle](https://github.com/blittle)
+
+## 1.7.0
+
+### Minor Changes
+
+- Updates default `powered-by` header output to `Shopify, Hydrogen`, and updates associateed documentation. ([#2518](https://github.com/Shopify/hydrogen-v1/pull/2518)) by [@benjaminsehl](https://github.com/benjaminsehl)
+
+### Patch Changes
+
+- Fix the `<CartProvider>` to by default pull localization from `<ShopifyProvider>`. You can still override the countryCode by passing a prop directly to `<CartProvider>`. Resolves https://github.com/Shopify/hydrogen/issues/622 ([#2521](https://github.com/Shopify/hydrogen-v1/pull/2521)) by [@blittle](https://github.com/blittle)
+
+- Fix an issue where cache doesn't properly match requests ([#2530](https://github.com/Shopify/hydrogen-v1/pull/2530)) by [@blittle](https://github.com/blittle)
+
 ## 1.6.8
 
 ### Patch Changes

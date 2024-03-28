@@ -5,7 +5,8 @@ mutation CartNoteUpdate(
   $note: String
   $numCartLines: Int = 250
   $country: CountryCode = ZZ
-) @inContext(country: $country) {
+  $language: LanguageCode
+) @inContext(country: $country, language: $language) {
   cartNoteUpdate(cartId: $cartId, note: $note) {
     cart {
       ...CartFragment

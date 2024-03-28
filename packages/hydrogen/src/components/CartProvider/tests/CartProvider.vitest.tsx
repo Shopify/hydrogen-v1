@@ -19,7 +19,7 @@ vi.mock('../hooks.client.js', () => ({
 
 import {CartProvider} from '../CartProvider.client.js';
 import {cartFromGraphQL} from '../useCartAPIStateMachine.client.js';
-import {CountryCode} from '../../../storefront-api-types.js';
+import {CountryCode, LanguageCode} from '../../../storefront-api-types.js';
 import {CART_ID_STORAGE_KEY} from '../constants.js';
 import {ClientAnalytics} from '../../../foundation/Analytics/ClientAnalytics.js';
 import {CartFragmentFragment} from '../graphql/CartFragment.js';
@@ -1273,7 +1273,9 @@ describe('<CartProvider />', () => {
         buyerIdentityUpdate: buyerIdentityUpdateSpy,
       });
       const {result} = renderHook(() => useCart(), {
-        wrapper: ShopifyCartProvider({countryCode: mockCountryCodeServerProps}),
+        wrapper: ShopifyCartProvider({
+          countryCode: mockCountryCodeServerProps,
+        }),
       });
 
       act(() => {
@@ -1294,6 +1296,47 @@ describe('<CartProvider />', () => {
       expect(buyerIdentityUpdateSpy).toHaveBeenCalledWith(cartMock.id, {
         countryCode: mockCountryCodeServerProps,
       });
+    });
+
+    it('Passes custom language and country code', async () => {
+      const mockCountryCode = CountryCode.Ca;
+      const cartWithCountry = {
+        ...cartMock,
+        buyerIdentity: {countryCode: mockCountryCode},
+      };
+      const cartCreateSpy = vi.fn(async () => ({
+        data: {cartCreate: {cart: cartWithCountry}},
+      }));
+
+      const buyerIdentityUpdateSpy = vi.fn(async () => ({
+        data: {cartBuyerIdentityUpdate: {cart: cartMock}},
+      }));
+
+      mockUseCartActions.mockReturnValue({
+        cartCreate: cartCreateSpy,
+        buyerIdentityUpdate: buyerIdentityUpdateSpy,
+      });
+      const {result} = renderHook(() => useCart(), {
+        wrapper: ShopifyCartProvider({
+          countryCode: mockCountryCode,
+          languageCode: LanguageCode.Es,
+        }),
+      });
+
+      act(() => {
+        result.current.cartCreate({
+          buyerIdentity: {countryCode: mockCountryCode},
+        });
+      });
+
+      await act(async () => {});
+
+      expect(mockUseCartActions).toHaveBeenCalledWith(
+        expect.objectContaining({
+          countryCode: mockCountryCode,
+          languageCode: LanguageCode.Es,
+        })
+      );
     });
 
     it('will try to match once the countryCode props if cart has a different countryCode', async () => {
