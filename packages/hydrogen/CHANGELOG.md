@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.4
+
+### Patch Changes
+
+- Update dependencies ([#2552](https://github.com/Shopify/hydrogen-v1/pull/2552)) by [@dependabot](https://github.com/apps/dependabot)
+
+- Make sure sub-requests that are 400 or 500 HTTP errors are not cached ([#2554](https://github.com/Shopify/hydrogen-v1/pull/2554)) by [@blittle](https://github.com/blittle)
+
 ## 1.7.3
 
 ### Patch Changes
