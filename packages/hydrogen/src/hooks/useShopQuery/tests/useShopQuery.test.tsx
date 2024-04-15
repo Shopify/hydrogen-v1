@@ -102,4 +102,21 @@ describe('useShopQuery', () => {
 
     expect(await cache.keys()).toHaveLength(0);
   });
+
+  it('handles 500 errors', async () => {
+    mockedFetch.mockResolvedValue(new Response('{}', {status: 500}));
+    const component = await mountComponent();
+
+    expect(await cache.keys()).toHaveLength(0);
+
+    await component.act(async () => {
+      await Promise.all(waitUntilPromises);
+    });
+
+    expect(component).toContainReactComponent('div', {
+      children: '{}',
+    });
+
+    expect(await cache.keys()).toHaveLength(0);
+  });
 });
