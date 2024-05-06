@@ -21,6 +21,11 @@ const sidebars = {
       id: 'index'
     },
     {
+      type: 'doc',
+      label: 'Migrate to v2',
+      id: 'migrate-v2',
+    },
+    {
       type: 'category',
       label: 'Tutorials',
       link: {

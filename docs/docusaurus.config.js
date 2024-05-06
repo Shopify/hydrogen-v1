@@ -77,7 +77,7 @@ const config = {
             label: 'API reference',
           },
           {
-            href: 'https://shopify.dev/docs/custom-storefronts/hydrogen/migrate-hydrogen-remix',
+            href: 'migrate',
             label: 'Migrate to Hydrogen 2',
             position: 'left',
           },
