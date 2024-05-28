@@ -1,4 +1,4 @@
-<p align="center">
+a<p align="center">
     <a href="https://hydrogen.shopify.dev"><img src="./docs/images/HydrogenLogo.png" alt="Hydrogen Logo"/></a>
 </p>
 <p align="center">
