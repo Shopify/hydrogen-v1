@@ -99,10 +99,6 @@ const config = {
                 href: 'https://shopify.dev',
               },
               {
-                label: 'Discord',
-                href: 'https://discord.gg/shopifydevs',
-              },
-              {
                 label: '@shopifydevs',
                 href: 'https://twitter.com/shopifydevs',
               },
@@ -113,7 +109,7 @@ const config = {
             items: [
               {
                 label: 'Hydrogen 2',
-                to: 'https://shopify.dev/custom-storefronts/hydrogen',
+                to: 'https://shopify.dev/docs/storefronts/headless/hydrogen',
               },
             ],
           },

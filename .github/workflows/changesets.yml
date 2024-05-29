@@ -100,35 +100,3 @@ jobs:
           git show-ref
           git commit -m "Update templates for dist"
           git push origin HEAD:dist --force
-
-  # discord_announcement:
-  #   needs: changelog
-  #   # Only announce if a release was published, and we're on the "latest" release branch
-  #   if: needs.changelog.outputs.published == 'true' && needs.changelog.outputs.latest == 'true'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Check out the code
-  #       uses: actions/checkout@v2
-
-  #     - name: Read Hydrogen version from package.json
-  #       id: read_package_json
-  #       working-directory: ./packages/hydrogen
-  #       run: |
-  #         content=`cat ./package.json`
-  #         # the following lines are required for multi line json
-  #         content="${content//'%'/'%25'}"
-  #         content="${content//$'\n'/'%0A'}"
-  #         content="${content//$'\r'/'%0D'}"
-  #         # end of handling multi line json
-  #         echo "::set-output name=packageJson::$content"
-  #     - run: |
-  #         echo "HYDROGEN_VERSION=${{fromJSON(steps.read_package_json.outputs.packageJson).version}}" >> $GITHUB_ENV
-
-  #     - name: Discord notification
-  #       env:
-  #         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-  #         DISCORD_USERNAME: Shopify Devs
-  #         DISCORD_AVATAR: https://cdn.discordapp.com/avatars/905537246990590012/0f6a687b93ef3f81a036c817fb02ccbf.webp
-  #       uses: Ilshidur/action-discord@08d9328877d6954120eef2b07abbc79249bb6210
-  #       with:
-  #         args: "Hydrogen ${{ env.HYDROGEN_VERSION }} has been released.\nhttps://github.com/Shopify/hydrogen-v1/releases/tag/@shopify/hydrogen@${{ env.HYDROGEN_VERSION }}"
