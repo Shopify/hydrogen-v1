@@ -1,4 +1,4 @@
-import {Text, Button} from '~/components/elements';
+import {Text, Button} from '~/components';
 import {useRenderServerComponents} from '~/lib/utils';
 
 export function AccountDeleteAddress({

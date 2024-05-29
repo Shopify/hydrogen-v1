@@ -1,4 +1,5 @@
 import type {Order} from '@shopify/hydrogen/storefront-api-types';
+
 import {Button, Text, OrderCard} from '~/components';
 
 export function AccountOrderHistory({orders}: {orders: Order[]}) {

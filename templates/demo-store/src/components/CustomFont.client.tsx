@@ -17,6 +17,6 @@
 // In a production environment, you will likely want to include the below
 // markup right in your index.html and index.css files.
 
-import '../styles/custom-font.css';
+import '~/styles/custom-font.css';
 
 export function CustomFont() {}

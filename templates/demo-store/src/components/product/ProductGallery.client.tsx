@@ -1,5 +1,6 @@
 import {MediaFile} from '@shopify/hydrogen/client';
 import type {MediaEdge} from '@shopify/hydrogen/storefront-api-types';
+
 import {ATTR_LOADING_EAGER} from '~/lib/const';
 
 /**

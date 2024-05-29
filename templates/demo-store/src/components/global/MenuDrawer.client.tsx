@@ -1,8 +1,8 @@
-import {EnhancedMenu} from '~/lib/utils';
-import {Text} from '~/components';
-import {Drawer} from './Drawer.client';
 import {Link} from '@shopify/hydrogen';
 import {startTransition} from 'react';
+
+import {EnhancedMenu} from '~/lib/utils';
+import {Drawer, Text} from '~/components';
 
 export function MenuDrawer({
   isOpen,

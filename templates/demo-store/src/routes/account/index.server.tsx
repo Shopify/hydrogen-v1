@@ -12,6 +12,15 @@ import {
   type HydrogenApiRouteOptions,
   useServerAnalytics,
 } from '@shopify/hydrogen';
+import type {
+  Collection,
+  CollectionConnection,
+  Customer,
+  MailingAddress,
+  Order,
+  Product,
+  ProductConnection,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {getApiErrorMessage} from '~/lib/utils';
@@ -24,15 +33,6 @@ import {
   PageHeader,
 } from '~/components';
 import {Layout, ProductSwimlane} from '~/components/index.server';
-import type {
-  Collection,
-  CollectionConnection,
-  Customer,
-  MailingAddress,
-  Order,
-  Product,
-  ProductConnection,
-} from '@shopify/hydrogen/storefront-api-types';
 
 export default function Account({response}: HydrogenRouteProps) {
   response.cache(CacheNone());

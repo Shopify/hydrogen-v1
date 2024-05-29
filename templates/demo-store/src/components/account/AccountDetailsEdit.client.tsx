@@ -6,7 +6,7 @@ import {
   passwordValidation,
   useRenderServerComponents,
 } from '~/lib/utils';
-import {getInputStyleClasses} from '../../lib/styleUtils';
+import {getInputStyleClasses} from '~/lib/styleUtils';
 
 interface FormElements {
   firstName: HTMLInputElement;

@@ -1,7 +1,7 @@
 import {useState} from 'react';
 
 import {emailValidation} from '~/lib/utils';
-import {getInputStyleClasses} from '../../lib/styleUtils';
+import {getInputStyleClasses} from '~/lib/styleUtils';
 
 interface FormElements {
   email: HTMLInputElement;

@@ -1,8 +1,8 @@
 import {useMemo, useState} from 'react';
-import {useRenderServerComponents} from '~/lib/utils';
 
+import {useRenderServerComponents} from '~/lib/utils';
+import {getInputStyleClasses} from '~/lib/styleUtils';
 import {Button, Text} from '~/components';
-import {getInputStyleClasses} from '../../lib/styleUtils';
 
 export function AccountAddressEdit({
   address,

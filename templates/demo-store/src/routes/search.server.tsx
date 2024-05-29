@@ -9,13 +9,13 @@ import {
   ShopifyAnalyticsConstants,
   useServerAnalytics,
 } from '@shopify/hydrogen';
+import type {Collection} from '@shopify/hydrogen/storefront-api-types';
+import {Suspense} from 'react';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {ProductGrid, Section, Text} from '~/components';
 import {NoResultRecommendations, SearchPage} from '~/components/index.server';
 import {PAGINATION_SIZE} from '~/lib/const';
-import type {Collection} from '@shopify/hydrogen/storefront-api-types';
-import {Suspense} from 'react';
 
 export default function Search({
   pageBy = PAGINATION_SIZE,
