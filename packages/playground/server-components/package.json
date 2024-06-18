@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "vite": "^2.9.18",
+    "vite": "^3.2.10",
     "@shopify/cli": "^3.12.0",
     "@shopify/cli-hydrogen": "^3.12.0"
   },
