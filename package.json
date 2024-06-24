@@ -14,7 +14,7 @@
     "dev": "yarn turbo run dev --parallel --filter=@shopify/hydrogen",
     "build": "yarn turbo run build --filter=!test-*",
     "lint": "run-p lint:js lint:language lint:schema",
-    "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx packages/*/src",
+    "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx packages/*/src --cache",
     "lint:language": "alex {.,.changeset}",
     "lint:schema": "jsonlint --quiet packages/hydrogen/graphql.schema.json",
     "format": "prettier --write --ignore-unknown .",
