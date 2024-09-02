@@ -36,6 +36,9 @@ const config = {
     locales: ['en'],
   },
 
+  // Remove from search engines
+  noIndex: true,
+
   presets: [
     [
       'classic',
