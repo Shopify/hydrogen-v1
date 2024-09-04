@@ -56,7 +56,9 @@ export function isNewArrival(date: string, daysOld = 30) {
 }
 
 export function isDiscounted(price: MoneyV2, compareAtPrice: MoneyV2) {
-  if (compareAtPrice?.amount > price?.amount) {
+  const priceAmount = Number(price.amount);
+  const compareAtPriceAmount = Number(compareAtPrice.amount);
+  if (compareAtPriceAmount > priceAmount) {
     return true;
   }
   return false;
