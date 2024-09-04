@@ -14,8 +14,9 @@ import {
   useServerAnalytics,
   Seo,
 } from '@shopify/hydrogen';
-import {HeaderFallback, EventsListener} from '~/components';
 import type {CountryCode} from '@shopify/hydrogen/storefront-api-types';
+
+import {HeaderFallback, EventsListener} from '~/components';
 import {NotFound} from '~/components/index.server';
 
 function App({request}: HydrogenRouteProps) {

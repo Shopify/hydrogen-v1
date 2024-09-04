@@ -1,9 +1,9 @@
 import {useState, useRef, useEffect, useCallback} from 'react';
 import {Link, flattenConnection} from '@shopify/hydrogen';
+import type {Collection, Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {Button, Grid, ProductCard} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
-import type {Collection, Product} from '@shopify/hydrogen/storefront-api-types';
 
 export function ProductGrid({
   url,

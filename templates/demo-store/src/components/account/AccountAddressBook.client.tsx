@@ -1,8 +1,12 @@
 import {useState, useMemo, MouseEventHandler} from 'react';
 
-import {Text, Button} from '~/components/elements';
-import {Modal} from '../index';
-import {AccountAddressEdit, AccountDeleteAddress} from '../index';
+import {
+  AccountAddressEdit,
+  AccountDeleteAddress,
+  Button,
+  Modal,
+  Text,
+} from '~/components';
 
 export function AccountAddressBook({
   addresses,

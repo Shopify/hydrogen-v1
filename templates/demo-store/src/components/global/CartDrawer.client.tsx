@@ -1,5 +1,4 @@
-import {CartDetails} from '~/components/cart';
-import {Drawer} from './Drawer.client';
+import {CartDetails, Drawer} from '~/components';
 
 export function CartDrawer({
   isOpen,

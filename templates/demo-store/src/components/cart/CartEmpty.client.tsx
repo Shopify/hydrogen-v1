@@ -1,9 +1,9 @@
-import {useRef} from 'react';
+import {Suspense, useRef} from 'react';
 import {useScroll} from 'react-use';
 import {fetchSync} from '@shopify/hydrogen';
-import {Button, Text, ProductCard, Heading, Skeleton} from '~/components';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
-import {Suspense} from 'react';
+
+import {Button, Text, ProductCard, Heading, Skeleton} from '~/components';
 
 export function CartEmpty({
   onClose,

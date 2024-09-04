@@ -8,15 +8,15 @@ import {
   useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
+import {
+  CollectionConnection,
+  ProductConnection,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
 import {FeaturedCollections, Hero} from '~/components';
 import {Layout, ProductSwimlane} from '~/components/index.server';
-import {
-  CollectionConnection,
-  ProductConnection,
-} from '@shopify/hydrogen/storefront-api-types';
 
 export default function Homepage() {
   useServerAnalytics({

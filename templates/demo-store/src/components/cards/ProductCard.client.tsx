@@ -6,16 +6,16 @@ import {
   Money,
   useMoney,
 } from '@shopify/hydrogen';
-
-import {Text} from '~/components';
-import {isDiscounted, isNewArrival} from '~/lib/utils';
-import {getProductPlaceholder} from '~/lib/placeholders';
 import type {
   MoneyV2,
   Product,
   ProductVariant,
   ProductVariantConnection,
 } from '@shopify/hydrogen/storefront-api-types';
+
+import {Text} from '~/components';
+import {isDiscounted, isNewArrival} from '~/lib/utils';
+import {getProductPlaceholder} from '~/lib/placeholders';
 
 export function ProductCard({
   product,
