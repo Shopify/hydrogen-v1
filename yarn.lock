@@ -14832,10 +14832,10 @@ undici@^5.1.0, undici@^5.5.1:
   dependencies:
     "@fastify/busboy" "^2.0.0"
 
-undici@^6.19.2:
-  version "6.19.2"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-6.19.2.tgz#231bc5de78d0dafb6260cf454b294576c2f3cd31"
-  integrity sha512-JfjKqIauur3Q6biAtHJ564e3bWa8VvT+7cSiOJHFbX4Erv6CLGDpg8z+Fmg/1OI/47RA+GI2QZaF48SSaLvyBA==
+undici@^6.19.3:
+  version "6.19.3"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-6.19.3.tgz#07712c2200d9aa6dbd613eb7b356903b7ba30efe"
+  integrity sha512-xWvTmUYvfiKATSKntAVRpPO5bfRcrG9FpiHI916j8dK8nUMjeM0uE8dx7ftKoPUQ2RtRi0KMDL10/03orVgTMA==
 
 unherit@^1.0.4:
   version "1.1.3"
