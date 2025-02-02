@@ -1,5 +1,9 @@
-import {Link, useUrl, useCart} from '@shopify/hydrogen';
+import React, {lazy, Suspense} from 'react';
+import {Link, useUrl, useCart, useLocalization} from '@shopify/hydrogen';
 import {useWindowScroll} from 'react-use';
+
+const Artists = lazy(() => import('./Artists.client'));
+const Performers = lazy(() => import('./Performers.client'));
 
 import {
   Heading,
@@ -21,9 +25,8 @@ import type {EnhancedMenu} from '~/lib/utils';
  */
 export function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
   const {pathname} = useUrl();
-
-  const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
-  const countryCode = localeMatch ? localeMatch[1] : undefined;
+  const {country} = useLocalization();
+  const countryCode = country?.isoCode ?? null;
 
   const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
 
@@ -41,6 +44,10 @@ export function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
 
   return (
     <>
+      <Suspense>
+        {isCartOpen && <Artists />}
+        {isMenuOpen && <Performers />}
+      </Suspense>
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
       <MenuDrawer isOpen={isMenuOpen} onClose={closeMenu} menu={menu!} />
       <DesktopHeader
