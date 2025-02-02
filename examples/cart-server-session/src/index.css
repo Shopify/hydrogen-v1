@@ -1,0 +1,26 @@
+input#header__checkbox {
+  display: none;
+}
+
+#header__toggle {
+  cursor: pointer;
+}
+
+/* open sidebar when SidebarToggle is clicked */
+#header__checkbox:checked ~ aside {
+  transform: translateX(0) !important;
+}
+
+#header__toggle > #header__toggle__icon > rect {
+  transform-origin: center center;
+  transition: transform 300ms ease 0s;
+}
+
+/* animate icon */
+#header__checkbox:checked ~ #header__toggle > #header__toggle__icon > #header__toggle__icon__top {
+  transform: rotate(-45deg) translate3d(0px, 6.5px, 0px);
+}
+
+#header__checkbox:checked ~ #header__toggle > #header__toggle__icon > #header__toggle__icon__bottom {
+  transform: rotate(45deg) translate3d(0px, -6.5px, 0px);
+}

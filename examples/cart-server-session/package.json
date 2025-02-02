@@ -1,0 +1,23 @@
+{
+  "name": "hello-cart-session",
+  "description": "A hydrogen example demonstrating a .server-driven basic Cart workflow.",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "shopify hydrogen dev",
+    "build": "shopify hydrogen build",
+    "preview": "shopify hydrogen preview"
+  },
+  "devDependencies": {
+    "@shopify/cli": "latest",
+    "@shopify/cli-hydrogen": "latest",
+    "vite": "^2.9.0"
+  },
+  "dependencies": {
+    "@shopify/hydrogen": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "author": "juanp.prieto"
+}
