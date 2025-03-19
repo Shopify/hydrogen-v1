@@ -15,6 +15,8 @@ jobs:
       contents: write
       packages: write
       id-token: write
+      pull-requests: write
+      issues: read
     name: Changelog Snapshot Release
     steps:
       - name: Checkout the code
