@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.4
+
+### Patch Changes
+
+- Add provenance statement to NPM ([#2566](https://github.com/Shopify/hydrogen-v1/pull/2566)) by [@blittle](https://github.com/blittle)
+
 ## 0.12.3
 
 ### Patch Changes
