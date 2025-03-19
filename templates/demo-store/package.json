@@ -24,7 +24,7 @@
     "@tailwindcss/typography": "^0.5.2",
     "@types/react": "^18.0.14",
     "eslint": "^8.18.0",
-    "eslint-plugin-hydrogen": "^0.12.4",
+    "eslint-plugin-hydrogen": "^0.12.5",
     "playwright": "^1.22.2",
     "postcss": "^8.4.31",
     "postcss-import": "^14.1.0",

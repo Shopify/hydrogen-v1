@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.5
+
+### Patch Changes
+
+- Update provenance ([#2568](https://github.com/Shopify/hydrogen-v1/pull/2568)) by [@blittle](https://github.com/blittle)
+
 ## 0.12.4
 
 ### Patch Changes
