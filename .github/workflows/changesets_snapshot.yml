@@ -11,6 +11,10 @@ jobs:
   changelog:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'shopify' && github.ref_name != 'latest'
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
     name: Changelog Snapshot Release
     steps:
       - name: Checkout the code
