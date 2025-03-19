@@ -19,6 +19,8 @@ jobs:
       contents: write
       packages: write
       id-token: write
+      pull-requests: write
+      issues: read
     outputs:
       published: ${{ steps.changesets.outputs.published }}
       latest: ${{ steps.flags.outputs.latest }}
