@@ -31,7 +31,7 @@ export function ProductSeo({
     name: title,
     description,
     brand: {
-      '@type': 'Thing',
+      '@type': 'Brand',
       name: vendor,
     },
     url,
