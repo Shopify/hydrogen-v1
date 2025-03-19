@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'shopify'
     name: Changelog PR or Release
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
     outputs:
       published: ${{ steps.changesets.outputs.published }}
       latest: ${{ steps.flags.outputs.latest }}
@@ -50,7 +54,8 @@ jobs:
         uses: changesets/action@v1
         with:
           version: yarn run version
-          publish: yarn changeset publish --tag h1
+          # publish: yarn changeset publish --tag h1
+          publish: yarn changeset publish
           commit: '[ci] release ${{ github.ref_name }}'
           title: '[ci] release ${{ github.ref_name }}'
         env:
