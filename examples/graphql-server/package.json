@@ -1,0 +1,23 @@
+{
+  "name": "example-graphql-server",
+  "description": "An example creating a graphql server using Hydrogen",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env LOCAL_DEV=true shopify hydrogen dev",
+    "build": "shopify hydrogen build",
+    "preview": "shopify hydrogen preview"
+  },
+  "devDependencies": {
+    "@shopify/cli": "latest",
+    "@shopify/cli-hydrogen": "latest",
+    "vite": "^2.9.0"
+  },
+  "dependencies": {
+    "@shopify/hydrogen": "latest",
+    "graphql": "^14.6.0",
+    "react": "0.0.0-experimental-2bf7c02f0-20220314",
+    "react-dom": "0.0.0-experimental-2bf7c02f0-20220314"
+  }
+}
