@@ -1,0 +1,25 @@
+{
+  "name": "hello-world-js",
+  "description": "An example using JavaScript in Hydrogen",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=16.14.0"
+  },
+  "scripts": {
+    "dev": "shopify hydrogen dev",
+    "build": "shopify hydrogen build",
+    "preview": "shopify hydrogen preview"
+  },
+  "devDependencies": {
+    "@shopify/cli": "^3.12.0",
+    "@shopify/cli-hydrogen": "^3.12.0",
+    "vite": "^2.9.18"
+  },
+  "dependencies": {
+    "@shopify/hydrogen": "^1.7.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
